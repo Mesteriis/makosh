@@ -246,23 +246,24 @@ pub async fn handle_query_request_v1(
                 },
             )
         }
-        Operation::GetEvidence(request) => QueryResult::GetEvidence(
-            hermes_communications_api::query_wire::GetEvidenceResponseV1 {
-                evidence: Some(
-                    (&get_communication_evidence(
-                        persistence,
-                        GetCommunicationEvidenceV1 {
-                            evidence_id: CommunicationObservationIdV1::new(id16(
-                                &request.evidence_id,
-                            )?),
-                        },
-                    )
+        Operation::GetEvidence(request) => {
+            let evidence_id = CommunicationObservationIdV1::new(id16(&request.evidence_id)?);
+            let evidence =
+                get_communication_evidence(persistence, GetCommunicationEvidenceV1 { evidence_id })
                     .await
-                    .map_err(map_client_error)?)
-                        .into(),
-                ),
-            },
-        ),
+                    .map_err(map_client_error)?;
+            let message_id = persistence
+                .canonical_message_id_for_evidence(evidence_id)
+                .await
+                .map_err(|_| CommunicationsQueryPortErrorV1::Unavailable)?
+                .map_or_else(Vec::new, |message_id| message_id.bytes().to_vec());
+            QueryResult::GetEvidence(
+                hermes_communications_api::query_wire::GetEvidenceResponseV1 {
+                    evidence: Some((&evidence).into()),
+                    message_id,
+                },
+            )
+        }
     };
     Ok(CommunicationsQueryResponseV1 {
         result: Some(result),

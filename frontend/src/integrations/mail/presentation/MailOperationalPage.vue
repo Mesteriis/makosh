@@ -26,6 +26,10 @@ import '../../../shared/ui/shell/providerOperationalWorkspace.css'
 
 defineProps<{
 	compositionModel: MailCompositionModel
+	bodyContentStatus: 'idle' | 'loading' | 'ready' | 'unavailable'
+	bodyContentStatusMessage: string
+	bodyText: string
+	bodyFormat: 'text' | 'html'
 	deliveryModel: MailDeliveryModel
 	flagModel: MailMessageFlagModel
 	locationModel: MailMessageLocationModel
@@ -113,6 +117,10 @@ const syncHealthOpen = ref(false)
 				@select-thread="emit('selectThread', $event)"
 			/>
 			<MailWorkspaceReader
+				:body-content-status="bodyContentStatus"
+				:body-content-status-message="bodyContentStatusMessage"
+				:body-text="bodyText"
+				:body-format="bodyFormat"
 				:detail="readModel.detail"
 				:inspector-visible="inspectorVisible"
 				@toggle-inspector="inspectorVisible = !inspectorVisible"

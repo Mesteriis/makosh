@@ -3,7 +3,10 @@
 use hermes_communications_call_evidence_persistence::{
     CommunicationsCallEvidenceSchemaErrorV1, append_communications_call_evidence_storage_v1,
 };
-use hermes_communications_persistence::communications_storage_bundle_v1;
+use hermes_communications_persistence::{
+    CommunicationsBodyMediaTypeSchemaErrorV1, append_communications_body_media_type_storage_v1,
+    communications_storage_bundle_v1,
+};
 use hermes_communications_retained_evidence_replay_persistence::{
     CommunicationsRetainedEvidenceReplayDeliverySchemaErrorV1,
     CommunicationsRetainedEvidenceReplayScanSchemaErrorV1,
@@ -20,6 +23,7 @@ pub enum CommunicationsRuntimeStorageBundleErrorV1 {
     RetainedEvidenceReplay(CommunicationsRetainedEvidenceReplaySchemaErrorV1),
     RetainedEvidenceReplayDelivery(CommunicationsRetainedEvidenceReplayDeliverySchemaErrorV1),
     RetainedEvidenceReplayScan(CommunicationsRetainedEvidenceReplayScanSchemaErrorV1),
+    BodyMediaType(CommunicationsBodyMediaTypeSchemaErrorV1),
 }
 
 pub fn communications_runtime_storage_bundle_v1()
@@ -30,6 +34,8 @@ pub fn communications_runtime_storage_bundle_v1()
         .map_err(CommunicationsRuntimeStorageBundleErrorV1::RetainedEvidenceReplay)?;
     let bundle = append_communications_retained_evidence_replay_delivery_storage_v1(bundle)
         .map_err(CommunicationsRuntimeStorageBundleErrorV1::RetainedEvidenceReplayDelivery)?;
-    append_communications_retained_evidence_replay_scan_storage_v1(bundle)
-        .map_err(CommunicationsRuntimeStorageBundleErrorV1::RetainedEvidenceReplayScan)
+    let bundle = append_communications_retained_evidence_replay_scan_storage_v1(bundle)
+        .map_err(CommunicationsRuntimeStorageBundleErrorV1::RetainedEvidenceReplayScan)?;
+    append_communications_body_media_type_storage_v1(bundle)
+        .map_err(CommunicationsRuntimeStorageBundleErrorV1::BodyMediaType)
 }

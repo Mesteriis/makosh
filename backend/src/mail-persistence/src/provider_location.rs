@@ -78,6 +78,41 @@ pub fn initial_imap_message_id(
 }
 
 impl MailDurablePersistence {
+    pub async fn recent_inbox_imap_uids(
+        &self,
+        connection_id: &str,
+        limit: u32,
+    ) -> Result<Vec<u32>, MailDurablePersistenceError> {
+        if !valid_id(connection_id) || !(1..=1_000).contains(&limit) {
+            return Err(MailDurablePersistenceError::InvalidRow);
+        }
+        let rows = sqlx::query(
+            "SELECT locator.uid \
+             FROM hermes_data.mail_imap_message_locators AS locator \
+             JOIN hermes_data.mail_operational_messages AS message \
+               ON message.connection_id = locator.connection_id \
+              AND message.message_id = locator.message_id \
+             WHERE locator.connection_id = $1 \
+               AND lower(locator.mailbox_id) = 'inbox' \
+             ORDER BY message.sent_at_unix_seconds DESC NULLS LAST, \
+                      message.cursor_sequence DESC \
+             LIMIT $2",
+        )
+        .bind(connection_id)
+        .bind(i64::from(limit))
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|_| MailDurablePersistenceError::Database)?;
+        rows.iter()
+            .map(|row| {
+                let uid = row
+                    .try_get::<i64, _>("uid")
+                    .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
+                u32::try_from(uid).map_err(|_| MailDurablePersistenceError::InvalidRow)
+            })
+            .collect()
+    }
+
     pub async fn imap_message_locator(
         &self,
         connection_id: &str,

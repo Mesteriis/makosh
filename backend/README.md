@@ -515,8 +515,10 @@ make dev
 ```
 
 ADR-0300 keeps this as a development assembly unit: it starts the loopback-only
-Compose dependencies, Kernel/Core Gateway and Vite, waits for both direct and
-same-origin readiness, then opens `http://127.0.0.1:5173/`. A per-run
+Compose dependencies, Kernel/Core Gateway and Vite, and waits for both direct
+and same-origin readiness at `http://127.0.0.1:5173/`. The developer opens
+that URL in an existing browser tab; automatic browser launching is opt-in via
+`HERMES_DEV_NO_BROWSER=0`. A per-run
 owner-private proxy proof stays outside browser JavaScript. The command does
 not become a signed release assembly, create provider credentials, or silently
 admit managed domain/integration runtimes.

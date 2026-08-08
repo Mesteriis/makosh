@@ -14,8 +14,30 @@ pub async fn apply_storage_bundle(
     roles: &StorageRoleSpecV1,
     bundle: &StorageBundleV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
-    admit_storage_bundle(bundle).map_err(|_| PostgresAdapterErrorV1::Migration)?;
+    admit_storage_bundle(bundle).map_err(|error| {
+        let digest = match error {
+            hermes_storage_migrations::MigrationBundleAdmissionErrorV1::Step {
+                revision, ..
+            } => bundle
+                .steps
+                .iter()
+                .find(|step| step.revision == revision)
+                .map(|step| {
+                    step.sha256
+                        .iter()
+                        .map(|byte| format!("{byte:02x}"))
+                        .collect::<String>()
+                }),
+            _ => None,
+        };
+        eprintln!(
+            "developer_storage_migration_failure=admission error={error:?} digest={}",
+            digest.as_deref().unwrap_or("unavailable")
+        );
+        PostgresAdapterErrorV1::Migration
+    })?;
     if bundle.owner_id != roles.owner_id() {
+        eprintln!("developer_storage_migration_failure=owner_mismatch");
         return Err(PostgresAdapterErrorV1::Migration);
     }
     for step in &bundle.steps {
@@ -32,15 +54,22 @@ async fn apply_step(
     bundle: &StorageBundleV1,
     step: &hermes_storage_protocol::v1::StorageMigrationStepV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
-    let mut transaction = connector
-        .pool()
-        .begin()
-        .await
-        .map_err(|_| PostgresAdapterErrorV1::Migration)?;
+    let mut transaction = connector.pool().begin().await.map_err(|_| {
+        eprintln!("developer_storage_migration_failure=transaction_begin");
+        PostgresAdapterErrorV1::Migration
+    })?;
     let recorded_steps = read_recorded_steps(&mut transaction, bundle, step)
         .await
         .map_err(|_| PostgresAdapterErrorV1::MigrationLedgerRead)?;
-    match classify_recorded_step_lineage(bundle.revision, &step.sha256, &recorded_steps)? {
+    let lineage = classify_recorded_step_lineage(bundle.revision, &step.sha256, &recorded_steps)
+        .map_err(|error| {
+            eprintln!(
+                "developer_storage_migration_failure=lineage step_revision={}",
+                step.revision
+            );
+            error
+        })?;
+    match lineage {
         RecordedStepLineageV1::Exact => {
             transaction
                 .commit()

@@ -110,7 +110,12 @@ message ListMessageReferencesResponseV1 {
 // Canonical evidence metadata only. Provider-local source cursors, message
 // content, Blob references and admission proofs remain owner-private.
 message GetEvidenceRequestV1 { bytes evidence_id = 1; }
-message GetEvidenceResponseV1 { EvidenceSummaryV1 evidence = 1; }
+message GetEvidenceResponseV1 {
+  EvidenceSummaryV1 evidence = 1;
+  // Canonical message owning this evidence, when the evidence projects a
+  // message. This remains provider-neutral and carries no source locator.
+  bytes message_id = 2;
+}
 
 message ListMessageEvidenceRequestV1 {
   bytes message_id = 1;

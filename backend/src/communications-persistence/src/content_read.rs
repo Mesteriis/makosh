@@ -14,6 +14,7 @@ pub struct CommunicationsBodyContentReceiptV1 {
     pub declared_bytes: u64,
     pub plaintext_sha256: [u8; 32],
     pub backup_class: u32,
+    pub media_type: String,
 }
 
 impl CommunicationsDurablePersistence {
@@ -23,7 +24,7 @@ impl CommunicationsDurablePersistence {
     ) -> Result<Option<CommunicationsBodyContentReceiptV1>, CommunicationsPersistenceError> {
         let row = sqlx::query(
             "SELECT evidence.body_blob_reference_id, evidence.body_blob_declared_bytes, \
-             evidence.body_blob_sha256 \
+             evidence.body_blob_sha256, evidence.body_media_type \
              FROM hermes_data.communications_messages AS message \
              JOIN hermes_data.communications_evidence_summaries AS evidence \
                ON evidence.observation_id = message.last_evidence_id \
@@ -46,6 +47,8 @@ impl CommunicationsDurablePersistence {
                     .map_err(|_| CommunicationsPersistenceError::InvalidRow)?,
                 row.try_get::<Vec<u8>, _>("body_blob_sha256")
                     .map_err(|_| CommunicationsPersistenceError::InvalidRow)?,
+                row.try_get::<String, _>("body_media_type")
+                    .map_err(|_| CommunicationsPersistenceError::InvalidRow)?,
             )
         })
         .transpose()
@@ -56,6 +59,7 @@ fn content_receipt_from_parts(
     reference_id: Vec<u8>,
     declared_bytes: i64,
     plaintext_sha256: Vec<u8>,
+    media_type: String,
 ) -> Result<CommunicationsBodyContentReceiptV1, CommunicationsPersistenceError> {
     let reference_id: [u8; 16] = reference_id
         .try_into()
@@ -68,6 +72,7 @@ fn content_receipt_from_parts(
     if reference_id.iter().all(|byte| *byte == 0)
         || plaintext_sha256.iter().all(|byte| *byte == 0)
         || !(1..=MAX_MESSAGE_BODY_BYTES_V1).contains(&declared_bytes)
+        || !matches!(media_type.as_str(), "text/plain" | "text/html")
     {
         return Err(CommunicationsPersistenceError::InvalidRow);
     }
@@ -76,6 +81,7 @@ fn content_receipt_from_parts(
         declared_bytes,
         plaintext_sha256,
         backup_class: REQUIRED_BACKUP_CLASS_V1,
+        media_type,
     })
 }
 
@@ -85,12 +91,25 @@ mod tests {
 
     #[test]
     fn content_receipt_requires_exact_non_zero_bounded_blob_metadata() {
-        assert!(content_receipt_from_parts(vec![1; 16], 1, vec![2; 32]).is_ok());
+        assert!(
+            content_receipt_from_parts(vec![1; 16], 1, vec![2; 32], "text/html".to_owned()).is_ok()
+        );
         for result in [
-            content_receipt_from_parts(vec![0; 16], 1, vec![2; 32]),
-            content_receipt_from_parts(vec![1; 16], 0, vec![2; 32]),
-            content_receipt_from_parts(vec![1; 16], 256 * 1024 + 1, vec![2; 32]),
-            content_receipt_from_parts(vec![1; 16], 1, vec![0; 32]),
+            content_receipt_from_parts(vec![0; 16], 1, vec![2; 32], "text/plain".to_owned()),
+            content_receipt_from_parts(vec![1; 16], 0, vec![2; 32], "text/plain".to_owned()),
+            content_receipt_from_parts(
+                vec![1; 16],
+                256 * 1024 + 1,
+                vec![2; 32],
+                "text/plain".to_owned(),
+            ),
+            content_receipt_from_parts(vec![1; 16], 1, vec![0; 32], "text/plain".to_owned()),
+            content_receipt_from_parts(
+                vec![1; 16],
+                1,
+                vec![2; 32],
+                "application/octet-stream".to_owned(),
+            ),
         ] {
             assert_eq!(result, Err(CommunicationsPersistenceError::InvalidRow));
         }

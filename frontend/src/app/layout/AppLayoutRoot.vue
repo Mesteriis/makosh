@@ -16,6 +16,7 @@ import ZulipOperationalRoute from '../../integrations/zulip/views/ZulipOperation
 import CommunicationsEvidenceExportWorkflow from '../../workflows/communications-export/CommunicationsEvidenceExportWorkflow.vue'
 import AttachmentPreviewWorkflow from '../../workflows/attachment-preview/AttachmentPreviewWorkflow.vue'
 import CallTranscriptionWorkflow from '../../workflows/call-transcription/CallTranscriptionWorkflow.vue'
+import { useMailMessageContent } from '../../workflows/mail-message-content/useMailMessageContent'
 import {
 	providerAccountIdFromRoute,
 	providerAccountNavigationLevel,
@@ -59,6 +60,10 @@ const communicationsSenderInsightsAvailable = computed(() =>
 )
 const communicationsExportAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'communications.export.v1'),
+)
+const communicationsContentAvailable = computed(() =>
+	hasClientModuleCapability(bootstrap.value, 'communications.query.v1')
+	&& hasClientModuleCapability(bootstrap.value, 'communications.content.v1'),
 )
 const attachmentPreviewAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'attachment_preview.client.v1'),
@@ -134,6 +139,9 @@ const mailMessagePermanentDeleteQueryAvailable = computed(() =>
 const mailSyncHealthAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'mail.sync.health.query.v1'),
 )
+const mailMessageContent = useMailMessageContent({
+	canRead: () => communicationsContentAvailable.value,
+})
 const zulipCommandAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'zulip.command.v1'),
 )
@@ -168,6 +176,10 @@ function selectNavigationItem(itemId: string): void {
 		return
 	}
 	navbar.selectNavigationItem(itemId)
+}
+
+function openMailMessageContent(evidenceId: Uint8Array | undefined): void {
+	void mailMessageContent.open(evidenceId)
 }
 
 watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mode]) => {
@@ -236,6 +248,10 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 				</template>
 				<MailOperationalRoute
 					v-else-if="selectedRouteId === 'communications-mail'"
+					:body-content-status="mailMessageContent.model.value.status"
+					:body-content-status-message="mailMessageContent.model.value.statusMessage"
+					:body-text="mailMessageContent.model.value.bodyText"
+					:body-format="mailMessageContent.model.value.bodyFormat"
 					:can-compose="mailCompositionCommandAvailable"
 					:can-compose-query="mailCompositionQueryAvailable"
 					:can-deliver="mailDeliveryAvailable"
@@ -252,6 +268,7 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					:modules="bootstrap.modules"
 					:navigation-account-id="requestedMailAccountId"
 					@account-navigation-change="mailAccountNavigation = $event"
+					@message-evidence-change="openMailMessageContent"
 				/>
 				<TelegramOperationalRoute
 					v-else-if="selectedRouteId === 'communications-telegram'"

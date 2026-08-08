@@ -46,6 +46,12 @@ pub struct Rfc822OperationalPreviewV1 {
     pub has_plain_text: bool,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Rfc822BodyContentV1 {
+    pub media_type: &'static str,
+    pub bytes: Vec<u8>,
+}
+
 /// Extracts only bounded, display-safe operational fields. Raw MIME and HTML are
 /// intentionally excluded from the returned snapshot.
 #[must_use]
@@ -63,7 +69,7 @@ pub fn operational_preview(raw_message: &[u8]) -> Option<Rfc822OperationalPrevie
         .filter_map(|(_, value)| operational_text(value, MAX_OPERATIONAL_ADDRESS_BYTES))
         .take(MAX_OPERATIONAL_RECIPIENTS)
         .collect();
-    let plaintext = direct_plain_text_body(raw_message);
+    let plaintext = readable_text_body(raw_message);
     let snippet = plaintext
         .as_deref()
         .and_then(|body| std::str::from_utf8(body).ok())
@@ -115,7 +121,7 @@ fn last_operational_header(
         .iter()
         .rev()
         .find(|(header_name, _)| header_name == name)
-        .and_then(|(_, value)| operational_text(value, max_bytes))
+        .and_then(|(_, value)| operational_text(&decode_rfc2047_words(value), max_bytes))
 }
 
 fn operational_text(value: &str, max_bytes: usize) -> Option<String> {
@@ -143,6 +149,140 @@ pub fn direct_plain_text_body(raw_message: &[u8]) -> Option<Vec<u8>> {
     }
     let (headers, body) = split_headers_and_body(raw_message)?;
     extract_plain_text_leaf(headers, body, 0, &mut 0)
+}
+
+/// Extracts bounded readable text for the provider experience. A real
+/// `text/plain` leaf remains authoritative; HTML-only messages fall back to
+/// visible text extracted from the first non-attachment `text/html` leaf.
+/// Raw MIME, markup and transfer-encoded bytes are never returned.
+#[must_use]
+pub fn readable_text_body(raw_message: &[u8]) -> Option<Vec<u8>> {
+    direct_plain_text_body(raw_message)
+        .or_else(|| {
+            let (headers, body) = split_headers_and_body(raw_message)?;
+            extract_html_text_leaf(headers, body, 0, &mut 0)
+        })
+        .or_else(|| loose_mime_text_leaf(raw_message, "text/plain"))
+        .or_else(|| loose_mime_text_leaf(raw_message, "text/html"))
+}
+
+/// Extracts the reference-view body without collapsing HTML markup. The caller
+/// must preserve the media type and the client must sanitize HTML before render.
+#[must_use]
+pub fn readable_body_content(raw_message: &[u8]) -> Option<Rfc822BodyContentV1> {
+    if raw_message.is_empty() || raw_message.len() > MAX_RFC822_BYTES {
+        return None;
+    }
+    let (headers, body) = split_headers_and_body(raw_message)?;
+    extract_html_leaf(headers, body, 0, &mut 0)
+        .or_else(|| loose_mime_body_leaf(raw_message, "text/html"))
+        .map(|bytes| Rfc822BodyContentV1 {
+            media_type: "text/html",
+            bytes,
+        })
+        .or_else(|| {
+            direct_plain_text_body(raw_message)
+                .or_else(|| loose_mime_body_leaf(raw_message, "text/plain"))
+                .map(|bytes| Rfc822BodyContentV1 {
+                    media_type: "text/plain",
+                    bytes,
+                })
+        })
+}
+
+fn loose_mime_text_leaf(raw_message: &[u8], expected_media_type: &str) -> Option<Vec<u8>> {
+    loose_mime_leaf(raw_message, expected_media_type, true)
+}
+
+fn loose_mime_body_leaf(raw_message: &[u8], expected_media_type: &str) -> Option<Vec<u8>> {
+    loose_mime_leaf(raw_message, expected_media_type, false)
+}
+
+fn loose_mime_leaf(
+    raw_message: &[u8],
+    expected_media_type: &str,
+    html_as_visible_text: bool,
+) -> Option<Vec<u8>> {
+    if raw_message.is_empty() || raw_message.len() > MAX_RFC822_BYTES {
+        return None;
+    }
+    let mut offset = 0_usize;
+    while offset < raw_message.len() {
+        let relative_end = raw_message[offset..]
+            .iter()
+            .position(|byte| *byte == b'\n')
+            .map_or(raw_message.len() - offset, |position| position + 1);
+        let next = offset.saturating_add(relative_end);
+        let line = &raw_message[offset..next];
+        let without_lf = line.strip_suffix(b"\n").unwrap_or(line);
+        let normalized = without_lf
+            .strip_suffix(b"\r")
+            .unwrap_or(without_lf)
+            .trim_ascii_end();
+        if normalized.len() >= 4 && normalized.starts_with(b"--") {
+            let boundary = normalized.strip_suffix(b"--").unwrap_or(normalized);
+            if let Some(decoded) = decode_loose_mime_candidate(
+                &raw_message[next..],
+                boundary,
+                expected_media_type,
+                html_as_visible_text,
+            ) {
+                return Some(decoded);
+            }
+        }
+        offset = next;
+    }
+    None
+}
+
+fn decode_loose_mime_candidate(
+    candidate: &[u8],
+    boundary: &[u8],
+    expected_media_type: &str,
+    html_as_visible_text: bool,
+) -> Option<Vec<u8>> {
+    let (headers, unbounded_body) = split_headers_and_body(candidate)?;
+    let content_type = header_value(headers, "content-type")?;
+    let media_type = content_type.split(';').next()?.trim();
+    if !media_type.eq_ignore_ascii_case(expected_media_type) || is_attachment(headers) {
+        return None;
+    }
+    let body = mime_body_before_boundary(unbounded_body, boundary);
+    let decoded = decode_transfer_encoding(
+        body,
+        header_value(headers, "content-transfer-encoding").unwrap_or_default(),
+    )?;
+    let charset = header_parameter(headers, "content-type", "charset");
+    let decoded = decode_text_bytes(&decoded, charset.as_deref());
+    if expected_media_type == "text/html" && html_as_visible_text {
+        valid_plaintext(visible_html_text(&decoded).into_bytes())
+    } else {
+        valid_plaintext(decoded.into_bytes())
+    }
+}
+
+fn mime_body_before_boundary<'a>(body: &'a [u8], boundary: &[u8]) -> &'a [u8] {
+    let mut offset = 0_usize;
+    while offset < body.len() {
+        let relative_end = body[offset..]
+            .iter()
+            .position(|byte| *byte == b'\n')
+            .map_or(body.len() - offset, |position| position + 1);
+        let next = offset.saturating_add(relative_end);
+        let line = &body[offset..next];
+        let without_lf = line.strip_suffix(b"\n").unwrap_or(line);
+        let normalized = without_lf
+            .strip_suffix(b"\r")
+            .unwrap_or(without_lf)
+            .trim_ascii_end();
+        if normalized == boundary
+            || (normalized.starts_with(boundary) && normalized.get(boundary.len()..) == Some(b"--"))
+        {
+            return &body[..offset];
+        }
+        offset = next;
+    }
+    body
 }
 
 fn extract_plain_text_leaf(
@@ -179,7 +319,77 @@ fn extract_plain_text_leaf(
         body,
         header_value(headers, "content-transfer-encoding").unwrap_or_default(),
     )?;
-    valid_plaintext(decoded)
+    let charset = header_parameter(headers, "content-type", "charset");
+    valid_plaintext(decode_text_bytes(&decoded, charset.as_deref()).into_bytes())
+}
+
+fn extract_html_text_leaf(
+    headers: &[u8],
+    body: &[u8],
+    depth: u8,
+    parts: &mut usize,
+) -> Option<Vec<u8>> {
+    if depth > MAX_MIME_DEPTH || *parts >= MAX_MIME_PARTS || is_attachment(headers) {
+        return None;
+    }
+    let content_type =
+        header_value(headers, "content-type").unwrap_or_else(|| "text/plain".to_owned());
+    let media_type = content_type.split(';').next()?.trim().to_ascii_lowercase();
+    if media_type.starts_with("multipart/") {
+        let boundary = header_parameter(headers, "content-type", "boundary")?;
+        for part in multipart_parts(body, &boundary)? {
+            *parts += 1;
+            let Some((part_headers, part_body)) = split_headers_and_body(&part) else {
+                continue;
+            };
+            if let Some(text) = extract_html_text_leaf(part_headers, part_body, depth + 1, parts) {
+                return Some(text);
+            }
+        }
+        return None;
+    }
+    if media_type != "text/html" {
+        return None;
+    }
+    let decoded = decode_transfer_encoding(
+        body,
+        header_value(headers, "content-transfer-encoding").unwrap_or_default(),
+    )?;
+    let charset = header_parameter(headers, "content-type", "charset");
+    let html = decode_text_bytes(&decoded, charset.as_deref());
+    let text = visible_html_text(&html);
+    valid_plaintext(text.into_bytes())
+}
+
+fn extract_html_leaf(headers: &[u8], body: &[u8], depth: u8, parts: &mut usize) -> Option<Vec<u8>> {
+    if depth > MAX_MIME_DEPTH || *parts >= MAX_MIME_PARTS || is_attachment(headers) {
+        return None;
+    }
+    let content_type =
+        header_value(headers, "content-type").unwrap_or_else(|| "text/plain".to_owned());
+    let media_type = content_type.split(';').next()?.trim().to_ascii_lowercase();
+    if media_type.starts_with("multipart/") {
+        let boundary = header_parameter(headers, "content-type", "boundary")?;
+        for part in multipart_parts(body, &boundary)? {
+            *parts += 1;
+            let Some((part_headers, part_body)) = split_headers_and_body(&part) else {
+                continue;
+            };
+            if let Some(html) = extract_html_leaf(part_headers, part_body, depth + 1, parts) {
+                return Some(html);
+            }
+        }
+        return None;
+    }
+    if media_type != "text/html" {
+        return None;
+    }
+    let decoded = decode_transfer_encoding(
+        body,
+        header_value(headers, "content-transfer-encoding").unwrap_or_default(),
+    )?;
+    let charset = header_parameter(headers, "content-type", "charset");
+    valid_plaintext(decode_text_bytes(&decoded, charset.as_deref()).into_bytes())
 }
 
 fn is_attachment(headers: &[u8]) -> bool {
@@ -202,11 +412,9 @@ fn multipart_parts(body: &[u8], boundary: &str) -> Option<Vec<Vec<u8>>> {
     let mut current = Vec::new();
     let mut inside_part = false;
     for line in body.split_inclusive(|byte| *byte == b'\n') {
-        let normalized = line
-            .strip_suffix(b"\n")
-            .unwrap_or(line)
-            .strip_suffix(b"\r")
-            .unwrap_or(line);
+        let without_lf = line.strip_suffix(b"\n").unwrap_or(line);
+        let normalized = without_lf.strip_suffix(b"\r").unwrap_or(without_lf);
+        let normalized = normalized.trim_ascii_end();
         if normalized == marker.as_bytes() || normalized == closing.as_bytes() {
             if inside_part && !current.is_empty() {
                 if parts.len() >= MAX_MIME_PARTS {
@@ -225,7 +433,13 @@ fn multipart_parts(body: &[u8], boundary: &str) -> Option<Vec<Vec<u8>>> {
             current.extend_from_slice(line);
         }
     }
-    None
+    if inside_part && !current.is_empty() {
+        if parts.len() >= MAX_MIME_PARTS {
+            return None;
+        }
+        parts.push(current);
+    }
+    (!parts.is_empty()).then_some(parts)
 }
 
 fn decode_transfer_encoding(body: &[u8], encoding: String) -> Option<Vec<u8>> {
@@ -264,10 +478,17 @@ fn decode_quoted_printable(body: &[u8]) -> Option<Vec<u8>> {
         } else if body.get(index + 1) == Some(&b'\n') {
             index += 2;
         } else {
-            let value =
-                (hex_value(*body.get(index + 1)?)? << 4) | hex_value(*body.get(index + 2)?)?;
-            decoded.push(value);
-            index += 3;
+            let value = body
+                .get(index + 1)
+                .and_then(|high| hex_value(*high))
+                .zip(body.get(index + 2).and_then(|low| hex_value(*low)));
+            if let Some((high, low)) = value {
+                decoded.push((high << 4) | low);
+                index += 3;
+            } else {
+                decoded.push(b'=');
+                index += 1;
+            }
         }
         if decoded.len() > MAX_PLAIN_TEXT_BYTES {
             return None;
@@ -283,6 +504,114 @@ const fn hex_value(value: u8) -> Option<u8> {
         b'A'..=b'F' => Some(value - b'A' + 10),
         _ => None,
     }
+}
+
+fn decode_rfc2047_words(input: &str) -> String {
+    let mut output = String::new();
+    let mut rest = input;
+    let mut decoded_previous_word = false;
+    while let Some(start) = rest.find("=?") {
+        let prefix = &rest[..start];
+        if !(decoded_previous_word && prefix.chars().all(char::is_whitespace)) {
+            output.push_str(prefix);
+        }
+        let encoded_word = &rest[start + 2..];
+        let Some(charset_end) = encoded_word.find('?') else {
+            output.push_str(&rest[start..]);
+            return output;
+        };
+        let charset = &encoded_word[..charset_end];
+        let after_charset = &encoded_word[charset_end + 1..];
+        let Some(encoding_end) = after_charset.find('?') else {
+            output.push_str(&rest[start..]);
+            return output;
+        };
+        let encoding = &after_charset[..encoding_end];
+        let encoded = &after_charset[encoding_end + 1..];
+        let Some(encoded_end) = encoded.find("?=") else {
+            output.push_str(&rest[start..]);
+            return output;
+        };
+        let payload = &encoded[..encoded_end];
+        let bytes = match encoding.to_ascii_lowercase().as_str() {
+            "b" => STANDARD.decode(payload).ok(),
+            "q" => decode_rfc2047_q(payload),
+            _ => None,
+        };
+        if let Some(bytes) = bytes {
+            output.push_str(&decode_text_bytes(&bytes, Some(charset)));
+            decoded_previous_word = true;
+        } else {
+            output.push_str(&rest[start..start + 2]);
+            decoded_previous_word = false;
+        }
+        rest = &encoded[encoded_end + 2..];
+    }
+    output.push_str(rest);
+    output
+}
+
+fn decode_rfc2047_q(input: &str) -> Option<Vec<u8>> {
+    decode_quoted_printable(input.replace('_', " ").as_bytes())
+}
+
+fn decode_text_bytes(bytes: &[u8], charset: Option<&str>) -> String {
+    match charset
+        .map(|label| label.trim_matches([' ', '"']).to_ascii_lowercase())
+        .as_deref()
+    {
+        Some("windows-1251" | "cp1251") => decode_windows_1251(bytes),
+        _ => String::from_utf8_lossy(bytes).into_owned(),
+    }
+}
+
+fn decode_windows_1251(bytes: &[u8]) -> String {
+    bytes
+        .iter()
+        .map(|byte| match byte {
+            0x00..=0x7f => char::from(*byte),
+            0xa8 => 'Ё',
+            0xb8 => 'ё',
+            0xc0..=0xdf => char::from_u32(u32::from(*byte) - 0xc0 + 0x0410)
+                .expect("Cyrillic upper-case range is valid"),
+            0xe0..=0xff => char::from_u32(u32::from(*byte) - 0xe0 + 0x0430)
+                .expect("Cyrillic lower-case range is valid"),
+            _ => '�',
+        })
+        .collect()
+}
+
+fn visible_html_text(html: &str) -> String {
+    let mut text = String::with_capacity(html.len().min(MAX_PLAIN_TEXT_BYTES));
+    let mut inside_tag = false;
+    let mut previous_space = false;
+    for character in html.chars() {
+        match character {
+            '<' => {
+                inside_tag = true;
+                if !previous_space {
+                    text.push(' ');
+                    previous_space = true;
+                }
+            }
+            '>' => inside_tag = false,
+            _ if inside_tag => {}
+            _ if character.is_whitespace() => {
+                if !previous_space {
+                    text.push(' ');
+                    previous_space = true;
+                }
+            }
+            _ => {
+                text.push(character);
+                previous_space = false;
+            }
+        }
+        if text.len() > MAX_PLAIN_TEXT_BYTES {
+            return String::new();
+        }
+    }
+    text.trim().to_owned()
 }
 
 fn valid_plaintext(mut body: Vec<u8>) -> Option<Vec<u8>> {
@@ -518,12 +847,10 @@ fn split_headers_and_body(bytes: &[u8]) -> Option<(&[u8], &[u8])> {
 }
 
 fn header_value(headers: &[u8], name: &str) -> Option<String> {
-    let text = std::str::from_utf8(headers).ok()?;
-    text.lines()
-        .filter_map(|line| line.split_once(':'))
-        .filter(|(key, _)| key.trim().eq_ignore_ascii_case(name))
-        .map(|(_, value)| value.trim().to_owned())
-        .next_back()
+    unfolded_headers(headers)?
+        .into_iter()
+        .rev()
+        .find_map(|(key, value)| key.eq_ignore_ascii_case(name).then_some(value))
 }
 
 fn header_parameter(headers: &[u8], header: &str, parameter: &str) -> Option<String> {
@@ -659,6 +986,103 @@ line one\r\nline two\r\n";
         assert_eq!(
             direct_plain_text_body(message),
             Some(b"hello world!".to_vec())
+        );
+    }
+
+    #[test]
+    fn decodes_rfc2047_headers_and_html_only_message_text() {
+        let message = b"From: =?UTF-8?B?0J/RgNC40LLQtdGC?= <sender@example.test>\r\n\
+Subject: =?UTF-8?B?0J/RgNC40LLQtdGC?=\r\n\
+To: Owner <owner@example.test>\r\n\
+Content-Type: multipart/alternative; boundary=x\r\n\r\n\
+--x\r\nContent-Type: text/html; charset=utf-8\r\n\
+Content-Transfer-Encoding: quoted-printable\r\n\r\n\
+<html><body><h1>Hello</h1><p>real mail</p></body></html>\r\n\
+--x--\r\n";
+
+        let preview = operational_preview(message).expect("valid preview");
+        assert_eq!(preview.subject.as_deref(), Some("Привет"));
+        assert_eq!(
+            preview.sender.as_deref(),
+            Some("Привет <sender@example.test>")
+        );
+        assert_eq!(preview.snippet.as_deref(), Some("Hello real mail"));
+        assert!(preview.has_plain_text);
+        assert_eq!(
+            readable_text_body(message),
+            Some(b"Hello real mail".to_vec())
+        );
+        assert_eq!(direct_plain_text_body(message), None);
+        assert_eq!(
+            readable_body_content(message),
+            Some(Rfc822BodyContentV1 {
+                media_type: "text/html",
+                bytes: b"<html><body><h1>Hello</h1><p>real mail</p></body></html>".to_vec(),
+            })
+        );
+    }
+
+    #[test]
+    fn unfolds_mime_parameters_before_resolving_a_multipart_boundary() {
+        let message = b"Content-Type: multipart/alternative;\r\n\
+\tboundary=\"----=_Part_4618394_53314671.1755262501399\"\r\n\r\n\
+------=_Part_4618394_53314671.1755262501399\r\n\
+Content-Type: text/html;\r\n\
+\tcharset=utf-8\r\n\
+Content-Transfer-Encoding: quoted-printable\r\n\r\n\
+<div style=3D\"display:none\"><span>Readable body</span></div>\r\n\
+------=_Part_4618394_53314671.1755262501399--\r\n";
+
+        let (headers, body) = split_headers_and_body(message).expect("top-level MIME body");
+        let boundary = header_parameter(headers, "content-type", "boundary")
+            .expect("folded boundary parameter");
+        assert_eq!(boundary, "----=_Part_4618394_53314671.1755262501399");
+        assert_eq!(
+            multipart_parts(body, &boundary)
+                .expect("closed multipart body")
+                .len(),
+            1
+        );
+        assert_eq!(readable_text_body(message), Some(b"Readable body".to_vec()));
+    }
+
+    #[test]
+    fn reads_bounded_vendor_html_with_an_implicit_multipart_end_and_literal_equals() {
+        let message = b"Content-Type: multipart/alternative; boundary=x\r\n\r\n\
+--x \t\r\n\
+Content-Type: text/html; charset=utf-8\r\n\
+Content-Transfer-Encoding: quoted-printable\r\n\r\n\
+<p>one=two</p>\r\n";
+
+        assert_eq!(readable_text_body(message), Some(b"one=two".to_vec()));
+    }
+
+    #[test]
+    fn recovers_vendor_html_leaf_when_outer_boundary_parameter_is_missing() {
+        let message = b"Subject: vendor\r\n\
+Content-Type: multipart/alternative\r\n\r\n\
+------=_Part_4618394_53314671.1755262501399\r\n\
+Content-ID: <vendor-body>\r\n\
+Content-Type: text/html;charset=utf-8\r\n\
+Content-Transfer-Encoding: quoted-printable\r\n\r\n\
+<html><body><h1>Order</h1><p>Readable=20mail</p></body></html>\r\n\
+------=_Part_4618394_53314671.1755262501399--\r\n";
+
+        assert_eq!(
+            readable_text_body(message),
+            Some(b"Order Readable mail".to_vec())
+        );
+    }
+
+    #[test]
+    fn transcodes_declared_legacy_plain_text_charset_to_utf8() {
+        let message = b"Content-Type: text/plain; charset=windows-1251\r\n\
+Content-Transfer-Encoding: 8bit\r\n\r\n\
+\xcf\xf0\xe8\xe2\xe5\xf2";
+
+        assert_eq!(
+            direct_plain_text_body(message),
+            Some("Привет".as_bytes().to_vec())
         );
     }
 }

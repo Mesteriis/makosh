@@ -87,6 +87,24 @@ export async function getCanonicalMessage(messageId: Uint8Array): Promise<Messag
 	return response.result.value.message
 }
 
+export async function resolveCanonicalMessageIdForEvidence(
+	evidenceId: Uint8Array,
+): Promise<Uint8Array> {
+	assertIdentifier('evidence ID', evidenceId)
+	const response = await getCommunicationsQueryConnectClient().query({
+		protocolMajor: 1,
+		operation: { case: 'getEvidence', value: { evidenceId } },
+	})
+	if (
+		response.errorCode
+		|| response.result.case !== 'getEvidence'
+		|| response.result.value.messageId.byteLength !== CANONICAL_ID_BYTES
+	) {
+		throw new Error('Canonical message for evidence is unavailable')
+	}
+	return new Uint8Array(response.result.value.messageId)
+}
+
 export async function listCanonicalConversationMessages(
 	conversationId: Uint8Array,
 	limit = 100,

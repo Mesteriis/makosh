@@ -75,9 +75,11 @@ fn is_column_definition(node: &Node) -> bool {
 
 fn is_additive_alter(node: &Node) -> bool {
     let Some(NodeEnum::AlterTableCmd(command)) = node.node.as_ref() else {
+        eprintln!("developer_storage_migration_alter_rejected=missing_command");
         return false;
     };
-    match AlterTableType::try_from(command.subtype) {
+    let subtype = AlterTableType::try_from(command.subtype);
+    let admitted = match subtype {
         Ok(AlterTableType::AtAddColumn) => command
             .def
             .as_ref()
@@ -87,7 +89,11 @@ fn is_additive_alter(node: &Node) -> bool {
             .as_ref()
             .is_some_and(|definition| is_check_constraint(definition)),
         _ => false,
+    };
+    if !admitted {
+        eprintln!("developer_storage_migration_alter_rejected=subtype_{subtype:?}");
     }
+    admitted
 }
 
 fn is_check_constraint(node: &Node) -> bool {
@@ -110,5 +116,22 @@ fn is_owner_local_table_constraint(node: &Node, owner: &str) -> bool {
         Ok(ConstrType::ConstrPrimary | ConstrType::ConstrUnique | ConstrType::ConstrCheck) => true,
         Ok(ConstrType::ConstrForeign) => is_owned_relation(constraint.pktable.as_ref(), owner),
         _ => false,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::admit_owner_local_additive_sql;
+
+    #[test]
+    fn admits_owner_local_boolean_marker_column() {
+        admit_owner_local_additive_sql(
+            "mail",
+            r#"
+ALTER TABLE hermes_data.mail_sync_runs
+    ADD COLUMN deadline_exceeded BOOLEAN NOT NULL DEFAULT FALSE;
+"#,
+        )
+        .expect("owner-local additive marker column");
     }
 }

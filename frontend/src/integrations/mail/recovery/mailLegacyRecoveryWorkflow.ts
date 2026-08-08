@@ -1,5 +1,10 @@
 import {
+	ClientSettingsApplyStateV1,
+	type ClientModuleSettingsTargetBootstrapV1,
+} from '../../../gen/hermes/gateway/v1/client_bootstrap_pb'
+import {
 	MailAccountReadinessV1,
+	MailCredentialBindingStateV1,
 	MailCredentialPurposeV1,
 	type MailAccountStatusV1,
 	type MailCredentialBindingReceiptV1,
@@ -70,6 +75,7 @@ export class MailLegacyRecoveryWorkflowV1 {
 		registrationId: string
 		plan: LegacyProviderRecoveryPlanV1
 		candidate: LegacyProviderRecoveryCandidateV1
+		settingsTargets?: readonly ClientModuleSettingsTargetBootstrapV1[]
 		explicitRetryOutcomeUnknown?: boolean
 	}): Promise<MailLegacyRecoveryResultV1> {
 		if (input.candidate.kind !== 'gmail' && input.candidate.kind !== 'icloud') {
@@ -93,7 +99,8 @@ export class MailLegacyRecoveryWorkflowV1 {
 			? 'mail_gmail_create_target'
 			: 'mail_icloud_create_target'
 		const createStep = await journal.begin(createStepId)
-		const target = await this.ports.configuration.createTarget(
+		const existingTarget = matchingMailTarget(input.settingsTargets ?? [], source.accountId)
+		const target = existingTarget ?? await this.ports.configuration.createTarget(
 			input.registrationId,
 			createStep.operationId,
 		)
@@ -189,12 +196,20 @@ export class MailLegacyRecoveryWorkflowV1 {
 				=== MailCredentialPurposeV1.MAIL_CREDENTIAL_PURPOSE_IMAP_PASSWORD,
 		)
 		const provisionStepId = 'mail_icloud_provision_imap_password'
-		const provisionStep = binding?.credentialRevision
-			? await journal.inspect(provisionStepId, target.configurationInstanceId)
-			: await journal.begin(provisionStepId, target.configurationInstanceId)
+		const provisionStep = await journal.begin(
+			provisionStepId,
+			target.configurationInstanceId,
+		)
+		const needsCredentialRepair = binding
+			? binding.state
+				!== MailCredentialBindingStateV1.MAIL_CREDENTIAL_BINDING_STATE_ACTIVE
+			: !provisionStep.publicRevision
+		const needsBindingRepair = !binding
+			|| binding.state
+				!== MailCredentialBindingStateV1.MAIL_CREDENTIAL_BINDING_STATE_ACTIVE
 		let credentialRevision = binding?.credentialRevision
 			?? provisionStep.publicRevision
-		if (!credentialRevision) {
+		if (needsCredentialRepair) {
 			const vault = await this.ports.vault.provisionCustodied({
 				operationId: provisionStep.operationId,
 				targetRegistrationId: input.registrationId,
@@ -203,7 +218,7 @@ export class MailLegacyRecoveryWorkflowV1 {
 				purposeId: 'mail_imap_password',
 				secretClass: OwnerVaultSecretClassV1.PROVIDER_CREDENTIAL,
 				action: OwnerVaultActionV1.CREATE,
-				secretRevision: 1n,
+				secretRevision: credentialRevision ?? 1n,
 			}, (authorized) => this.ports.source.sealSource({
 				...authorized,
 				recoverySessionId: input.plan.recoverySessionId,
@@ -212,19 +227,22 @@ export class MailLegacyRecoveryWorkflowV1 {
 			}))
 			credentialRevision = vault.secretRevision
 		}
+		if (!credentialRevision) {
+			throw new Error('mail legacy recovery credential revision is unavailable')
+		}
 		await journal.complete(provisionStepId, provisionStep, {
 			targetConfigurationInstanceId: target.configurationInstanceId,
 			publicRevision: credentialRevision,
 		})
 		const bindStepId = 'mail_icloud_bind_imap_password'
-		const bindStep = binding?.credentialRevision
-			? await journal.inspect(bindStepId, target.configurationInstanceId)
-			: await journal.begin(bindStepId, target.configurationInstanceId)
-		if (!binding?.credentialRevision) {
+		const bindStep = needsBindingRepair
+			? await journal.begin(bindStepId, target.configurationInstanceId)
+			: await journal.inspect(bindStepId, target.configurationInstanceId)
+		if (needsBindingRepair) {
 			await this.ports.mail.bind({
 				connectionId: source.accountId,
 				purpose: MailCredentialPurposeV1.MAIL_CREDENTIAL_PURPOSE_IMAP_PASSWORD,
-				expectedBindingRevision: 0n,
+				expectedBindingRevision: binding?.bindingRevision ?? 0n,
 				credentialRevision,
 			})
 		}
@@ -257,6 +275,33 @@ export class MailLegacyRecoveryWorkflowV1 {
 			state: required(input.returnedState),
 			authorizationCode: required(input.authorizationCode),
 		})
+	}
+}
+
+function matchingMailTarget(
+	targets: readonly ClientModuleSettingsTargetBootstrapV1[],
+	connectionId: string,
+): { configurationInstanceId: string; desiredRevision: bigint; applyState: string } | undefined {
+	const matches = targets.filter((target) => target.values.some((entry) =>
+		entry.settingId === 'mail.connection_id'
+		&& entry.value?.value.case === 'stringValue'
+		&& entry.value.value.value === connectionId,
+	))
+	if (matches.length > 1) {
+		throw new Error('mail legacy recovery target is ambiguous')
+	}
+	const target = matches[0]
+	if (!target) return undefined
+	if (target.applyState !== ClientSettingsApplyStateV1.CURRENT
+		&& target.applyState !== ClientSettingsApplyStateV1.BLOCKED_CONFIG) {
+		throw new Error('mail legacy recovery settings outcome is ambiguous')
+	}
+	return {
+		configurationInstanceId: target.configurationInstanceId,
+		desiredRevision: target.desiredRevision,
+		applyState: target.applyState === ClientSettingsApplyStateV1.CURRENT
+			? 'current'
+			: 'blocked_config',
 	}
 }
 

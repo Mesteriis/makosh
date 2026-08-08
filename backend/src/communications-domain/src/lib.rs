@@ -109,6 +109,7 @@ pub fn accept_command(
         forward_origin_source_cursor: command.forward_origin_source_cursor,
         body: command.body,
         body_blob: command.body_blob,
+        body_media_type: command.body_media_type,
         body_admission_failure: command.body_admission_failure,
         attachment_descriptor: command.attachment_descriptor,
         observed_at_unix_seconds: command.observed_at_unix_seconds,
@@ -144,6 +145,18 @@ const fn valid_timestamp(seconds: i64, nanos: i32) -> bool {
 fn validate_body_admission(
     command: &RecordCommunicationEvidenceV1,
 ) -> Result<(), CommunicationsDomainError> {
+    let media_type_is_valid = command
+        .body_media_type
+        .as_deref()
+        .is_some_and(|value| matches!(value, "text/plain" | "text/html"));
+    if matches!(
+        command.body,
+        hermes_communications_api::CommunicationBodyStateV1::PendingBlob
+            | hermes_communications_api::CommunicationBodyStateV1::AdmittedBlob
+    ) != media_type_is_valid
+    {
+        return Err(CommunicationsDomainError::InvalidAttachmentScope);
+    }
     if command.body == hermes_communications_api::CommunicationBodyStateV1::AdmittedBlob {
         let Some(receipt) = command.body_blob.as_ref() else {
             return Err(CommunicationsDomainError::InvalidAttachmentScope);
@@ -409,6 +422,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::ChatMessage,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1,
@@ -458,6 +472,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::MessageDeleted,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1,
@@ -494,6 +509,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::EmailMessage,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1,
@@ -538,6 +554,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::ChatMessage,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1,
@@ -583,6 +600,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::EmailMessage,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1,

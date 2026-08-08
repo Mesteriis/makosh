@@ -128,7 +128,7 @@ pub struct CommunicationsEventRuntimeV1 {
     control_channel: ManagedControlChannelV2<UnixStream>,
     connection: RuntimeJetStreamConnection,
     permits: CommunicationsSubscribePermitsV1,
-    next_consumer: CommunicationsConsumerV1,
+    consumer_schedule: CommunicationsConsumerScheduleV1,
     domain_publish_permit: RuntimePublishPermitV1,
     persistence: CommunicationsDurablePersistence,
     call_evidence_persistence: CommunicationsCallEvidencePersistenceV1,
@@ -186,6 +186,49 @@ enum CommunicationsConsumerV1 {
     ReplayCommand,
 }
 
+const COMMUNICATIONS_OBSERVATION_BURST_V1: u16 = 512;
+
+struct CommunicationsConsumerScheduleV1 {
+    next: CommunicationsConsumerV1,
+    next_secondary: CommunicationsConsumerV1,
+    observation_burst_remaining: u16,
+}
+
+impl CommunicationsConsumerScheduleV1 {
+    const fn new() -> Self {
+        Self {
+            next: CommunicationsConsumerV1::Observation,
+            next_secondary: CommunicationsConsumerV1::CallEvidence,
+            observation_burst_remaining: COMMUNICATIONS_OBSERVATION_BURST_V1,
+        }
+    }
+
+    const fn selected(&self) -> CommunicationsConsumerV1 {
+        self.next
+    }
+
+    fn complete_attempt(&mut self, delivered: bool) {
+        if self.next == CommunicationsConsumerV1::Observation {
+            if delivered {
+                self.observation_burst_remaining =
+                    self.observation_burst_remaining.saturating_sub(1);
+                if self.observation_burst_remaining > 0 {
+                    return;
+                }
+            }
+            self.next = self.next_secondary;
+            self.next_secondary = match self.next_secondary.successor() {
+                CommunicationsConsumerV1::Observation => CommunicationsConsumerV1::CallEvidence,
+                successor => successor,
+            };
+            self.observation_burst_remaining = COMMUNICATIONS_OBSERVATION_BURST_V1;
+            return;
+        }
+        self.next = CommunicationsConsumerV1::Observation;
+        self.observation_burst_remaining = COMMUNICATIONS_OBSERVATION_BURST_V1;
+    }
+}
+
 impl CommunicationsConsumerV1 {
     const fn successor(self) -> Self {
         match self {
@@ -204,6 +247,42 @@ impl CommunicationsConsumerV1 {
             Self::TaskSourcePrepare => Self::ReplayCommand,
             Self::ReplayCommand => Self::Observation,
         }
+    }
+}
+
+#[cfg(test)]
+mod consumer_schedule_tests {
+    use super::{
+        COMMUNICATIONS_OBSERVATION_BURST_V1, CommunicationsConsumerScheduleV1,
+        CommunicationsConsumerV1,
+    };
+
+    #[test]
+    fn observation_backlog_drains_in_a_bounded_burst_before_fair_rotation() {
+        let mut schedule = CommunicationsConsumerScheduleV1::new();
+        for _ in 1..COMMUNICATIONS_OBSERVATION_BURST_V1 {
+            assert_eq!(schedule.selected(), CommunicationsConsumerV1::Observation);
+            schedule.complete_attempt(true);
+        }
+        assert_eq!(schedule.selected(), CommunicationsConsumerV1::Observation);
+        schedule.complete_attempt(true);
+        assert_eq!(schedule.selected(), CommunicationsConsumerV1::CallEvidence);
+        schedule.complete_attempt(false);
+        assert_eq!(schedule.selected(), CommunicationsConsumerV1::Observation);
+    }
+
+    #[test]
+    fn empty_observation_consumer_rotates_without_spinning() {
+        let mut schedule = CommunicationsConsumerScheduleV1::new();
+        schedule.complete_attempt(false);
+        assert_eq!(schedule.selected(), CommunicationsConsumerV1::CallEvidence);
+        schedule.complete_attempt(false);
+        assert_eq!(schedule.selected(), CommunicationsConsumerV1::Observation);
+        schedule.complete_attempt(false);
+        assert_eq!(
+            schedule.selected(),
+            CommunicationsConsumerV1::AttachmentBlobAdmission
+        );
     }
 }
 
@@ -578,7 +657,7 @@ impl CommunicationsEventRuntimeV1 {
             control_channel,
             connection,
             permits,
-            next_consumer: CommunicationsConsumerV1::Observation,
+            consumer_schedule: CommunicationsConsumerScheduleV1::new(),
             domain_publish_permit,
             persistence,
             call_evidence_persistence,
@@ -768,9 +847,8 @@ impl CommunicationsEventRuntimeV1 {
 
     pub async fn consume_next(&mut self) -> Result<(), CommunicationsDeliveryErrorV1> {
         let canonical_event_context = self.canonical_event_context()?;
-        let consumer = self.next_consumer;
-        self.next_consumer = consumer.successor();
-        match consumer {
+        let consumer = self.consumer_schedule.selected();
+        let result = match consumer {
             CommunicationsConsumerV1::Observation => consume_next_observation_v1(
                 &self.persistence,
                 &self.connection,
@@ -1112,7 +1190,9 @@ impl CommunicationsEventRuntimeV1 {
                 .map(|_| ())
                 .map_err(replay_command_error)
             }
-        }
+        };
+        self.consumer_schedule.complete_attempt(result.is_ok());
+        result
     }
 
     pub async fn publish_call_evidence_realtime(
@@ -1313,9 +1393,14 @@ fn custody_worker_outcome(
     match outcome {
         Ok(processed) => Ok(processed),
         Err(
-            CommunicationsCustodyWorkerErrorV1::RetryPending
-            | CommunicationsCustodyWorkerErrorV1::StorageUnavailable,
-        ) => Ok(false),
+            error @ (CommunicationsCustodyWorkerErrorV1::RetryPending
+            | CommunicationsCustodyWorkerErrorV1::StorageUnavailable),
+        ) => {
+            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                eprintln!("developer_communications_custody_retry={error:?}");
+            }
+            Ok(false)
+        }
     }
 }
 

@@ -35,6 +35,7 @@ message BodyBlobReceiptV1 {
   bytes sha256 = 4;
   // Opaque Kernel-signed custody proof. It carries no plaintext or Blob key.
   bytes custody_transfer_source_proof = 5;
+  string media_type = 6;
 }
 
 enum BodyAdmissionFailureV1 {

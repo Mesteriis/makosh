@@ -11,7 +11,11 @@ use hermes_communications_domain::{
 use hermes_communications_ingress::{
     BodyAvailabilityV1, CommunicationDirectionV1 as IngressDirectionV1,
     CommunicationEvidenceKindV1, ProviderProvenanceV1,
-    admission::communication_observed_contract_reference_v1, v1::CommunicationObservationV1,
+    admission::{
+        communication_observed_contract_reference_v1,
+        communication_observed_prior_contract_reference_v1,
+    },
+    v1::CommunicationObservationV1,
 };
 use hermes_communications_persistence::{
     CommunicationsConsumeOutcomeV1, CommunicationsDurablePersistence,
@@ -162,6 +166,7 @@ struct SourceBodyCustodyReceiptV1 {
     declared_bytes: u64,
     sha256: [u8; 32],
     custody_transfer_source_proof: Vec<u8>,
+    media_type: String,
 }
 
 fn command_from_envelope(
@@ -175,11 +180,25 @@ fn command_from_envelope(
         return Err(CommunicationsEventConsumeErrorV1::WrongContract);
     };
     let expected_contract = communication_observed_contract_reference_v1();
-    if contract.owner != expected_contract.owner
-        || contract.name != expected_contract.name
-        || contract.major != expected_contract.major
-        || contract.revision != expected_contract.revision
-        || contract.schema_sha256 != expected_contract.schema_sha256
+    let prior_contract = communication_observed_prior_contract_reference_v1();
+    let mut transitional_contract = expected_contract.clone();
+    transitional_contract.revision = prior_contract.revision;
+    let is_current_contract = contract.owner == expected_contract.owner
+        && contract.name == expected_contract.name
+        && contract.major == expected_contract.major
+        && contract.revision == expected_contract.revision
+        && contract.schema_sha256 == expected_contract.schema_sha256;
+    let is_prior_contract = contract.owner == prior_contract.owner
+        && contract.name == prior_contract.name
+        && contract.major == prior_contract.major
+        && contract.revision == prior_contract.revision
+        && contract.schema_sha256 == prior_contract.schema_sha256;
+    let is_transitional_contract = contract.owner == transitional_contract.owner
+        && contract.name == transitional_contract.name
+        && contract.major == transitional_contract.major
+        && contract.revision == transitional_contract.revision
+        && contract.schema_sha256 == transitional_contract.schema_sha256;
+    if (!is_current_contract && !is_prior_contract && !is_transitional_contract)
         || metadata.observation_id != envelope.message_id
         || metadata.source_cursor_sha256.len() != 32
     {
@@ -188,7 +207,7 @@ fn command_from_envelope(
     let payload = CommunicationObservationV1::decode(envelope.payload.as_slice())
         .map_err(|_| CommunicationsEventConsumeErrorV1::InvalidPayload)?;
     let observed_body = body_from_wire(payload.body)?;
-    let source_body = source_body_from_wire(payload.body_blob)?;
+    let source_body = source_body_from_wire(payload.body_blob, is_prior_contract)?;
     let (body, body_blob) = match (observed_body, source_body.as_ref()) {
         (BodyAvailabilityV1::AdmittedBlob, Some(_)) => {
             (CommunicationBodyStateV1::PendingBlob, None)
@@ -222,6 +241,7 @@ fn command_from_envelope(
             kind: canonical_kind(kind_from_wire(payload.kind)?),
             body,
             body_blob,
+            body_media_type: source_body.as_ref().map(|value| value.media_type.clone()),
             body_admission_failure,
             attachment_descriptor: attachment_descriptor_from_wire(payload.attachment_descriptor)?,
             observed_at_unix_seconds: metadata
@@ -305,10 +325,16 @@ fn body_from_wire(value: i32) -> Result<BodyAvailabilityV1, CommunicationsEventC
 }
 fn source_body_from_wire(
     value: Option<hermes_communications_ingress::v1::BodyBlobReceiptV1>,
+    is_prior_contract: bool,
 ) -> Result<Option<SourceBodyCustodyReceiptV1>, CommunicationsEventConsumeErrorV1> {
     let Some(value) = value else { return Ok(None) };
     let reference_id = id16(&value.reference_id)?;
     let sha256 = id32(&value.sha256)?;
+    let media_type = match value.media_type.as_str() {
+        "text/plain" | "text/html" => value.media_type,
+        "" if is_prior_contract => "text/plain".to_owned(),
+        _ => return Err(CommunicationsEventConsumeErrorV1::InvalidPayload),
+    };
     if value.blob_ref.trim().is_empty()
         || value.blob_ref.len() > 512
         || !value.blob_ref.is_ascii()
@@ -324,6 +350,7 @@ fn source_body_from_wire(
         declared_bytes: value.declared_bytes,
         sha256,
         custody_transfer_source_proof: value.custody_transfer_source_proof,
+        media_type,
     }))
 }
 fn body_admission_failure_from_wire(
@@ -575,5 +602,113 @@ mod tests {
             command.command.provider,
             CommunicationProviderProvenanceV1::Zulip
         );
+    }
+
+    #[test]
+    fn accepts_exact_prior_contract_for_durable_backlog() {
+        let draft = new_scoped_communication_observation_draft(
+            "provider-local-id",
+            SourceEnvelope {
+                provider: ProviderProvenanceV1::MailImap,
+                external_record_id: "message-8".to_owned(),
+                scope: Some(SourceScopeEnvelope {
+                    external_account_id: "account-1".to_owned(),
+                    external_conversation_id: None,
+                    external_participant_id: None,
+                    external_media_id: None,
+                    external_reply_to_record_id: None,
+                    external_forward_origin_record_id: None,
+                }),
+            },
+            CommunicationEvidenceKindV1::EmailMessage,
+            BodyAvailabilityV1::MetadataOnly,
+            CommunicationDirectionV1::Incoming,
+            Some(10),
+        )
+        .expect("draft");
+        let record = build_observation_outbox_record_v1(
+            &draft,
+            &ObservationEnvelopeContextV1 {
+                runtime_instance_id: "mail-runtime-1".to_owned(),
+                runtime_generation: 1,
+                module_id: "mail-runtime".to_owned(),
+                recorded_at_unix_seconds: 10,
+                recorded_at_nanos: 0,
+            },
+        )
+        .expect("record");
+        let mut envelope = decode_envelope_v1(record.exact_bytes()).expect("envelope");
+        let prior = communication_observed_prior_contract_reference_v1();
+        let contract = envelope.contract.as_mut().expect("contract");
+        contract.owner = prior.owner;
+        contract.name = prior.name;
+        contract.major = prior.major;
+        contract.revision = prior.revision;
+        contract.schema_sha256 = prior.schema_sha256;
+
+        command_from_envelope(&envelope).expect("prior contract backlog");
+    }
+
+    #[test]
+    fn prior_body_receipt_defaults_to_plain_text_without_widening_current_contract() {
+        let legacy = hermes_communications_ingress::v1::BodyBlobReceiptV1 {
+            blob_ref: "legacy-body".to_owned(),
+            reference_id: vec![1; 16],
+            declared_bytes: 1,
+            sha256: vec![2; 32],
+            custody_transfer_source_proof: vec![3],
+            media_type: String::new(),
+        };
+
+        assert_eq!(
+            source_body_from_wire(Some(legacy.clone()), true)
+                .expect("prior receipt")
+                .expect("body")
+                .media_type,
+            "text/plain",
+        );
+        assert!(matches!(
+            source_body_from_wire(Some(legacy), false),
+            Err(CommunicationsEventConsumeErrorV1::InvalidPayload),
+        ));
+    }
+
+    #[test]
+    fn accepts_exact_transitional_revision_for_already_published_backlog() {
+        let draft = new_scoped_communication_observation_draft(
+            "provider-local-id",
+            SourceEnvelope {
+                provider: ProviderProvenanceV1::MailImap,
+                external_record_id: "message-9".to_owned(),
+                scope: Some(SourceScopeEnvelope {
+                    external_account_id: "account-1".to_owned(),
+                    external_conversation_id: None,
+                    external_participant_id: None,
+                    external_media_id: None,
+                    external_reply_to_record_id: None,
+                    external_forward_origin_record_id: None,
+                }),
+            },
+            CommunicationEvidenceKindV1::EmailMessage,
+            BodyAvailabilityV1::MetadataOnly,
+            CommunicationDirectionV1::Incoming,
+            Some(10),
+        )
+        .expect("draft");
+        let record = build_observation_outbox_record_v1(
+            &draft,
+            &ObservationEnvelopeContextV1 {
+                runtime_instance_id: "mail-runtime-1".to_owned(),
+                runtime_generation: 1,
+                module_id: "mail-runtime".to_owned(),
+                recorded_at_unix_seconds: 10,
+                recorded_at_nanos: 0,
+            },
+        )
+        .expect("record");
+        let mut envelope = decode_envelope_v1(record.exact_bytes()).expect("envelope");
+        envelope.contract.as_mut().expect("contract").revision = 2;
+
+        command_from_envelope(&envelope).expect("transitional backlog");
     }
 }

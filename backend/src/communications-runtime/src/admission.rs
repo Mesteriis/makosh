@@ -826,7 +826,7 @@ pub fn communications_observe_capability_v1() -> CapabilityDescriptorV1 {
     let observed = communication_observed_contract_reference_v1();
     CapabilityDescriptorV1 {
         capability_id: COMMUNICATIONS_OBSERVE_CAPABILITY_ID.to_owned(),
-        capability_revision: 1,
+        capability_revision: 2,
         criticality: CapabilityCriticalityV1::Required as i32,
         provides: vec![ProvidedSurfaceV1 {
             kind: ProvidedSurfaceKindV1::DurableConsumer as i32,

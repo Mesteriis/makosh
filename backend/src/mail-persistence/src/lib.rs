@@ -80,7 +80,9 @@ pub use schema::{
     MAIL_STORAGE_BUNDLE_REVISION_V16, MAIL_STORAGE_BUNDLE_REVISION_V17,
     MAIL_STORAGE_BUNDLE_REVISION_V18, MAIL_STORAGE_BUNDLE_REVISION_V19,
     MAIL_STORAGE_BUNDLE_REVISION_V20, MAIL_STORAGE_BUNDLE_REVISION_V22,
-    MailIcloudCardDavCredentialSchemaErrorV1, append_mail_icloud_carddav_credential_storage_v1,
+    MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1, MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1,
+    MailIcloudCardDavCredentialSchemaErrorV1, MailSyncDeadlineFailureSchemaErrorV1,
+    append_mail_icloud_carddav_credential_storage_v1, append_mail_sync_deadline_failure_storage_v1,
     mail_storage_bundle_v1,
 };
 pub use sync_health::{MAIL_SCHEMA_V10, MailSyncRunStartOutcomeV1};

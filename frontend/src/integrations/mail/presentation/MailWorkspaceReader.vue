@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { Icon } from '@/shared/ui'
+import { computed } from 'vue'
+import { HtmlPreview, Icon } from '@/shared/ui'
+import { rewriteRemoteImageSources, sanitizeEmailHtml } from '@/shared/sanitize/emailHtml'
 import type { MailMessageDetailCard } from './mailOperationalReadModel'
 
-defineProps<{
+const props = defineProps<{
 	detail: MailMessageDetailCard | null
 	inspectorVisible: boolean
+	bodyContentStatus: 'idle' | 'loading' | 'ready' | 'unavailable'
+	bodyContentStatusMessage: string
+	bodyText: string
+	bodyFormat: 'text' | 'html'
 }>()
+
+const renderedBody = computed(() => props.bodyFormat === 'html'
+	? rewriteRemoteImageSources(sanitizeEmailHtml(props.bodyText), () => null)
+	: props.bodyText)
 
 const emit = defineEmits<{
 	toggleInspector: []
@@ -47,8 +57,18 @@ const emit = defineEmits<{
 				</div>
 
 				<div class="mail-message-body">
-					<p>{{ detail.snippet }}</p>
-					<aside>
+					<div v-if="bodyContentStatus === 'loading'" class="mail-message-body__skeleton" aria-label="Loading message body" />
+					<HtmlPreview
+						v-else-if="bodyContentStatus === 'ready'"
+						class="mail-message-body__content"
+						:content="renderedBody"
+						:format="bodyFormat"
+						:sanitized="bodyFormat === 'html'"
+						:isolated="bodyFormat === 'html'"
+						empty-label="No message body"
+					/>
+					<p v-else>{{ bodyContentStatusMessage || detail.snippet }}</p>
+					<aside v-if="bodyContentStatus !== 'ready'">
 						<Icon icon="tabler:info-circle" size="1rem" />
 						<span>{{ detail.contentState }}</span>
 					</aside>

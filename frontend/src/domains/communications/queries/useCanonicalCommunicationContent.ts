@@ -5,11 +5,12 @@ import {
 	type CanonicalCommunicationContentStatus,
 } from '../presentation/canonicalCommunicationContentModel'
 import { readCanonicalCommunicationContent } from './canonicalCommunicationsContent'
+import type { CanonicalCommunicationContent } from './canonicalCommunicationsContent'
 
 type CanonicalCommunicationContentReader = (
 	messageId: Uint8Array,
 	signal?: AbortSignal,
-) => Promise<Uint8Array>
+) => Promise<CanonicalCommunicationContent>
 
 export function useCanonicalCommunicationContent(
 	readContent: CanonicalCommunicationContentReader = readCanonicalCommunicationContent,
@@ -36,7 +37,7 @@ export function useCanonicalCommunicationContent(
 		try {
 			const content = await readContent(messageId, activeRequest.signal)
 			if (requestGeneration !== generation) return
-			bodyText.value = decodeCanonicalCommunicationContent(content)
+			bodyText.value = decodeCanonicalCommunicationContent(content.bytes)
 			status.value = 'ready'
 			statusMessage.value = ''
 		} catch (error) {

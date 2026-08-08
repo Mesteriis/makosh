@@ -77,7 +77,7 @@ describe('Mail operational read controller', () => {
 		expect(listMailOperationalMessages).toHaveBeenCalledWith({
 			connectionId: 'primary',
 			folderId: 'inbox',
-			providerThreadId: 'thread-1',
+			providerThreadId: undefined,
 		})
 		expect(getMailOperationalMessage).toHaveBeenCalledWith({
 			connectionId: 'primary',
@@ -88,6 +88,29 @@ describe('Mail operational read controller', () => {
 			selectedConnectionId: 'primary',
 		})
 		expect(controller.model.value.detail?.subject).toBe('Clean room')
+	})
+
+	it('keeps the message list primary and applies a thread only after explicit selection', async () => {
+		const controller = useMailOperationalRead({
+			canQuery: () => true,
+			connections: () => [mailConnection()],
+		})
+		await controller.reconcile()
+		vi.mocked(listMailOperationalMessages).mockClear()
+
+		await controller.selectThread('thread-1')
+
+		expect(listMailOperationalMessages).toHaveBeenCalledWith({
+			connectionId: 'primary',
+			folderId: 'inbox',
+			providerThreadId: 'thread-1',
+		})
+		await controller.selectThread('')
+		expect(listMailOperationalMessages).toHaveBeenLastCalledWith({
+			connectionId: 'primary',
+			folderId: 'inbox',
+			providerThreadId: undefined,
+		})
 	})
 
 	it('fails closed before transport when capability or effective connection is absent', async () => {

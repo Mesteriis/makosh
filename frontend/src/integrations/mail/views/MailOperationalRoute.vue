@@ -28,11 +28,16 @@ const props = defineProps<{
 	canQueryPermanentDeleteStatus: boolean
 	canSync: boolean
 	canSyncHealth: boolean
+	bodyContentStatus: 'idle' | 'loading' | 'ready' | 'unavailable'
+	bodyContentStatusMessage: string
+	bodyText: string
+	bodyFormat: 'text' | 'html'
 	modules: readonly ClientModuleBootstrapV1[]
 	navigationAccountId?: string
 }>()
 const emit = defineEmits<{
 	accountNavigationChange: [snapshot: ProviderAccountNavigationSnapshot]
+	messageEvidenceChange: [evidenceId: Uint8Array | undefined]
 }>()
 let accountNavigationLoading = true
 
@@ -173,11 +178,21 @@ watch(
 	() => read.model.value.selectedConnectionId,
 	() => emitAccountNavigation(),
 )
+
+watch(
+	() => read.model.value.detail?.observationAnchorId,
+	(evidenceId) => emit('messageEvidenceChange', evidenceId),
+	{ immediate: true },
+)
 </script>
 
 <template>
 	<MailOperationalPage
 		:composition-model="composition.model.value"
+		:body-content-status="bodyContentStatus"
+		:body-content-status-message="bodyContentStatusMessage"
+		:body-text="bodyText"
+		:body-format="bodyFormat"
 		:delivery-model="delivery.model.value"
 		:flag-model="messageFlags.model.value"
 		:location-model="messageLocation.model.value"

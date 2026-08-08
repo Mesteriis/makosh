@@ -55,6 +55,29 @@ fn main() -> Result<(), String> {
     }
 }
 
+#[cfg(test)]
+mod maintenance_bounds_tests {
+    use super::{
+        MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK,
+        MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, maintenance_interval,
+    };
+
+    #[test]
+    fn custody_and_index_maintenance_have_independent_exact_bounds() {
+        assert_eq!(MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK, 64);
+        assert_eq!(MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, 64);
+    }
+
+    #[tokio::test]
+    async fn delayed_maintenance_skips_missed_ticks_instead_of_starving_event_delivery() {
+        let interval = maintenance_interval();
+        assert_eq!(
+            interval.missed_tick_behavior(),
+            tokio::time::MissedTickBehavior::Skip,
+        );
+    }
+}
+
 fn export_storage_bundle<I>(arguments: &mut std::iter::Peekable<I>) -> Result<(), String>
 where
     I: Iterator<Item = OsString>,
@@ -153,8 +176,7 @@ where
                 runtime_startup_reason_code(error),
             )
         })?;
-    let mut maintenance =
-        executor.block_on(async { tokio::time::interval(Duration::from_secs(1)) });
+    let mut maintenance = executor.block_on(async { maintenance_interval() });
     loop {
         executor.block_on(consume_or_tick(&mut runtime, &mut maintenance))?;
         let now = SystemTime::now()
@@ -188,6 +210,12 @@ where
     }
 }
 
+fn maintenance_interval() -> tokio::time::Interval {
+    let mut interval = tokio::time::interval(Duration::from_secs(1));
+    interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+    interval
+}
+
 const fn runtime_startup_reason_code(error: CommunicationsEventRuntimeErrorV1) -> &'static str {
     match error {
         CommunicationsEventRuntimeErrorV1::Admission => "admission_rejected",
@@ -196,6 +224,7 @@ const fn runtime_startup_reason_code(error: CommunicationsEventRuntimeErrorV1) -
 }
 
 const MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK: usize = 64;
+const MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK: usize = 64;
 
 async fn consume_or_tick(
     runtime: &mut CommunicationsEventRuntimeV1,
@@ -217,7 +246,7 @@ async fn consume_or_tick(
         }
     }
     if client_delivery {
-        if tokio::time::timeout(Duration::ZERO, maintenance.tick())
+        if tokio::time::timeout(Duration::from_millis(1), maintenance.tick())
             .await
             .is_ok()
         {
@@ -260,11 +289,18 @@ async fn run_maintenance_tick(runtime: &mut CommunicationsEventRuntimeV1) -> Res
             return Err("Communications runtime replay index maintenance failed".to_owned());
         }
     }
-    let custody_processed = runtime
-        .process_next_body_custody_transfer()
-        .await
-        .map_err(|error| maintenance_error("body_custody", error))?;
-    if custody_processed && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+    let mut custody_processed = 0_usize;
+    for _ in 0..MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK {
+        let processed = runtime
+            .process_next_body_custody_transfer()
+            .await
+            .map_err(|error| maintenance_error("body_custody", error))?;
+        if !processed {
+            break;
+        }
+        custody_processed = custody_processed.saturating_add(1);
+    }
+    if custody_processed > 0 && std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_runtime_custody_processed={custody_processed}");
     }
     runtime

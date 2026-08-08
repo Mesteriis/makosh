@@ -38,9 +38,21 @@ pub const MAIL_STORAGE_BUNDLE_REVISION_V20: u32 = 20;
 /// migration step.
 pub const MAIL_STORAGE_BUNDLE_REVISION_V22: u32 = 22;
 pub const MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1: u32 = 29;
+pub const MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1: u32 = 31;
+
+pub const MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1: &str = r#"
+ALTER TABLE hermes_data.mail_sync_runs
+    ADD COLUMN deadline_exceeded BOOLEAN NOT NULL DEFAULT FALSE;
+"#;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MailIcloudCardDavCredentialSchemaErrorV1 {
+    InvalidPredecessor,
+    InvalidSuccessor,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MailSyncDeadlineFailureSchemaErrorV1 {
     InvalidPredecessor,
     InvalidSuccessor,
 }
@@ -206,6 +218,30 @@ pub fn append_mail_icloud_carddav_credential_storage_v1(
         .map_err(|_| MailIcloudCardDavCredentialSchemaErrorV1::InvalidSuccessor)
 }
 
+pub fn append_mail_sync_deadline_failure_storage_v1(
+    mut predecessor: StorageBundleV1,
+) -> Result<StorageBundleV1, MailSyncDeadlineFailureSchemaErrorV1> {
+    if predecessor.major != 1
+        || predecessor.revision != MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1
+        || predecessor.bundle_id != "mail_state"
+        || predecessor.owner_id != "mail"
+        || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
+        || hermes_storage_protocol::validation::validate_storage_bundle(&predecessor).is_err()
+    {
+        return Err(MailSyncDeadlineFailureSchemaErrorV1::InvalidPredecessor);
+    }
+    predecessor.steps.push(StorageMigrationStepV1 {
+        revision: MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1,
+        migration_id: "mail_sync_deadline_failure_marker".to_owned(),
+        forward_sql_utf8: MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1.as_bytes().to_vec(),
+        sha256: Sha256::digest(MAIL_SYNC_DEADLINE_FAILURE_SCHEMA_V1.as_bytes()).to_vec(),
+    });
+    predecessor.revision = MAIL_SYNC_DEADLINE_FAILURE_STORAGE_BUNDLE_REVISION_V1;
+    hermes_storage_protocol::validation::validate_storage_bundle(&predecessor)
+        .map(|()| predecessor)
+        .map_err(|_| MailSyncDeadlineFailureSchemaErrorV1::InvalidSuccessor)
+}
+
 #[cfg(test)]
 mod tests {
     use hermes_storage_protocol::validation::validate_storage_bundle;
@@ -289,6 +325,31 @@ mod tests {
             .expect("CardDAV credential SQL");
         assert!(sql.contains("mail_icloud_carddav_credential_bindings"));
         assert!(sql.contains("mail_icloud_carddav_lifecycle_credentials"));
+        assert!(!sql.contains("DROP "));
+        assert!(!sql.contains("communications"));
+    }
+
+    #[test]
+    fn sync_deadline_failure_successor_adds_only_the_mail_marker() {
+        let mut predecessor = mail_storage_bundle_v1();
+        predecessor.revision = MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1;
+        predecessor.steps.push(StorageMigrationStepV1 {
+            revision: MAIL_ICLOUD_CARDDAV_CREDENTIAL_STORAGE_BUNDLE_REVISION_V1,
+            migration_id: "mail_revision_29_predecessor".to_owned(),
+            forward_sql_utf8: b"CREATE TABLE hermes_data.mail_revision_29_predecessor (id BIGINT);"
+                .to_vec(),
+            sha256: Sha256::digest(
+                b"CREATE TABLE hermes_data.mail_revision_29_predecessor (id BIGINT);",
+            )
+            .to_vec(),
+        });
+
+        let bundle = append_mail_sync_deadline_failure_storage_v1(predecessor)
+            .expect("valid sync deadline failure successor");
+        assert_eq!(bundle.revision, 31);
+        let sql = std::str::from_utf8(&bundle.steps.last().unwrap().forward_sql_utf8)
+            .expect("sync deadline failure SQL");
+        assert!(sql.contains("ADD COLUMN deadline_exceeded BOOLEAN NOT NULL DEFAULT FALSE"));
         assert!(!sql.contains("DROP "));
         assert!(!sql.contains("communications"));
     }

@@ -204,7 +204,8 @@ impl MailDurablePersistence {
         sqlx::query(
             "UPDATE hermes_data.mail_sync_runs
              SET outcome = $2, observed_messages = $3, completed_at_unix_seconds = $4,
-                 failure_code = $5, projection_revision = projection_revision + 1
+                 failure_code = $5, deadline_exceeded = $6,
+                 projection_revision = projection_revision + 1
              WHERE operation_id = $1 AND outcome = 1",
         )
         .bind(operation_id)
@@ -214,7 +215,11 @@ impl MailDurablePersistence {
                 .map_err(|_| MailDurablePersistenceError::InvalidRow)?,
         )
         .bind(completed_at)
-        .bind(failure_code.map(failure_id))
+        .bind(failure_code.map(storage_failure_id))
+        .bind(matches!(
+            failure_code,
+            Some(MailSyncFailureCodeV1::DeadlineExceeded)
+        ))
         .execute(&mut *transaction)
         .await
         .map_err(|_| MailDurablePersistenceError::Database)?;
@@ -316,7 +321,7 @@ impl MailDurablePersistence {
         sqlx::query(
             "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                     started_at_unix_seconds, completed_at_unix_seconds, failure_code,
-                    runtime_generation, projection_revision
+                    deadline_exceeded, runtime_generation, projection_revision
              FROM hermes_data.mail_sync_runs
              WHERE connection_id = $1 AND operation_id = $2",
         )
@@ -344,7 +349,7 @@ impl MailDurablePersistence {
             sqlx::query(
                 "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                         started_at_unix_seconds, completed_at_unix_seconds, failure_code,
-                        runtime_generation, projection_revision, cursor_sequence
+                        deadline_exceeded, runtime_generation, projection_revision, cursor_sequence
                  FROM hermes_data.mail_sync_runs
                  WHERE connection_id = $1
                    AND (started_at_unix_seconds, cursor_sequence) < ($2, $3)
@@ -361,7 +366,7 @@ impl MailDurablePersistence {
             sqlx::query(
                 "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                         started_at_unix_seconds, completed_at_unix_seconds, failure_code,
-                        runtime_generation, projection_revision, cursor_sequence
+                        deadline_exceeded, runtime_generation, projection_revision, cursor_sequence
                  FROM hermes_data.mail_sync_runs
                  WHERE connection_id = $1
                  ORDER BY started_at_unix_seconds DESC, cursor_sequence DESC
@@ -493,7 +498,7 @@ async fn sync_run_for_update(
     sqlx::query(
         "SELECT operation_id, connection_id, trigger, outcome, observed_messages,
                 started_at_unix_seconds, completed_at_unix_seconds, failure_code,
-                runtime_generation, projection_revision
+                deadline_exceeded, runtime_generation, projection_revision
          FROM hermes_data.mail_sync_runs WHERE operation_id = $1 FOR UPDATE",
     )
     .bind(operation_id)
@@ -532,11 +537,7 @@ fn run_from_row(row: &PgRow) -> Result<MailSyncRunV1, MailDurablePersistenceErro
         completed_at_unix_seconds: row
             .try_get("completed_at_unix_seconds")
             .map_err(|_| MailDurablePersistenceError::InvalidRow)?,
-        failure_code: row
-            .try_get::<Option<i16>, _>("failure_code")
-            .map_err(|_| MailDurablePersistenceError::InvalidRow)?
-            .map(failure_from_id)
-            .transpose()?,
+        failure_code: failure_from_storage_row(row)?,
         runtime_generation: u64::try_from(
             row.try_get::<i64, _>("runtime_generation")
                 .map_err(|_| MailDurablePersistenceError::InvalidRow)?,
@@ -611,6 +612,36 @@ const fn failure_id(value: MailSyncFailureCodeV1) -> i16 {
         MailSyncFailureCodeV1::RuntimeRestarted => 9,
         MailSyncFailureCodeV1::DeadlineExceeded => 10,
     }
+}
+
+const fn storage_failure_id(value: MailSyncFailureCodeV1) -> i16 {
+    match value {
+        // Schema v10 admits IDs 1..=9. Revision 30 records the exact timeout
+        // meaning in an additive marker while retaining the provider failure
+        // category in the legacy constrained column.
+        MailSyncFailureCodeV1::DeadlineExceeded => {
+            failure_id(MailSyncFailureCodeV1::ProviderUnavailable)
+        }
+        value => failure_id(value),
+    }
+}
+
+fn failure_from_storage_row(
+    row: &PgRow,
+) -> Result<Option<MailSyncFailureCodeV1>, MailDurablePersistenceError> {
+    let deadline_exceeded = row
+        .try_get::<bool, _>("deadline_exceeded")
+        .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
+    let stored = row
+        .try_get::<Option<i16>, _>("failure_code")
+        .map_err(|_| MailDurablePersistenceError::InvalidRow)?;
+    if deadline_exceeded {
+        if stored != Some(failure_id(MailSyncFailureCodeV1::ProviderUnavailable)) {
+            return Err(MailDurablePersistenceError::InvalidRow);
+        }
+        return Ok(Some(MailSyncFailureCodeV1::DeadlineExceeded));
+    }
+    stored.map(failure_from_id).transpose()
 }
 
 const fn failure_from_id(value: i16) -> Result<MailSyncFailureCodeV1, MailDurablePersistenceError> {
@@ -704,6 +735,10 @@ mod tests {
     #[test]
     fn deadline_failure_code_has_a_stable_storage_id() {
         assert_eq!(failure_id(MailSyncFailureCodeV1::DeadlineExceeded), 10);
+        assert_eq!(
+            storage_failure_id(MailSyncFailureCodeV1::DeadlineExceeded),
+            failure_id(MailSyncFailureCodeV1::ProviderUnavailable)
+        );
         assert_eq!(
             failure_from_id(10).expect("deadline failure storage ID"),
             MailSyncFailureCodeV1::DeadlineExceeded

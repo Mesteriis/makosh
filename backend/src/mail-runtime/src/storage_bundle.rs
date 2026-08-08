@@ -4,7 +4,8 @@ use hermes_mail_address_book_persistence::{
     MailAddressBookSchemaErrorV1, append_mail_address_book_storage_v1,
 };
 use hermes_mail_persistence::{
-    MailIcloudCardDavCredentialSchemaErrorV1, append_mail_icloud_carddav_credential_storage_v1,
+    MailIcloudCardDavCredentialSchemaErrorV1, MailSyncDeadlineFailureSchemaErrorV1,
+    append_mail_icloud_carddav_credential_storage_v1, append_mail_sync_deadline_failure_storage_v1,
     mail_storage_bundle_v1,
 };
 use hermes_mail_retained_evidence_replay_persistence::{
@@ -23,6 +24,7 @@ pub enum MailRuntimeStorageBundleErrorV1 {
     RetainedEvidenceReplayScan(MailRetainedEvidenceReplayScanSchemaErrorV1),
     AddressBook(MailAddressBookSchemaErrorV1),
     IcloudCardDavCredential(MailIcloudCardDavCredentialSchemaErrorV1),
+    SyncDeadlineFailure(MailSyncDeadlineFailureSchemaErrorV1),
 }
 
 pub fn mail_runtime_storage_bundle_v1() -> Result<StorageBundleV1, MailRuntimeStorageBundleErrorV1>
@@ -35,6 +37,20 @@ pub fn mail_runtime_storage_bundle_v1() -> Result<StorageBundleV1, MailRuntimeSt
         .map_err(MailRuntimeStorageBundleErrorV1::RetainedEvidenceReplayScan)?;
     let bundle = append_mail_address_book_storage_v1(bundle)
         .map_err(MailRuntimeStorageBundleErrorV1::AddressBook)?;
-    append_mail_icloud_carddav_credential_storage_v1(bundle)
-        .map_err(MailRuntimeStorageBundleErrorV1::IcloudCardDavCredential)
+    let bundle = append_mail_icloud_carddav_credential_storage_v1(bundle)
+        .map_err(MailRuntimeStorageBundleErrorV1::IcloudCardDavCredential)?;
+    append_mail_sync_deadline_failure_storage_v1(bundle)
+        .map_err(MailRuntimeStorageBundleErrorV1::SyncDeadlineFailure)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::mail_runtime_storage_bundle_v1;
+
+    #[test]
+    fn storage_bundle_has_exact_successor_lineage() {
+        let bundle = mail_runtime_storage_bundle_v1().expect("Mail storage bundle");
+        assert_eq!(bundle.revision, 31);
+        assert_eq!(bundle.steps.last().map(|step| step.revision), Some(31));
+    }
 }

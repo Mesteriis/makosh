@@ -34,7 +34,7 @@ function folderIcon(folder: MailFolderRow): string {
 }
 
 function threadLabel(thread: MailThreadRow | undefined): string {
-	return thread?.subject || 'All messages'
+	return thread?.subject || 'Messages'
 }
 </script>
 
@@ -68,11 +68,11 @@ function threadLabel(thread: MailThreadRow | undefined): string {
 					<small>{{ visibleMessages.length }} messages</small>
 				</div>
 				<select
-					aria-label="Mail thread"
+					aria-label="Filter messages by thread"
 					:value="model.threads.find((thread) => thread.selected)?.id || ''"
 					@change="emit('selectThread', ($event.target as HTMLSelectElement).value)"
 				>
-					<option value="">All threads</option>
+					<option value="">All messages</option>
 					<option v-for="thread in model.threads" :key="thread.id" :value="thread.id">
 						{{ thread.subject }}
 					</option>

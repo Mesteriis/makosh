@@ -12,7 +12,7 @@ Hermes Hub — local-first Personal Memory System / Personal Operating System.
 | Предыдущий backend | Перенесён в `references/backend-legacy/` и используется только как evidence/reference |
 | Desktop frontend | Vue 3 + Vite + Tauri страницы Communications/Settings используют generated clean-room Core Gateway contracts и capability-driven availability |
 | Android | Запланирован; код клиента и окончательная Kernel topology отсутствуют |
-| Local development | Root `make dev` поднимает Compose, Kernel/Core Gateway и Vite, проверяет readiness и открывает loopback browser contour |
+| Local development | Root `make dev` поднимает Compose, Kernel/Core Gateway и Vite, проверяет readiness и предоставляет loopback browser contour на `http://127.0.0.1:5173` |
 | Active architecture | Clean-room ADR находятся в `docs/adr/`; executable policy, scripts и tests находятся внутри `backend/` |
 | Предыдущая документация | Перенесена в `references/backend-legacy/docs/` и не является действующей policy |
 

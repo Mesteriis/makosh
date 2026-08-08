@@ -157,8 +157,8 @@ use hermes_mail_api::{
     valid_account_configuration,
 };
 use hermes_mail_core::rfc822::{
-    AttachmentDispositionV1 as Rfc822AttachmentDispositionV1, attachment_metadata,
-    direct_plain_text_body, extract_attachment_part, operational_preview,
+    AttachmentDispositionV1 as Rfc822AttachmentDispositionV1, Rfc822BodyContentV1,
+    attachment_metadata, extract_attachment_part, operational_preview, readable_body_content,
 };
 use hermes_mail_core::{
     MAX_OUTBOUND_ATTACHMENT_BYTES, OutboundAttachmentDispositionV1, OutboundAttachmentV1,
@@ -292,6 +292,7 @@ pub struct PreparedImapSyncProviderOperationV1 {
     password: Zeroizing<Vec<u8>>,
     window: u32,
     windows: u32,
+    priority_uids: Vec<u32>,
     deadline_at_unix_seconds: i64,
 }
 
@@ -376,7 +377,7 @@ struct InboundBodyObservationSourceV1 {
     source_id: String,
     sender: Option<String>,
     subject: Option<String>,
-    plaintext: Option<Vec<u8>>,
+    body: Option<Rfc822BodyContentV1>,
 }
 
 #[derive(Debug)]
@@ -2575,7 +2576,7 @@ impl MailAdmittedRuntime {
         Ok(())
     }
 
-    pub fn prepare_pending_imap_sync(
+    pub async fn prepare_pending_imap_sync(
         &mut self,
     ) -> Result<Option<PreparedImapSyncProviderOperationV1>, MailBootstrapError> {
         let MailInboundTransportV1::Imap(configuration) = &self.account.inbound else {
@@ -2593,6 +2594,11 @@ impl MailAdmittedRuntime {
             .as_ref()
             .ok_or(MailBootstrapError::Credential)?
             .clone();
+        let priority_uids = self
+            .durable
+            .recent_inbox_imap_uids(&self.account.connection_id, 1_000)
+            .await
+            .map_err(|_| MailBootstrapError::Persistence)?;
         Ok(Some(PreparedImapSyncProviderOperationV1 {
             connection_id: self.account.connection_id.clone(),
             operation_id: pending.operation_id,
@@ -2602,6 +2608,7 @@ impl MailAdmittedRuntime {
             password,
             window: self.account.sync_window,
             windows: self.account.sync_windows,
+            priority_uids,
             deadline_at_unix_seconds: pending.deadline_at_unix_seconds,
         }))
     }
@@ -2979,19 +2986,13 @@ impl MailAdmittedRuntime {
                 .map_or_else(|| initial_imap_message_id(connection_id, &locator), Ok)
                 .map_err(|_| MailBootstrapError::Persistence)?;
             let observation = self.draft_inbound_body_observation(
-                &inbound_observation_id(
-                    ProviderProvenanceV1::MailImap,
-                    connection_id,
-                    &message_id,
-                    None,
-                ),
                 ProviderProvenanceV1::MailImap,
                 connection_id,
                 InboundBodyObservationSourceV1 {
                     source_id: message_id.clone(),
                     sender: message.sender.clone(),
                     subject: Some(message.subject.clone()),
-                    plaintext: message.plain_text_body.clone(),
+                    body: message.body_content.clone(),
                 },
             )?;
             let record = build_observation_outbox_record_v1(
@@ -3157,19 +3158,13 @@ impl MailAdmittedRuntime {
                 .and_then(|preview| preview.subject.clone())
                 .filter(|value| !value.trim().is_empty());
             let observation = self.draft_inbound_body_observation(
-                &inbound_observation_id(
-                    ProviderProvenanceV1::MailGmail,
-                    connection_id,
-                    &provider_record_id,
-                    None,
-                ),
                 ProviderProvenanceV1::MailGmail,
                 connection_id,
                 InboundBodyObservationSourceV1 {
                     source_id: format!("{connection_id}:{provider_record_id}"),
                     sender: preview.as_ref().and_then(|preview| preview.sender.clone()),
                     subject: subject.clone(),
-                    plaintext: direct_plain_text_body(&bytes),
+                    body: readable_body_content(&bytes),
                 },
             )?;
             let primary_record = build_observation_outbox_record_v1(
@@ -3308,7 +3303,6 @@ impl MailAdmittedRuntime {
 
     fn draft_inbound_body_observation(
         &mut self,
-        operation_id: &str,
         provider: ProviderProvenanceV1,
         connection_id: &str,
         source: InboundBodyObservationSourceV1,
@@ -3317,11 +3311,17 @@ impl MailAdmittedRuntime {
             source_id,
             sender,
             subject,
-            plaintext,
+            body,
         } = source;
-        let Some(plaintext) = plaintext else {
+        let Some(body) = body else {
+            let operation_id = inbound_body_observation_id(
+                provider,
+                connection_id,
+                &source_id,
+                BodyObservationRevisionV1::Unavailable(BodyAdmissionFailureV1::PolicyRejected),
+            );
             return unavailable_body_observation(
-                operation_id,
+                &operation_id,
                 provider,
                 connection_id,
                 source_id,
@@ -3330,37 +3330,61 @@ impl MailAdmittedRuntime {
                 BodyAdmissionFailureV1::PolicyRejected,
             );
         };
-        match self.admit_plain_text_body(&plaintext) {
-            Ok(receipt) => with_admitted_body_blob(
-                draft_ingress_observation_with_sender_subject_body(
-                    operation_id,
+        match self.admit_body_content(&body) {
+            Ok(receipt) => {
+                let operation_id = inbound_body_observation_id(
+                    provider,
+                    connection_id,
+                    &source_id,
+                    BodyObservationRevisionV1::Admitted {
+                        sha256: receipt.sha256,
+                        media_type: &receipt.media_type,
+                        source_receipt_binding_sha256: Sha256::digest(
+                            &receipt.custody_transfer_source_proof,
+                        )
+                        .into(),
+                    },
+                );
+                with_admitted_body_blob(
+                    draft_ingress_observation_with_sender_subject_body(
+                        &operation_id,
+                        provider,
+                        connection_id,
+                        source_id,
+                        sender,
+                        subject,
+                        BodyAvailabilityV1::AdmittedBlob,
+                    )
+                    .map_err(|_| MailBootstrapError::Provider)?,
+                    receipt,
+                )
+                .map_err(|_| MailBootstrapError::Provider)
+            }
+            Err(failure) => {
+                let operation_id = inbound_body_observation_id(
+                    provider,
+                    connection_id,
+                    &source_id,
+                    BodyObservationRevisionV1::Unavailable(failure),
+                );
+                unavailable_body_observation(
+                    &operation_id,
                     provider,
                     connection_id,
                     source_id,
                     sender,
                     subject,
-                    BodyAvailabilityV1::AdmittedBlob,
+                    failure,
                 )
-                .map_err(|_| MailBootstrapError::Provider)?,
-                receipt,
-            )
-            .map_err(|_| MailBootstrapError::Provider),
-            Err(failure) => unavailable_body_observation(
-                operation_id,
-                provider,
-                connection_id,
-                source_id,
-                sender,
-                subject,
-                failure,
-            ),
+            }
         }
     }
 
-    fn admit_plain_text_body(
+    fn admit_body_content(
         &mut self,
-        plaintext: &[u8],
+        body: &Rfc822BodyContentV1,
     ) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1> {
+        let plaintext = body.bytes.as_slice();
         if plaintext.is_empty() || plaintext.len() > hermes_mail_api::MAX_PLAIN_TEXT_BYTES {
             return Err(BodyAdmissionFailureV1::SizeLimitExceeded);
         }
@@ -3410,6 +3434,7 @@ impl MailAdmittedRuntime {
                 .map_err(|_| BodyAdmissionFailureV1::SizeLimitExceeded)?,
             sha256,
             custody_transfer_source_proof,
+            media_type: body.media_type.to_owned(),
         })
     }
 
@@ -3621,19 +3646,21 @@ pub fn execute_imap_sync_provider_operation(
         password,
         window,
         windows,
+        priority_uids,
         deadline_at_unix_seconds: _,
     } = prepared;
     let result = match std::str::from_utf8(&password) {
         Err(_) => Err(MailBootstrapError::Credential),
         Ok(password) => {
             let mut finalization_rejected = false;
-            let provider_result = hermes_mail_imap::sync_inbox(
+            let provider_result = hermes_mail_imap::sync_inbox_prioritized(
                 &host,
                 port,
                 &username,
                 Some(password),
                 window,
                 windows,
+                &priority_uids,
                 |sync| {
                     let (acknowledgment, committed) = std::sync::mpsc::channel();
                     page_sender
@@ -4192,6 +4219,59 @@ fn inbound_observation_id(
     format!("mail-inbound:{}", hex_digest(&hasher.finalize()))
 }
 
+#[derive(Clone, Copy)]
+enum BodyObservationRevisionV1<'a> {
+    Unavailable(BodyAdmissionFailureV1),
+    Admitted {
+        sha256: [u8; 32],
+        media_type: &'a str,
+        source_receipt_binding_sha256: [u8; 32],
+    },
+}
+
+fn inbound_body_observation_id(
+    provider: ProviderProvenanceV1,
+    connection_id: &str,
+    provider_record_id: &str,
+    revision: BodyObservationRevisionV1<'_>,
+) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(b"hermes.mail.inbound-body-observation.v6\0");
+    hasher.update(provider.as_str().as_bytes());
+    hasher.update(b"\0");
+    hasher.update(connection_id.as_bytes());
+    hasher.update(b"\0");
+    hasher.update(provider_record_id.as_bytes());
+    hasher.update(b"\0");
+    match revision {
+        BodyObservationRevisionV1::Unavailable(failure) => {
+            hasher.update(b"unavailable\0");
+            hasher.update([body_admission_failure_code(failure)]);
+        }
+        BodyObservationRevisionV1::Admitted {
+            sha256,
+            media_type,
+            source_receipt_binding_sha256,
+        } => {
+            hasher.update(b"admitted\0");
+            hasher.update(media_type.as_bytes());
+            hasher.update(b"\0");
+            hasher.update(sha256);
+            hasher.update(source_receipt_binding_sha256);
+        }
+    }
+    format!("mail-inbound-body:{}", hex_digest(&hasher.finalize()))
+}
+
+const fn body_admission_failure_code(failure: BodyAdmissionFailureV1) -> u8 {
+    match failure {
+        BodyAdmissionFailureV1::SourceUnavailable => 1,
+        BodyAdmissionFailureV1::SizeLimitExceeded => 2,
+        BodyAdmissionFailureV1::IntegrityMismatch => 3,
+        BodyAdmissionFailureV1::PolicyRejected => 4,
+    }
+}
+
 fn mail_delivery_route_locator(
     observation: &CommunicationObservationDraft,
     connection_id: &str,
@@ -4362,6 +4442,80 @@ mod tests {
                 "uid-42",
                 Some(1),
             ),
+        );
+    }
+
+    #[test]
+    fn inbound_body_identity_revises_when_admission_or_content_changes() {
+        let unavailable = inbound_body_observation_id(
+            ProviderProvenanceV1::MailImap,
+            "account-1",
+            "uid-42",
+            BodyObservationRevisionV1::Unavailable(BodyAdmissionFailureV1::PolicyRejected),
+        );
+        let admitted = inbound_body_observation_id(
+            ProviderProvenanceV1::MailImap,
+            "account-1",
+            "uid-42",
+            BodyObservationRevisionV1::Admitted {
+                sha256: [7; 32],
+                media_type: "text/html",
+                source_receipt_binding_sha256: [9; 32],
+            },
+        );
+
+        assert_ne!(unavailable, admitted);
+        assert_eq!(
+            admitted,
+            inbound_body_observation_id(
+                ProviderProvenanceV1::MailImap,
+                "account-1",
+                "uid-42",
+                BodyObservationRevisionV1::Admitted {
+                    sha256: [7; 32],
+                    media_type: "text/html",
+                    source_receipt_binding_sha256: [9; 32],
+                },
+            )
+        );
+        assert_ne!(
+            admitted,
+            inbound_body_observation_id(
+                ProviderProvenanceV1::MailImap,
+                "account-1",
+                "uid-42",
+                BodyObservationRevisionV1::Admitted {
+                    sha256: [8; 32],
+                    media_type: "text/html",
+                    source_receipt_binding_sha256: [9; 32],
+                },
+            )
+        );
+        assert_ne!(
+            admitted,
+            inbound_body_observation_id(
+                ProviderProvenanceV1::MailImap,
+                "account-1",
+                "uid-42",
+                BodyObservationRevisionV1::Admitted {
+                    sha256: [7; 32],
+                    media_type: "text/plain",
+                    source_receipt_binding_sha256: [9; 32],
+                },
+            )
+        );
+        assert_ne!(
+            admitted,
+            inbound_body_observation_id(
+                ProviderProvenanceV1::MailImap,
+                "account-1",
+                "uid-42",
+                BodyObservationRevisionV1::Admitted {
+                    sha256: [7; 32],
+                    media_type: "text/html",
+                    source_receipt_binding_sha256: [10; 32],
+                },
+            )
         );
     }
 

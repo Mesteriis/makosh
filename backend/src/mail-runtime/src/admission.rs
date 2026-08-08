@@ -79,7 +79,9 @@ pub const MAIL_STORAGE_CAPABILITY_ID: &str = "mail.storage.v1";
 pub const MAIL_RETAINED_EVIDENCE_REPLAY_CAPABILITY_ID: &str = "mail.retained-evidence-replay.v1";
 pub const MAIL_ADDRESS_BOOK_SOURCE_BLOB_CUSTODY_SCOPE_ID_V1: &str =
     CONTACTS_MAIL_SYNC_SOURCE_CAPABILITY_ID_V1;
-pub const MAIL_ATTACHMENT_BLOB_MAX_BYTES: u64 = 16 * 1024 * 1024;
+/// Cumulative durable budget for the complete Mail-owned Blob custody scope.
+/// Per-message attachment limits are enforced independently by Mail contracts.
+pub const MAIL_BLOB_CUSTODY_QUOTA_BYTES: u64 = 1 << 30;
 pub const MAIL_ATTACHMENT_BLOB_CUSTODY_SCOPE_ID: &str = "mail.attachment.content.v1";
 pub const MAIL_STORAGE_CONNECTION_BUDGET: u32 = 4;
 pub const MAIL_STORAGE_STATEMENT_TIMEOUT_MILLIS: u32 = 5_000;
@@ -292,11 +294,11 @@ fn mail_client_contract_reference_v1(
 pub fn mail_blob_capability_v1() -> CapabilityDescriptorV1 {
     CapabilityDescriptorV1 {
         capability_id: MAIL_BLOB_CAPABILITY_ID.to_owned(),
-        capability_revision: 1,
+        capability_revision: 2,
         criticality: CapabilityCriticalityV1::Optional as i32,
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
-                max_bytes: MAIL_ATTACHMENT_BLOB_MAX_BYTES,
+                max_bytes: MAIL_BLOB_CUSTODY_QUOTA_BYTES,
                 custody_scope_id: MAIL_ATTACHMENT_BLOB_CUSTODY_SCOPE_ID.to_owned(),
                 allowed_operations: vec![
                     BlobQuotaOperationV1::Write as i32,
@@ -436,7 +438,7 @@ fn vault_purpose_request_v1(
 pub fn mail_communication_observed_publish_capability_v1() -> CapabilityDescriptorV1 {
     CapabilityDescriptorV1 {
         capability_id: MAIL_COMMUNICATION_OBSERVED_PUBLISH_CAPABILITY_ID.to_owned(),
-        capability_revision: 1,
+        capability_revision: 2,
         criticality: CapabilityCriticalityV1::Required as i32,
         requests: vec![communication_observed_publish_request_v1()],
         ..Default::default()
@@ -653,6 +655,23 @@ mod tests {
                     && quota.custody_scope_id == CONTACTS_MAIL_SYNC_SOURCE_CAPABILITY_ID_V1
                     && quota.allowed_operations == [
                         BlobQuotaOperationV1::CustodyTransfer as i32,
+                        BlobQuotaOperationV1::ReadRange as i32,
+                    ]
+        ));
+
+        let mail_blob = descriptor
+            .capabilities
+            .iter()
+            .find(|capability| capability.capability_id == MAIL_BLOB_CAPABILITY_ID)
+            .expect("Mail Blob capability");
+        assert_eq!(mail_blob.capability_revision, 2);
+        assert!(matches!(
+            mail_blob.requests[0].request.as_ref(),
+            Some(Request::BlobQuota(quota))
+                if quota.max_bytes == MAIL_BLOB_CUSTODY_QUOTA_BYTES
+                    && quota.custody_scope_id == MAIL_ATTACHMENT_BLOB_CUSTODY_SCOPE_ID
+                    && quota.allowed_operations == [
+                        BlobQuotaOperationV1::Write as i32,
                         BlobQuotaOperationV1::ReadRange as i32,
                     ]
         ));

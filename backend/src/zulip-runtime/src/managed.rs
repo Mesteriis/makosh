@@ -775,6 +775,7 @@ fn admit_inbound_plaintext(
             .map_err(|_| BodyAdmissionFailureV1::SizeLimitExceeded)?,
         sha256,
         custody_transfer_source_proof,
+        media_type: "text/plain".to_owned(),
     })
 }
 

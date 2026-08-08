@@ -59,6 +59,7 @@ pub async fn handle_module_content_ticket_request_v1(
                 opaque_read_capability: Vec::new(),
                 declared_bytes: 0,
                 expires_at_unix_seconds: 0,
+                media_type: String::new(),
                 error_code: "NOT_FOUND".to_owned(),
             }
             .encode_to_vec(),
@@ -78,6 +79,7 @@ pub async fn handle_module_content_ticket_request_v1(
             opaque_read_capability: issued.opaque_read_capability.to_vec(),
             declared_bytes: issued.declared_bytes,
             expires_at_unix_seconds: issued.expires_at_unix_seconds,
+            media_type: issued.media_type,
             error_code: String::new(),
         }
         .encode_to_vec(),

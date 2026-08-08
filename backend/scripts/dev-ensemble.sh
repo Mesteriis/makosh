@@ -13,6 +13,7 @@ owner_vault_host_address="127.0.0.1:9445"
 owner_vault_host_target="http://$owner_vault_host_address"
 browser_origin="http://127.0.0.1:5173"
 browser_url="$browser_origin/"
+no_browser="${HERMES_DEV_NO_BROWSER:-1}"
 data_dir="${HERMES_DEV_DATA_DIR:-$project_root/.local/kernel-dev}"
 cargo_target_dir="${HERMES_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
 release_root="${HERMES_DEV_RELEASE_ROOT:-$project_root/.local/dev-release}"
@@ -135,9 +136,14 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 trap 'exit 129' HUP
 
-for command_name in cargo curl docker id lsof make mktemp node open pnpm; do
+for command_name in cargo curl docker id lsof make mktemp node pnpm; do
 	require_command "$command_name"
 done
+case "$no_browser" in
+	0) require_command open ;;
+	1) ;;
+	*) fail "HERMES_DEV_NO_BROWSER must be 0 or 1" ;;
+esac
 require_absolute_directory_path "HERMES_DEV_DATA_DIR" "$data_dir"
 require_absolute_directory_path "HERMES_DEV_CARGO_TARGET_DIR" "$cargo_target_dir"
 require_absolute_directory_path "HERMES_DEV_RELEASE_ROOT" "$release_root"
@@ -373,8 +379,12 @@ while :; do
 done
 
 printf 'Hermes development ensemble is ready at %s\n' "$browser_url"
-open "$browser_url"
-printf '%s\n' 'Browser opened. Press Ctrl-C to stop the full local ensemble.'
+if test "$no_browser" = 0; then
+	open "$browser_url"
+	printf '%s\n' 'Browser opened. Press Ctrl-C to stop the full local ensemble.'
+else
+	printf 'Browser opening skipped. Open %s in an existing browser tab. Press Ctrl-C to stop the full local ensemble.\n' "$browser_url"
+fi
 
 while kill -0 "$kernel_pid" 2>/dev/null \
 	&& kill -0 "$owner_vault_host_pid" 2>/dev/null \

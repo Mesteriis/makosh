@@ -69,6 +69,7 @@ export type MailMessageDetailCard = {
 	flags: string
 	evidenceState: string
 	contentState: string
+	observationAnchorId: Uint8Array
 	isRead: boolean
 	isStarred: boolean
 	isTrashed: boolean
@@ -145,6 +146,7 @@ export function buildMailMessageDetail(
 		contentState: message.hasPlainText
 			? 'Authorized body content is Communications-owned and is not part of this Mail projection.'
 			: 'No plain-text content was observed.',
+		observationAnchorId: new Uint8Array(message.observationAnchorId),
 		isRead: message.flag.includes(MailMessageFlagV1.MAIL_MESSAGE_FLAG_READ),
 		isStarred: message.flag.includes(MailMessageFlagV1.MAIL_MESSAGE_FLAG_STARRED),
 		isTrashed: message.flag.includes(MailMessageFlagV1.MAIL_MESSAGE_FLAG_TRASHED),

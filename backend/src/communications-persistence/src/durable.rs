@@ -5,9 +5,9 @@ use hermes_communications_api::{
     CanonicalCommunicationEvidenceKindV1, CanonicalCommunicationProjectionV1,
     CanonicalMessageMutationV1, CommunicationAccountIdV1, CommunicationAccountSummaryV1,
     CommunicationAttachmentAnchorIdV1, CommunicationAttachmentAnchorStateV1,
-    CommunicationAttachmentAnchorSummaryV1, CommunicationBodyStateV1,
-    CommunicationConversationIdV1, CommunicationConversationSummaryV1, CommunicationDirectionV1,
-    CommunicationMessageIdV1, CommunicationMessageLifecycleStateV1,
+    CommunicationAttachmentAnchorSummaryV1, CommunicationBodyBlobReferenceV1,
+    CommunicationBodyStateV1, CommunicationConversationIdV1, CommunicationConversationSummaryV1,
+    CommunicationDirectionV1, CommunicationMessageIdV1, CommunicationMessageLifecycleStateV1,
     CommunicationMessageReferenceKindV1, CommunicationMessageReferenceSummaryV1,
     CommunicationMessageSummaryV1, CommunicationObservationIdV1,
     CommunicationObservedParticipantSummaryV1, CommunicationParticipantIdV1,
@@ -17,7 +17,7 @@ use hermes_events_protocol::delivery::OutboxRecordV1;
 use hermes_storage_protocol::StorageBindingV1;
 use sha2::{Digest, Sha256};
 use sqlx::{
-    PgPool, Row,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
@@ -41,6 +41,52 @@ pub struct PersistedCommunicationsObservationV1<'a> {
     pub canonical_outbox_record: &'a OutboxRecordV1,
     pub attachment_anchor_outbox_record: Option<&'a OutboxRecordV1>,
     pub created_at_unix_seconds: i64,
+}
+
+struct ReusableCanonicalBodyV1 {
+    blob: CommunicationBodyBlobReferenceV1,
+}
+
+async fn find_reusable_canonical_body_v1(
+    transaction: &mut Transaction<'_, Postgres>,
+    transfer: &PendingCommunicationsBodyCustodyTransferV1,
+) -> Result<Option<ReusableCanonicalBodyV1>, CommunicationsPersistenceError> {
+    let row = sqlx::query(
+        "SELECT evidence.body_blob_ref, evidence.body_blob_reference_id, evidence.body_blob_declared_bytes, evidence.body_blob_sha256 FROM hermes_data.communications_body_custody_transfers AS source JOIN hermes_data.communications_body_custody_transfer_lifecycle AS lifecycle ON lifecycle.evidence_id = source.evidence_id JOIN hermes_data.communications_evidence_summaries AS evidence ON evidence.observation_id = source.evidence_id WHERE lifecycle.state = 2 AND evidence.body_state = 4 AND source.source_blob_ref = $1 AND source.source_reference_id = $2 AND source.declared_bytes = $3 AND source.plaintext_sha256 = $4 ORDER BY lifecycle.completed_at_unix_seconds DESC NULLS LAST, source.evidence_id DESC LIMIT 1",
+    )
+    .bind(&transfer.source_blob_ref)
+    .bind(transfer.source_reference_id.as_slice())
+    .bind(i64::try_from(transfer.declared_bytes).map_err(|_| CommunicationsPersistenceError::InvalidCustodyTransfer)?)
+    .bind(transfer.plaintext_sha256.as_slice())
+    .fetch_optional(&mut **transaction)
+    .await
+    .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+    let Some(row) = row else { return Ok(None) };
+    let blob_ref: String = row
+        .try_get("body_blob_ref")
+        .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+    let reference_id: Vec<u8> = row
+        .try_get("body_blob_reference_id")
+        .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+    let declared_bytes: i64 = row
+        .try_get("body_blob_declared_bytes")
+        .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+    let sha256: Vec<u8> = row
+        .try_get("body_blob_sha256")
+        .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+    Ok(Some(ReusableCanonicalBodyV1 {
+        blob: CommunicationBodyBlobReferenceV1 {
+            blob_ref,
+            reference_id: reference_id
+                .try_into()
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?,
+            declared_bytes: u64::try_from(declared_bytes)
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?,
+            sha256: sha256
+                .try_into()
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?,
+        },
+    }))
 }
 
 impl CommunicationsDurablePersistence {
@@ -183,8 +229,8 @@ impl CommunicationsDurablePersistence {
         let inserted_summary = sqlx::query(
             r#"
             INSERT INTO hermes_data.communications_evidence_summaries
-                (observation_id, source_cursor_sha256, account_cursor_sha256, conversation_cursor_sha256, participant_cursor_sha256, participant_display_label, message_subject, media_cursor_sha256, reply_to_source_cursor_sha256, forward_origin_source_cursor_sha256, provider, direction, evidence_kind, body_state, body_blob_ref, body_blob_reference_id, body_blob_declared_bytes, body_blob_sha256, body_admission_failure, observed_at_unix_seconds)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+                (observation_id, source_cursor_sha256, account_cursor_sha256, conversation_cursor_sha256, participant_cursor_sha256, participant_display_label, message_subject, media_cursor_sha256, reply_to_source_cursor_sha256, forward_origin_source_cursor_sha256, provider, direction, evidence_kind, body_state, body_blob_ref, body_blob_reference_id, body_blob_declared_bytes, body_blob_sha256, body_admission_failure, body_media_type, observed_at_unix_seconds)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
             ON CONFLICT (observation_id) DO NOTHING
             "#,
         )
@@ -207,6 +253,7 @@ impl CommunicationsDurablePersistence {
         .bind(summary.body_blob.as_ref().map(|value| i64::try_from(value.declared_bytes).expect("body byte limit fits i64")))
         .bind(summary.body_blob.as_ref().map(|value| value.sha256.to_vec()))
         .bind(summary.body_admission_failure.map(body_admission_failure_value))
+        .bind(&summary.body_media_type)
         .bind(summary.observed_at_unix_seconds)
         .execute(&mut *transaction)
         .await
@@ -225,6 +272,7 @@ impl CommunicationsDurablePersistence {
         .execute(&mut *transaction)
         .await
         .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+        let mut reused_canonical_body = None;
         if let Some(transfer) = observation.pending_custody_transfer {
             if transfer.evidence_id != summary.evidence_id
                 || transfer.envelope_sha256.as_slice() != record.envelope_sha256()
@@ -240,26 +288,46 @@ impl CommunicationsDurablePersistence {
             {
                 return Err(CommunicationsPersistenceError::InvalidCustodyTransfer);
             }
-            sqlx::query(
-                "INSERT INTO hermes_data.communications_body_custody_transfers (evidence_id, envelope_sha256, source_blob_ref, source_reference_id, declared_bytes, plaintext_sha256, source_custody_proof, state) VALUES ($1, $2, $3, $4, $5, $6, $7, 1) ON CONFLICT (evidence_id) DO NOTHING",
-            )
-            .bind(transfer.evidence_id.bytes().as_slice())
-            .bind(transfer.envelope_sha256.as_slice())
-            .bind(&transfer.source_blob_ref)
-            .bind(transfer.source_reference_id.as_slice())
-            .bind(i64::try_from(transfer.declared_bytes).map_err(|_| CommunicationsPersistenceError::InvalidCustodyTransfer)?)
-            .bind(transfer.plaintext_sha256.as_slice())
-            .bind(&transfer.source_custody_proof)
-            .execute(&mut *transaction)
-            .await
-            .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
-            sqlx::query(
-                "INSERT INTO hermes_data.communications_body_custody_transfer_lifecycle (evidence_id, state) VALUES ($1, 1) ON CONFLICT (evidence_id) DO NOTHING",
-            )
-            .bind(transfer.evidence_id.bytes().as_slice())
-            .execute(&mut *transaction)
-            .await
-            .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+            if let Some(reusable) =
+                find_reusable_canonical_body_v1(&mut transaction, transfer).await?
+            {
+                let updated = sqlx::query(
+                    "UPDATE hermes_data.communications_evidence_summaries SET body_state = 4, body_blob_ref = $2, body_blob_reference_id = $3, body_blob_declared_bytes = $4, body_blob_sha256 = $5 WHERE observation_id = $1 AND body_state = 2",
+                )
+                .bind(transfer.evidence_id.bytes().as_slice())
+                .bind(&reusable.blob.blob_ref)
+                .bind(reusable.blob.reference_id.as_slice())
+                .bind(i64::try_from(reusable.blob.declared_bytes).map_err(|_| CommunicationsPersistenceError::InvalidCustodyTransfer)?)
+                .bind(reusable.blob.sha256.as_slice())
+                .execute(&mut *transaction)
+                .await
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+                if updated.rows_affected() != 1 {
+                    return Err(CommunicationsPersistenceError::InvalidCustodyTransfer);
+                }
+                reused_canonical_body = Some(reusable);
+            } else {
+                sqlx::query(
+                    "INSERT INTO hermes_data.communications_body_custody_transfers (evidence_id, envelope_sha256, source_blob_ref, source_reference_id, declared_bytes, plaintext_sha256, source_custody_proof, state) VALUES ($1, $2, $3, $4, $5, $6, $7, 1) ON CONFLICT (evidence_id) DO NOTHING",
+                )
+                .bind(transfer.evidence_id.bytes().as_slice())
+                .bind(transfer.envelope_sha256.as_slice())
+                .bind(&transfer.source_blob_ref)
+                .bind(transfer.source_reference_id.as_slice())
+                .bind(i64::try_from(transfer.declared_bytes).map_err(|_| CommunicationsPersistenceError::InvalidCustodyTransfer)?)
+                .bind(transfer.plaintext_sha256.as_slice())
+                .bind(&transfer.source_custody_proof)
+                .execute(&mut *transaction)
+                .await
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+                sqlx::query(
+                    "INSERT INTO hermes_data.communications_body_custody_transfer_lifecycle (evidence_id, state) VALUES ($1, 1) ON CONFLICT (evidence_id) DO NOTHING",
+                )
+                .bind(transfer.evidence_id.bytes().as_slice())
+                .execute(&mut *transaction)
+                .await
+                .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+            }
         } else if summary.body == CommunicationBodyStateV1::PendingBlob {
             return Err(CommunicationsPersistenceError::InvalidCustodyTransfer);
         }
@@ -291,15 +359,20 @@ impl CommunicationsDurablePersistence {
             .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
         }
         if let Some(message) = &observation.projection.message {
+            let projected_body = if reused_canonical_body.is_some() {
+                CommunicationBodyStateV1::AdmittedBlob
+            } else {
+                message.body
+            };
             match message.mutation {
                 CanonicalMessageMutationV1::Create => {
                     sqlx::query(
-                        "INSERT INTO hermes_data.communications_messages (message_id, conversation_id, source_cursor_sha256, body_state, canonical_body_state, direction, lifecycle_state, first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id) VALUES ($1, $2, $3, LEAST($4, 3), $4, $5, 1, $6, $6, $7) ON CONFLICT (message_id) DO NOTHING",
+                        "INSERT INTO hermes_data.communications_messages (message_id, conversation_id, source_cursor_sha256, body_state, canonical_body_state, direction, lifecycle_state, first_observed_at_unix_seconds, last_observed_at_unix_seconds, last_evidence_id) VALUES ($1, $2, $3, LEAST($4, 3), $4, $5, 1, $6, $6, $7) ON CONFLICT (message_id) DO UPDATE SET body_state = LEAST($4, 3), canonical_body_state = $4, canonical_revision = communications_messages.canonical_revision + 1, last_observed_at_unix_seconds = GREATEST(communications_messages.last_observed_at_unix_seconds, EXCLUDED.last_observed_at_unix_seconds), last_evidence_id = CASE WHEN EXCLUDED.last_observed_at_unix_seconds >= communications_messages.last_observed_at_unix_seconds THEN EXCLUDED.last_evidence_id ELSE communications_messages.last_evidence_id END WHERE communications_messages.conversation_id = EXCLUDED.conversation_id AND communications_messages.direction = EXCLUDED.direction",
                     )
                     .bind(message.message_id.bytes().as_slice())
                     .bind(message.conversation_id.bytes().as_slice())
                     .bind(message.source_cursor.bytes().as_slice())
-                    .bind(body_value(message.body))
+                    .bind(body_value(projected_body))
                     .bind(direction_value(message.direction))
                     .bind(message.observed_at_unix_seconds)
                     .bind(summary.evidence_id.bytes().as_slice())
@@ -318,7 +391,7 @@ impl CommunicationsDurablePersistence {
                     )
                     .bind(message.message_id.bytes().as_slice())
                     .bind(message.conversation_id.bytes().as_slice())
-                    .bind(body_value(message.body))
+                    .bind(body_value(projected_body))
                     .bind(lifecycle_state)
                     .bind(message.observed_at_unix_seconds)
                     .bind(summary.evidence_id.bytes().as_slice())
@@ -568,7 +641,7 @@ impl CommunicationsDurablePersistence {
         evidence_id: CommunicationObservationIdV1,
     ) -> Result<Option<CommunicationSummary>, CommunicationsPersistenceError> {
         let row = sqlx::query(
-            "SELECT summary.observation_id, lineage.causation_message_id, COALESCE(lineage.correlation_id, summary.observation_id) AS correlation_id, summary.source_cursor_sha256, summary.account_cursor_sha256, summary.conversation_cursor_sha256, summary.participant_cursor_sha256, summary.participant_display_label, summary.message_subject, summary.media_cursor_sha256, summary.reply_to_source_cursor_sha256, summary.forward_origin_source_cursor_sha256, summary.provider, summary.direction, summary.evidence_kind, summary.body_state, summary.body_blob_ref, summary.body_blob_reference_id, summary.body_blob_declared_bytes, summary.body_blob_sha256, summary.body_admission_failure, summary.observed_at_unix_seconds, COALESCE(lineage.recorded_at_unix_seconds, summary.observed_at_unix_seconds) AS recorded_at_unix_seconds, COALESCE(lineage.recorded_at_nanos, 0) AS recorded_at_nanos FROM hermes_data.communications_evidence_summaries summary LEFT JOIN hermes_data.communications_evidence_audit_lineage lineage ON lineage.evidence_id = summary.observation_id WHERE summary.observation_id = $1",
+            "SELECT summary.observation_id, lineage.causation_message_id, COALESCE(lineage.correlation_id, summary.observation_id) AS correlation_id, summary.source_cursor_sha256, summary.account_cursor_sha256, summary.conversation_cursor_sha256, summary.participant_cursor_sha256, summary.participant_display_label, summary.message_subject, summary.media_cursor_sha256, summary.reply_to_source_cursor_sha256, summary.forward_origin_source_cursor_sha256, summary.provider, summary.direction, summary.evidence_kind, summary.body_state, summary.body_blob_ref, summary.body_blob_reference_id, summary.body_blob_declared_bytes, summary.body_blob_sha256, summary.body_admission_failure, summary.body_media_type, summary.observed_at_unix_seconds, COALESCE(lineage.recorded_at_unix_seconds, summary.observed_at_unix_seconds) AS recorded_at_unix_seconds, COALESCE(lineage.recorded_at_nanos, 0) AS recorded_at_nanos FROM hermes_data.communications_evidence_summaries summary LEFT JOIN hermes_data.communications_evidence_audit_lineage lineage ON lineage.evidence_id = summary.observation_id WHERE summary.observation_id = $1",
         )
         .bind(evidence_id.bytes().as_slice())
         .fetch_optional(&self.pool)
@@ -637,6 +710,9 @@ impl CommunicationsDurablePersistence {
                 .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
             let body_admission_failure: Option<i16> = row
                 .try_get("body_admission_failure")
+                .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
+            let body_media_type: Option<String> = row
+                .try_get("body_media_type")
                 .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
             let observed_at_unix_seconds: i64 = row
                 .try_get("observed_at_unix_seconds")
@@ -765,6 +841,7 @@ impl CommunicationsDurablePersistence {
                 kind: kind_from_value(kind)?,
                 body: body_from_value(body)?,
                 body_blob,
+                body_media_type,
                 body_admission_failure: body_admission_failure
                     .map(body_admission_failure_from_value)
                     .transpose()?,

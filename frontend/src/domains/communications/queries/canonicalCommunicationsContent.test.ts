@@ -15,6 +15,7 @@ describe('canonical Communications content adapter', () => {
 			opaqueReadCapability: capability,
 			declaredBytes: BigInt(body.byteLength),
 			expiresAtUnixSeconds: 100n,
+			mediaType: 'text/plain',
 			errorCode: '',
 		})
 		const readBlob = vi.fn().mockResolvedValue(new Response(body, {
@@ -26,7 +27,7 @@ describe('canonical Communications content adapter', () => {
 			messageId,
 			undefined,
 			{ issueTicket, readBlob },
-		)).resolves.toEqual(body)
+		)).resolves.toEqual({ bytes: body, mediaType: 'text/plain' })
 
 		expect(issueTicket).toHaveBeenCalledWith(messageId, undefined)
 		expect(readBlob).toHaveBeenCalledWith(
@@ -54,6 +55,7 @@ describe('canonical Communications content adapter', () => {
 			opaqueReadCapability: new Uint8Array(32).fill(1),
 			declaredBytes: 3n,
 			expiresAtUnixSeconds: 100n,
+			mediaType: 'text/plain',
 			errorCode: '',
 		}
 		const issueTicket = vi.fn().mockResolvedValue(ticket)

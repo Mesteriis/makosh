@@ -110,6 +110,7 @@ pub struct BodyBlobReceiptV1 {
     pub declared_bytes: u64,
     pub sha256: [u8; 32],
     pub custody_transfer_source_proof: Vec<u8>,
+    pub media_type: String,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -379,6 +380,7 @@ pub fn build_observation_outbox_record_v1(
                 declared_bytes: receipt.declared_bytes,
                 sha256: receipt.sha256.to_vec(),
                 custody_transfer_source_proof: receipt.custody_transfer_source_proof.clone(),
+                media_type: receipt.media_type.clone(),
             }),
         body_admission_failure: draft
             .body_admission_failure
@@ -871,6 +873,7 @@ fn valid_body_blob_receipt(value: &BodyBlobReceiptV1) -> bool {
         && value.reference_id.iter().any(|byte| *byte != 0)
         && (1..=64 * 1024 * 1024).contains(&value.declared_bytes)
         && (1..=2_048).contains(&value.custody_transfer_source_proof.len())
+        && matches!(value.media_type.as_str(), "text/plain" | "text/html")
 }
 
 fn outbox_error(_: OutboxRecordError) -> ObservationEnvelopeBuildErrorV1 {
@@ -961,6 +964,7 @@ mod body_admission_tests {
                 declared_bytes: 64,
                 sha256: [9; 32],
                 custody_transfer_source_proof: vec![4; 96],
+                media_type: "text/html".to_owned(),
             },
         )
         .expect("receipt");

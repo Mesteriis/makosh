@@ -47,15 +47,22 @@ pub async fn process_next_body_custody_transfer_v1(
             lease_expires_at_unix_seconds,
         )
         .await
-        .map_err(storage_error)?
+        .map_err(|error| storage_error_at("claim", error))?
     else {
         return Ok(false);
     };
+    if persistence
+        .reuse_completed_body_custody_transfer(&claimed, now_unix_seconds)
+        .await
+        .map_err(|error| storage_error_at("reuse", error))?
+    {
+        return Ok(true);
+    }
 
     control_channel
         .inner_mut()
         .set_nonblocking(false)
-        .map_err(|_| CommunicationsCustodyWorkerErrorV1::StorageUnavailable)?;
+        .map_err(|_| unavailable_at("control_blocking"))?;
     let transfer = (|| {
         let session = request_managed_blob_custody_transfer_v2(
             control_channel,
@@ -83,26 +90,31 @@ pub async fn process_next_body_custody_transfer_v1(
     control_channel
         .inner_mut()
         .set_nonblocking(true)
-        .map_err(|_| CommunicationsCustodyWorkerErrorV1::StorageUnavailable)?;
+        .map_err(|_| unavailable_at("control_restore"))?;
 
     let target_reference_id = match transfer {
         Ok(reference_id) => reference_id,
-        Err(error) => match blob_transfer_failure(error) {
-            BlobCustodyTransferFailureV1::PolicyRejected => {
-                persistence
-                    .fail_body_custody_transfer(&claimed, now_unix_seconds)
-                    .await
-                    .map_err(storage_error)?;
-                return Ok(true);
+        Err(error) => {
+            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                eprintln!("developer_communications_custody_blob_error={error:?}");
             }
-            BlobCustodyTransferFailureV1::RetryPending => {
-                persistence
-                    .release_body_custody_transfer(&claimed)
-                    .await
-                    .map_err(storage_error)?;
-                return Err(CommunicationsCustodyWorkerErrorV1::RetryPending);
+            match blob_transfer_failure(error) {
+                BlobCustodyTransferFailureV1::PolicyRejected => {
+                    persistence
+                        .fail_body_custody_transfer(&claimed, now_unix_seconds)
+                        .await
+                        .map_err(|error| storage_error_at("fail", error))?;
+                    return Ok(true);
+                }
+                BlobCustodyTransferFailureV1::RetryPending => {
+                    persistence
+                        .release_body_custody_transfer(&claimed)
+                        .await
+                        .map_err(|error| storage_error_at("release", error))?;
+                    return Err(CommunicationsCustodyWorkerErrorV1::RetryPending);
+                }
             }
-        },
+        }
     };
     let blob_ref = format!(
         "blob-content:{}",
@@ -123,13 +135,30 @@ pub async fn process_next_body_custody_transfer_v1(
             now_unix_seconds,
         )
         .await
-        .map_err(storage_error)?;
+        .map_err(|error| storage_error_at("complete", error))?;
     Ok(true)
 }
 
 fn storage_error(
     _: CommunicationsBodyCustodyTransferErrorV1,
 ) -> CommunicationsCustodyWorkerErrorV1 {
+    CommunicationsCustodyWorkerErrorV1::StorageUnavailable
+}
+
+fn storage_error_at(
+    stage: &str,
+    error: CommunicationsBodyCustodyTransferErrorV1,
+) -> CommunicationsCustodyWorkerErrorV1 {
+    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        eprintln!("developer_communications_custody_storage_error stage={stage} error={error:?}");
+    }
+    storage_error(error)
+}
+
+fn unavailable_at(stage: &str) -> CommunicationsCustodyWorkerErrorV1 {
+    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        eprintln!("developer_communications_custody_storage_error stage={stage}");
+    }
     CommunicationsCustodyWorkerErrorV1::StorageUnavailable
 }
 

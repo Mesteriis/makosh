@@ -89,6 +89,20 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(authenticatedCompose, /image: clamav\/clamav:1\.5\.3-debian13-slim/);
   assert.match(
     authenticatedCompose,
+    /- hermes-authenticated-development-nats:\/var\/lib\/hermes/,
+    'JetStream state must survive a normal development ensemble restart',
+  );
+  assert.match(
+    authenticatedCompose,
+    /- hermes-authenticated-development-postgres:\/var\/lib\/postgresql\/data/,
+    'authenticated PostgreSQL must not rely on an anonymous Docker volume',
+  );
+  assert.match(
+    authenticatedCompose,
+    /^volumes:\n  hermes-authenticated-development-nats:\n  hermes-authenticated-development-postgres:/m,
+  );
+  assert.match(
+    authenticatedCompose,
     /\.\/nats-server\.conf:\/etc\/nats\/hermes-development\.conf:ro/,
   );
   assert.match(authenticatedNats, /^max_control_line: 16384$/m);
@@ -111,10 +125,9 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(assembly, /HERMES_DEV_GATEWAY_PROOF_FILE="\$proof_file"/);
   assert.match(assembly, /probe-dev-gateway\.mjs/);
   assert.match(assembly, /curl .*"\$browser_origin\/readyz"/);
-  assert.ok(
-    assembly.indexOf('open "$browser_url"')
-      > assembly.indexOf('Hermes development ensemble is ready'),
-  );
+  assert.match(assembly, /no_browser="\$\{HERMES_DEV_NO_BROWSER:-1\}"/);
+  assert.match(assembly, /if test "\$no_browser" = 0; then[\s\S]*open "\$browser_url"/);
+  assert.match(assembly, /Browser opening skipped/);
   assert.match(assembly, /trap cleanup EXIT/);
   assert.doesNotMatch(
     assembly,

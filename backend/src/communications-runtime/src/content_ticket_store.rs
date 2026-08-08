@@ -20,6 +20,7 @@ pub struct IssuedCommunicationsContentTicketV1 {
     pub opaque_read_capability: [u8; TICKET_BYTES],
     pub declared_bytes: u64,
     pub expires_at_unix_seconds: i64,
+    pub media_type: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -75,6 +76,7 @@ impl CommunicationsContentTicketStoreV1 {
                 continue;
             }
             let declared_bytes = receipt.declared_bytes;
+            let media_type = receipt.media_type.clone();
             tickets.push(ContentTicketAuthorityV1 {
                 opaque_read_capability: capability,
                 logical_owner_id: logical_owner_id.to_owned(),
@@ -86,6 +88,7 @@ impl CommunicationsContentTicketStoreV1 {
                 opaque_read_capability: capability,
                 declared_bytes,
                 expires_at_unix_seconds,
+                media_type,
             });
         }
         Err(CommunicationsContentTicketStoreErrorV1::Unavailable)
@@ -201,6 +204,7 @@ mod tests {
             declared_bytes: 64,
             plaintext_sha256: [3; 32],
             backup_class: 1,
+            media_type: "text/plain".to_owned(),
         }
     }
 }

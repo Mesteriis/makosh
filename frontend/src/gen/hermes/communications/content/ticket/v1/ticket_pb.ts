@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file hermes/communications/content/ticket/v1/ticket.proto.
  */
 export const file_hermes_communications_content_ticket_v1_ticket: GenFile = /*@__PURE__*/
-  fileDesc("CjRoZXJtZXMvY29tbXVuaWNhdGlvbnMvY29udGVudC90aWNrZXQvdjEvdGlja2V0LnByb3RvEidoZXJtZXMuY29tbXVuaWNhdGlvbnMuY29udGVudC50aWNrZXQudjEiSwodSXNzdWVNZXNzYWdlQm9keVJlYWRSZXF1ZXN0VjESFgoOcHJvdG9jb2xfbWFqb3IYASABKA0SEgoKbWVzc2FnZV9pZBgCIAEoDCKNAQoeSXNzdWVNZXNzYWdlQm9keVJlYWRSZXNwb25zZVYxEh4KFm9wYXF1ZV9yZWFkX2NhcGFiaWxpdHkYASABKAwSFgoOZGVjbGFyZWRfYnl0ZXMYAiABKAQSHwoXZXhwaXJlc19hdF91bml4X3NlY29uZHMYAyABKAMSEgoKZXJyb3JfY29kZRgPIAEoCTLOAQoiQ29tbXVuaWNhdGlvbnNDb250ZW50VGlja2V0U2VydmljZRKnAQoUSXNzdWVNZXNzYWdlQm9keVJlYWQSRi5oZXJtZXMuY29tbXVuaWNhdGlvbnMuY29udGVudC50aWNrZXQudjEuSXNzdWVNZXNzYWdlQm9keVJlYWRSZXF1ZXN0VjEaRy5oZXJtZXMuY29tbXVuaWNhdGlvbnMuY29udGVudC50aWNrZXQudjEuSXNzdWVNZXNzYWdlQm9keVJlYWRSZXNwb25zZVYxYgZwcm90bzM");
+  fileDesc("CjRoZXJtZXMvY29tbXVuaWNhdGlvbnMvY29udGVudC90aWNrZXQvdjEvdGlja2V0LnByb3RvEidoZXJtZXMuY29tbXVuaWNhdGlvbnMuY29udGVudC50aWNrZXQudjEiSwodSXNzdWVNZXNzYWdlQm9keVJlYWRSZXF1ZXN0VjESFgoOcHJvdG9jb2xfbWFqb3IYASABKA0SEgoKbWVzc2FnZV9pZBgCIAEoDCKhAQoeSXNzdWVNZXNzYWdlQm9keVJlYWRSZXNwb25zZVYxEh4KFm9wYXF1ZV9yZWFkX2NhcGFiaWxpdHkYASABKAwSFgoOZGVjbGFyZWRfYnl0ZXMYAiABKAQSHwoXZXhwaXJlc19hdF91bml4X3NlY29uZHMYAyABKAMSEgoKbWVkaWFfdHlwZRgEIAEoCRISCgplcnJvcl9jb2RlGA8gASgJMs4BCiJDb21tdW5pY2F0aW9uc0NvbnRlbnRUaWNrZXRTZXJ2aWNlEqcBChRJc3N1ZU1lc3NhZ2VCb2R5UmVhZBJGLmhlcm1lcy5jb21tdW5pY2F0aW9ucy5jb250ZW50LnRpY2tldC52MS5Jc3N1ZU1lc3NhZ2VCb2R5UmVhZFJlcXVlc3RWMRpHLmhlcm1lcy5jb21tdW5pY2F0aW9ucy5jb250ZW50LnRpY2tldC52MS5Jc3N1ZU1lc3NhZ2VCb2R5UmVhZFJlc3BvbnNlVjFiBnByb3RvMw");
 
 /**
  * Generated owner contract for a short-lived, one-use canonical body read.
@@ -55,6 +55,11 @@ export type IssueMessageBodyReadResponseV1 = Message<"hermes.communications.cont
    * @generated from field: int64 expires_at_unix_seconds = 3;
    */
   expiresAtUnixSeconds: bigint;
+
+  /**
+   * @generated from field: string media_type = 4;
+   */
+  mediaType: string;
 
   /**
    * @generated from field: string error_code = 15;

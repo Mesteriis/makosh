@@ -384,12 +384,13 @@ impl MailDurablePersistence {
             folder_id.unwrap_or(""),
             provider_thread_id.unwrap_or(""),
         ]);
-        let anchor = decode_cursor("m1m", &scope, cursor)?;
+        let anchor = decode_cursor("m2m", &scope, cursor)?;
         if cursor.is_some() {
             require_cursor_anchor(
                 sqlx::query(
                     "SELECT EXISTS(SELECT 1 FROM hermes_data.mail_operational_messages AS message \
-                     WHERE message.connection_id = $1 AND message.updated_at_unix_seconds = $2 \
+                     WHERE message.connection_id = $1 \
+                       AND COALESCE(message.sent_at_unix_seconds, 1) = $2 \
                        AND message.cursor_sequence = $3 \
                        AND ($4::TEXT IS NULL OR message.provider_thread_id = $4) \
                        AND ($5::TEXT IS NULL OR EXISTS( \
@@ -413,6 +414,7 @@ impl MailDurablePersistence {
              message.snippet, message.sent_at_unix_seconds, message.flags, \
              message.has_plain_text, message.has_attachments, message.observation_anchor_id, \
              message.projection_revision, message.updated_at_unix_seconds, \
+             COALESCE(message.sent_at_unix_seconds, 1) AS message_order_unix_seconds, \
              message.cursor_sequence FROM hermes_data.mail_operational_messages AS message \
              WHERE message.connection_id = $1 \
                AND ($2::TEXT IS NULL OR message.provider_thread_id = $2) \
@@ -421,8 +423,9 @@ impl MailDurablePersistence {
                  WHERE membership.connection_id = message.connection_id \
                    AND membership.message_id = message.message_id \
                    AND membership.folder_id = $3)) \
-               AND (message.updated_at_unix_seconds, message.cursor_sequence) < ($4, $5) \
-             ORDER BY message.updated_at_unix_seconds DESC, message.cursor_sequence DESC LIMIT $6",
+               AND (COALESCE(message.sent_at_unix_seconds, 1), message.cursor_sequence) < ($4, $5) \
+             ORDER BY COALESCE(message.sent_at_unix_seconds, 1) DESC, \
+                      message.cursor_sequence DESC LIMIT $6",
         )
         .bind(connection_id)
         .bind(provider_thread_id)
@@ -440,7 +443,7 @@ impl MailDurablePersistence {
             .iter()
             .map(|row| message_from_row(row, &folder_ids))
             .collect::<Result<Vec<_>, _>>()?;
-        let next_cursor = page_cursor("m1m", &scope, &rows, limit)?;
+        let next_cursor = message_page_cursor("m2m", &scope, &rows, limit)?;
         Ok(MailOperationalQueryResponseV1::Messages(
             MailOperationalPageV1 { items, next_cursor },
         ))
@@ -573,6 +576,25 @@ fn page_cursor(
         .then(|| rows.last())
         .flatten()
         .map(|row| encode_cursor(prefix, scope, row))
+        .transpose()
+}
+
+fn message_page_cursor(
+    prefix: &str,
+    scope: &str,
+    rows: &[PgRow],
+    limit: u32,
+) -> Result<Option<String>, MailDurablePersistenceError> {
+    (rows.len() == limit as usize)
+        .then(|| rows.last())
+        .flatten()
+        .map(|row| {
+            Ok(format!(
+                "{prefix}.{scope}.{}.{}",
+                row_i64(row, "message_order_unix_seconds")?,
+                row_i64(row, "cursor_sequence")?
+            ))
+        })
         .transpose()
 }
 
@@ -1192,16 +1214,16 @@ mod tests {
         let sent_scope = cursor_scope(&["messages", "account-1", "SENT", ""]);
         assert_ne!(inbox_scope, sent_scope);
 
-        let cursor = format!("m1m.{inbox_scope}.1700000000.42");
+        let cursor = format!("m2m.{inbox_scope}.1700000000.42");
         assert_eq!(
-            decode_cursor("m1m", &inbox_scope, Some(&cursor)),
+            decode_cursor("m2m", &inbox_scope, Some(&cursor)),
             Ok(CursorAnchorV1 {
                 updated_at_unix_seconds: 1_700_000_000,
                 sequence: 42,
             })
         );
         assert_eq!(
-            decode_cursor("m1m", &sent_scope, Some(&cursor)),
+            decode_cursor("m2m", &sent_scope, Some(&cursor)),
             Err(MailDurablePersistenceError::InvalidRow)
         );
         assert!(!cursor.contains("account-1"));

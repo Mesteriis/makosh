@@ -464,6 +464,29 @@
 	white-space: pre-wrap;
 }
 
+.mail-message-body__content {
+	min-height: 12rem;
+	border: 0;
+	background: transparent;
+}
+
+.mail-message-body__skeleton {
+	height: 16rem;
+	border-radius: var(--h-radius-md);
+	background: linear-gradient(
+		90deg,
+		var(--h-color-surface-muted) 25%,
+		color-mix(in srgb, var(--h-color-surface-muted) 65%, var(--h-color-surface)) 50%,
+		var(--h-color-surface-muted) 75%
+	);
+	background-size: 200% 100%;
+	animation: mail-body-loading 1.2s linear infinite;
+}
+
+@keyframes mail-body-loading {
+	to { background-position: -200% 0; }
+}
+
 .mail-message-body aside {
 	display: flex;
 	gap: var(--h-space-2);

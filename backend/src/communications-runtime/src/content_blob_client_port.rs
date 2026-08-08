@@ -136,6 +136,7 @@ mod tests {
             declared_bytes: 32,
             plaintext_sha256: [2; 32],
             backup_class: 1,
+            media_type: "text/plain".to_owned(),
         };
         assert_eq!(
             current_receipt_if_unchanged(Some(receipt.clone()), &receipt),

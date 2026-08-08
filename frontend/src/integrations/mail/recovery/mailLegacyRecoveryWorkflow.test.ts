@@ -1,4 +1,7 @@
-import { MailAccountReadinessV1 } from '../../../gen/hermes/mail/account/v1/client_pb'
+import {
+	MailAccountReadinessV1,
+	MailCredentialBindingStateV1,
+} from '../../../gen/hermes/mail/account/v1/client_pb'
 import { describe, expect, it, vi } from 'vitest'
 
 import { MailLegacyRecoveryWorkflowV1 } from './mailLegacyRecoveryWorkflow'
@@ -193,6 +196,54 @@ describe('MailLegacyRecoveryWorkflowV1', () => {
 		expect(oauthStart).toHaveBeenCalledOnce()
 	})
 
+	it('reuses the existing Mail target for the same connection', async () => {
+		const sourceHandle = 'a'.repeat(64)
+		const createTarget = vi.fn()
+		const oauthStart = vi.fn().mockResolvedValue({
+			setupId: 'setup',
+			authorizationUrl: 'https://accounts.google.test/authorize',
+		})
+		const workflow = new MailLegacyRecoveryWorkflowV1({
+			source: {
+				...receiptPort(),
+				source: vi.fn().mockResolvedValue({
+					kind: 'gmail',
+					sourceHandle,
+					accountId: 'gmail-account',
+					displayName: 'Gmail',
+					email: 'owner@example.test',
+					oauthClientId: 'public-client',
+					oauthRedirectUri: 'http://127.0.0.1/callback',
+				}),
+			},
+			configuration: { createTarget, apply: vi.fn() },
+			vault: { provisionCustodied: vi.fn() },
+			mail: { status: vi.fn(), bind: vi.fn() },
+			oauth: { start: oauthStart, complete: vi.fn() },
+		} as never)
+
+		await workflow.recover({
+			registrationId: 'mail-registration',
+			plan,
+			candidate: { sourceHandle, kind: 'gmail', state: 'reauthorization_required' },
+			settingsTargets: [{
+				configurationInstanceId: 'existing-target',
+				desiredRevision: 7n,
+				effectiveRevision: 7n,
+				applyState: 1,
+				sanitizedReasonCode: '',
+				values: [{
+					settingId: 'mail.connection_id',
+					displayName: 'Connection',
+					value: { value: { case: 'stringValue', value: 'gmail-account' } },
+				}],
+			} as never],
+		})
+
+		expect(createTarget).not.toHaveBeenCalled()
+		expect(oauthStart).toHaveBeenCalledOnce()
+	})
+
 	it('rebinds a persisted iCloud credential when provider binding state was lost', async () => {
 		const sourceHandle = 'e'.repeat(64)
 		const bind = vi.fn().mockResolvedValue({})
@@ -257,6 +308,80 @@ describe('MailLegacyRecoveryWorkflowV1', () => {
 		expect(provisionCustodied).not.toHaveBeenCalled()
 		expect(bind).toHaveBeenCalledWith(expect.objectContaining({
 			connectionId: 'mail-account',
+			credentialRevision: 1n,
+		}))
+	})
+
+	it('reprovisions a non-active iCloud binding before rebinding it', async () => {
+		const sourceHandle = 'f'.repeat(64)
+		const sealSource = vi.fn().mockResolvedValue({})
+		const bind = vi.fn().mockResolvedValue({})
+		const provisionCustodied = vi.fn().mockImplementation(async (_input, seal) => {
+			await seal({
+				hostSessionId: 'host-session',
+				operationId: new Uint8Array(16).fill(1),
+				action: 1,
+				secretClass: 1,
+				authorized: {},
+			})
+			return { secretRevision: 1n }
+		})
+		const status = vi.fn()
+			.mockResolvedValueOnce({
+				binding: [{
+					purpose: 1,
+					credentialRevision: 1n,
+					bindingRevision: 4n,
+					state: MailCredentialBindingStateV1
+						.MAIL_CREDENTIAL_BINDING_STATE_PENDING_RESTART,
+				}],
+			})
+			.mockResolvedValueOnce({
+				binding: [{ purpose: 1, credentialRevision: 1n }],
+				readiness: MailAccountReadinessV1.MAIL_ACCOUNT_READINESS_READY,
+			})
+		const workflow = new MailLegacyRecoveryWorkflowV1({
+			source: {
+				...receiptPort(),
+				source: vi.fn().mockResolvedValue({
+					kind: 'icloud',
+					sourceHandle,
+					accountId: 'mail-account',
+					displayName: 'Private',
+					email: 'owner@example.test',
+					imapHost: 'imap.mail.me.com',
+					imapPort: 993,
+					username: 'owner@example.test',
+				}),
+				sealSource,
+			},
+			configuration: {
+				createTarget: vi.fn().mockResolvedValue({
+					configurationInstanceId: 'mail-target',
+					desiredRevision: 7n,
+					applyState: 'current',
+				}),
+				apply: vi.fn(),
+			},
+			vault: { provisionCustodied },
+			mail: { status, bind },
+			oauth: { start: vi.fn(), complete: vi.fn() },
+		} as never)
+
+		const result = await workflow.recover({
+			registrationId: 'mail-registration',
+			plan,
+			candidate: { sourceHandle, kind: 'icloud', state: 'ready_to_apply' },
+		})
+
+		expect(result).toEqual({ kind: 'icloud', state: 'ready' })
+		expect(provisionCustodied).toHaveBeenCalledWith(
+			expect.objectContaining({ secretRevision: 1n }),
+			expect.any(Function),
+		)
+		expect(sealSource).toHaveBeenCalledOnce()
+		expect(bind).toHaveBeenCalledWith(expect.objectContaining({
+			expectedBindingRevision: 4n,
 			credentialRevision: 1n,
 		}))
 	})

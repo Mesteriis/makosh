@@ -1,6 +1,7 @@
 //! Canonical Communications Storage bundle construction.
 
 use hermes_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
+use hermes_storage_protocol::validation::validate_storage_bundle;
 use sha2::{Digest, Sha256};
 
 const INITIAL_SCHEMA: &[u8] = include_bytes!("../../migrations/0001_communications_state.sql");
@@ -32,8 +33,17 @@ const EVIDENCE_EXPORT_SOURCE_SCHEMA: &[u8] =
     include_bytes!("../../migrations/0014_communications_evidence_export_source.sql");
 const MESSAGE_SUBJECT_SCHEMA: &[u8] =
     include_bytes!("../../migrations/0015_communications_message_subject.sql");
+const BODY_MEDIA_TYPE_SCHEMA: &[u8] =
+    include_bytes!("../../migrations/0016_communications_body_media_type.sql");
 
 pub const COMMUNICATIONS_STORAGE_BUNDLE_REVISION_V1: u32 = 15;
+pub const COMMUNICATIONS_BODY_MEDIA_TYPE_STORAGE_BUNDLE_REVISION_V1: u32 = 20;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum CommunicationsBodyMediaTypeSchemaErrorV1 {
+    InvalidPredecessor,
+    InvalidSuccessor,
+}
 
 /// Immutable Communications schema admitted and applied only by Storage Control.
 #[must_use]
@@ -136,6 +146,30 @@ pub fn communications_storage_bundle_v1() -> StorageBundleV1 {
             },
         ],
     }
+}
+
+pub fn append_communications_body_media_type_storage_v1(
+    mut predecessor: StorageBundleV1,
+) -> Result<StorageBundleV1, CommunicationsBodyMediaTypeSchemaErrorV1> {
+    if predecessor.major != 1
+        || predecessor.revision != COMMUNICATIONS_BODY_MEDIA_TYPE_STORAGE_BUNDLE_REVISION_V1 - 1
+        || predecessor.bundle_id != "communications_state"
+        || predecessor.owner_id != "communications"
+        || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
+        || validate_storage_bundle(&predecessor).is_err()
+    {
+        return Err(CommunicationsBodyMediaTypeSchemaErrorV1::InvalidPredecessor);
+    }
+    predecessor.steps.push(StorageMigrationStepV1 {
+        revision: COMMUNICATIONS_BODY_MEDIA_TYPE_STORAGE_BUNDLE_REVISION_V1,
+        migration_id: "communications_body_media_type".to_owned(),
+        forward_sql_utf8: BODY_MEDIA_TYPE_SCHEMA.to_vec(),
+        sha256: Sha256::digest(BODY_MEDIA_TYPE_SCHEMA).to_vec(),
+    });
+    predecessor.revision = COMMUNICATIONS_BODY_MEDIA_TYPE_STORAGE_BUNDLE_REVISION_V1;
+    validate_storage_bundle(&predecessor)
+        .map(|()| predecessor)
+        .map_err(|_| CommunicationsBodyMediaTypeSchemaErrorV1::InvalidSuccessor)
 }
 
 #[cfg(test)]

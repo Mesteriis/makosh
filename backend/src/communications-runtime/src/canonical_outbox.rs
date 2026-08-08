@@ -393,6 +393,7 @@ mod tests {
             kind: CanonicalCommunicationEvidenceKindV1::EmailMessage,
             body: CommunicationBodyStateV1::MetadataOnly,
             body_blob: None,
+            body_media_type: None,
             body_admission_failure: None,
             attachment_descriptor: None,
             observed_at_unix_seconds: 1_700_000_000,

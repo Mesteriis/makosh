@@ -39,8 +39,9 @@ pub use saved_search::{
     CommunicationsSavedSearchWriteV1,
 };
 pub use schema::{
-    COMMUNICATIONS_SCHEMA_V1, COMMUNICATIONS_STORAGE_BUNDLE_REVISION_V1,
-    communications_storage_bundle_v1,
+    COMMUNICATIONS_BODY_MEDIA_TYPE_STORAGE_BUNDLE_REVISION_V1, COMMUNICATIONS_SCHEMA_V1,
+    COMMUNICATIONS_STORAGE_BUNDLE_REVISION_V1, CommunicationsBodyMediaTypeSchemaErrorV1,
+    append_communications_body_media_type_storage_v1, communications_storage_bundle_v1,
 };
 pub use search::{
     CommunicationsSearchProjectionWriteErrorV1, CommunicationsSearchProjectionWriteV1,

@@ -332,26 +332,37 @@ impl BlobSessionHandlerV1 {
             self.store.snapshot().instance_id(),
             now,
             CustodySourceProofUseV1::Transfer,
-        )?;
-        if source.reference_id != request.reference_id
-            || source.declared_size != request.declared_size
-            || source.receipt_sha256 != request.receipt_sha256
-            || !proof_authorizes_target(
-                &source,
-                target.request().owner_id(),
-                expectation.module_id(),
-                &request.capability_id,
-            )
-            || !catalog::resolve(&*self.store)?.iter().any(|entry| {
-                entry.registration_id() == source.registration_id.as_str()
-                    && entry.capability_id() == source.capability_id.as_str()
-                    && entry.grant_epoch() == source.grant_epoch
-                    && entry.request().owner_id() == source.owner_id.as_str()
-                    && entry.request().custody_scope_id() == source.custody_scope_id
-                    && required_source_operation(&source)
-                        .is_some_and(|operation| entry.request().allows(operation))
-            })
-        {
+        )
+        .map_err(|error| {
+            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                eprintln!("developer_blob_custody_denied_stage=source_proof");
+            }
+            error
+        })?;
+        let source_matches = source.reference_id == request.reference_id
+            && source.declared_size == request.declared_size
+            && source.receipt_sha256 == request.receipt_sha256;
+        let target_authorized = proof_authorizes_target(
+            &source,
+            target.request().owner_id(),
+            expectation.module_id(),
+            &request.capability_id,
+        );
+        let source_grant_current = catalog::resolve(&*self.store)?.iter().any(|entry| {
+            entry.registration_id() == source.registration_id.as_str()
+                && entry.capability_id() == source.capability_id.as_str()
+                && entry.grant_epoch() == source.grant_epoch
+                && entry.request().owner_id() == source.owner_id.as_str()
+                && entry.request().custody_scope_id() == source.custody_scope_id
+                && required_source_operation(&source)
+                    .is_some_and(|operation| entry.request().allows(operation))
+        });
+        if !source_matches || !target_authorized || !source_grant_current {
+            if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+                eprintln!(
+                    "developer_blob_custody_denied_stage=binding source_matches={source_matches} target_authorized={target_authorized} source_grant_current={source_grant_current}"
+                );
+            }
             return Err("managed runtime Blob custody transfer is denied".to_owned());
         }
         let blob = status::read_current(&self.store, &self.relay)?;

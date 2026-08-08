@@ -43,6 +43,30 @@ pub struct CanonicalReadPageV1<T> {
 }
 
 impl CommunicationsDurablePersistence {
+    pub async fn canonical_message_id_for_evidence(
+        &self,
+        evidence_id: CommunicationObservationIdV1,
+    ) -> Result<Option<CommunicationMessageIdV1>, CommunicationsPersistenceError> {
+        let row = sqlx::query(
+            "SELECT message.message_id \
+             FROM hermes_data.communications_evidence_summaries evidence \
+             JOIN hermes_data.communications_messages message \
+               ON message.source_cursor_sha256 = evidence.source_cursor_sha256 \
+             WHERE evidence.observation_id = $1",
+        )
+        .bind(evidence_id.bytes().as_slice())
+        .fetch_optional(&self.pool)
+        .await
+        .map_err(|_| CommunicationsPersistenceError::StorageUnavailable)?;
+        row.map(|row| {
+            let value = row
+                .try_get::<Vec<u8>, _>("message_id")
+                .map_err(|_| CommunicationsPersistenceError::InvalidRow)?;
+            Ok(CommunicationMessageIdV1::new(id16(&value)?))
+        })
+        .transpose()
+    }
+
     pub async fn canonical_message(
         &self,
         message_id: CommunicationMessageIdV1,

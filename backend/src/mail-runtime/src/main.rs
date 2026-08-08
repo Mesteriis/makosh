@@ -70,6 +70,7 @@ struct ActiveGmailSyncProviderOperationV1 {
     connection_id: String,
     operation_id: String,
     deadline_at_unix_seconds: i64,
+    timed_out: bool,
 }
 
 struct ActiveImapSyncProviderOperationV1 {
@@ -190,7 +191,7 @@ where
     let mut imap_sync_provider_operation: Option<ActiveImapSyncProviderOperationV1> = None;
     let mut gmail_sync_provider_operation: Option<ActiveGmailSyncProviderOperationV1> = None;
     let mut replay_indexed_at_unix_seconds = 0;
-    loop {
+    'runtime: loop {
         drain_client_deliveries(&runtime, &mut admitted)?;
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -220,6 +221,7 @@ where
             &mut imap_sync_provider_operation,
             now,
         )?;
+        drain_client_deliveries(&runtime, &mut admitted)?;
         if gmail_oauth_provider_operation
             .as_ref()
             .is_some_and(tokio::task::JoinHandle::is_finished)
@@ -257,6 +259,7 @@ where
                 }
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         if let Some(operation) = imap_sync_provider_operation.as_mut()
             && let Some(pages) = operation.pages.as_ref()
         {
@@ -274,7 +277,7 @@ where
         }
         if imap_sync_provider_operation
             .as_ref()
-            .is_some_and(|operation| operation.completion.is_finished())
+            .is_some_and(|operation| !operation.timed_out && operation.completion.is_finished())
         {
             let operation = imap_sync_provider_operation
                 .take()
@@ -299,7 +302,7 @@ where
                 admitted
                     .select_account(&connection_id)
                     .map_err(|_| "Mail runtime sync account selection failed".to_owned())?;
-                match admitted.prepare_pending_imap_sync() {
+                match runtime.block_on(admitted.prepare_pending_imap_sync()) {
                     Ok(Some(prepared)) => {
                         let connection_id = prepared.connection_id().to_owned();
                         let operation_id = prepared.operation_id().to_owned();
@@ -327,6 +330,7 @@ where
                 }
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         if let Some(operation) = gmail_sync_provider_operation.as_mut() {
             while let Ok(delivery) = operation.pages.try_recv() {
                 let connection_id = delivery.connection_id().to_owned();
@@ -344,7 +348,7 @@ where
         }
         if gmail_sync_provider_operation
             .as_ref()
-            .is_some_and(|operation| operation.completion.is_finished())
+            .is_some_and(|operation| !operation.timed_out && operation.completion.is_finished())
         {
             let operation = gmail_sync_provider_operation
                 .take()
@@ -382,6 +386,7 @@ where
                             connection_id,
                             operation_id,
                             deadline_at_unix_seconds,
+                            timed_out: false,
                         });
                         break;
                     }
@@ -395,28 +400,33 @@ where
                 }
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         for connection_id in admitted.connection_ids() {
             admitted
                 .select_account(&connection_id)
                 .map_err(|_| "Mail runtime account selection failed".to_owned())?;
             execute_account_queues(&runtime, &mut admitted, now)?;
+            drain_client_deliveries(&runtime, &mut admitted)?;
         }
         match runtime.block_on(admitted.try_consume_delivery_intent(now)) {
             Ok(_) | Err(MailDeliveryIntentConsumeErrorV1::Unavailable) => {}
             Err(MailDeliveryIntentConsumeErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_delivery_intent_inbox_persistence_failed");
-                return Err("Mail delivery-intent inbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
             Err(_) => {
                 developer_diagnostic("developer_mail_delivery_intent_invalid");
                 return Err("Mail delivery-intent command is invalid".to_owned());
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.try_consume_address_book_upsert(now)) {
             Ok(_) | Err(MailAddressBookConsumeErrorV1::Unavailable) => {}
             Err(MailAddressBookConsumeErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_address_book_inbox_persistence_failed");
-                return Err("Mail address-book inbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
             Err(error) => {
                 developer_diagnostic(&format!(
@@ -425,11 +435,13 @@ where
                 return Err("Mail address-book command is invalid".to_owned());
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.try_consume_address_book_fetch(now)) {
             Ok(_) | Err(MailAddressBookConsumeErrorV1::Unavailable) => {}
             Err(MailAddressBookConsumeErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_address_book_fetch_inbox_persistence_failed");
-                return Err("Mail address-book fetch inbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
             Err(error) => {
                 developer_diagnostic(&format!(
@@ -438,6 +450,7 @@ where
                 return Err("Mail address-book fetch command is invalid".to_owned());
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(process_next_mail_address_book_fetch_v1(&mut admitted, now)) {
             Ok(_) => {}
             Err(MailAddressBookFetchWorkerErrorV1::InvalidClock) => {
@@ -445,13 +458,15 @@ where
             }
             Err(MailAddressBookFetchWorkerErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_address_book_fetch_worker_persistence_failed");
-                return Err("Mail address-book fetch worker persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
             Err(MailAddressBookFetchWorkerErrorV1::Envelope) => {
                 developer_diagnostic("developer_mail_address_book_fetch_worker_envelope_failed");
                 return Err("Mail address-book fetch worker result is invalid".to_owned());
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(process_next_mail_address_book_upsert_v1(&mut admitted, now)) {
             Ok(_) => {}
             Err(MailAddressBookWorkerErrorV1::InvalidClock) => {
@@ -459,13 +474,15 @@ where
             }
             Err(MailAddressBookWorkerErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_address_book_worker_persistence_failed");
-                return Err("Mail address-book persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
             Err(MailAddressBookWorkerErrorV1::ResultEnvelope) => {
                 developer_diagnostic("developer_mail_address_book_result_invalid");
                 return Err("Mail address-book result is invalid".to_owned());
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         runtime
             .block_on(admitted.try_consume_attachment_anchor_handoff(now))
             .map_err(|_| {
@@ -478,6 +495,7 @@ where
                 developer_diagnostic("developer_mail_attachment_safety_projection_failed");
                 "Mail runtime attachment safety projection failed".to_owned()
             })?;
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.try_consume_replay_command(now)) {
             Ok(_)
             | Err(MailReplayCommandConsumeErrorV1::EventUnavailable)
@@ -497,23 +515,29 @@ where
             }
             Err(MailCommunicationsOutboxRelayError::Persistence(_)) => {
                 developer_diagnostic("developer_mail_outbox_persistence_failed");
-                return Err("Mail runtime outbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.relay_delivery_intent_outbox(now)) {
             Ok(_) | Err(MailDeliveryIntentOutboxRelayErrorV1::Unavailable) => {}
             Err(MailDeliveryIntentOutboxRelayErrorV1::Persistence(_)) => {
                 developer_diagnostic("developer_mail_delivery_intent_outbox_persistence_failed");
-                return Err("Mail delivery-intent outbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.relay_address_book_outbox(now)) {
             Ok(_) | Err(MailAddressBookOutboxRelayErrorV1::Unavailable) => {}
             Err(MailAddressBookOutboxRelayErrorV1::Persistence) => {
                 developer_diagnostic("developer_mail_address_book_outbox_persistence_failed");
-                return Err("Mail address-book result relay failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.relay_attachment_security_outbox(now)) {
             Ok(_) => {}
             Err(MailAttachmentSecurityOutboxRelayError::Unavailable) => {
@@ -523,9 +547,11 @@ where
                 developer_diagnostic(
                     "developer_mail_attachment_security_outbox_persistence_failed",
                 );
-                return Err("Mail runtime Attachment Security outbox persistence failed".to_owned());
+                defer_runtime_tick();
+                continue 'runtime;
             }
         }
+        drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.relay_replay_result(now)) {
             Ok(_)
             | Err(MailReplayResultRelayErrorV1::EventUnavailable)
@@ -563,22 +589,28 @@ fn expire_active_gmail_sync_operation(
     operation: &mut Option<ActiveGmailSyncProviderOperationV1>,
     now_unix_seconds: i64,
 ) -> Result<(), String> {
-    if !operation
-        .as_ref()
-        .is_some_and(|active| now_unix_seconds >= active.deadline_at_unix_seconds)
-    {
+    let Some(active) = operation.as_mut() else {
+        return Ok(());
+    };
+    if now_unix_seconds < active.deadline_at_unix_seconds {
         return Ok(());
     }
-    let active = operation.take().expect("expired Gmail sync operation");
-    active.completion.abort();
+    if !active.timed_out {
+        active.completion.abort();
+        active.timed_out = true;
+    }
     admitted
         .select_account(&active.connection_id)
         .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
-    runtime
-        .block_on(
-            admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
-        )
-        .map_err(|_| "Mail runtime Gmail sync expiration failed".to_owned())
+    match runtime.block_on(
+        admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
+    ) {
+        Ok(()) => *operation = None,
+        Err(error) => developer_diagnostic(&format!(
+            "developer_mail_gmail_sync_expiration_error={error:?}"
+        )),
+    }
+    Ok(())
 }
 
 fn expire_active_imap_sync_operation(
@@ -590,19 +622,25 @@ fn expire_active_imap_sync_operation(
     let Some(active) = operation.as_mut() else {
         return Ok(());
     };
-    if active.timed_out || now_unix_seconds < active.deadline_at_unix_seconds {
+    if now_unix_seconds < active.deadline_at_unix_seconds {
         return Ok(());
     }
-    active.pages = None;
-    active.timed_out = true;
+    if !active.timed_out {
+        active.pages = None;
+        active.timed_out = true;
+    }
     admitted
         .select_account(&active.connection_id)
         .map_err(|_| "Mail runtime IMAP sync account selection failed".to_owned())?;
-    runtime
-        .block_on(
-            admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
-        )
-        .map_err(|_| "Mail runtime IMAP sync expiration failed".to_owned())
+    match runtime.block_on(
+        admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
+    ) {
+        Ok(()) => *operation = None,
+        Err(error) => developer_diagnostic(&format!(
+            "developer_mail_imap_sync_expiration_error={error:?}"
+        )),
+    }
+    Ok(())
 }
 
 fn drain_client_deliveries(
@@ -634,7 +672,7 @@ fn execute_account_queues(
         }
         Err(MailDeliveryIntentWorkerErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_delivery_intent_persistence_failed");
-            return Err("Mail delivery-intent persistence failed".to_owned());
+            return Ok(());
         }
         Err(MailDeliveryIntentWorkerErrorV1::Runtime) => {
             developer_diagnostic("developer_mail_delivery_intent_runtime_failed");
@@ -662,7 +700,7 @@ fn execute_account_queues(
         }
         Err(MailDeliveryDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_delivery_persistence_failed");
-            return Err("Mail runtime delivery persistence failed".to_owned());
+            return Ok(());
         }
     }
     match runtime.block_on(admitted.execute_next_message_flag_command(now)) {
@@ -678,8 +716,10 @@ fn execute_account_queues(
             return Err("Mail runtime message flag command is invalid".to_owned());
         }
         Err(MailMessageFlagDispatchErrorV1::Persistence) => {
+            // A transient storage outage must not terminate the managed runtime;
+            // the durable operation remains pending for a later worker pass.
             developer_diagnostic("developer_mail_message_flag_persistence_failed");
-            return Err("Mail runtime message flag persistence failed".to_owned());
+            return Ok(());
         }
     }
     match runtime.block_on(admitted.execute_next_message_location_command(now)) {
@@ -699,7 +739,7 @@ fn execute_account_queues(
         }
         Err(MailMessageLocationDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_message_location_persistence_failed");
-            return Err("Mail runtime message location persistence failed".to_owned());
+            return Ok(());
         }
     }
     match runtime.block_on(admitted.execute_next_message_permanent_delete_command(now)) {
@@ -724,10 +764,14 @@ fn execute_account_queues(
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_message_permanent_delete_persistence_failed");
-            return Err("Mail runtime permanent delete persistence failed".to_owned());
+            return Ok(());
         }
     }
     Ok(())
+}
+
+fn defer_runtime_tick() {
+    std::thread::sleep(RUNTIME_TICK_INTERVAL);
 }
 
 fn developer_diagnostic(message: &str) {
@@ -755,7 +799,7 @@ fn handle_gmail_oauth_dispatch_result(
         }
         Err(MailGmailOAuthDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_gmail_oauth_persistence_failed");
-            Err("Mail runtime Gmail OAuth persistence failed".to_owned())
+            Ok(())
         }
     }
 }

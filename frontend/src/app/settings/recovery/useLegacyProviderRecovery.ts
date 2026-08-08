@@ -98,6 +98,7 @@ export function useLegacyProviderRecovery(
 								registrationId: currentMail.registrationId,
 								plan: currentPlan,
 								candidate,
+								settingsTargets: currentMail.settingsTargets,
 								explicitRetryOutcomeUnknown: retryOutcomeUnknown.value,
 							}),
 						]

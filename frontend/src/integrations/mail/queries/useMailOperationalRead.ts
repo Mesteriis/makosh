@@ -115,11 +115,12 @@ export function useMailOperationalRead(input: {
 	}
 
 	async function selectThread(providerThreadId: string): Promise<void> {
-		if (!threads.value.some((thread) => thread.providerThreadId === providerThreadId)) return
+		if (providerThreadId
+			&& !threads.value.some((thread) => thread.providerThreadId === providerThreadId)) return
 		const token = ++generation
 		begin('Loading Mail messages…')
 		try {
-			await loadThread(providerThreadId, token)
+			await loadMessages(providerThreadId || undefined, token)
 		} catch (error) {
 			fail(error, token, 'Mail messages are unavailable.')
 		}
@@ -209,20 +210,11 @@ export function useMailOperationalRead(input: {
 		if (!current(token)) return
 		threads.value = page.item
 		threadCursor.value = page.nextCursor ?? ''
-		const initialThread = page.item[0]
-		if (initialThread) {
-			await loadThread(initialThread.providerThreadId, token)
-			return
-		}
 		await loadMessages(undefined, token)
 	}
 
-	async function loadThread(providerThreadId: string, token: number): Promise<void> {
-		selectedThreadId.value = providerThreadId
-		await loadMessages(providerThreadId, token)
-	}
-
 	async function loadMessages(providerThreadId: string | undefined, token: number): Promise<void> {
+		selectedThreadId.value = providerThreadId ?? ''
 		selectedMessageId.value = ''
 		messages.value = []
 		detail.value = undefined

@@ -7,7 +7,7 @@
 #![allow(clippy::items_after_test_module)]
 
 use std::fmt::{Debug, Display, Formatter};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use async_imap::{
     Session,
@@ -22,7 +22,8 @@ use futures_util::TryStreamExt;
 use futures_util::io::{AsyncRead, AsyncWrite};
 use hermes_mail_api::{MAX_PLAIN_TEXT_BYTES, MAX_WINDOW, MAX_WINDOWS, WINDOW_DEADLINE_SECONDS};
 use hermes_mail_core::rfc822::{
-    AttachmentDispositionV1, attachment_metadata, extract_attachment_part, operational_preview,
+    AttachmentDispositionV1, Rfc822BodyContentV1, attachment_metadata, extract_attachment_part,
+    operational_preview, readable_body_content, readable_text_body,
 };
 use imap_proto::{
     Response, Status,
@@ -56,6 +57,7 @@ mod retry {
 pub const MAX_ATTEMPTS: u8 = retry::IMAP_SYNC_RETRY_POLICY.max_attempts;
 
 const IMAP_UID_FETCH_CHUNK_SIZE: usize = 10;
+const IMAP_SYNC_FINALIZATION_PAGE_SIZE: usize = 20;
 const IMAP_UID_FETCH_TIMEOUT_SECONDS: u64 = WINDOW_DEADLINE_SECONDS;
 const IMAP_SYNC_TIMEOUT_SECONDS: u64 = 300;
 const SNAPSHOT_PREVIEW_BYTES: usize = 160;
@@ -72,6 +74,7 @@ pub struct ImapMessage {
     pub flags: Vec<ImapMessageFlag>,
     pub has_plain_text: bool,
     pub plain_text_body: Option<Vec<u8>>,
+    pub body_content: Option<Rfc822BodyContentV1>,
     pub attachments: Vec<ImapAttachment>,
 }
 
@@ -235,6 +238,31 @@ pub fn sync_inbox<F>(
     password: Option<&str>,
     window: u32,
     windows: u32,
+    finalize_page: F,
+) -> Result<usize, String>
+where
+    F: FnMut(ImapSyncResult) -> Result<(), ()>,
+{
+    sync_inbox_prioritized(
+        host,
+        port,
+        username,
+        password,
+        window,
+        windows,
+        &[],
+        finalize_page,
+    )
+}
+
+pub fn sync_inbox_prioritized<F>(
+    host: &str,
+    port: u16,
+    username: &str,
+    password: Option<&str>,
+    window: u32,
+    windows: u32,
+    priority_uids: &[u32],
     mut finalize_page: F,
 ) -> Result<usize, String>
 where
@@ -246,8 +274,7 @@ where
     }
     let limit = usize::try_from(window as u64 * windows as u64)
         .map_err(|_| "imap requested window does not fit runtime limits".to_owned())?;
-    let page_size =
-        usize::try_from(window).map_err(|_| "imap page window does not fit runtime limits")?;
+    let page_size = sync_finalization_page_size(window)?;
     task::block_on(future::timeout(
         Duration::from_secs(IMAP_SYNC_TIMEOUT_SECONDS),
         imap_sync_pages_once(
@@ -257,6 +284,7 @@ where
             password,
             limit,
             page_size,
+            priority_uids,
             &mut finalize_page,
         ),
     ))
@@ -615,11 +643,27 @@ pub fn supports_read_only_windows(windows: u32) -> bool {
     windows > 0 && windows <= MAX_WINDOWS
 }
 
+fn sync_finalization_page_size(window: u32) -> Result<usize, String> {
+    usize::try_from(window)
+        .map(|window| window.min(IMAP_SYNC_FINALIZATION_PAGE_SIZE))
+        .map_err(|_| "imap page window does not fit runtime limits".to_owned())
+}
+
 #[cfg(test)]
 #[test]
 fn supports_read_only_sync_uses_mail_window_limit_only() {
     assert!(supports_read_only_sync(MAX_WINDOW));
     assert!(!supports_read_only_sync(MAX_WINDOW + 1));
+}
+
+#[cfg(test)]
+#[test]
+fn sync_finalization_page_is_bounded_independently_of_the_total_window() {
+    assert_eq!(
+        sync_finalization_page_size(MAX_WINDOW).expect("supported Mail window"),
+        IMAP_SYNC_FINALIZATION_PAGE_SIZE
+    );
+    assert_eq!(sync_finalization_page_size(1), Ok(1));
 }
 
 struct ImapSyncPlanV1 {
@@ -637,6 +681,7 @@ async fn imap_sync_pages_once<F>(
     password: &str,
     requested: usize,
     page_size: usize,
+    priority_uids: &[u32],
     finalize_page: &mut F,
 ) -> Result<usize, ImapError>
 where
@@ -648,7 +693,7 @@ where
         selected_mailbox,
         fetch_uids,
         has_more,
-    } = discover_sync_plan(host, port, username, password, requested).await?;
+    } = discover_sync_plan(host, port, username, password, requested, priority_uids).await?;
     let mut active_session = Some(session);
     let page_count = fetch_uids.len().div_ceil(page_size);
     let mut observed_messages = 0_usize;
@@ -724,11 +769,14 @@ async fn discover_sync_plan(
     username: &str,
     password: &str,
     requested: usize,
+    priority_uids: &[u32],
 ) -> Result<ImapSyncPlanV1, ImapError> {
     let mut attempts = 0_u8;
     loop {
         attempts = attempts.saturating_add(1);
-        match discover_sync_plan_once(host, port, username, password, requested).await {
+        match discover_sync_plan_once(host, port, username, password, requested, priority_uids)
+            .await
+        {
             Ok(plan) => return Ok(plan),
             Err(error) => {
                 if error.is_retryable() && attempts < retry::MAX_SYNC_ATTEMPTS {
@@ -750,16 +798,23 @@ async fn discover_sync_plan_once(
     username: &str,
     password: &str,
     requested: usize,
+    priority_uids: &[u32],
 ) -> Result<ImapSyncPlanV1, ImapError> {
+    let started = Instant::now();
     let mut session = open_session(host, port, username, password).await?;
+    developer_imap_stage("login", started, 0);
+    let list_started = Instant::now();
     let mailboxes = discover_mailboxes(&mut session).await?;
+    developer_imap_stage("list", list_started, mailboxes.len());
     let inbox = mailboxes
         .iter()
         .find(|mailbox| mailbox.kind == ImapMailboxKindV1::Inbox)
         .ok_or_else(|| ImapError::new("protocol", "imap LIST did not return selectable INBOX"))?;
+    let examine_started = Instant::now();
     let selected = session.examine(&inbox.mailbox_id).await.map_err(|error| {
         ImapError::new("protocol", format!("imap EXAMINE mailbox failed: {error}"))
     })?;
+    developer_imap_stage("examine", examine_started, 0);
     let uid_validity = selected
         .uid_validity
         .filter(|value| *value > 0)
@@ -768,12 +823,14 @@ async fn discover_sync_plan_once(
     let all_uids = if requested == 0 {
         Vec::new()
     } else {
+        let search_started = Instant::now();
         let ids = session.uid_search("UID 1:*").await.map_err(|error| {
             ImapError::new("protocol", format!("imap uid search failed: {error}"))
         })?;
+        developer_imap_stage("search", search_started, ids.len());
         ids.into_iter().collect::<Vec<_>>()
     };
-    let (fetch_uids, has_more) = select_latest_uids(all_uids, requested);
+    let (fetch_uids, has_more) = select_latest_uids(all_uids, requested, priority_uids);
     Ok(ImapSyncPlanV1 {
         session,
         mailboxes,
@@ -786,14 +843,31 @@ async fn discover_sync_plan_once(
     })
 }
 
-fn select_latest_uids(mut all_uids: Vec<u32>, requested: usize) -> (Vec<u32>, bool) {
+fn select_latest_uids(
+    mut all_uids: Vec<u32>,
+    requested: usize,
+    priority_uids: &[u32],
+) -> (Vec<u32>, bool) {
     all_uids.sort_unstable();
     let has_more = all_uids.len() > requested;
-    if has_more {
-        (all_uids.split_off(all_uids.len() - requested), true)
-    } else {
-        (all_uids, false)
+    let mut selected = Vec::with_capacity(requested.min(all_uids.len()));
+    for uid in priority_uids {
+        if selected.len() == requested {
+            break;
+        }
+        if all_uids.binary_search(uid).is_ok() && !selected.contains(uid) {
+            selected.push(*uid);
+        }
     }
+    for uid in all_uids.into_iter().rev() {
+        if selected.len() == requested {
+            break;
+        }
+        if !selected.contains(&uid) {
+            selected.push(uid);
+        }
+    }
+    (selected, has_more)
 }
 
 async fn reopen_selected_session(
@@ -1010,6 +1084,7 @@ where
 {
     let mut messages = Vec::new();
     for chunk in uids.chunks(IMAP_UID_FETCH_CHUNK_SIZE) {
+        let fetch_started = Instant::now();
         let fetched_messages =
             future::timeout(Duration::from_secs(IMAP_UID_FETCH_TIMEOUT_SECONDS), async {
                 session
@@ -1029,6 +1104,7 @@ where
                 )
             })?
             .map_err(|error| ImapError::new("protocol", format!("uid fetch failed: {error}")))?;
+        developer_imap_stage("fetch", fetch_started, fetched_messages.len());
 
         for message in fetched_messages {
             let uid = message
@@ -1077,12 +1153,22 @@ where
                 sent_at_unix_seconds: message.internal_date().map(|date| date.timestamp()),
                 flags,
                 has_plain_text,
-                plain_text_body: hermes_mail_core::rfc822::direct_plain_text_body(body),
+                plain_text_body: readable_text_body(body),
+                body_content: readable_body_content(body),
                 attachments,
             });
         }
     }
     Ok(messages)
+}
+
+fn developer_imap_stage(stage: &str, started: Instant, item_count: usize) {
+    if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
+        eprintln!(
+            "developer_mail_imap_stage={stage} elapsed_millis={} item_count={item_count}",
+            started.elapsed().as_millis()
+        );
+    }
 }
 
 #[cfg(test)]
@@ -1106,11 +1192,19 @@ mod tests {
 
     #[test]
     fn latest_uids_are_partitioned_deterministically_into_bounded_pages() {
-        let (uids, has_more) = select_latest_uids(vec![8, 2, 7, 4, 6, 5, 3, 1], 6);
+        let (uids, has_more) = select_latest_uids(vec![8, 2, 7, 4, 6, 5, 3, 1], 6, &[]);
         let pages = uids.chunks(2).map(<[u32]>::to_vec).collect::<Vec<_>>();
 
         assert!(has_more);
-        assert_eq!(pages, vec![vec![3, 4], vec![5, 6], vec![7, 8]]);
+        assert_eq!(pages, vec![vec![8, 7], vec![6, 5], vec![4, 3]]);
+    }
+
+    #[test]
+    fn known_projection_uids_are_fetched_before_the_latest_window() {
+        let (uids, has_more) = select_latest_uids((1..=12).collect(), 6, &[3, 9, 3]);
+
+        assert!(has_more);
+        assert_eq!(uids, vec![3, 9, 12, 11, 10, 8]);
     }
 
     #[test]
@@ -1456,8 +1550,9 @@ mod tests {
 }
 
 fn decode_message_preview(body: &[u8]) -> (String, String, bool) {
-    let raw = String::from_utf8_lossy(body);
-    let (subject, text) = split_subject_and_body(&raw);
+    let text = readable_text_body(body)
+        .and_then(|body| String::from_utf8(body).ok())
+        .unwrap_or_default();
     let has_plain_text = !text.trim().is_empty();
     let mut snippet = if has_plain_text {
         text.lines()
@@ -1475,13 +1570,10 @@ fn decode_message_preview(body: &[u8]) -> (String, String, bool) {
         snippet.truncate(boundary);
     }
     if snippet.is_empty() {
-        snippet = subject.clone();
-    }
-    if snippet.is_empty() {
         snippet = "message".to_owned();
     }
     let has_plain_text = snippet.len() <= MAX_PLAIN_TEXT_BYTES && has_plain_text;
-    (subject, snippet, has_plain_text)
+    ("message".to_owned(), snippet, has_plain_text)
 }
 
 fn floor_char_boundary(value: &str, maximum_bytes: usize) -> usize {
@@ -1493,30 +1585,6 @@ fn floor_char_boundary(value: &str, maximum_bytes: usize) -> usize {
         boundary -= 1;
     }
     boundary
-}
-
-fn split_subject_and_body(raw_message: &str) -> (String, String) {
-    let mut subject = String::new();
-    for line in raw_message.lines() {
-        if line.is_empty() {
-            break;
-        }
-        if let Some(rest) = line.strip_prefix("Subject:") {
-            subject = rest.trim().to_owned();
-            break;
-        }
-    }
-    let body = raw_message
-        .split_once("\r\n\r\n")
-        .map(|(_, body)| body)
-        .unwrap_or("")
-        .replace('\r', "");
-    let subject = if subject.is_empty() {
-        "message".to_owned()
-    } else {
-        subject
-    };
-    (subject, body)
 }
 
 fn decode_message_attachments(raw_message: &[u8]) -> Vec<ImapAttachment> {

@@ -22,11 +22,16 @@ type CanonicalCommunicationsContentPorts = {
 	readBlob(input: RequestInfo | URL, init: RequestInit): Promise<Response>
 }
 
+export type CanonicalCommunicationContent = {
+	bytes: Uint8Array
+	mediaType: 'text/plain' | 'text/html'
+}
+
 export async function readCanonicalCommunicationContent(
 	messageId: Uint8Array,
 	signal?: AbortSignal,
 	ports: CanonicalCommunicationsContentPorts = defaultPorts(),
-): Promise<Uint8Array> {
+): Promise<CanonicalCommunicationContent> {
 	if (messageId.byteLength !== CANONICAL_ID_BYTES) {
 		throw new RangeError(`Canonical Communications message ID must be ${CANONICAL_ID_BYTES} bytes`)
 	}
@@ -39,6 +44,7 @@ export async function readCanonicalCommunicationContent(
 		|| declaredBytes < 1
 		|| declaredBytes > MAX_MESSAGE_BODY_BYTES
 		|| ticket.expiresAtUnixSeconds <= 0n
+		|| (ticket.mediaType !== 'text/plain' && ticket.mediaType !== 'text/html')
 	) {
 		throw new Error('Canonical communication content ticket is unavailable')
 	}
@@ -65,7 +71,7 @@ export async function readCanonicalCommunicationContent(
 	if (content.byteLength !== declaredBytes || content.byteLength > MAX_MESSAGE_BODY_BYTES) {
 		throw new Error('Canonical communication content length is invalid')
 	}
-	return content
+	return { bytes: content, mediaType: ticket.mediaType }
 }
 
 function defaultPorts(): CanonicalCommunicationsContentPorts {
