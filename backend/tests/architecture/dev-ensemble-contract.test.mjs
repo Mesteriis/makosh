@@ -78,7 +78,7 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(assembly, /run_compose up --detach --wait/);
   assert.match(
     assembly,
-    /run_compose exec --no-TTY pgbouncer[\s\\]+test -r \/etc\/hermes\/runtime\/databases\.ini -a -r \/etc\/hermes\/auth\/users\.txt/,
+    /run_compose exec --no-TTY pgbouncer[\s\\]+test -r \/etc\/pgbouncer\/pgbouncer\.ini[\s\\]+-a -r \/etc\/hermes\/runtime\/databases\.ini[\s\\]+-a -r \/etc\/hermes\/auth\/users\.txt/,
   );
   assert.match(
     assembly,

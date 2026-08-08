@@ -229,11 +229,14 @@ run_compose up --detach --wait
 # PgBouncer is stateless and binds the OS-cache runtime directory. Docker
 # Desktop can retain a mount to a removed/recreated cache-directory inode while
 # keeping the long-lived data services alive. Recreate only a pooler whose
-# current mount cannot resolve the expected files; PostgreSQL, NATS and ClamAV
-# state stay untouched. A healthy current mount must remain running because its
-# boot script intentionally initializes the admin-only auth file.
+# current mount cannot resolve the expected configuration and runtime files;
+# PostgreSQL, NATS and ClamAV state stay untouched. A healthy current mount
+# must remain running because its boot script intentionally initializes the
+# admin-only auth file.
 if ! run_compose exec --no-TTY pgbouncer \
-	test -r /etc/hermes/runtime/databases.ini -a -r /etc/hermes/auth/users.txt; then
+	test -r /etc/pgbouncer/pgbouncer.ini \
+		-a -r /etc/hermes/runtime/databases.ini \
+		-a -r /etc/hermes/auth/users.txt; then
 	run_compose up --detach --no-deps --force-recreate --wait pgbouncer
 fi
 
