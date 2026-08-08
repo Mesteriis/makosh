@@ -1,16 +1,23 @@
 use hermes_mail_api::IMAP_PORT;
 use hermes_mail_api::MAX_WINDOW;
-use hermes_mail_imap::{ImapMessage, supports_read_only_sync, sync_inbox};
+use hermes_mail_imap::{
+    ImapMessage, ImapSyncAccessV1, ImapSyncRequestV1, supports_read_only_sync, sync_inbox,
+};
 
 #[test]
 fn sync_requires_password() {
     let result = sync_inbox(
-        "mail.example.com",
-        IMAP_PORT,
-        "user",
-        None,
-        MAX_WINDOW,
-        1,
+        ImapSyncAccessV1 {
+            host: "mail.example.com",
+            port: IMAP_PORT,
+            username: "user",
+            password: None,
+        },
+        ImapSyncRequestV1 {
+            window: MAX_WINDOW,
+            windows: 1,
+            priority_uids: &[],
+        },
         |_| Ok(()),
     );
     assert!(matches!(result, Err(error) if error == "imap password is required"));
@@ -32,6 +39,7 @@ fn supports_only_read_windows() {
             flags: Vec::new(),
             has_plain_text: true,
             plain_text_body: None,
+            body_content: None,
             attachments: Vec::new(),
         } != ImapMessage {
             uid: 2,
@@ -43,6 +51,7 @@ fn supports_only_read_windows() {
             flags: Vec::new(),
             has_plain_text: true,
             plain_text_body: None,
+            body_content: None,
             attachments: Vec::new(),
         }
     );

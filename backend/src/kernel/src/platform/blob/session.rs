@@ -333,11 +333,10 @@ impl BlobSessionHandlerV1 {
             now,
             CustodySourceProofUseV1::Transfer,
         )
-        .map_err(|error| {
+        .inspect_err(|_| {
             if std::env::var_os("HERMES_DEVELOPER_VERBOSE").is_some() {
                 eprintln!("developer_blob_custody_denied_stage=source_proof");
             }
-            error
         })?;
         let source_matches = source.reference_id == request.reference_id
             && source.declared_size == request.declared_size

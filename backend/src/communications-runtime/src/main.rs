@@ -55,29 +55,6 @@ fn main() -> Result<(), String> {
     }
 }
 
-#[cfg(test)]
-mod maintenance_bounds_tests {
-    use super::{
-        MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK,
-        MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, maintenance_interval,
-    };
-
-    #[test]
-    fn custody_and_index_maintenance_have_independent_exact_bounds() {
-        assert_eq!(MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK, 64);
-        assert_eq!(MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, 64);
-    }
-
-    #[tokio::test]
-    async fn delayed_maintenance_skips_missed_ticks_instead_of_starving_event_delivery() {
-        let interval = maintenance_interval();
-        assert_eq!(
-            interval.missed_tick_behavior(),
-            tokio::time::MissedTickBehavior::Skip,
-        );
-    }
-}
-
 fn export_storage_bundle<I>(arguments: &mut std::iter::Peekable<I>) -> Result<(), String>
 where
     I: Iterator<Item = OsString>,
@@ -386,4 +363,27 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
         return Err("Communications runtime contract is unavailable".to_owned());
     }
     std::fs::read(path).map_err(|_| "Communications runtime contract is unavailable".to_owned())
+}
+
+#[cfg(test)]
+mod maintenance_bounds_tests {
+    use super::{
+        MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK,
+        MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, maintenance_interval,
+    };
+
+    #[test]
+    fn custody_and_index_maintenance_have_independent_exact_bounds() {
+        assert_eq!(MAX_BODY_CUSTODY_TRANSFERS_PER_MAINTENANCE_TICK, 64);
+        assert_eq!(MAX_DERIVED_INDEX_JOBS_PER_MAINTENANCE_TICK, 64);
+    }
+
+    #[tokio::test]
+    async fn delayed_maintenance_skips_missed_ticks_instead_of_starving_event_delivery() {
+        let interval = maintenance_interval();
+        assert_eq!(
+            interval.missed_tick_behavior(),
+            tokio::time::MissedTickBehavior::Skip,
+        );
+    }
 }

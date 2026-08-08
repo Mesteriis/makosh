@@ -218,7 +218,7 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
     /pages:\s*Vec<GmailSyncProviderPageV1>/,
   );
   assert.match(imapAdapter, /FnMut\(ImapSyncResult\) -> Result<\(\), \(\)>/);
-  assert.match(imapAdapter, /fetch_uids\.chunks\(page_size\)/);
+  assert.match(imapAdapter, /fetch_uids\.chunks\(execution\.page_size\)/);
   assert.match(imapAdapter, /finalize_page\(ImapSyncResult/);
   assert.match(imapAdapter, /select_latest_uids/);
   assert.match(

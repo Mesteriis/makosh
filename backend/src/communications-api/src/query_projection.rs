@@ -372,6 +372,7 @@ mod tests {
                 declared_bytes: 64,
                 sha256: [7; 32],
             }),
+            body_media_type: Some("text/plain".to_owned()),
             body_admission_failure: Some(CommunicationBodyAdmissionFailureV1::PolicyRejected),
             attachment_descriptor: None,
             observed_at_unix_seconds: 8,

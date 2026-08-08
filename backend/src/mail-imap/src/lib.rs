@@ -131,6 +131,22 @@ pub struct ImapMessageLocationAccessV1<'a> {
     pub password: &'a str,
 }
 
+/// Credentials and endpoint for one bounded IMAP synchronization session.
+#[derive(Clone, Copy)]
+pub struct ImapSyncAccessV1<'a> {
+    pub host: &'a str,
+    pub port: u16,
+    pub username: &'a str,
+    pub password: Option<&'a str>,
+}
+
+/// Caller-selected bounds and priorities for one IMAP synchronization session.
+pub struct ImapSyncRequestV1<'a> {
+    pub window: u32,
+    pub windows: u32,
+    pub priority_uids: &'a [u32],
+}
+
 pub struct ImapMessageLocatorV1<'a> {
     pub mailbox_id: &'a str,
     pub uid_validity: u32,
@@ -232,61 +248,33 @@ impl ImapError {
 }
 
 pub fn sync_inbox<F>(
-    host: &str,
-    port: u16,
-    username: &str,
-    password: Option<&str>,
-    window: u32,
-    windows: u32,
-    finalize_page: F,
-) -> Result<usize, String>
-where
-    F: FnMut(ImapSyncResult) -> Result<(), ()>,
-{
-    sync_inbox_prioritized(
-        host,
-        port,
-        username,
-        password,
-        window,
-        windows,
-        &[],
-        finalize_page,
-    )
-}
-
-pub fn sync_inbox_prioritized<F>(
-    host: &str,
-    port: u16,
-    username: &str,
-    password: Option<&str>,
-    window: u32,
-    windows: u32,
-    priority_uids: &[u32],
+    access: ImapSyncAccessV1<'_>,
+    request: ImapSyncRequestV1<'_>,
     mut finalize_page: F,
 ) -> Result<usize, String>
 where
     F: FnMut(ImapSyncResult) -> Result<(), ()>,
 {
-    let password = password.ok_or_else(|| "imap password is required".to_owned())?;
-    if !supports_read_only_sync(window) || !supports_read_only_windows(windows) {
+    let password = access
+        .password
+        .ok_or_else(|| "imap password is required".to_owned())?;
+    if !supports_read_only_sync(request.window) || !supports_read_only_windows(request.windows) {
         return Err("window unsupported for read-only sync".to_owned());
     }
-    let limit = usize::try_from(window as u64 * windows as u64)
+    let limit = usize::try_from(request.window as u64 * request.windows as u64)
         .map_err(|_| "imap requested window does not fit runtime limits".to_owned())?;
-    let page_size = sync_finalization_page_size(window)?;
+    let execution = ImapPageSyncExecutionV1 {
+        requested: limit,
+        page_size: sync_finalization_page_size(request.window)?,
+        priority_uids: request.priority_uids,
+    };
+    let access = ImapSyncAccessV1 {
+        password: Some(password),
+        ..access
+    };
     task::block_on(future::timeout(
         Duration::from_secs(IMAP_SYNC_TIMEOUT_SECONDS),
-        imap_sync_pages_once(
-            host,
-            port,
-            username,
-            password,
-            limit,
-            page_size,
-            priority_uids,
-            &mut finalize_page,
-        ),
+        imap_sync_pages_once(access, execution, &mut finalize_page),
     ))
     .map_err(|_| format!("imap sync exceeded {IMAP_SYNC_TIMEOUT_SECONDS}s deadline"))?
     .map_err(|error| format!("imap sync failed: {error}"))
@@ -674,14 +662,15 @@ struct ImapSyncPlanV1 {
     has_more: bool,
 }
 
-async fn imap_sync_pages_once<F>(
-    host: &str,
-    port: u16,
-    username: &str,
-    password: &str,
+struct ImapPageSyncExecutionV1<'a> {
     requested: usize,
     page_size: usize,
-    priority_uids: &[u32],
+    priority_uids: &'a [u32],
+}
+
+async fn imap_sync_pages_once<F>(
+    access: ImapSyncAccessV1<'_>,
+    execution: ImapPageSyncExecutionV1<'_>,
     finalize_page: &mut F,
 ) -> Result<usize, ImapError>
 where
@@ -693,17 +682,31 @@ where
         selected_mailbox,
         fetch_uids,
         has_more,
-    } = discover_sync_plan(host, port, username, password, requested, priority_uids).await?;
+    } = discover_sync_plan(
+        access.host,
+        access.port,
+        access.username,
+        access.password.expect("validated IMAP password"),
+        execution.requested,
+        execution.priority_uids,
+    )
+    .await?;
     let mut active_session = Some(session);
-    let page_count = fetch_uids.len().div_ceil(page_size);
+    let page_count = fetch_uids.len().div_ceil(execution.page_size);
     let mut observed_messages = 0_usize;
-    for (page_index, page_uids) in fetch_uids.chunks(page_size).enumerate() {
+    for (page_index, page_uids) in fetch_uids.chunks(execution.page_size).enumerate() {
         let mut attempts = 0_u8;
         let messages = loop {
             attempts = attempts.saturating_add(1);
             if active_session.is_none() {
-                match reopen_selected_session(host, port, username, password, &selected_mailbox)
-                    .await
+                match reopen_selected_session(
+                    access.host,
+                    access.port,
+                    access.username,
+                    access.password.expect("validated IMAP password"),
+                    &selected_mailbox,
+                )
+                .await
                 {
                     Ok(session) => active_session = Some(session),
                     Err(error) => {

@@ -3653,14 +3653,18 @@ pub fn execute_imap_sync_provider_operation(
         Err(_) => Err(MailBootstrapError::Credential),
         Ok(password) => {
             let mut finalization_rejected = false;
-            let provider_result = hermes_mail_imap::sync_inbox_prioritized(
-                &host,
-                port,
-                &username,
-                Some(password),
-                window,
-                windows,
-                &priority_uids,
+            let provider_result = hermes_mail_imap::sync_inbox(
+                hermes_mail_imap::ImapSyncAccessV1 {
+                    host: &host,
+                    port,
+                    username: &username,
+                    password: Some(password),
+                },
+                hermes_mail_imap::ImapSyncRequestV1 {
+                    window,
+                    windows,
+                    priority_uids: &priority_uids,
+                },
                 |sync| {
                     let (acknowledgment, committed) = std::sync::mpsc::channel();
                     page_sender

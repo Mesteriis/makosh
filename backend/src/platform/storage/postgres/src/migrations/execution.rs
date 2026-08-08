@@ -62,12 +62,11 @@ async fn apply_step(
         .await
         .map_err(|_| PostgresAdapterErrorV1::MigrationLedgerRead)?;
     let lineage = classify_recorded_step_lineage(bundle.revision, &step.sha256, &recorded_steps)
-        .map_err(|error| {
+        .inspect_err(|_| {
             eprintln!(
                 "developer_storage_migration_failure=lineage step_revision={}",
                 step.revision
             );
-            error
         })?;
     match lineage {
         RecordedStepLineageV1::Exact => {

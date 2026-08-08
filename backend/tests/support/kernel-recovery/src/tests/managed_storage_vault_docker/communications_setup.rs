@@ -1243,6 +1243,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
             sha256: [9; 32],
+            media_type: "text/plain".to_owned(),
             custody_transfer_source_proof: source_proof.clone(),
         },
     )
@@ -1295,6 +1296,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
             sha256: plaintext_sha256,
+            media_type: "text/plain".to_owned(),
             custody_transfer_source_proof: source_proof.clone(),
         },
     )
@@ -1549,6 +1551,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                     reference_id,
                     declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
                     sha256: plaintext_sha256,
+                    media_type: "text/plain".to_owned(),
                     custody_transfer_source_proof: source_proof.clone(),
                 },
             )
@@ -1674,6 +1677,7 @@ pub(super) fn assert_communications_transferred_body_projection_with_plaintext_a
                     reference_id: current_reference_id,
                     declared_bytes: u64::try_from(plaintext.len()).expect("fixture body size"),
                     sha256: plaintext_sha256,
+                    media_type: "text/plain".to_owned(),
                     custody_transfer_source_proof: current_source_proof,
                 },
             )
@@ -1926,6 +1930,7 @@ pub(super) fn publish_and_wait_for_communications_message_edit(
             reference_id,
             declared_bytes: u64::try_from(plaintext.len()).expect("edited fixture body size"),
             sha256: plaintext_sha256,
+            media_type: "text/plain".to_owned(),
             custody_transfer_source_proof: source_proof,
         },
     )
