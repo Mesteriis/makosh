@@ -1,0 +1,173 @@
+syntax = "proto3";
+package makosh.documents.client.v1;
+
+message TimestampV1 { int64 unix_seconds = 1; int32 nanos = 2; }
+
+enum DocumentStateV1 {
+  DOCUMENT_STATE_UNSPECIFIED = 0;
+  DOCUMENT_STATE_ACTIVE = 1;
+  DOCUMENT_STATE_ARCHIVED = 2;
+}
+
+enum DocumentCustodyStateV1 {
+  DOCUMENT_CUSTODY_STATE_UNSPECIFIED = 0;
+  DOCUMENT_CUSTODY_STATE_UNBOUND = 1;
+  DOCUMENT_CUSTODY_STATE_BOUND = 2;
+  DOCUMENT_CUSTODY_STATE_RELEASED = 3;
+}
+
+enum DocumentSourceStateV1 {
+  DOCUMENT_SOURCE_STATE_UNSPECIFIED = 0;
+  DOCUMENT_SOURCE_STATE_ACTIVE = 1;
+  DOCUMENT_SOURCE_STATE_REMOVED = 2;
+}
+
+message DocumentBlobBindingV1 {
+  bytes blob_reference_id = 1;
+  uint64 declared_size = 2;
+  bytes content_sha256 = 3;
+  DocumentCustodyStateV1 custody_state = 4;
+  uint64 updated_at_document_revision = 5;
+}
+
+message DocumentSourceV1 {
+  bytes source_id = 1;
+  string source_owner_id = 2;
+  string source_record_id = 3;
+  uint64 source_revision = 4;
+  bytes evidence_digest = 5;
+  DocumentSourceStateV1 state = 6;
+  uint64 updated_at_document_revision = 7;
+}
+
+message DocumentV1 {
+  bytes document_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string description = 4;
+  string media_type = 5;
+  string original_file_name = 6;
+  uint64 declared_size = 7;
+  bytes content_sha256 = 8;
+  DocumentStateV1 state = 9;
+  DocumentCustodyStateV1 custody_state = 10;
+  uint64 document_revision = 11;
+  TimestampV1 created_at = 12;
+  TimestampV1 updated_at = 13;
+}
+
+message CreateDocumentRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string description = 4;
+  string media_type = 5;
+  string original_file_name = 6;
+  uint64 declared_size = 7;
+  bytes content_sha256 = 8;
+  TimestampV1 created_at = 9;
+}
+
+message UpdateDocumentRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  optional string title = 5;
+  optional string description = 6;
+  optional string media_type = 7;
+  optional string original_file_name = 8;
+  TimestampV1 updated_at = 9;
+}
+
+message SetDocumentStateRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  DocumentStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AttachDocumentBlobRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  bytes blob_reference_id = 5;
+  uint64 declared_size = 6;
+  bytes content_sha256 = 7;
+  TimestampV1 changed_at = 8;
+  bytes custody_transfer_source_proof = 9;
+  bytes source_evidence_id = 10;
+  bytes source_evidence_envelope_sha256 = 11;
+}
+
+message ReleaseDocumentBlobRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  bytes blob_reference_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddDocumentSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  string source_owner_id = 5;
+  string source_record_id = 6;
+  uint64 source_revision = 7;
+  bytes evidence_digest = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message RemoveDocumentSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_document_revision = 4;
+  bytes source_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message DocumentMutationResultV1 {
+  bytes operation_id = 1;
+  DocumentV1 document = 2;
+}
+
+message GetDocumentRequestV1 { string logical_owner_id = 1; bytes document_id = 2; }
+message ListDocumentsRequestV1 { string logical_owner_id = 1; bytes after_document_id = 2; uint32 limit = 3; }
+message SearchDocumentsRequestV1 { string logical_owner_id = 1; string query = 2; bytes after_document_id = 3; uint32 limit = 4; }
+message ListDocumentsResultV1 { repeated DocumentV1 documents = 1; bytes next_after_document_id = 2; }
+message ListDocumentSourcesRequestV1 { string logical_owner_id = 1; bytes document_id = 2; bytes after_source_id = 3; uint32 limit = 4; }
+message ListDocumentSourcesResultV1 { repeated DocumentSourceV1 sources = 1; bytes next_after_source_id = 2; }
+
+message DocumentChangedV1 {
+  bytes event_id = 1;
+  bytes document_id = 2;
+  string logical_owner_id = 3;
+  uint64 document_revision = 4;
+  DocumentStateV1 state = 5;
+  DocumentCustodyStateV1 custody_state = 6;
+  TimestampV1 occurred_at = 7;
+}
+
+service DocumentsCommandService {
+  rpc Create(CreateDocumentRequestV1) returns (DocumentMutationResultV1);
+  rpc Update(UpdateDocumentRequestV1) returns (DocumentMutationResultV1);
+  rpc SetState(SetDocumentStateRequestV1) returns (DocumentMutationResultV1);
+  rpc AttachBlob(AttachDocumentBlobRequestV1) returns (DocumentMutationResultV1);
+  rpc ReleaseBlob(ReleaseDocumentBlobRequestV1) returns (DocumentMutationResultV1);
+  rpc AddSource(AddDocumentSourceRequestV1) returns (DocumentMutationResultV1);
+  rpc RemoveSource(RemoveDocumentSourceRequestV1) returns (DocumentMutationResultV1);
+}
+
+service DocumentsQueryService {
+  rpc Get(GetDocumentRequestV1) returns (DocumentV1);
+  rpc List(ListDocumentsRequestV1) returns (ListDocumentsResultV1);
+  rpc Search(SearchDocumentsRequestV1) returns (ListDocumentsResultV1);
+  rpc ListSources(ListDocumentSourcesRequestV1) returns (ListDocumentSourcesResultV1);
+}

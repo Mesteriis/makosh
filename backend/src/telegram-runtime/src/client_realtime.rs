@@ -23,6 +23,8 @@ use makosh_telegram_api::{
 use prost::Message;
 use sha2::{Digest, Sha256};
 
+use crate::managed_control::with_blocking_control_channel;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TelegramAuthorizationRealtimeErrorV1 {
     InvalidStatus,
@@ -82,13 +84,16 @@ where
     };
     validate_managed_client_realtime_publish_request_v1(&request)
         .map_err(|_| TelegramAuthorizationRealtimeErrorV1::InvalidStatus)?;
-    let response = channel
-        .request_next_with_dispatch(
+    let response = with_blocking_control_channel(channel, |channel| {
+        channel.request_next_with_dispatch(
             ManagedRuntimeControlRequestV1 {
                 operation: Some(Operation::PublishClientRealtime(request)),
             },
             dispatcher,
         )
+    });
+    let response = response
+        .map_err(|_| TelegramAuthorizationRealtimeErrorV1::Unavailable)?
         .map_err(|_| TelegramAuthorizationRealtimeErrorV1::Unavailable)?;
     if !response.error_code.is_empty() {
         return Err(TelegramAuthorizationRealtimeErrorV1::Unavailable);
@@ -135,6 +140,13 @@ fn valid_public_state(state: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use makosh_runtime_protocol::managed_control::{
+        ManagedControlChannelV2, RejectManagedControlRequestsV2,
+    };
+    use makosh_runtime_protocol::v1::{
+        ManagedRuntimeClientRealtimePublishResponseV1, ManagedRuntimeControlResponseV1,
+    };
+    use std::{os::unix::net::UnixStream, thread, time::Duration};
 
     #[test]
     fn realtime_payload_excludes_qr_link_and_password_hint() {
@@ -153,5 +165,53 @@ mod tests {
         assert_eq!(decoded.state, "waiting_qr_scan");
         assert_eq!(decoded.qr_link, None);
         assert_eq!(decoded.password_hint, None);
+    }
+
+    #[test]
+    fn publishes_realtime_from_the_nonblocking_provider_loop() {
+        let (client, server) = UnixStream::pair().expect("control pair");
+        client.set_nonblocking(true).expect("nonblocking client");
+        let (release_server, wait_for_client) = std::sync::mpsc::sync_channel(0);
+        let server = thread::spawn(move || {
+            let mut channel = ManagedControlChannelV2::new(server);
+            let (correlation_id, request) = channel.receive_request().expect("realtime request");
+            let Some(Operation::PublishClientRealtime(request)) = request.operation else {
+                panic!("expected realtime publish request");
+            };
+            thread::sleep(Duration::from_millis(20));
+            channel
+                .write_response(
+                    correlation_id,
+                    ManagedRuntimeControlResponseV1 {
+                        result: Some(ControlResult::ClientRealtimePublish(
+                            ManagedRuntimeClientRealtimePublishResponseV1 {
+                                accepted_cursor: request.cursor,
+                            },
+                        )),
+                        error_code: String::new(),
+                    },
+                )
+                .expect("realtime response");
+            wait_for_client.recv().expect("client completed");
+        });
+        let mut channel = ManagedControlChannelV2::new(client);
+        let mut dispatcher = RejectManagedControlRequestsV2;
+
+        publish_authorization_status_changed_v1(
+            &mut channel,
+            &mut dispatcher,
+            "owner-1",
+            1,
+            1,
+            1,
+            &TelegramAuthorizationStatus {
+                state: "ready".to_owned(),
+                qr_link: None,
+                password_hint: None,
+            },
+        )
+        .expect("publish realtime from nonblocking provider loop");
+        release_server.send(()).expect("release server");
+        server.join().expect("server join");
     }
 }

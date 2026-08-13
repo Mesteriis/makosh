@@ -23,6 +23,7 @@ import {
   composeReleaseCompilerInput,
   generateReleaseSigningKey,
   loadReleaseSigningKey,
+  readReleaseArtifactFragment,
   writeReleaseArtifact,
 } from '../../scripts/lib/release-distribution-compiler.mjs';
 
@@ -36,6 +37,73 @@ const releaseProvenance = {
   sbom_sha256: 'c'.repeat(64),
   toolchain_sha256: 'd'.repeat(64),
 };
+
+test('compiles the exact Review Person-match assembly fragments and staged sources', async () => {
+  const contours = [
+    {
+      package: 'makosh-review-person-match-candidate-assembly',
+      fragment: 'review-person-match-candidate.release-artifacts.json',
+      runtimeId: 'review.person-match-candidate.runtime.v1',
+      storageId: 'review.person-match-candidate.storage.v1',
+    },
+    {
+      package: 'makosh-reviewed-person-match-candidate-promotion-assembly',
+      fragment: 'reviewed-person-match-candidate-promotion.release-artifacts.json',
+      runtimeId: 'reviewed-person-match-candidate-promotion.runtime.v1',
+      storageId: 'reviewed-person-match-candidate-promotion.storage.v1',
+    },
+  ];
+  for (const contour of contours) {
+    const root = canonicalTemporaryDirectory(`makosh-${contour.package}-fragment-`);
+    try {
+      const runtime = join(root, 'runtime');
+      const output = join(root, 'assembly');
+      writeFileSync(runtime, `${contour.package} runtime`, { mode: 0o700 });
+      execFileSync('cargo', [
+        'run', '--quiet', '-p', contour.package, '--', 'assemble',
+        '--output-dir', output,
+        '--build-id', 'build-review-person-match',
+        '--runtime-source', runtime,
+      ], { cwd: process.cwd(), stdio: 'pipe' });
+      const fragment = readReleaseArtifactFragment(join(output, contour.fragment));
+      assert.deepEqual(
+        fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+        [
+          [contour.runtimeId, 'module_runtime'],
+          [contour.storageId, 'storage_bundle'],
+        ],
+      );
+      const input = composeReleaseCompilerInput({
+        verification_key_id: 'release-2026',
+        trust_root_revision: 1,
+        revision: 1,
+        distribution_id: 'makosh-desktop',
+        release_version: '1.0.0',
+        build_id: 'build-review-person-match',
+        target_triple: 'aarch64-apple-darwin',
+        generation: 1,
+        ...releaseProvenance,
+        additional_verification_keys: [],
+        artifacts: [{
+          artifact_kind: 'browser_bootstrap_bundle',
+          artifact_id: 'browser.bootstrap',
+          relative_path: 'browser/bootstrap.html',
+          source_path: browserBootstrapSource,
+          required: true,
+        }],
+      }, [fragment]);
+      const compiled = await compileUnsignedReleaseContent(input);
+      assert.deepEqual(
+        compiled.artifacts.map(({ artifactId }) => artifactId),
+        ['browser.bootstrap', contour.runtimeId, contour.storageId],
+      );
+      assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+      assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
 
 function decodeVarint(bytes, offset) {
   let value = 0n;
@@ -495,6 +563,100 @@ test('composes an exact Telegram artifact fragment before signing the full distr
       () => composeReleaseCompilerInput(baseInput, [wrongBinding]),
       /artifact fragment binding is invalid/,
     );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('signs the exact Telegram runtime, Storage and native entries emitted by Telegram assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-telegram-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-telegram-runtime');
+    const tdjson = join(root, 'libtdjson.dylib');
+    const tgcalls = join(root, 'libmakosh_tgcalls_bridge.dylib');
+    const assemblyOutput = join(root, 'assembly');
+    const privateKeyPath = join(root, 'release-key.pem');
+    writeFileSync(runtime, 'telegram runtime bytes', { mode: 0o700 });
+    writeFileSync(tdjson, 'telegram tdjson bytes', { mode: 0o700 });
+    writeFileSync(tgcalls, 'telegram tgcalls bytes', { mode: 0o700 });
+    const keyPair = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
+    writeFileSync(
+      privateKeyPath,
+      keyPair.privateKey.export({ type: 'pkcs8', format: 'pem' }),
+      { mode: 0o600 },
+    );
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-telegram-assembly',
+      '--',
+      '--build-id',
+      'build-telegram',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+      '--tdjson',
+      tdjson,
+      '--tgcalls',
+      tgcalls,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'telegram.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['telegram.runtime.v1', 'module_runtime'],
+        ['telegram.storage.v1', 'storage_bundle'],
+        ['telegram.tdjson.v1', 'module_runtime_native_dependency'],
+        ['telegram.tgcalls.v1', 'module_runtime_native_dependency'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'telegram');
+    assert.equal(fragment.module_id, 'makosh-telegram-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-telegram',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const release = await compileReleaseDistribution(
+      input,
+      loadReleaseSigningKey(privateKeyPath),
+    );
+    const signed = decodeFields(release.signedManifest);
+    const manifest = decodeFields(signed.get(2)[0]);
+    const artifacts = manifest.get(8).map(decodeFields);
+    assert.deepEqual(
+      artifacts.map((artifact) => [fieldString(artifact, 2), artifact.get(1)[0]]),
+      [
+        ['browser.bootstrap', 4n],
+        ['telegram.runtime.v1', 1n],
+        ['telegram.storage.v1', 3n],
+        ['telegram.tdjson.v1', 6n],
+        ['telegram.tgcalls.v1', 6n],
+      ],
+    );
+    assert.equal(artifacts[1].get(6)[0].length, 32);
+    assert.equal(artifacts[1].get(7)[0].length, 32);
+    assert.equal(fieldString(artifacts[3], 13), 'makosh-telegram-runtime');
+    assert.equal(fieldString(artifacts[4], 13), 'makosh-telegram-runtime');
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -1092,7 +1254,7 @@ test('signs the exact Review attention runtime and Storage entries emitted by it
   }
 });
 
-test('signs distinct task note Contacts and mail sync runtime and Storage entries', async () => {
+test('signs distinct task note Persons and Mail-Persons runtime and Storage entries', async () => {
   const root = canonicalTemporaryDirectory('makosh-task-candidate-release-fragments-');
   try {
     const privateKeyPath = join(root, 'release-key.pem');
@@ -1148,18 +1310,45 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
         ids: ['tasks.runtime.v1', 'tasks.storage.v1'],
       },
       {
-        package: 'makosh-contacts-assembly',
-        runtimeName: 'makosh-contacts-runtime',
-        fragmentName: 'contacts.release-artifacts.json',
-        owner: 'contacts',
-        ids: ['contacts.runtime.v1', 'contacts.storage.v1'],
+        package: 'makosh-review-obligation-candidate-assembly',
+        runtimeName: 'makosh-review-obligation-candidate-runtime',
+        fragmentName: 'review-obligation-candidate.release-artifacts.json',
+        owner: 'review',
+        ids: ['review.obligation-candidate.runtime.v1', 'review.obligation-candidate.storage.v1'],
       },
       {
-        package: 'makosh-mail-contacts-sync-assembly',
-        runtimeName: 'makosh-mail-contacts-sync-runtime',
-        fragmentName: 'mail_contacts_sync.release-artifacts.json',
-        owner: 'mail_contacts_sync',
-        ids: ['mail_contacts_sync.runtime.v1', 'mail_contacts_sync.storage.v1'],
+        package: 'makosh-obligations-assembly',
+        runtimeName: 'makosh-obligations-runtime',
+        fragmentName: 'obligations.release-artifacts.json',
+        owner: 'obligations',
+        ids: ['obligations.runtime.v1', 'obligations.storage.v1'],
+      },
+      {
+        package: 'makosh-reviewed-obligation-candidate-promotion-assembly',
+        runtimeName: 'makosh-reviewed-obligation-candidate-promotion-runtime',
+        fragmentName: 'reviewed_obligation_candidate_promotion.release-artifacts.json',
+        owner: 'reviewed_obligation_candidate_promotion',
+        ids: [
+          'reviewed_obligation_candidate_promotion.runtime.v1',
+          'reviewed_obligation_candidate_promotion.storage.v1',
+        ],
+      },
+      {
+        package: 'makosh-persons-assembly',
+        runtimeName: 'makosh-persons-runtime',
+        fragmentName: 'persons.release-artifacts.json',
+        owner: 'persons',
+        outputFlag: '--output',
+        runtimeBeforeOutput: true,
+        ids: ['persons.runtime.v1', 'persons.storage.v1'],
+      },
+      {
+        package: 'makosh-mail-persons-sync-assembly',
+        runtimeName: 'makosh-mail-persons-sync-runtime',
+        fragmentName: 'mail_persons_sync.release-artifacts.json',
+        owner: 'mail_persons_sync',
+        outputFlag: '--output',
+        ids: ['mail_persons_sync.runtime.v1', 'mail_persons_sync.storage.v1'],
       },
     ];
     const fragments = [];
@@ -1167,18 +1356,30 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
       const runtime = join(root, unit.runtimeName);
       const output = join(root, `assembly-${index}`);
       writeFileSync(runtime, `${unit.runtimeName} bytes`, { mode: 0o700 });
+      const assemblyArguments = unit.runtimeBeforeOutput
+        ? [
+          '--build-id',
+          'build-task-candidate-chain',
+          '--runtime',
+          runtime,
+          unit.outputFlag ?? '--output-dir',
+          output,
+        ]
+        : [
+          '--build-id',
+          'build-task-candidate-chain',
+          unit.outputFlag ?? '--output-dir',
+          output,
+          '--runtime',
+          runtime,
+        ];
       execFileSync('cargo', [
         'run',
         '--quiet',
         '-p',
         unit.package,
         '--',
-        '--build-id',
-        'build-task-candidate-chain',
-        '--output-dir',
-        output,
-        '--runtime',
-        runtime,
+        ...assemblyArguments,
       ], { cwd: process.cwd(), stdio: 'pipe' });
       const fragment = JSON.parse(readFileSync(join(output, unit.fragmentName), 'utf8'));
       assert.equal(fragment.owner_id, unit.owner);
@@ -1218,12 +1419,18 @@ test('signs distinct task note Contacts and mail sync runtime and Storage entrie
         ['communication_note_candidate_extraction.storage.v1', 3n],
         ['communication_task_candidate_extraction.runtime.v1', 1n],
         ['communication_task_candidate_extraction.storage.v1', 3n],
-        ['contacts.runtime.v1', 1n],
-        ['contacts.storage.v1', 3n],
-        ['mail_contacts_sync.runtime.v1', 1n],
-        ['mail_contacts_sync.storage.v1', 3n],
+        ['mail_persons_sync.runtime.v1', 1n],
+        ['mail_persons_sync.storage.v1', 3n],
+        ['obligations.runtime.v1', 1n],
+        ['obligations.storage.v1', 3n],
+        ['persons.runtime.v1', 1n],
+        ['persons.storage.v1', 3n],
+        ['review.obligation-candidate.runtime.v1', 1n],
+        ['review.obligation-candidate.storage.v1', 3n],
         ['review.task-candidate.runtime.v1', 1n],
         ['review.task-candidate.storage.v1', 3n],
+        ['reviewed_obligation_candidate_promotion.runtime.v1', 1n],
+        ['reviewed_obligation_candidate_promotion.storage.v1', 3n],
         ['reviewed_task_candidate_promotion.runtime.v1', 1n],
         ['reviewed_task_candidate_promotion.storage.v1', 3n],
         ['tasks.runtime.v1', 1n],
@@ -1729,6 +1936,566 @@ test('signs the exact Ollama AI runtime and Storage entries emitted by its assem
     assert.equal(artifacts[1].get(7)[0].length, 32);
   } finally {
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('signs the exact AI inference runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-ai-inference-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-ai-inference-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    const privateKeyPath = join(root, 'release-key.pem');
+    writeFileSync(runtime, 'ai inference runtime bytes', { mode: 0o700 });
+    const keyPair = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
+    writeFileSync(
+      privateKeyPath,
+      keyPair.privateKey.export({ type: 'pkcs8', format: 'pem' }),
+      { mode: 0o600 },
+    );
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-ai-inference-assembly',
+      '--',
+      '--build-id',
+      'build-ai-inference',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = JSON.parse(readFileSync(
+      join(assemblyOutput, 'ai-inference.release-artifacts.json'),
+      'utf8',
+    ));
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['ai_inference.runtime.v1', 'module_runtime'],
+        ['ai_inference.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'ai');
+    assert.equal(fragment.module_id, 'makosh-ai-inference-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-ai-inference',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const release = await compileReleaseDistribution(
+      input,
+      loadReleaseSigningKey(privateKeyPath),
+    );
+    const signed = decodeFields(release.signedManifest);
+    const manifest = decodeFields(signed.get(2)[0]);
+    const artifacts = manifest.get(8).map(decodeFields);
+
+    assert.deepEqual(
+      artifacts.map((artifact) => [fieldString(artifact, 2), artifact.get(1)[0]]),
+      [
+        ['ai_inference.runtime.v1', 1n],
+        ['ai_inference.storage.v1', 3n],
+        ['browser.bootstrap', 4n],
+      ],
+    );
+    assert.equal(artifacts[0].get(6)[0].length, 32);
+    assert.equal(artifacts[0].get(7)[0].length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Calendar runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-calendar-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-calendar-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'calendar runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-calendar-assembly',
+      '--',
+      '--build-id',
+      'build-calendar',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'calendar.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['calendar.runtime.v1', 'module_runtime'],
+        ['calendar.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'calendar');
+    assert.equal(fragment.module_id, 'makosh-calendar-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-calendar',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'calendar.runtime.v1', 'calendar.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Organizations runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-organizations-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-organizations-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'organizations runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-organizations-assembly',
+      '--',
+      '--build-id',
+      'build-organizations',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'organizations.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['organizations.runtime.v1', 'module_runtime'],
+        ['organizations.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'organizations');
+    assert.equal(fragment.module_id, 'makosh-organizations-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-organizations',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'organizations.runtime.v1', 'organizations.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Documents runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-documents-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-documents-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'documents runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-documents-assembly',
+      '--',
+      '--build-id',
+      'build-documents',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'documents.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['documents.runtime.v1', 'module_runtime'],
+        ['documents.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'documents');
+    assert.equal(fragment.module_id, 'makosh-documents-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-documents',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'documents.runtime.v1', 'documents.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Relationships runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-relationships-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-relationships-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'relationships runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run',
+      '--quiet',
+      '-p',
+      'makosh-relationships-assembly',
+      '--',
+      '--build-id',
+      'build-relationships',
+      '--output-dir',
+      assemblyOutput,
+      '--runtime',
+      runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'relationships.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['relationships.runtime.v1', 'module_runtime'],
+        ['relationships.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'relationships');
+    assert.equal(fragment.module_id, 'makosh-relationships-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026',
+      trust_root_revision: 1,
+      revision: 1,
+      distribution_id: 'makosh-desktop',
+      release_version: '1.0.0',
+      build_id: 'build-relationships',
+      target_triple: 'aarch64-apple-darwin',
+      generation: 1,
+      ...releaseProvenance,
+      additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle',
+        artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html',
+        source_path: browserBootstrapSource,
+        required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'relationships.runtime.v1', 'relationships.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Projects runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-projects-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-projects-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'projects runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run', '--quiet', '-p', 'makosh-projects-assembly', '--',
+      '--build-id', 'build-projects', '--output-dir', assemblyOutput, '--runtime', runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'projects.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['projects.runtime.v1', 'module_runtime'],
+        ['projects.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'projects');
+    assert.equal(fragment.module_id, 'makosh-projects-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
+      distribution_id: 'makosh-desktop', release_version: '1.0.0',
+      build_id: 'build-projects', target_triple: 'aarch64-apple-darwin', generation: 1,
+      ...releaseProvenance, additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html', source_path: browserBootstrapSource, required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'projects.runtime.v1', 'projects.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Decisions runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-decisions-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-decisions-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'decisions runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run', '--quiet', '-p', 'makosh-decisions-assembly', '--',
+      '--build-id', 'build-decisions', '--output-dir', assemblyOutput, '--runtime', runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'decisions.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['decisions.runtime.v1', 'module_runtime'],
+        ['decisions.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'decisions');
+    assert.equal(fragment.module_id, 'makosh-decisions-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
+      distribution_id: 'makosh-desktop', release_version: '1.0.0',
+      build_id: 'build-decisions', target_triple: 'aarch64-apple-darwin', generation: 1,
+      ...releaseProvenance, additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html', source_path: browserBootstrapSource, required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'decisions.runtime.v1', 'decisions.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles the exact Identity Resolution runtime and Storage entries emitted by its assembly', async () => {
+  const root = canonicalTemporaryDirectory('makosh-identity-resolution-release-fragment-');
+  try {
+    const runtime = join(root, 'makosh-identity-resolution-runtime');
+    const assemblyOutput = join(root, 'assembly');
+    writeFileSync(runtime, 'identity resolution runtime bytes', { mode: 0o700 });
+    execFileSync('cargo', [
+      'run', '--quiet', '-p', 'makosh-identity-resolution-assembly', '--',
+      '--build-id', 'build-identity-resolution', '--output-dir', assemblyOutput, '--runtime', runtime,
+    ], { cwd: process.cwd(), stdio: 'pipe' });
+    const fragment = readReleaseArtifactFragment(
+      join(assemblyOutput, 'identity-resolution.release-artifacts.json'),
+    );
+    assert.deepEqual(
+      fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+      [
+        ['identity_resolution.runtime.v1', 'module_runtime'],
+        ['identity_resolution.storage.v1', 'storage_bundle'],
+      ],
+    );
+    assert.equal(fragment.owner_id, 'identity_resolution');
+    assert.equal(fragment.module_id, 'makosh-identity-resolution-runtime');
+
+    const input = composeReleaseCompilerInput({
+      verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
+      distribution_id: 'makosh-desktop', release_version: '1.0.0',
+      build_id: 'build-identity-resolution', target_triple: 'aarch64-apple-darwin', generation: 1,
+      ...releaseProvenance, additional_verification_keys: [],
+      artifacts: [{
+        artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
+        relative_path: 'browser/bootstrap.html', source_path: browserBootstrapSource, required: true,
+      }],
+    }, [fragment]);
+    const compiled = await compileUnsignedReleaseContent(input);
+    assert.deepEqual(
+      compiled.artifacts.map(({ artifactId }) => artifactId),
+      ['browser.bootstrap', 'identity_resolution.runtime.v1', 'identity_resolution.storage.v1'],
+    );
+    assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+    assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('compiles exact Search Timeline Graph Memory Consistency and Risk runtime and Storage entries', async () => {
+  for (const owner of ['search', 'timeline', 'graph', 'memory', 'consistency', 'risk']) {
+    const root = canonicalTemporaryDirectory(`makosh-${owner}-release-fragment-`);
+    try {
+      const runtime = join(root, `makosh-${owner}-runtime`);
+      const assemblyOutput = join(root, 'assembly');
+      writeFileSync(runtime, `${owner} runtime bytes`, { mode: 0o700 });
+      execFileSync('cargo', [
+        'run', '--quiet', '-p', `makosh-${owner}-assembly`, '--',
+        '--build-id', `build-${owner}`, '--output-dir', assemblyOutput, '--runtime', runtime,
+      ], { cwd: process.cwd(), stdio: 'pipe' });
+      const fragment = readReleaseArtifactFragment(
+        join(assemblyOutput, `${owner}.release-artifacts.json`),
+      );
+      assert.deepEqual(
+        fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+        [
+          [`${owner}.runtime.v1`, 'module_runtime'],
+          [`${owner}.storage.v1`, 'storage_bundle'],
+        ],
+      );
+      assert.equal(fragment.owner_id, owner);
+      assert.equal(fragment.module_id, `makosh-${owner}-runtime`);
+
+      const input = composeReleaseCompilerInput({
+        verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
+        distribution_id: 'makosh-desktop', release_version: '1.0.0',
+        build_id: `build-${owner}`, target_triple: 'aarch64-apple-darwin', generation: 1,
+        ...releaseProvenance, additional_verification_keys: [],
+        artifacts: [{
+          artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
+          relative_path: 'browser/bootstrap.html', source_path: browserBootstrapSource, required: true,
+        }],
+      }, [fragment]);
+      const compiled = await compileUnsignedReleaseContent(input);
+      assert.deepEqual(
+        compiled.artifacts.map(({ artifactId }) => artifactId),
+        ['browser.bootstrap', `${owner}.runtime.v1`, `${owner}.storage.v1`],
+      );
+      assert.equal(compiled.artifacts[1].descriptor.sha256.length, 32);
+      assert.equal(compiled.artifacts[1].settingsSchema.sha256.length, 32);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
+
+test('compiles exact Zoom Telemost and OmniRoute runtime and Storage entries', async () => {
+  for (const owner of ['zoom', 'telemost', 'omniroute']) {
+    const root = canonicalTemporaryDirectory(`makosh-${owner}-release-fragment-`);
+    try {
+      const runtime = join(root, `makosh-${owner}-runtime`);
+      const assemblyOutput = join(root, 'assembly');
+      writeFileSync(runtime, `${owner} runtime bytes`, { mode: 0o700 });
+      execFileSync('cargo', [
+        'run', '--quiet', '-p', `makosh-${owner}-assembly`, '--',
+        '--build-id', `build-${owner}`, '--output-dir', assemblyOutput, '--runtime', runtime,
+      ], { cwd: process.cwd(), stdio: 'pipe' });
+      const fragment = readReleaseArtifactFragment(
+        join(assemblyOutput, `${owner}.release-artifacts.json`),
+      );
+      assert.deepEqual(
+        fragment.artifacts.map(({ artifact_id, artifact_kind }) => [artifact_id, artifact_kind]),
+        [
+          [`${owner}.runtime.v1`, 'module_runtime'],
+          [`${owner}.storage.v1`, 'storage_bundle'],
+        ],
+      );
+      assert.equal(fragment.owner_id, owner);
+      assert.equal(fragment.module_id, `makosh-${owner}-runtime`);
+      const input = composeReleaseCompilerInput({
+        verification_key_id: 'release-2026', trust_root_revision: 1, revision: 1,
+        distribution_id: 'makosh-desktop', release_version: '1.0.0',
+        build_id: `build-${owner}`, target_triple: 'aarch64-apple-darwin', generation: 1,
+        ...releaseProvenance, additional_verification_keys: [],
+        artifacts: [{
+          artifact_kind: 'browser_bootstrap_bundle', artifact_id: 'browser.bootstrap',
+          relative_path: 'browser/bootstrap.html', source_path: browserBootstrapSource, required: true,
+        }],
+      }, [fragment]);
+      const compiled = await compileUnsignedReleaseContent(input);
+      assert.deepEqual(
+        compiled.artifacts.map(({ artifactId }) => artifactId),
+        ['browser.bootstrap', `${owner}.runtime.v1`, `${owner}.storage.v1`],
+      );
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   }
 });
 

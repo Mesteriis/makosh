@@ -203,10 +203,22 @@ CARGO_TARGET_DIR="$cargo_target_dir" cargo +1.97.0 build --locked \
 	--package makosh-review-task-candidate-assembly \
 	--package makosh-tasks-runtime \
 	--package makosh-tasks-assembly \
-	--package makosh-contacts-runtime \
-	--package makosh-contacts-assembly \
-	--package makosh-mail-contacts-sync-runtime \
-	--package makosh-mail-contacts-sync-assembly \
+	--package makosh-review-obligation-candidate-runtime \
+	--package makosh-review-obligation-candidate-assembly \
+	--package makosh-obligations-runtime \
+	--package makosh-obligations-assembly \
+	--package makosh-reviewed-obligation-candidate-promotion-runtime \
+	--package makosh-reviewed-obligation-candidate-promotion-assembly \
+	--package makosh-persons-runtime \
+	--package makosh-persons-assembly \
+	--package makosh-identity-resolution-runtime \
+	--package makosh-identity-resolution-assembly \
+	--package makosh-mail-persons-sync-runtime \
+	--package makosh-mail-persons-sync-assembly \
+	--package makosh-review-person-match-candidate-runtime \
+	--package makosh-review-person-match-candidate-assembly \
+	--package makosh-reviewed-person-match-candidate-promotion-runtime \
+	--package makosh-reviewed-person-match-candidate-promotion-assembly \
 	--package makosh-knowledge-runtime \
 	--package makosh-knowledge-assembly \
 	--package makosh-review-note-candidate-runtime \
@@ -227,12 +239,44 @@ CARGO_TARGET_DIR="$cargo_target_dir" cargo +1.97.0 build --locked \
 	--package makosh-attachment-preview-evidence-replay-assembly \
 	--package makosh-attachment-translation-runtime \
 	--package makosh-attachment-translation-assembly \
+	--package makosh-ai-inference-runtime \
+	--package makosh-ai-inference-assembly \
 	--package makosh-ollama-ai-runtime \
 	--package makosh-ollama-ai-assembly \
 	--package makosh-speech-to-text-runtime \
 	--package makosh-speech-to-text-assembly \
 	--package makosh-whisper-stt-runtime \
 	--package makosh-whisper-stt-assembly \
+	--package makosh-calendar-runtime \
+	--package makosh-calendar-assembly \
+	--package makosh-organizations-runtime \
+	--package makosh-organizations-assembly \
+	--package makosh-documents-runtime \
+	--package makosh-documents-assembly \
+	--package makosh-relationships-runtime \
+	--package makosh-relationships-assembly \
+	--package makosh-projects-runtime \
+	--package makosh-projects-assembly \
+	--package makosh-decisions-runtime \
+	--package makosh-decisions-assembly \
+	--package makosh-search-runtime \
+	--package makosh-search-assembly \
+	--package makosh-timeline-runtime \
+	--package makosh-timeline-assembly \
+	--package makosh-graph-runtime \
+	--package makosh-graph-assembly \
+	--package makosh-memory-runtime \
+	--package makosh-memory-assembly \
+	--package makosh-consistency-runtime \
+	--package makosh-consistency-assembly \
+	--package makosh-risk-runtime \
+	--package makosh-risk-assembly \
+	--package makosh-zoom-runtime \
+	--package makosh-zoom-assembly \
+	--package makosh-telemost-runtime \
+	--package makosh-telemost-assembly \
+	--package makosh-omniroute-runtime \
+	--package makosh-omniroute-assembly \
 	--package makosh-desktop-call-recording-runtime \
 	--package makosh-desktop-call-recording-assembly \
 	--package makosh-mail-runtime \
@@ -293,8 +337,14 @@ communication_task_candidate_assembly="$assembly_root/communication-task-candida
 communication_note_candidate_assembly="$assembly_root/communication-note-candidate"
 review_task_candidate_assembly="$assembly_root/review-task-candidate"
 tasks_assembly="$assembly_root/tasks"
-contacts_assembly="$assembly_root/contacts"
-mail_contacts_sync_assembly="$assembly_root/mail-contacts-sync"
+review_obligation_candidate_assembly="$assembly_root/review-obligation-candidate"
+obligations_assembly="$assembly_root/obligations"
+reviewed_obligation_candidate_promotion_assembly="$assembly_root/reviewed-obligation-candidate-promotion"
+persons_assembly="$assembly_root/persons"
+identity_resolution_assembly="$assembly_root/identity-resolution"
+mail_persons_sync_assembly="$assembly_root/mail-persons-sync"
+review_person_match_candidate_assembly="$assembly_root/review-person-match-candidate"
+reviewed_person_match_candidate_promotion_assembly="$assembly_root/reviewed-person-match-candidate-promotion"
 knowledge_assembly="$assembly_root/knowledge"
 review_note_candidate_assembly="$assembly_root/review-note-candidate"
 reviewed_note_candidate_promotion_assembly="$assembly_root/reviewed-note-candidate-promotion"
@@ -305,9 +355,25 @@ attachment_text_extraction_assembly="$assembly_root/attachment-text-extraction"
 attachment_preview_assembly="$assembly_root/attachment-preview"
 attachment_preview_evidence_replay_assembly="$assembly_root/attachment-preview-evidence-replay"
 attachment_translation_assembly="$assembly_root/attachment-translation"
+ai_inference_assembly="$assembly_root/ai-inference"
 ollama_ai_assembly="$assembly_root/ollama-ai"
 speech_to_text_assembly="$assembly_root/speech-to-text"
 whisper_stt_assembly="$assembly_root/whisper-stt"
+calendar_assembly="$assembly_root/calendar"
+organizations_assembly="$assembly_root/organizations"
+documents_assembly="$assembly_root/documents"
+relationships_assembly="$assembly_root/relationships"
+projects_assembly="$assembly_root/projects"
+decisions_assembly="$assembly_root/decisions"
+search_assembly="$assembly_root/search"
+timeline_assembly="$assembly_root/timeline"
+graph_assembly="$assembly_root/graph"
+memory_assembly="$assembly_root/memory"
+consistency_assembly="$assembly_root/consistency"
+risk_assembly="$assembly_root/risk"
+zoom_assembly="$assembly_root/zoom"
+telemost_assembly="$assembly_root/telemost"
+omniroute_assembly="$assembly_root/omniroute"
 desktop_call_recording_assembly="$assembly_root/desktop-call-recording"
 mail_assembly="$assembly_root/mail"
 telegram_assembly="$assembly_root/telegram"
@@ -370,14 +436,38 @@ zulip_assembly="$assembly_root/zulip"
 	--build-id "$build_id" \
 	--output-dir "$tasks_assembly" \
 	--runtime "$cargo_target_dir/debug/makosh-tasks-runtime"
-"$cargo_target_dir/debug/makosh-contacts-assembly" \
+"$cargo_target_dir/debug/makosh-review-obligation-candidate-assembly" \
 	--build-id "$build_id" \
-	--output-dir "$contacts_assembly" \
-	--runtime "$cargo_target_dir/debug/makosh-contacts-runtime"
-"$cargo_target_dir/debug/makosh-mail-contacts-sync-assembly" \
+	--output-dir "$review_obligation_candidate_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-review-obligation-candidate-runtime"
+"$cargo_target_dir/debug/makosh-obligations-assembly" \
 	--build-id "$build_id" \
-	--output-dir "$mail_contacts_sync_assembly" \
-	--runtime "$cargo_target_dir/debug/makosh-mail-contacts-sync-runtime"
+	--output-dir "$obligations_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-obligations-runtime"
+"$cargo_target_dir/debug/makosh-reviewed-obligation-candidate-promotion-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$reviewed_obligation_candidate_promotion_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-reviewed-obligation-candidate-promotion-runtime"
+"$cargo_target_dir/debug/makosh-persons-assembly" \
+	--build-id "$build_id" \
+	--runtime "$cargo_target_dir/debug/makosh-persons-runtime" \
+	--output "$persons_assembly"
+"$cargo_target_dir/debug/makosh-identity-resolution-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$identity_resolution_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-identity-resolution-runtime"
+"$cargo_target_dir/debug/makosh-mail-persons-sync-assembly" \
+	--build-id "$build_id" \
+	--runtime "$cargo_target_dir/debug/makosh-mail-persons-sync-runtime" \
+	--output "$mail_persons_sync_assembly"
+"$cargo_target_dir/debug/makosh-review-person-match-candidate-assembly" assemble \
+	--output-dir "$review_person_match_candidate_assembly" \
+	--build-id "$build_id" \
+	--runtime-source "$cargo_target_dir/debug/makosh-review-person-match-candidate-runtime"
+"$cargo_target_dir/debug/makosh-reviewed-person-match-candidate-promotion-assembly" assemble \
+	--output-dir "$reviewed_person_match_candidate_promotion_assembly" \
+	--build-id "$build_id" \
+	--runtime-source "$cargo_target_dir/debug/makosh-reviewed-person-match-candidate-promotion-runtime"
 "$cargo_target_dir/debug/makosh-knowledge-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$knowledge_assembly" \
@@ -421,6 +511,10 @@ zulip_assembly="$assembly_root/zulip"
 	--build-id "$build_id" \
 	--output-dir "$attachment_translation_assembly" \
 	--runtime "$cargo_target_dir/debug/makosh-attachment-translation-runtime"
+"$cargo_target_dir/debug/makosh-ai-inference-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$ai_inference_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-ai-inference-runtime"
 "$cargo_target_dir/debug/makosh-ollama-ai-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$ollama_ai_assembly" \
@@ -435,6 +529,66 @@ zulip_assembly="$assembly_root/zulip"
 	--runtime "$cargo_target_dir/debug/makosh-whisper-stt-runtime" \
 	--runner "$whisper_stt_runner" \
 	--model "$whisper_stt_model"
+"$cargo_target_dir/debug/makosh-calendar-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$calendar_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-calendar-runtime"
+"$cargo_target_dir/debug/makosh-organizations-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$organizations_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-organizations-runtime"
+"$cargo_target_dir/debug/makosh-documents-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$documents_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-documents-runtime"
+"$cargo_target_dir/debug/makosh-relationships-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$relationships_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-relationships-runtime"
+"$cargo_target_dir/debug/makosh-projects-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$projects_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-projects-runtime"
+"$cargo_target_dir/debug/makosh-decisions-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$decisions_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-decisions-runtime"
+"$cargo_target_dir/debug/makosh-search-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$search_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-search-runtime"
+"$cargo_target_dir/debug/makosh-timeline-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$timeline_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-timeline-runtime"
+"$cargo_target_dir/debug/makosh-graph-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$graph_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-graph-runtime"
+"$cargo_target_dir/debug/makosh-memory-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$memory_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-memory-runtime"
+"$cargo_target_dir/debug/makosh-consistency-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$consistency_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-consistency-runtime"
+"$cargo_target_dir/debug/makosh-risk-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$risk_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-risk-runtime"
+"$cargo_target_dir/debug/makosh-zoom-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$zoom_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-zoom-runtime"
+"$cargo_target_dir/debug/makosh-telemost-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$telemost_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-telemost-runtime"
+"$cargo_target_dir/debug/makosh-omniroute-assembly" \
+	--build-id "$build_id" \
+	--output-dir "$omniroute_assembly" \
+	--runtime "$cargo_target_dir/debug/makosh-omniroute-runtime"
 "$cargo_target_dir/debug/makosh-desktop-call-recording-assembly" \
 	--build-id "$build_id" \
 	--output-dir "$desktop_call_recording_assembly" \
@@ -500,8 +654,14 @@ node "$backend_root/scripts/build-distribution-release.mjs" \
 	--artifact-fragment "$communication_note_candidate_assembly/communication_note_candidate.release-artifacts.json" \
 	--artifact-fragment "$review_task_candidate_assembly/review-task-candidate.release-artifacts.json" \
 	--artifact-fragment "$tasks_assembly/tasks.release-artifacts.json" \
-	--artifact-fragment "$contacts_assembly/contacts.release-artifacts.json" \
-	--artifact-fragment "$mail_contacts_sync_assembly/mail_contacts_sync.release-artifacts.json" \
+	--artifact-fragment "$review_obligation_candidate_assembly/review-obligation-candidate.release-artifacts.json" \
+	--artifact-fragment "$obligations_assembly/obligations.release-artifacts.json" \
+	--artifact-fragment "$reviewed_obligation_candidate_promotion_assembly/reviewed_obligation_candidate_promotion.release-artifacts.json" \
+	--artifact-fragment "$persons_assembly/persons.release-artifacts.json" \
+	--artifact-fragment "$identity_resolution_assembly/identity-resolution.release-artifacts.json" \
+	--artifact-fragment "$mail_persons_sync_assembly/mail_persons_sync.release-artifacts.json" \
+	--artifact-fragment "$review_person_match_candidate_assembly/review-person-match-candidate.release-artifacts.json" \
+	--artifact-fragment "$reviewed_person_match_candidate_promotion_assembly/reviewed-person-match-candidate-promotion.release-artifacts.json" \
 	--artifact-fragment "$knowledge_assembly/knowledge.release-artifacts.json" \
 	--artifact-fragment "$review_note_candidate_assembly/review-note-candidate.release-artifacts.json" \
 	--artifact-fragment "$reviewed_note_candidate_promotion_assembly/reviewed_note_candidate_promotion.release-artifacts.json" \
@@ -512,9 +672,25 @@ node "$backend_root/scripts/build-distribution-release.mjs" \
 	--artifact-fragment "$attachment_preview_assembly/attachment-preview.release-artifacts.json" \
 	--artifact-fragment "$attachment_preview_evidence_replay_assembly/attachment_preview_evidence_replay.release-artifacts.json" \
 	--artifact-fragment "$attachment_translation_assembly/attachment_translation.release-artifacts.json" \
+	--artifact-fragment "$ai_inference_assembly/ai-inference.release-artifacts.json" \
 	--artifact-fragment "$ollama_ai_assembly/ollama-ai.release-artifacts.json" \
 	--artifact-fragment "$speech_to_text_assembly/speech-to-text.release-artifacts.json" \
 	--artifact-fragment "$whisper_stt_assembly/whisper-stt.release-artifacts.json" \
+	--artifact-fragment "$calendar_assembly/calendar.release-artifacts.json" \
+	--artifact-fragment "$organizations_assembly/organizations.release-artifacts.json" \
+	--artifact-fragment "$documents_assembly/documents.release-artifacts.json" \
+	--artifact-fragment "$relationships_assembly/relationships.release-artifacts.json" \
+	--artifact-fragment "$projects_assembly/projects.release-artifacts.json" \
+	--artifact-fragment "$decisions_assembly/decisions.release-artifacts.json" \
+	--artifact-fragment "$search_assembly/search.release-artifacts.json" \
+	--artifact-fragment "$timeline_assembly/timeline.release-artifacts.json" \
+	--artifact-fragment "$graph_assembly/graph.release-artifacts.json" \
+	--artifact-fragment "$memory_assembly/memory.release-artifacts.json" \
+	--artifact-fragment "$consistency_assembly/consistency.release-artifacts.json" \
+	--artifact-fragment "$risk_assembly/risk.release-artifacts.json" \
+	--artifact-fragment "$zoom_assembly/zoom.release-artifacts.json" \
+	--artifact-fragment "$telemost_assembly/telemost.release-artifacts.json" \
+	--artifact-fragment "$omniroute_assembly/omniroute.release-artifacts.json" \
 	--artifact-fragment "$desktop_call_recording_assembly/desktop-call-recording.release-artifacts.json" \
 	--artifact-fragment "$mail_assembly/mail.release-artifacts.json" \
 	--artifact-fragment "$telegram_assembly/telegram.release-artifacts.json" \

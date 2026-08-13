@@ -53,6 +53,7 @@ pub struct WhatsAppRuntimeIdentity {
 #[derive(Clone)]
 pub struct WhatsAppRuntimeAdmission {
     pub logical_owner_id: String,
+    pub logical_human_owner_id: String,
     pub module_registration_id: String,
     pub runtime_instance_id: String,
     pub runtime_generation: u64,

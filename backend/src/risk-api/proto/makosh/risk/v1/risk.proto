@@ -1,0 +1,44 @@
+syntax = "proto3";
+package makosh.risk.v1;
+
+message RiskCursorV1 {
+  int64 occurred_at_unix_millis = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  bytes event_id = 6;
+}
+message ListRiskRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_cursor = 2;
+  uint32 limit = 3;
+}
+message RiskEntryV1 {
+  bytes event_id = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  string reason_code = 6;
+  uint32 severity = 7;
+  int64 occurred_at_unix_millis = 8;
+  int64 expires_at_unix_millis = 9;
+  bool cleared = 10;
+}
+message ListRiskResultV1 {
+  repeated RiskEntryV1 entries = 1;
+  bytes next_cursor = 2;
+  uint64 projection_generation = 3;
+}
+message RiskStatusRequestV1 { string logical_owner_id = 1; }
+message RiskStatusV1 {
+  uint64 active_generation = 1;
+  uint64 risk_entries = 2;
+  uint64 source_events = 3;
+  int64 rebuilt_at_unix_millis = 4;
+}
+service RiskQueryService {
+  rpc List(ListRiskRequestV1) returns (ListRiskResultV1);
+  rpc GetStatus(RiskStatusRequestV1) returns (RiskStatusV1);
+}

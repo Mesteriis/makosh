@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file makosh/gateway/v1/client_system_status_realtime.proto.
  */
 export const file_makosh_gateway_v1_client_system_status_realtime: GenFile = /*@__PURE__*/
-  fileDesc("CjVoZXJtZXMvZ2F0ZXdheS92MS9jbGllbnRfc3lzdGVtX3N0YXR1c19yZWFsdGltZS5wcm90bxIRaGVybWVzLmdhdGV3YXkudjEicwobQ2xpZW50U3lzdGVtU3RhdHVzQ2hhbmdlZFYxEhAKCHJldmlzaW9uGAEgASgEEkIKCHN0YXR1c2VzGAIgAygLMjAuaGVybWVzLmdhdGV3YXkudjEuQ2xpZW50U3lzdGVtQ29tcG9uZW50U3RhdHVzVjFiBnByb3RvMw", [file_makosh_gateway_v1_client_bootstrap]);
+  fileDesc("CjVtYWtvc2gvZ2F0ZXdheS92MS9jbGllbnRfc3lzdGVtX3N0YXR1c19yZWFsdGltZS5wcm90bxIRbWFrb3NoLmdhdGV3YXkudjEicwobQ2xpZW50U3lzdGVtU3RhdHVzQ2hhbmdlZFYxEhAKCHJldmlzaW9uGAEgASgEEkIKCHN0YXR1c2VzGAIgAygLMjAubWFrb3NoLmdhdGV3YXkudjEuQ2xpZW50U3lzdGVtQ29tcG9uZW50U3RhdHVzVjFiBnByb3RvMw", [file_makosh_gateway_v1_client_bootstrap]);
 
 /**
  * Full client-safe replacement snapshot for Kernel/platform system status.

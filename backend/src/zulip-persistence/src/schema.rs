@@ -11,6 +11,7 @@ pub const ZULIP_STORAGE_BUNDLE_REVISION_V3: u32 = 3;
 pub const ZULIP_STORAGE_BUNDLE_REVISION_V4: u32 = 4;
 pub const ZULIP_STORAGE_BUNDLE_REVISION_V5: u32 = 5;
 pub const ZULIP_STORAGE_BUNDLE_REVISION_V6: u32 = 6;
+pub const ZULIP_STORAGE_BUNDLE_REVISION_V7: u32 = 7;
 
 pub const ZULIP_SCHEMA_V2: &str = r#"
 CREATE TABLE IF NOT EXISTS makosh_data.zulip_operational_account_state (

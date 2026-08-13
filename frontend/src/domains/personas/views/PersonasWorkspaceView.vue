@@ -4,8 +4,6 @@ import PersonasPage from '../presentation/PersonasPage.vue'
 import type { PersonasPageActions, PersonasPageModel } from '../presentation/personasPageModel'
 import { usePersonasPageSurface } from '../queries/usePersonasPageSurface'
 
-// Temporary legacy adapter. The page itself is presentation-only and can be
-// mounted by a generated Gateway contract without importing this surface.
 const surface = usePersonasPageSurface()
 
 const model = computed<PersonasPageModel>(() => ({

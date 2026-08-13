@@ -10,14 +10,21 @@ pub(super) fn record_scheduler_runtime(store: &SqliteControlStore) {
     record_scheduler_runtime_with_job_route(store, None);
 }
 
-pub(super) fn record_scheduler_runtime_for_mail_contacts_sync(store: &SqliteControlStore) {
+pub(super) fn record_scheduler_runtime_for_mail_persons_sync(store: &SqliteControlStore) {
     record_scheduler_runtime_with_job_route(
         store,
         Some((
-            "mail_contacts_sync",
+            "mail_persons_sync",
             "scheduled_sync",
             scheduler_contract_schema(),
         )),
+    );
+}
+
+pub(super) fn record_scheduler_runtime_for_calendar(store: &SqliteControlStore) {
+    record_scheduler_runtime_with_job_route(
+        store,
+        Some(("calendar", "reminder_due", scheduler_contract_schema())),
     );
 }
 

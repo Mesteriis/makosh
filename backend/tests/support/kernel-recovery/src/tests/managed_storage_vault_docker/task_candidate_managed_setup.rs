@@ -20,7 +20,7 @@ use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_MODULE_ID_V1, REVIEW_TASK_CANDIDATE_OWNER_V1,
 };
 use makosh_review_task_candidate_persistence::{
-    REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1, review_task_candidate_storage_bundle_v1,
+    REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V2, review_task_candidate_storage_bundle_v1,
 };
 use makosh_review_task_candidate_runtime::{
     REVIEW_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1, review_task_candidate_module_descriptor_v1,
@@ -43,7 +43,7 @@ use makosh_runtime_protocol::v1::{
 };
 use makosh_storage_protocol::v1::StorageBundleV1;
 use makosh_tasks_command_api::{TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1};
-use makosh_tasks_persistence::{TASKS_STORAGE_BUNDLE_REVISION_V1, tasks_storage_bundle_v1};
+use makosh_tasks_persistence::{TASKS_STORAGE_BUNDLE_REVISION_V2, tasks_storage_bundle_v1};
 use makosh_tasks_runtime::{
     TASKS_STORAGE_CAPABILITY_ID_V1, tasks_module_descriptor_v1, tasks_settings_schema_bytes_v1,
 };
@@ -160,7 +160,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
             artifact_id: "review.task-candidate.runtime.v1",
             binary_environment: "MAKOSH_REVIEW_TASK_CANDIDATE_RUNTIME_BIN",
             storage_capability_id: REVIEW_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1,
-            storage_revision: REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
+            storage_revision: REVIEW_TASK_CANDIDATE_STORAGE_BUNDLE_REVISION_V2,
             descriptor: review_task_candidate_module_descriptor_v1(TASK_CANDIDATE_BUILD_ID_V1),
             settings: review_task_candidate_settings_schema_bytes_v1(),
             storage_bundle: review_task_candidate_storage_bundle_v1(),
@@ -182,7 +182,7 @@ fn task_candidate_units_v1() -> [TaskCandidateManagedUnitV1; 4] {
             artifact_id: "tasks.runtime.v1",
             binary_environment: "MAKOSH_TASKS_RUNTIME_BIN",
             storage_capability_id: TASKS_STORAGE_CAPABILITY_ID_V1,
-            storage_revision: TASKS_STORAGE_BUNDLE_REVISION_V1,
+            storage_revision: TASKS_STORAGE_BUNDLE_REVISION_V2,
             descriptor: tasks_module_descriptor_v1(TASK_CANDIDATE_BUILD_ID_V1),
             settings: tasks_settings_schema_bytes_v1(),
             storage_bundle: tasks_storage_bundle_v1(),
@@ -210,6 +210,20 @@ fn admit_task_candidate_unit_v1(
         &capability_ids,
     )
     .unwrap_or_else(|error| panic!("approve exact {} capabilities: {error}", unit.label));
+    let effective_capability_ids = store
+        .module_grant_snapshot(registration.registration_id())
+        .expect("read exact managed Task candidate grants")
+        .and_then(|snapshot| {
+            snapshot
+                .effective_grants()
+                .map(|grants| grants.capability_ids().to_vec())
+        })
+        .expect("effective managed Task candidate grants");
+    assert_eq!(
+        effective_capability_ids, capability_ids,
+        "{} exact capability grant drift",
+        unit.label
+    );
     store
         .record_bundled_managed_launch_binding(&BundledManagedLaunchBinding::new(
             registration.registration_id(),
@@ -384,7 +398,7 @@ fn start_reserved_task_candidate_unit_v1(
                 settings_revision: 0,
                 configuration_instances: Vec::new(),
             },
-            &[],
+            &admitted.capability_ids,
         ),
         ModuleKindV1::Domain => managed_launch::start_reserved_domain(
             supervisor,

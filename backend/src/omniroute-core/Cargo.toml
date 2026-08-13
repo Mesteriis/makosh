@@ -1,0 +1,13 @@
+[package]
+name = "makosh-omniroute-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[package.metadata.makosh]
+role = "integration"
+owner = "omniroute"
+surface = "core"
+[dependencies]
+sha2 = { version = "=0.11.0", default-features = false }

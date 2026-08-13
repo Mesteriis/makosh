@@ -1,0 +1,185 @@
+syntax = "proto3";
+package makosh.relationships.client.v1;
+
+message TimestampV1 { int64 unix_seconds = 1; int32 nanos = 2; }
+
+enum RelationshipParticipantKindV1 {
+  RELATIONSHIP_PARTICIPANT_KIND_UNSPECIFIED = 0;
+  RELATIONSHIP_PARTICIPANT_KIND_PERSON = 1;
+  RELATIONSHIP_PARTICIPANT_KIND_ORGANIZATION = 2;
+}
+
+enum RelationshipTypeV1 {
+  RELATIONSHIP_TYPE_UNSPECIFIED = 0;
+  RELATIONSHIP_TYPE_FAMILY = 1;
+  RELATIONSHIP_TYPE_FRIEND = 2;
+  RELATIONSHIP_TYPE_COLLEAGUE = 3;
+  RELATIONSHIP_TYPE_REPORTS_TO = 4;
+  RELATIONSHIP_TYPE_MEMBER_OF = 5;
+  RELATIONSHIP_TYPE_PARTNER = 6;
+}
+
+enum RelationshipStateV1 {
+  RELATIONSHIP_STATE_UNSPECIFIED = 0;
+  RELATIONSHIP_STATE_CONFIRMED = 1;
+  RELATIONSHIP_STATE_ENDED = 2;
+}
+
+enum RelationshipEvidenceStateV1 {
+  RELATIONSHIP_EVIDENCE_STATE_UNSPECIFIED = 0;
+  RELATIONSHIP_EVIDENCE_STATE_ACTIVE = 1;
+  RELATIONSHIP_EVIDENCE_STATE_REMOVED = 2;
+}
+
+message RelationshipParticipantV1 {
+  RelationshipParticipantKindV1 kind = 1;
+  bytes public_id = 2;
+}
+
+message RelationshipEvidenceV1 {
+  bytes evidence_id = 1;
+  string source_owner_id = 2;
+  string source_record_id = 3;
+  uint64 source_revision = 4;
+  bytes evidence_digest = 5;
+  TimestampV1 observed_at = 6;
+  RelationshipEvidenceStateV1 state = 7;
+  uint64 updated_at_relationship_revision = 8;
+}
+
+message RelationshipV1 {
+  bytes relationship_id = 1;
+  string logical_owner_id = 2;
+  RelationshipParticipantV1 source = 3;
+  RelationshipParticipantV1 target = 4;
+  RelationshipTypeV1 relationship_type = 5;
+  RelationshipStateV1 state = 6;
+  TimestampV1 valid_from = 7;
+  optional TimestampV1 valid_until = 8;
+  uint64 relationship_revision = 9;
+  TimestampV1 created_at = 10;
+  TimestampV1 updated_at = 11;
+}
+
+message CreateRelationshipRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  RelationshipParticipantV1 source = 3;
+  RelationshipParticipantV1 target = 4;
+  RelationshipTypeV1 relationship_type = 5;
+  TimestampV1 valid_from = 6;
+  optional TimestampV1 valid_until = 7;
+  string evidence_source_owner_id = 8;
+  string evidence_source_record_id = 9;
+  uint64 evidence_source_revision = 10;
+  bytes evidence_digest = 11;
+  TimestampV1 evidence_observed_at = 12;
+  TimestampV1 created_at = 13;
+}
+
+message UpdateRelationshipValidityRequestV1 {
+  bytes operation_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_relationship_revision = 4;
+  TimestampV1 valid_from = 5;
+  optional TimestampV1 valid_until = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message EndRelationshipRequestV1 {
+  bytes operation_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_relationship_revision = 4;
+  TimestampV1 valid_until = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message ReactivateRelationshipRequestV1 {
+  bytes operation_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_relationship_revision = 4;
+  TimestampV1 valid_from = 5;
+  optional TimestampV1 valid_until = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message AddRelationshipEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_relationship_revision = 4;
+  string source_owner_id = 5;
+  string source_record_id = 6;
+  uint64 source_revision = 7;
+  bytes evidence_digest = 8;
+  TimestampV1 observed_at = 9;
+  TimestampV1 changed_at = 10;
+}
+
+message RemoveRelationshipEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_relationship_revision = 4;
+  bytes evidence_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message RelationshipMutationResultV1 {
+  bytes operation_id = 1;
+  RelationshipV1 relationship = 2;
+}
+
+message GetRelationshipRequestV1 { string logical_owner_id = 1; bytes relationship_id = 2; }
+message ListRelationshipsForParticipantRequestV1 {
+  string logical_owner_id = 1;
+  RelationshipParticipantV1 participant = 2;
+  bytes after_relationship_id = 3;
+  uint32 limit = 4;
+}
+message ListRelationshipsResultV1 {
+  repeated RelationshipV1 relationships = 1;
+  bytes next_after_relationship_id = 2;
+}
+message ListRelationshipEvidenceRequestV1 {
+  string logical_owner_id = 1;
+  bytes relationship_id = 2;
+  bytes after_evidence_id = 3;
+  uint32 limit = 4;
+}
+message ListRelationshipEvidenceResultV1 {
+  repeated RelationshipEvidenceV1 evidence = 1;
+  bytes next_after_evidence_id = 2;
+}
+
+message RelationshipChangedV1 {
+  bytes event_id = 1;
+  bytes relationship_id = 2;
+  string logical_owner_id = 3;
+  RelationshipParticipantV1 source = 4;
+  RelationshipParticipantV1 target = 5;
+  RelationshipTypeV1 relationship_type = 6;
+  RelationshipStateV1 state = 7;
+  TimestampV1 valid_from = 8;
+  optional TimestampV1 valid_until = 9;
+  uint64 relationship_revision = 10;
+  TimestampV1 occurred_at = 11;
+}
+
+service RelationshipsCommandService {
+  rpc Create(CreateRelationshipRequestV1) returns (RelationshipMutationResultV1);
+  rpc UpdateValidity(UpdateRelationshipValidityRequestV1) returns (RelationshipMutationResultV1);
+  rpc End(EndRelationshipRequestV1) returns (RelationshipMutationResultV1);
+  rpc Reactivate(ReactivateRelationshipRequestV1) returns (RelationshipMutationResultV1);
+  rpc AddEvidence(AddRelationshipEvidenceRequestV1) returns (RelationshipMutationResultV1);
+  rpc RemoveEvidence(RemoveRelationshipEvidenceRequestV1) returns (RelationshipMutationResultV1);
+}
+
+service RelationshipsQueryService {
+  rpc Get(GetRelationshipRequestV1) returns (RelationshipV1);
+  rpc ListForParticipant(ListRelationshipsForParticipantRequestV1) returns (ListRelationshipsResultV1);
+  rpc ListEvidence(ListRelationshipEvidenceRequestV1) returns (ListRelationshipEvidenceResultV1);
+}

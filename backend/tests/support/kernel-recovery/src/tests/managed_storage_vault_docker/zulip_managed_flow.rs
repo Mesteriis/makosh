@@ -11,6 +11,7 @@ use makosh_zulip_api::{
     client_contract::ZulipClientContractV1,
     operational::{ZulipOperationalQueryResponseV1, ZulipOperationalQueryV1},
 };
+use makosh_zulip_persistence::ZULIP_OWNER_RLS_TABLES_V1;
 use makosh_zulip_runtime::{
     admission::ZULIP_STORAGE_CAPABILITY_ID,
     client_port::{decode_module_response, encode_module_request},
@@ -36,6 +37,13 @@ fn managed_zulip_runtime_uses_kernel_leases_and_route_specific_admission() {
         &contour.supervisor,
         &contour.zulip,
     );
+    assert_owner_rls_tables_v1(
+        "makosh_storage_authenticated",
+        &ZULIP_OWNER_RLS_TABLES_V1,
+        "zulip_owner_scope",
+    );
+    // The shared assertion switches to an effective NOSUPERUSER/NOBYPASSRLS
+    // runtime role before exercising every owner-local table.
     let (owner_runtime_dir, owner_control) = start_owner_control(
         &contour.data,
         &contour.store,
@@ -56,6 +64,214 @@ fn managed_zulip_runtime_uses_kernel_leases_and_route_specific_admission() {
         .expect("join owner control server")
         .expect("owner control server");
     contour.finish();
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, Zulip and NATS binaries"]
+fn managed_zulip_runtime_bootstrap_fails_closed_and_stops_promptly() {
+    let contour = ManagedZulipContour::start(ZulipGrantProfileV1::QueryOnly);
+    assert_zulip_query_is_admitted(&contour.store, &contour.supervisor, &contour.zulip);
+    contour
+        .supervisor
+        .stop(&contour.zulip.registration_id)
+        .expect("stop healthy Zulip predecessor");
+    let runtime_dir = contour.root.join("runtime");
+    let mut predecessor = contour.zulip.clone();
+
+    for (phase, bootstrap_override) in [
+        (
+            "missing-settings",
+            ZulipBootstrapOverrideV1::MissingSettings,
+        ),
+        ("missing-storage", ZulipBootstrapOverrideV1::MissingStorage),
+        (
+            "missing-event-capability",
+            ZulipBootstrapOverrideV1::MissingEventCapability,
+        ),
+        (
+            "missing-blob-capability",
+            ZulipBootstrapOverrideV1::MissingBlobCapability,
+        ),
+    ] {
+        let capture = zulip_child_capture_v1(&contour.root, phase);
+        predecessor = launch_zulip_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            contour.fixture.realm_url(),
+            bootstrap_override,
+            &capture,
+        );
+        assert_zulip_pre_spawn_denied_v1(&contour.supervisor, &predecessor, phase, &capture);
+    }
+
+    for (phase, bootstrap_override) in [
+        (
+            "invalid-settings",
+            ZulipBootstrapOverrideV1::InvalidSettings,
+        ),
+        (
+            "stale-event-fence",
+            ZulipBootstrapOverrideV1::StaleEventFence,
+        ),
+    ] {
+        let capture = zulip_child_capture_v1(&contour.root, phase);
+        predecessor = launch_zulip_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            contour.fixture.realm_url(),
+            bootstrap_override,
+            &capture,
+        );
+        assert_zulip_bounded_runtime_denied_v1(&contour.supervisor, &predecessor, phase, &capture);
+    }
+
+    for (phase, bootstrap_override) in [
+        (
+            "stale-storage-fence",
+            ZulipBootstrapOverrideV1::StaleStorageFence,
+        ),
+        (
+            "unavailable-vault",
+            ZulipBootstrapOverrideV1::StaleVaultFence,
+        ),
+    ] {
+        let capture = zulip_child_capture_v1(&contour.root, phase);
+        predecessor = launch_zulip_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            contour.fixture.realm_url(),
+            bootstrap_override,
+            &capture,
+        );
+        assert_zulip_active_until_requested_stop_v1(
+            &contour.supervisor,
+            &predecessor,
+            phase,
+            &capture,
+        );
+    }
+
+    contour.shutdown_processes();
+    contour.finish();
+}
+
+fn zulip_child_capture_v1(root: &Path, phase: &str) -> PathBuf {
+    private_directory(root.join(format!("zulip-stdio-{phase}")))
+}
+
+fn zulip_child_capture_paths_v1(directory: &Path) -> Vec<PathBuf> {
+    let mut paths = std::fs::read_dir(directory)
+        .expect("read Zulip child capture directory")
+        .map(|entry| entry.expect("read Zulip child capture entry").path())
+        .collect::<Vec<_>>();
+    paths.sort();
+    paths
+}
+
+fn assert_zulip_pre_spawn_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedZulipRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    assert_ne!(
+        supervisor.relay_port().is_ready(&started.registration_id),
+        Ok(true)
+    );
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("Zulip pre-spawn activity"),
+        "{phase} must be denied before child spawn"
+    );
+    assert!(
+        zulip_child_capture_paths_v1(capture).is_empty(),
+        "{phase} must not create supervised child output"
+    );
+}
+
+fn assert_zulip_bounded_runtime_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedZulipRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = std::time::Instant::now() + Duration::from_secs(2);
+    while supervisor
+        .is_active(&started.registration_id)
+        .expect("Zulip bounded denial activity")
+    {
+        assert!(
+            std::time::Instant::now() < deadline,
+            "{phase} did not terminate"
+        );
+        assert_ne!(
+            supervisor.relay_port().is_ready(&started.registration_id),
+            Ok(true),
+            "{phase} must not signal Ready"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let captures = zulip_child_capture_paths_v1(capture);
+    assert!(
+        captures.len() >= 2 && captures.len().is_multiple_of(2),
+        "{phase} must have bounded complete supervised child attempts"
+    );
+}
+
+fn assert_zulip_active_until_requested_stop_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedZulipRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = std::time::Instant::now() + Duration::from_millis(100);
+    while std::time::Instant::now() < deadline {
+        assert!(
+            supervisor
+                .is_active(&started.registration_id)
+                .expect("Zulip bootstrap activity"),
+            "{phase} child exited before requested stop"
+        );
+        assert_ne!(
+            supervisor.relay_port().is_ready(&started.registration_id),
+            Ok(true)
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let stopped_at = std::time::Instant::now();
+    assert!(
+        supervisor
+            .request_stop_if_active(&started.registration_id)
+            .expect("request Zulip bootstrap stop"),
+        "{phase} must own the active child"
+    );
+    assert!(
+        supervisor
+            .stop_if_active(&started.registration_id)
+            .expect("join Zulip bootstrap stop")
+    );
+    assert!(stopped_at.elapsed() < Duration::from_secs(2));
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("Zulip stopped activity"),
+        "{phase} must not install a replacement"
+    );
+    assert_eq!(
+        zulip_child_capture_paths_v1(capture).len(),
+        2,
+        "{phase} must spawn exactly one supervised child"
+    );
 }
 
 #[test]
@@ -81,16 +297,15 @@ fn managed_zulip_account_rotation_and_retirement_use_settings_successors() {
     let (client, owner_session) =
         open_owner_control_client(&owner_runtime_dir, &contour.owner_signer);
     let revision_two =
-        zulip_settings_snapshot(&predecessor.registration_id, 2, contour.fixture.realm_url())
-            .encode_to_vec();
-    client
-        .update_operator_settings(
-            &owner_session,
-            &predecessor.registration_id,
-            1,
-            revision_two,
-        )
-        .expect("commit Zulip Settings revision two");
+        zulip_settings_snapshot(ZULIP_ACCOUNT_ID, 2, contour.fixture.realm_url()).encode_to_vec();
+    crate::modules::settings::mutation::commit_after_owner_authorization_for_target(
+        &*contour.store,
+        &predecessor.registration_id,
+        ZULIP_ACCOUNT_ID,
+        1,
+        &revision_two,
+    )
+    .expect("commit Zulip Settings revision two");
     let applied = client
         .apply_managed_integration_settings(
             &owner_session,
@@ -108,11 +323,20 @@ fn managed_zulip_account_rotation_and_retirement_use_settings_successors() {
     assert_eq!(
         contour
             .store
-            .settings_schema_binding(&predecessor.registration_id)
-            .expect("read applied Zulip Settings")
+            .settings_configuration_target(&predecessor.registration_id, ZULIP_ACCOUNT_ID)
+            .expect("read applied Zulip Settings target")
             .expect("applied Zulip Settings")
             .apply_state(),
         SettingsApplyState::Current,
+    );
+    assert_eq!(
+        contour
+            .store
+            .settings_configuration_target(&predecessor.registration_id, ZULIP_ACCOUNT_ID)
+            .expect("read applied Zulip Settings target")
+            .expect("applied Zulip Settings")
+            .effective_revision(),
+        2,
     );
     let successor = current_zulip_runtime(&contour, &predecessor);
     let status = query_zulip_account_status(&contour, &successor);
@@ -146,16 +370,15 @@ fn managed_zulip_account_rotation_and_retirement_use_settings_successors() {
     wait_for_provider_quiescence(&contour);
     let provider_connections = contour.fixture.accepted_connections();
     let revision_three =
-        zulip_settings_snapshot(&predecessor.registration_id, 3, contour.fixture.realm_url())
-            .encode_to_vec();
-    client
-        .update_operator_settings(
-            &owner_session,
-            &predecessor.registration_id,
-            2,
-            revision_three,
-        )
-        .expect("commit Zulip Settings revision three");
+        zulip_settings_snapshot(ZULIP_ACCOUNT_ID, 3, contour.fixture.realm_url()).encode_to_vec();
+    crate::modules::settings::mutation::commit_after_owner_authorization_for_target(
+        &*contour.store,
+        &predecessor.registration_id,
+        ZULIP_ACCOUNT_ID,
+        2,
+        &revision_three,
+    )
+    .expect("commit Zulip Settings revision three");
     let retired_apply = client
         .apply_managed_integration_settings(
             &owner_session,
@@ -185,16 +408,15 @@ fn managed_zulip_account_rotation_and_retirement_use_settings_successors() {
         bind_zulip_credential(&contour.store, &contour.supervisor, &retired_runtime, 3, 3);
     assert_eq!(missing_credential.binding_revision, 4);
     let revision_four =
-        zulip_settings_snapshot(&predecessor.registration_id, 4, contour.fixture.realm_url())
-            .encode_to_vec();
-    client
-        .update_operator_settings(
-            &owner_session,
-            &predecessor.registration_id,
-            3,
-            revision_four,
-        )
-        .expect("commit Zulip Settings revision four");
+        zulip_settings_snapshot(ZULIP_ACCOUNT_ID, 4, contour.fixture.realm_url()).encode_to_vec();
+    crate::modules::settings::mutation::commit_after_owner_authorization_for_target(
+        &*contour.store,
+        &predecessor.registration_id,
+        ZULIP_ACCOUNT_ID,
+        3,
+        &revision_four,
+    )
+    .expect("commit Zulip Settings revision four");
     client
         .apply_managed_integration_settings(
             &owner_session,
@@ -207,8 +429,8 @@ fn managed_zulip_account_rotation_and_retirement_use_settings_successors() {
         .expect_err("missing Zulip credential revision must block replacement");
     let blocked = contour
         .store
-        .settings_schema_binding(&predecessor.registration_id)
-        .expect("read blocked Zulip Settings")
+        .settings_configuration_target(&predecessor.registration_id, ZULIP_ACCOUNT_ID)
+        .expect("read blocked Zulip Settings target")
         .expect("blocked Zulip Settings");
     assert_eq!(blocked.desired_revision(), 4);
     assert_eq!(blocked.effective_revision(), 3);

@@ -5,22 +5,24 @@ use makosh_review_note_candidate_core::{
 };
 use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
-    PgPool, Row,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
 use crate::{
     CheckReviewNoteCandidateDecisionReplayV1, CompleteReviewNoteCandidateSubmissionV1,
-    DecideReviewNoteCandidateOperationV1, PersistReviewNoteCandidateMaterializationV1,
-    PersistReviewNoteCandidatePromotionResultV1, PersistedReviewNoteCandidateSubmissionV1,
-    RejectReviewNoteCandidateSubmissionV1, ReserveReviewNoteCandidateSubmissionOutcomeV1,
-    ReserveReviewNoteCandidateSubmissionV1, ReviewNoteCandidateDecisionOutcomeV1,
-    ReviewNoteCandidateInboxOutcomeV1, ReviewNoteCandidateOutboxRecordV1,
+    DecideReviewNoteCandidateOperationV1, ListReviewNoteCandidatesV1,
+    PersistReviewNoteCandidateMaterializationV1, PersistReviewNoteCandidatePromotionResultV1,
+    PersistedReviewNoteCandidateSubmissionV1, RejectReviewNoteCandidateSubmissionV1,
+    ReserveReviewNoteCandidateSubmissionOutcomeV1, ReserveReviewNoteCandidateSubmissionV1,
+    ReviewNoteCandidateDecisionOutcomeV1, ReviewNoteCandidateInboxOutcomeV1,
+    ReviewNoteCandidateOutboxRecordV1, ReviewNoteCandidatePageV1,
     ReviewNoteCandidatePersistenceErrorV1, ReviewNoteCandidateRealtimeTransitionV1,
     model::{
-        REVIEW_NOTE_CANDIDATE_OUTBOX_LIMIT_V1, REVIEW_NOTE_CANDIDATE_REALTIME_LIMIT_V1,
-        REVIEW_NOTE_CANDIDATE_RECOVERY_LIMIT_V1, decision_fingerprint, decision_replay_fingerprint,
-        nonzero, valid_blob, valid_cleanup, valid_identity, valid_outbox,
+        REVIEW_NOTE_CANDIDATE_MAX_PAGE_SIZE_V1, REVIEW_NOTE_CANDIDATE_OUTBOX_LIMIT_V1,
+        REVIEW_NOTE_CANDIDATE_REALTIME_LIMIT_V1, REVIEW_NOTE_CANDIDATE_RECOVERY_LIMIT_V1,
+        decision_fingerprint, decision_replay_fingerprint, nonzero, valid_blob, valid_cleanup,
+        valid_identity, valid_outbox,
     },
     row_codec::{
         SELECT_PENDING_PROMOTIONS, SELECT_RECOVERABLE_SUBMISSIONS, SELECT_REVIEW_BY_ID,
@@ -84,6 +86,9 @@ impl ReviewNoteCandidatePersistenceV1 {
     ) -> Result<ReserveReviewNoteCandidateSubmissionOutcomeV1, ReviewNoteCandidatePersistenceErrorV1>
     {
         validate_reservation(&input)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.review_note_candidate_submissions (
                logical_owner_id, submission_message_id, submission_envelope_sha256,
@@ -107,17 +112,20 @@ impl ReviewNoteCandidatePersistenceV1 {
         .bind(input.candidate_content.sha256.as_slice())
         .bind(&input.candidate_content.custody_transfer_source_proof)
         .bind(input.received_at_unix_millis)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected();
-        let persisted = self
-            .load_submission(&input.logical_owner_id, &input.submission_message_id)
-            .await?;
+        let persisted = load_submission_in_transaction(
+            &mut transaction,
+            &input.logical_owner_id,
+            &input.submission_message_id,
+        )
+        .await?;
         if !same_submission(&persisted, &input) {
             return Err(ReviewNoteCandidatePersistenceErrorV1::SubmissionConflict);
         }
-        if inserted == 1 {
+        let outcome = if inserted == 1 {
             Ok(ReserveReviewNoteCandidateSubmissionOutcomeV1::Reserved(
                 persisted,
             ))
@@ -125,7 +133,9 @@ impl ReviewNoteCandidatePersistenceV1 {
             Ok(ReserveReviewNoteCandidateSubmissionOutcomeV1::Existing(
                 persisted,
             ))
-        }
+        };
+        transaction.commit().await.map_err(storage_error)?;
+        outcome
     }
 
     pub async fn load_recoverable_submissions(
@@ -136,15 +146,18 @@ impl ReviewNoteCandidatePersistenceV1 {
         if !valid_identity(logical_owner_id) {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RECOVERABLE_SUBMISSIONS)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let submissions = sqlx::query(SELECT_RECOVERABLE_SUBMISSIONS)
             .bind(logical_owner_id)
             .bind(i64::from(REVIEW_NOTE_CANDIDATE_RECOVERY_LIMIT_V1))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
             .map_err(storage_error)?
             .into_iter()
             .map(submission_from_row)
-            .collect()
+            .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(submissions)
     }
 
     pub async fn persist_materialization(
@@ -159,7 +172,9 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let current = load_submission_for_update(
             &mut transaction,
             &input.logical_owner_id,
@@ -189,9 +204,14 @@ impl ReviewNoteCandidatePersistenceV1 {
         if affected != 1 {
             return Err(ReviewNoteCandidatePersistenceErrorV1::RevisionConflict);
         }
+        let persisted = load_submission_in_transaction(
+            &mut transaction,
+            &input.logical_owner_id,
+            &input.submission_message_id,
+        )
+        .await?;
         transaction.commit().await.map_err(storage_error)?;
-        self.load_submission(&input.logical_owner_id, &input.submission_message_id)
-            .await
+        Ok(persisted)
     }
 
     pub async fn complete_blob_cleanup(
@@ -208,6 +228,7 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.review_note_candidate_submissions
              SET cleanup_completed_at_unix_millis=$1
@@ -225,19 +246,24 @@ impl ReviewNoteCandidatePersistenceV1 {
         .bind(signed(materialization.declared_bytes)?)
         .bind(materialization.sha256.as_slice())
         .bind(&materialization.custody_proof)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected();
         if affected == 1 {
+            transaction.commit().await.map_err(storage_error)?;
             return Ok(());
         }
-        let current = self
-            .load_submission(logical_owner_id, submission_message_id)
-            .await?;
+        let current = load_submission_in_transaction(
+            &mut transaction,
+            logical_owner_id,
+            submission_message_id,
+        )
+        .await?;
         if current.materialization.as_ref() == Some(materialization)
             && current.cleanup_completed_at_unix_millis.is_some()
         {
+            transaction.commit().await.map_err(storage_error)?;
             Ok(())
         } else {
             Err(ReviewNoteCandidatePersistenceErrorV1::RevisionConflict)
@@ -258,7 +284,9 @@ impl ReviewNoteCandidatePersistenceV1 {
         }
         let review = create_review_note_candidate_v1(input.draft.clone())
             .map_err(|_| ReviewNoteCandidatePersistenceErrorV1::InvalidTransition)?;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let submission = load_submission_for_update(
             &mut transaction,
             &input.logical_owner_id,
@@ -269,8 +297,11 @@ impl ReviewNoteCandidatePersistenceV1 {
             let review_id = submission
                 .review_id
                 .ok_or(ReviewNoteCandidatePersistenceErrorV1::SubmissionConflict)?;
+            let review =
+                load_review_in_transaction(&mut transaction, &input.logical_owner_id, &review_id)
+                    .await?;
             transaction.commit().await.map_err(storage_error)?;
-            return self.load_review(&input.logical_owner_id, &review_id).await;
+            return Ok(review);
         }
         if submission.candidate_id != review.candidate_id
             || submission.candidate_digest != review.candidate_digest
@@ -319,7 +350,9 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let submission = load_submission_for_update(
             &mut transaction,
             &input.logical_owner_id,
@@ -364,14 +397,67 @@ impl ReviewNoteCandidatePersistenceV1 {
         if !valid_identity(logical_owner_id) || !nonzero(review_id) {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_REVIEW_BY_ID)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let review = sqlx::query(SELECT_REVIEW_BY_ID)
             .bind(logical_owner_id)
             .bind(review_id.as_slice())
-            .fetch_optional(&self.pool)
+            .fetch_optional(&mut *transaction)
             .await
             .map_err(storage_error)?
             .ok_or(ReviewNoteCandidatePersistenceErrorV1::NotFound)
-            .and_then(review_from_row)
+            .and_then(review_from_row)?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(review)
+    }
+
+    pub async fn list_reviews(
+        &self,
+        logical_owner_id: &str,
+        input: ListReviewNoteCandidatesV1,
+    ) -> Result<ReviewNoteCandidatePageV1, ReviewNoteCandidatePersistenceErrorV1> {
+        if !valid_identity(logical_owner_id)
+            || input.limit == 0
+            || input.limit > REVIEW_NOTE_CANDIDATE_MAX_PAGE_SIZE_V1
+            || input
+                .after_review_id
+                .is_some_and(|review_id| !nonzero(&review_id))
+        {
+            return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let rows = sqlx::query(
+            "SELECT logical_owner_id, review_id, candidate_id, candidate_digest,
+                    source_evidence_id, source_evidence_revision, title, excerpt,
+                    topic_hints, source_basis, confidence_basis_points, state, promotion_status,
+                    review_revision, decided_by_owner_device_id, decided_at_unix_seconds,
+                    decided_at_nanos, promoted_note_id, updated_at_unix_seconds, updated_at_nanos
+             FROM makosh_data.review_note_candidate_state
+             WHERE logical_owner_id=$1
+               AND ($2::BYTEA IS NULL OR review_id > $2)
+               AND ($3::SMALLINT IS NULL OR state=$3)
+             ORDER BY review_id ASC LIMIT $4",
+        )
+        .bind(logical_owner_id)
+        .bind(input.after_review_id.map(|value| value.to_vec()))
+        .bind(input.state.map(state_code))
+        .bind(i64::from(input.limit) + 1)
+        .fetch_all(&mut *transaction)
+        .await
+        .map_err(storage_error)?;
+        let mut reviews = rows
+            .into_iter()
+            .map(review_from_row)
+            .collect::<Result<Vec<_>, _>>()?;
+        let has_more = reviews.len() > usize::from(input.limit);
+        reviews.truncate(usize::from(input.limit));
+        let next_after_review_id = has_more
+            .then(|| reviews.last().map(|review| review.review_id))
+            .flatten();
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(ReviewNoteCandidatePageV1 {
+            reviews,
+            next_after_review_id,
+        })
     }
 
     pub async fn decide(
@@ -380,7 +466,9 @@ impl ReviewNoteCandidatePersistenceV1 {
     ) -> Result<ReviewNoteCandidateDecisionOutcomeV1, ReviewNoteCandidatePersistenceErrorV1> {
         validate_decision(&input)?;
         let fingerprint = decision_fingerprint(&input);
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         if let Some(row) = sqlx::query(
             "SELECT request_sha256, decision_fingerprint, review_id, result_review_revision
              FROM makosh_data.review_note_candidate_operations
@@ -402,11 +490,14 @@ impl ReviewNoteCandidatePersistenceV1 {
             {
                 return Err(ReviewNoteCandidatePersistenceErrorV1::OperationConflict);
             }
+            let review = load_review_in_transaction(
+                &mut transaction,
+                &input.logical_owner_id,
+                &input.review_id,
+            )
+            .await?;
             transaction.commit().await.map_err(storage_error)?;
-            return self
-                .load_review(&input.logical_owner_id, &input.review_id)
-                .await
-                .map(ReviewNoteCandidateDecisionOutcomeV1::Replayed);
+            return Ok(ReviewNoteCandidateDecisionOutcomeV1::Replayed(review));
         }
         let current =
             load_review_for_update(&mut transaction, &input.logical_owner_id, &input.review_id)
@@ -458,6 +549,9 @@ impl ReviewNoteCandidatePersistenceV1 {
     ) -> Result<Option<ReviewNoteCandidateV1>, ReviewNoteCandidatePersistenceErrorV1> {
         validate_decision_replay(input)?;
         let fingerprint = decision_replay_fingerprint(input);
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let Some(row) = sqlx::query(
             "SELECT request_sha256, decision_fingerprint, review_id
              FROM makosh_data.review_note_candidate_operations
@@ -465,10 +559,11 @@ impl ReviewNoteCandidatePersistenceV1 {
         )
         .bind(&input.logical_owner_id)
         .bind(input.operation_id.as_slice())
-        .fetch_optional(&self.pool)
+        .fetch_optional(&mut *transaction)
         .await
         .map_err(storage_error)?
         else {
+            transaction.commit().await.map_err(storage_error)?;
             return Ok(None);
         };
         let request_hash: Vec<u8> = row.try_get("request_sha256").map_err(invalid_row)?;
@@ -481,9 +576,11 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::OperationConflict);
         }
-        self.load_review(&input.logical_owner_id, &input.review_id)
-            .await
-            .map(Some)
+        let review =
+            load_review_in_transaction(&mut transaction, &input.logical_owner_id, &input.review_id)
+                .await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(Some(review))
     }
 
     pub async fn persist_promotion_result(
@@ -491,7 +588,9 @@ impl ReviewNoteCandidatePersistenceV1 {
         input: PersistReviewNoteCandidatePromotionResultV1,
     ) -> Result<ReviewNoteCandidateInboxOutcomeV1, ReviewNoteCandidatePersistenceErrorV1> {
         validate_promotion_result(&input)?;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&input.logical_owner_id)
+            .await?;
         let current =
             load_review_for_update(&mut transaction, &input.logical_owner_id, &input.review_id)
                 .await?;
@@ -559,15 +658,18 @@ impl ReviewNoteCandidatePersistenceV1 {
         if !valid_identity(logical_owner_id) {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_PENDING_PROMOTIONS)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let reviews = sqlx::query(SELECT_PENDING_PROMOTIONS)
             .bind(logical_owner_id)
             .bind(i64::from(REVIEW_NOTE_CANDIDATE_RECOVERY_LIMIT_V1))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
             .map_err(storage_error)?
             .into_iter()
             .map(review_from_row)
-            .collect()
+            .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(reviews)
     }
 
     pub async fn realtime_after(
@@ -583,7 +685,8 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let transitions = sqlx::query(
             "SELECT realtime_sequence, review_id, candidate_id, state,
                     promotion_status, review_revision, occurred_at_unix_millis
              FROM makosh_data.review_note_candidate_realtime
@@ -593,12 +696,14 @@ impl ReviewNoteCandidatePersistenceV1 {
         .bind(logical_owner_id)
         .bind(signed(after_sequence)?)
         .bind(i64::from(limit))
-        .fetch_all(&self.pool)
+        .fetch_all(&mut *transaction)
         .await
         .map_err(storage_error)?
         .into_iter()
         .map(realtime_from_row)
-        .collect()
+        .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(transitions)
     }
 
     pub async fn unpublished_outbox(
@@ -612,7 +717,8 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let records = sqlx::query(
             "SELECT message_id, envelope_sha256, envelope_bytes
              FROM makosh_data.review_note_candidate_outbox
              WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL
@@ -620,12 +726,14 @@ impl ReviewNoteCandidatePersistenceV1 {
         )
         .bind(logical_owner_id)
         .bind(i64::from(limit))
-        .fetch_all(&self.pool)
+        .fetch_all(&mut *transaction)
         .await
         .map_err(storage_error)?
         .into_iter()
         .map(outbox_from_row)
-        .collect()
+        .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(records)
     }
 
     pub async fn mark_outbox_published(
@@ -642,6 +750,7 @@ impl ReviewNoteCandidatePersistenceV1 {
         {
             return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.review_note_candidate_outbox
              SET published_at_unix_millis=$1
@@ -652,31 +761,62 @@ impl ReviewNoteCandidatePersistenceV1 {
         .bind(logical_owner_id)
         .bind(message_id.as_slice())
         .bind(envelope_sha256.as_slice())
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected();
         if affected != 1 {
             return Err(ReviewNoteCandidatePersistenceErrorV1::NotFound);
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(())
     }
 
-    async fn load_submission(
+    async fn begin_owner_transaction(
         &self,
         logical_owner_id: &str,
-        submission_message_id: &[u8; 16],
-    ) -> Result<PersistedReviewNoteCandidateSubmissionV1, ReviewNoteCandidatePersistenceErrorV1>
-    {
-        sqlx::query(SELECT_SUBMISSION_BY_MESSAGE_ID)
+    ) -> Result<Transaction<'_, Postgres>, ReviewNoteCandidatePersistenceErrorV1> {
+        if !valid_identity(logical_owner_id) {
+            return Err(ReviewNoteCandidatePersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
             .bind(logical_owner_id)
-            .bind(submission_message_id.as_slice())
-            .fetch_optional(&self.pool)
+            .execute(&mut *transaction)
             .await
-            .map_err(storage_error)?
-            .ok_or(ReviewNoteCandidatePersistenceErrorV1::NotFound)
-            .and_then(submission_from_row)
+            .map_err(storage_error)?;
+        Ok(transaction)
     }
+}
+
+async fn load_submission_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    submission_message_id: &[u8; 16],
+) -> Result<PersistedReviewNoteCandidateSubmissionV1, ReviewNoteCandidatePersistenceErrorV1> {
+    sqlx::query(SELECT_SUBMISSION_BY_MESSAGE_ID)
+        .bind(logical_owner_id)
+        .bind(submission_message_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .ok_or(ReviewNoteCandidatePersistenceErrorV1::NotFound)
+        .and_then(submission_from_row)
+}
+
+async fn load_review_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    review_id: &[u8; 16],
+) -> Result<ReviewNoteCandidateV1, ReviewNoteCandidatePersistenceErrorV1> {
+    sqlx::query(SELECT_REVIEW_BY_ID)
+        .bind(logical_owner_id)
+        .bind(review_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .ok_or(ReviewNoteCandidatePersistenceErrorV1::NotFound)
+        .and_then(review_from_row)
 }
 
 async fn load_submission_for_update(

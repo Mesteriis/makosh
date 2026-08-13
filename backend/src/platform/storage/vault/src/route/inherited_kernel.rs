@@ -38,6 +38,10 @@ impl InheritedKernelVaultRouteV2 {
         self.channel
     }
 
+    pub fn channel_mut(&mut self) -> &mut ManagedControlChannelV2<UnixStream> {
+        &mut self.channel
+    }
+
     pub fn route(
         &mut self,
         route: VaultCiphertextRouteV1,

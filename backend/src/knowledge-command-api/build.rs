@@ -19,4 +19,21 @@ fn main() {
         format!("pub const KNOWLEDGE_COMMAND_SCHEMA_SHA256_V1: [u8; 32] = {digest:?};\n"),
     )
     .expect("Knowledge command schema digest must be written");
+
+    let client_descriptor = output.join("knowledge-client-v1.bin");
+    prost_build::Config::new()
+        .file_descriptor_set_path(&client_descriptor)
+        .compile_protos(
+            &["proto/makosh/knowledge/client/v1/knowledge.proto"],
+            &["proto"],
+        )
+        .expect("Knowledge client protocol must compile");
+    let client_digest: [u8; 32] =
+        Sha256::digest(std::fs::read(&client_descriptor).expect("client descriptor must exist"))
+            .into();
+    std::fs::write(
+        output.join("knowledge_client_schema.rs"),
+        format!("pub const KNOWLEDGE_CLIENT_SCHEMA_SHA256_V1: [u8; 32] = {client_digest:?};\n"),
+    )
+    .expect("Knowledge client schema digest must be written");
 }

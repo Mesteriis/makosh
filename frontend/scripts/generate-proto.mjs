@@ -66,11 +66,51 @@ const speechTranscriptProtoRoot = join(
   'proto'
 )
 const mailProtoRoot = join(repoRoot, 'backend', 'src', 'mail-api', 'proto')
-const mailContactsSyncProtoRoot = join(
+const personsProtoRoot = join(repoRoot, 'backend', 'src', 'persons-api', 'proto')
+const tasksProtoRoot = join(repoRoot, 'backend', 'src', 'tasks-command-api', 'proto')
+const knowledgeProtoRoot = join(repoRoot, 'backend', 'src', 'knowledge-command-api', 'proto')
+const calendarProtoRoot = join(repoRoot, 'backend', 'src', 'calendar-api', 'proto')
+const organizationsProtoRoot = join(repoRoot, 'backend', 'src', 'organizations-api', 'proto')
+const documentsProtoRoot = join(repoRoot, 'backend', 'src', 'documents-api', 'proto')
+const relationshipsProtoRoot = join(repoRoot, 'backend', 'src', 'relationships-api', 'proto')
+const projectsProtoRoot = join(repoRoot, 'backend', 'src', 'projects-api', 'proto')
+const obligationsProtoRoot = join(repoRoot, 'backend', 'src', 'obligations-api', 'proto')
+const decisionsProtoRoot = join(repoRoot, 'backend', 'src', 'decisions-api', 'proto')
+const searchProtoRoot = join(repoRoot, 'backend', 'src', 'search-api', 'proto')
+const timelineProtoRoot = join(repoRoot, 'backend', 'src', 'timeline-api', 'proto')
+const graphProtoRoot = join(repoRoot, 'backend', 'src', 'graph-api', 'proto')
+const memoryProtoRoot = join(repoRoot, 'backend', 'src', 'memory-api', 'proto')
+const consistencyProtoRoot = join(repoRoot, 'backend', 'src', 'consistency-api', 'proto')
+const riskProtoRoot = join(repoRoot, 'backend', 'src', 'risk-api', 'proto')
+const zoomProtoRoot = join(repoRoot, 'backend', 'src', 'zoom-api', 'proto')
+const telemostProtoRoot = join(repoRoot, 'backend', 'src', 'telemost-api', 'proto')
+const reviewPersonMatchCandidateProtoRoot = join(
   repoRoot,
   'backend',
   'src',
-  'mail-contacts-sync-api',
+  'review-person-match-candidate-api',
+  'proto'
+)
+const reviewAttentionProtoRoot = join(repoRoot, 'backend', 'src', 'review-attention-api', 'proto')
+const reviewTaskCandidateProtoRoot = join(
+  repoRoot,
+  'backend',
+  'src',
+  'review-task-candidate-api',
+  'proto'
+)
+const reviewObligationCandidateProtoRoot = join(
+  repoRoot,
+  'backend',
+  'src',
+  'review-obligation-candidate-api',
+  'proto'
+)
+const reviewNoteCandidateProtoRoot = join(
+  repoRoot,
+  'backend',
+  'src',
+  'review-note-candidate-api',
   'proto'
 )
 const telegramProtoRoot = join(repoRoot, 'backend', 'src', 'telegram-api', 'proto')
@@ -82,7 +122,6 @@ const pluginPath = join(frontendRoot, 'node_modules', '.bin', 'protoc-gen-es')
 const protoFiles = [
   join(protoRoot, 'makosh', 'common', 'v1', 'common.proto'),
   join(protoRoot, 'makosh', 'events', 'v1', 'event_envelope.proto'),
-  join(protoRoot, 'makosh', 'signal_hub', 'v1', 'signal_hub.proto'),
   join(protoRoot, 'makosh', 'communications', 'v1', 'communications.proto'),
   join(communicationsQueryProtoRoot, 'makosh', 'communications', 'query', 'v1', 'query.proto'),
   join(
@@ -166,7 +205,36 @@ const protoFiles = [
   join(mailProtoRoot, 'makosh', 'mail', 'operational', 'v1', 'client.proto'),
   join(mailProtoRoot, 'makosh', 'mail', 'sync_health', 'v1', 'client.proto'),
   join(mailProtoRoot, 'makosh', 'mail', 'portability', 'v1', 'portability.proto'),
-  join(mailContactsSyncProtoRoot, 'makosh', 'mail_contacts_sync', 'v1', 'sync.proto'),
+  join(personsProtoRoot, 'makosh', 'persons', 'v1', 'persons.proto'),
+  join(tasksProtoRoot, 'makosh', 'tasks', 'client', 'v1', 'tasks.proto'),
+  join(knowledgeProtoRoot, 'makosh', 'knowledge', 'client', 'v1', 'knowledge.proto'),
+  join(calendarProtoRoot, 'makosh', 'calendar', 'client', 'v1', 'calendar.proto'),
+  join(organizationsProtoRoot, 'makosh', 'organizations', 'client', 'v1', 'organizations.proto'),
+  join(documentsProtoRoot, 'makosh', 'documents', 'client', 'v1', 'documents.proto'),
+  join(relationshipsProtoRoot, 'makosh', 'relationships', 'client', 'v1', 'relationships.proto'),
+  join(projectsProtoRoot, 'makosh', 'projects', 'client', 'v1', 'projects.proto'),
+  join(obligationsProtoRoot, 'makosh', 'obligations', 'client', 'v1', 'obligations.proto'),
+  join(decisionsProtoRoot, 'makosh', 'decisions', 'client', 'v1', 'decisions.proto'),
+  join(searchProtoRoot, 'makosh', 'search', 'v1', 'search.proto'),
+  join(timelineProtoRoot, 'makosh', 'timeline', 'v1', 'timeline.proto'),
+  join(graphProtoRoot, 'makosh', 'graph', 'v1', 'graph.proto'),
+  join(memoryProtoRoot, 'makosh', 'memory', 'v1', 'memory.proto'),
+  join(consistencyProtoRoot, 'makosh', 'consistency', 'v1', 'consistency.proto'),
+  join(riskProtoRoot, 'makosh', 'risk', 'v1', 'risk.proto'),
+  join(zoomProtoRoot, 'makosh', 'zoom', 'v1', 'zoom.proto'),
+  join(telemostProtoRoot, 'makosh', 'telemost', 'v1', 'telemost.proto'),
+  join(reviewAttentionProtoRoot, 'makosh', 'review', 'attention', 'client', 'v1', 'client.proto'),
+  join(reviewTaskCandidateProtoRoot, 'makosh', 'review', 'task_candidate', 'v1', 'task_candidate.proto'),
+  join(reviewObligationCandidateProtoRoot, 'makosh', 'review', 'obligation_candidate', 'v1', 'obligation_candidate.proto'),
+  join(reviewNoteCandidateProtoRoot, 'makosh', 'review', 'note_candidate', 'v1', 'note_candidate.proto'),
+  join(
+    reviewPersonMatchCandidateProtoRoot,
+    'makosh',
+    'review',
+    'person_match_candidate',
+    'v1',
+    'person_match_candidate.proto'
+  ),
   join(telegramProtoRoot, 'makosh', 'telegram', 'v1', 'client.proto'),
   join(telegramAutomationProtoRoot, 'makosh', 'telegram', 'automation', 'v1', 'automation.proto'),
   join(whatsappProtoRoot, 'makosh', 'whatsapp', 'v1', 'client.proto'),
@@ -201,7 +269,29 @@ const result = spawnSync(
     `-I${callTranscriptionProtoRoot}`,
     `-I${speechTranscriptProtoRoot}`,
     `-I${mailProtoRoot}`,
-    `-I${mailContactsSyncProtoRoot}`,
+    `-I${personsProtoRoot}`,
+    `-I${tasksProtoRoot}`,
+    `-I${knowledgeProtoRoot}`,
+    `-I${calendarProtoRoot}`,
+    `-I${organizationsProtoRoot}`,
+    `-I${documentsProtoRoot}`,
+    `-I${relationshipsProtoRoot}`,
+    `-I${projectsProtoRoot}`,
+    `-I${obligationsProtoRoot}`,
+    `-I${decisionsProtoRoot}`,
+    `-I${searchProtoRoot}`,
+    `-I${timelineProtoRoot}`,
+    `-I${graphProtoRoot}`,
+    `-I${memoryProtoRoot}`,
+    `-I${consistencyProtoRoot}`,
+    `-I${riskProtoRoot}`,
+    `-I${zoomProtoRoot}`,
+    `-I${telemostProtoRoot}`,
+    `-I${reviewAttentionProtoRoot}`,
+    `-I${reviewTaskCandidateProtoRoot}`,
+    `-I${reviewObligationCandidateProtoRoot}`,
+    `-I${reviewNoteCandidateProtoRoot}`,
+    `-I${reviewPersonMatchCandidateProtoRoot}`,
     `-I${telegramProtoRoot}`,
     `-I${telegramAutomationProtoRoot}`,
     `-I${whatsappProtoRoot}`,

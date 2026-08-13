@@ -102,7 +102,9 @@ impl ReviewAttentionPersistenceV1 {
     ) -> Result<ReviewAttentionPersistenceOutcomeV1, ReviewAttentionPersistenceErrorV1> {
         validate_operation(&operation)?;
         let request_sha256 = request_sha256(&operation);
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&operation.logical_owner_id)
+            .await?;
         let reserved = sqlx::query(
             "INSERT INTO makosh_data.review_attention_operations (
                logical_owner_id, operation_id, request_sha256, expected_revision,
@@ -173,6 +175,30 @@ impl ReviewAttentionPersistenceV1 {
             replayed: false,
         })
     }
+
+    pub(crate) async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<Transaction<'_, Postgres>, ReviewAttentionPersistenceErrorV1> {
+        if !valid_owner(logical_owner_id) {
+            return Err(ReviewAttentionPersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage_error)?;
+        Ok(transaction)
+    }
+}
+
+pub(crate) fn valid_owner(owner: &str) -> bool {
+    !owner.is_empty()
+        && owner.len() <= 128
+        && owner.bytes().all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'.' | b'_' | b'-')
+        })
 }
 
 fn report_developer_database_error(stage: &str, error: &sqlx::Error) {

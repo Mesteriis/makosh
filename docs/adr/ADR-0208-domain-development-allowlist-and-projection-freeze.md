@@ -4,6 +4,17 @@
 Дата: 2026-07-15
 Состояние реализации: Не реализовано
 
+Часть allowlist о `contacts` заменена
+[ADR-0402](ADR-0402-persons-canonical-owner-and-contacts-cutover-boundary.md):
+новая разработка разрешена для `persons`, а существующий Contacts contour
+остаётся только закрытым exact production inventory до atomic cutover.
+
+Freeze для `relationships`, `projects`, `knowledge`, `review` и `obligations`
+последовательно снят отдельными superseding ADR. Для Obligations действующим
+решением является
+[ADR-0406](ADR-0406-obligations-owner-review-and-promotion-boundary.md);
+`decisions` остаётся единственным заблокированным доменом.
+
 Зависит от:
 
 - [ADR-0200: Модульная модель и изоляция runtime](ADR-0200-clean-room-module-model-and-runtime-isolation.md);

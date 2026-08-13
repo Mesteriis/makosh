@@ -25,7 +25,8 @@ use makosh_telegram_calls_persistence::{
 };
 use makosh_telegram_persistence::{
     TELEGRAM_DELIVERY_INTENT_STORAGE_REVISION_V1, TELEGRAM_DELIVERY_ROUTE_STORAGE_REVISION_V1,
-    telegram_delivery_intent_storage_migration_v1, telegram_delivery_route_storage_migration_v1,
+    TELEGRAM_OWNER_RLS_STORAGE_REVISION_V1, telegram_delivery_intent_storage_migration_v1,
+    telegram_delivery_route_storage_migration_v1, telegram_owner_rls_storage_migration_v1,
     telegram_storage_bundle_v1,
 };
 use makosh_telegram_runtime::admission::telegram_module_descriptor_v1;
@@ -48,6 +49,7 @@ pub const TELEGRAM_STORAGE_BUNDLE_REVISION_V6: u32 = TELEGRAM_CALLS_STORAGE_REVI
 pub const TELEGRAM_STORAGE_BUNDLE_REVISION_V7: u32 = TELEGRAM_DELIVERY_ROUTE_STORAGE_REVISION_V1;
 pub const TELEGRAM_STORAGE_BUNDLE_REVISION_V8: u32 = TELEGRAM_DELIVERY_INTENT_STORAGE_REVISION_V1;
 pub const TELEGRAM_STORAGE_BUNDLE_REVISION_V9: u32 = TELEGRAM_CALLS_STORAGE_REVISION_V5;
+pub const TELEGRAM_STORAGE_BUNDLE_REVISION_V10: u32 = TELEGRAM_OWNER_RLS_STORAGE_REVISION_V1;
 pub const TELEGRAM_DESCRIPTOR_FILE: &str = "telegram.runtime.descriptor.pb";
 pub const TELEGRAM_SETTINGS_FILE: &str = "telegram.runtime.settings.pb";
 pub const TELEGRAM_STORAGE_BUNDLE_FILE: &str = "telegram.storage.bundle.pb";
@@ -215,6 +217,14 @@ pub fn telegram_storage_bundle_with_call_evidence_v9() -> StorageBundleV1 {
     bundle
 }
 
+#[must_use]
+pub fn telegram_storage_bundle_with_owner_rls_v10() -> StorageBundleV1 {
+    let mut bundle = telegram_storage_bundle_with_call_evidence_v9();
+    bundle.revision = TELEGRAM_STORAGE_BUNDLE_REVISION_V10;
+    bundle.steps.push(telegram_owner_rls_storage_migration_v1());
+    bundle
+}
+
 /// Materializes one unsigned, exact Telegram release artifact set.
 ///
 /// The output directory must be an absolute path that does not exist. Runtime
@@ -237,7 +247,7 @@ pub fn materialize_telegram_release_assembly_v1(
 
     let descriptor = telegram_module_descriptor_v1(build_id);
     let settings_schema = telegram_settings_schema_v1();
-    let storage_bundle = telegram_storage_bundle_with_call_evidence_v9();
+    let storage_bundle = telegram_storage_bundle_with_owner_rls_v10();
     if validate_descriptor_v1(&descriptor).is_err()
         || validate_settings_schema_v1(&settings_schema).is_err()
         || validate_storage_bundle(&storage_bundle).is_err()
@@ -446,7 +456,7 @@ mod tests {
         assert_eq!(descriptor.module_id, TELEGRAM_ASSEMBLY_MODULE_ID);
         assert_eq!(settings.major, 1);
         assert_eq!(storage.owner_id, TELEGRAM_ASSEMBLY_OWNER_ID);
-        assert_eq!(storage.revision, TELEGRAM_STORAGE_BUNDLE_REVISION_V9);
+        assert_eq!(storage.revision, TELEGRAM_STORAGE_BUNDLE_REVISION_V10);
         assert_eq!(
             storage
                 .steps
@@ -462,7 +472,8 @@ mod tests {
                 "telegram_call_realtime_backfill_job",
                 "telegram_delivery_route_locators",
                 "telegram_delivery_intent_inbox_jobs_and_result_outbox",
-                "telegram_call_evidence_outbox"
+                "telegram_call_evidence_outbox",
+                "telegram_owner_scope_and_rls"
             ]
         );
         assert_eq!(

@@ -5,7 +5,7 @@ use makosh_ai_contracts::wire::{
 use makosh_ai_inference_core::{AiInferenceRunStateV1, AiInferenceRunV1};
 use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
-    PgPool, Row,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
 };
 
@@ -21,6 +21,22 @@ pub struct AiInferencePersistenceV1 {
 }
 
 impl AiInferencePersistenceV1 {
+    pub(crate) async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<Transaction<'_, Postgres>, AiInferencePersistenceErrorV1> {
+        if !valid_owner(logical_owner_id) {
+            return Err(AiInferencePersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage_error)?;
+        Ok(transaction)
+    }
+
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,
@@ -79,6 +95,9 @@ impl AiInferencePersistenceV1 {
             .source
             .as_ref()
             .ok_or(AiInferencePersistenceErrorV1::InvalidInput)?;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.ai_inference_runs (
                logical_owner_id, run_id, request_digest, context_id,
@@ -116,16 +135,19 @@ impl AiInferencePersistenceV1 {
         .bind(i32::try_from(request.egress_policy_revision).map_err(|_| invalid_input())?)
         .bind(signed(run.revision)?)
         .bind(run_state_code(run.state))
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected()
             == 1;
 
-        let mut persisted = self
-            .load_run(&request.logical_owner_id, id16(&request.run_id)?)
-            .await?
-            .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
+        let mut persisted = load_run_in_transaction(
+            &mut transaction,
+            &request.logical_owner_id,
+            id16(&request.run_id)?,
+        )
+        .await?
+        .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
         if !inserted && persisted.run.request != run.request {
             if !same_semantic_request(&persisted.run.request, &run.request) {
                 return Err(AiInferencePersistenceErrorV1::RequestConflict);
@@ -155,19 +177,23 @@ impl AiInferencePersistenceV1 {
                         .ok_or(AiInferencePersistenceErrorV1::InvalidInput)?
                         .request_digest,
                 )
-                .execute(&self.pool)
+                .execute(&mut *transaction)
                 .await
                 .map_err(storage_error)?
                 .rows_affected();
                 if updated != 1 {
                     return Err(AiInferencePersistenceErrorV1::RevisionConflict);
                 }
-                persisted = self
-                    .load_run(&request.logical_owner_id, id16(&request.run_id)?)
-                    .await?
-                    .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
+                persisted = load_run_in_transaction(
+                    &mut transaction,
+                    &request.logical_owner_id,
+                    id16(&request.run_id)?,
+                )
+                .await?
+                .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
             }
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(AiInferencePersistenceOutcomeV1 {
             persisted,
             replayed: !inserted,
@@ -182,14 +208,10 @@ impl AiInferencePersistenceV1 {
         if !valid_owner(logical_owner_id) || run_id == [0; 16] {
             return Err(AiInferencePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RUN)
-            .bind(logical_owner_id)
-            .bind(run_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage_error)?
-            .map(|row| persisted_from_row(&row))
-            .transpose()
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted = load_run_in_transaction(&mut transaction, logical_owner_id, run_id).await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn load_recoverable_runs(
@@ -201,15 +223,16 @@ impl AiInferencePersistenceV1 {
         {
             return Err(AiInferencePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RECOVERABLE_RUNS)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let rows = sqlx::query(SELECT_RECOVERABLE_RUNS)
             .bind(logical_owner_id)
             .bind(i64::from(limit))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
-            .map_err(storage_error)?
-            .iter()
-            .map(persisted_from_row)
-            .collect()
+            .map_err(storage_error)?;
+        let persisted = rows.iter().map(persisted_from_row).collect();
+        transaction.commit().await.map_err(storage_error)?;
+        persisted
     }
 
     pub async fn persist_transition(
@@ -218,7 +241,9 @@ impl AiInferencePersistenceV1 {
     ) -> Result<PersistedAiInferenceRunV1, AiInferencePersistenceErrorV1> {
         validate_run(&transition.next_run)?;
         let request = &transition.next_run.request;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let current_row = sqlx::query(SELECT_RUN_FOR_UPDATE)
             .bind(&request.logical_owner_id)
             .bind(&request.run_id)
@@ -279,6 +304,21 @@ impl AiInferencePersistenceV1 {
             selected_provider_settings_revision: selected_revision,
         })
     }
+}
+
+async fn load_run_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    run_id: [u8; 16],
+) -> Result<Option<PersistedAiInferenceRunV1>, AiInferencePersistenceErrorV1> {
+    sqlx::query(SELECT_RUN)
+        .bind(logical_owner_id)
+        .bind(run_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .map(|row| persisted_from_row(&row))
+        .transpose()
 }
 
 fn same_semantic_request(

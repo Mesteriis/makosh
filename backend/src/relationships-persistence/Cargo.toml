@@ -1,0 +1,19 @@
+[package]
+name = "makosh-relationships-persistence"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "relationships"
+surface = "persistence"
+
+[dependencies]
+makosh-relationships-core = { path = "../relationships-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+sha2 = { version = "=0.11.0", default-features = false }
+sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

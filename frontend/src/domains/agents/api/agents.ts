@@ -7,8 +7,7 @@ import type {
 	AiRunListResponse,
 	AiAnswerRequest,
 	AiMeetingPrepRequest,
-	AiTaskCandidateRefreshRequest,
-	OwnerPersonaResponse
+	AiTaskCandidateRefreshRequest
 } from '../types/agents'
 
 export async function fetchAiStatus(): Promise<AiStatus> {
@@ -31,13 +30,6 @@ export async function fetchAiRun(runId: string): Promise<AiRun> {
 	return ApiClient.instance.get<AiRun>(
 		`/api/v1/ai/runs/${encodeURIComponent(runId)}`,
 		'AI run request failed'
-	)
-}
-
-export async function fetchOwnerPersona(): Promise<OwnerPersonaResponse> {
-	return ApiClient.instance.get<OwnerPersonaResponse>(
-		'/api/v1/personas/owner',
-		'Owner persona request failed'
 	)
 }
 

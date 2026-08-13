@@ -2,6 +2,7 @@
 
 mod admission;
 mod blob;
+mod client;
 mod command;
 mod event_outbox;
 mod managed_runtime;
@@ -10,6 +11,7 @@ pub use admission::{
     KNOWLEDGE_STORAGE_CAPABILITY_ID_V1, knowledge_module_descriptor_v1,
     knowledge_settings_schema_bytes_v1, knowledge_settings_schema_v1,
 };
+pub use client::dispatch_knowledge_client_request_v1;
 pub use managed_runtime::{
     KnowledgeManagedRuntimeErrorV1, KnowledgeManagedRuntimeV1, KnowledgeRuntimeAdmissionV1,
 };

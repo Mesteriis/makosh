@@ -200,6 +200,19 @@ describe('Макошь UI Storybook visual coverage boundary', () => {
 		expect(packageJson).toContain('test-storybook --url http://localhost:6006')
 	})
 
+	it('keeps every Storybook visual baseline with the canonical PNG signature', () => {
+		const snapshotsDir = fileURLToPath(
+			new URL('../../../tests/visual/storybook.visual.spec.ts-snapshots/', import.meta.url)
+		)
+		const pngFiles = readdirSync(snapshotsDir).filter((fileName) => fileName.endsWith('.png'))
+
+		for (const fileName of pngFiles) {
+			expect(readFileSync(join(snapshotsDir, fileName)).subarray(0, 8).toString('hex')).toBe(
+				'89504e470d0a1a0a'
+			)
+		}
+	})
+
 	it('keeps vendor UI primitives behind the Макошь UI kit boundary', () => {
 		const frontendRoot = fileURLToPath(new URL('../../../', import.meta.url))
 		const checkedRoots = ['src', 'stories', '.storybook']

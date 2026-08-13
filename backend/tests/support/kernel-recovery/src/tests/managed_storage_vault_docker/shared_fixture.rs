@@ -42,6 +42,130 @@ pub(super) fn start_vault(
         .expect("start signed Vault")
 }
 
+struct KernelStorageCredentialObserverRouteV1 {
+    handler: KernelManagedVaultRouteHandler,
+    storage_expectation: ManagedRuntimeExpectation,
+}
+
+impl crate::vault::StorageVaultRoutePortV1 for KernelStorageCredentialObserverRouteV1 {
+    #[allow(clippy::manual_async_fn)]
+    fn route_vault_ciphertext(
+        &mut self,
+        route: makosh_runtime_protocol::v1::VaultCiphertextRouteV1,
+    ) -> impl std::future::Future<
+        Output = Result<
+            makosh_runtime_protocol::v1::VaultCiphertextResponseV1,
+            crate::vault::StorageVaultRouteFailureV1,
+        >,
+    > + Send {
+        async move {
+            self.handler
+                .route_vault_ciphertext(&self.storage_expectation, route)
+                .map_err(|_| crate::vault::StorageVaultRouteFailureV1::Rejected)
+        }
+    }
+}
+
+pub(super) fn runtime_storage_credential_for_registration_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &Arc<SqliteControlStore>,
+    data: &Path,
+    registration_id: &str,
+    storage_capability_id: &str,
+) -> zeroize::Zeroizing<Vec<u8>> {
+    let platform_binding = store
+        .platform_storage_binding(registration_id, storage_capability_id)
+        .expect("read target Storage binding")
+        .filter(|binding| {
+            binding.state() == makosh_kernel_control_store::PlatformStorageBindingStateV1::Active
+        })
+        .expect("active target Storage binding");
+    let topology = crate::platform::storage::topology::current(store)
+        .expect("current target Storage topology");
+    let runtime_topology = crate::platform::storage::topology::to_runtime(&topology)
+        .expect("typed target Storage topology");
+    let binding_message = crate::platform::storage::topology::to_runtime_binding(
+        &runtime_topology,
+        &platform_binding,
+    )
+    .expect("typed target Storage binding");
+    let binding =
+        makosh_storage_protocol::validation::storage_binding_from_message(&binding_message)
+            .expect("validated target Storage binding");
+    let vault = vault_status::read_current(store, &supervisor.relay_port())
+        .expect("current Vault route context");
+    let context = crate::vault::StorageVaultRouteContextV1::new(
+        store.snapshot().instance_id().to_owned(),
+        vault.runtime_generation(),
+        *vault.hpke_public_key_x25519(),
+    )
+    .expect("typed Vault route context");
+    let storage_binding = store
+        .platform_managed_process_binding(crate::platform::storage::binding::STORAGE_PROCESS_ID)
+        .expect("read Storage process binding")
+        .expect("bound Storage process");
+    let storage_launch = store
+        .platform_managed_process_launch(crate::platform::storage::binding::STORAGE_PROCESS_ID)
+        .expect("read Storage process launch")
+        .expect("launched Storage process");
+    let storage_expectation = ManagedRuntimeExpectation::from_platform_fenced_launch(
+        crate::platform::storage::binding::STORAGE_PROCESS_ID,
+        "storage",
+        &storage_binding,
+        &storage_launch,
+    )
+    .expect("current Storage process expectation");
+    let route = KernelStorageCredentialObserverRouteV1 {
+        handler: KernelManagedVaultRouteHandler::new(
+            Arc::clone(store),
+            data,
+            Arc::new(supervisor.relay_port()),
+        ),
+        storage_expectation,
+    };
+    let mut adapter = crate::vault::StorageVaultLeaseAdapterV1::new(route, context);
+    let lease_id = crate::vault::complete_immediately(adapter.issue_runtime_credential(&binding))
+        .expect("synchronous Vault credential observer")
+        .expect("issue exact target runtime credential lease");
+    let credential =
+        crate::vault::complete_immediately(adapter.resolve_runtime_credential(&binding, lease_id))
+            .expect("synchronous Vault credential observer")
+            .expect("resolve exact target runtime Storage credential");
+    assert_eq!(
+        credential.len(),
+        64,
+        "runtime credential has canonical length"
+    );
+    credential
+}
+
+pub(super) async fn authenticated_storage_admin_pool_v1() -> sqlx::PgPool {
+    let password = zeroize::Zeroizing::new(
+        std::fs::read_to_string(required(
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+        ))
+        .expect("read disposable PostgreSQL credential")
+        .trim()
+        .to_owned(),
+    );
+    let options = sqlx::postgres::PgConnectOptions::new()
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .port(
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+                .parse()
+                .expect("valid PostgreSQL port"),
+        )
+        .username("makosh_postgres_admin")
+        .password(password.as_str())
+        .database("makosh_storage_authenticated")
+        .ssl_mode(sqlx::postgres::PgSslMode::Disable);
+    sqlx::postgres::PgPoolOptions::new()
+        .max_connections(1)
+        .connect_with(options)
+        .await
+        .expect("connect authenticated Storage conformance database")
+}
+
 pub(super) fn start_storage(
     supervisor: &ManagedRuntimeSupervisor,
     store: &SqliteControlStore,

@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package makosh.obligations.client.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+enum ObligationStateV1 {
+  OBLIGATION_STATE_UNSPECIFIED = 0;
+  OBLIGATION_STATE_OPEN = 1;
+  OBLIGATION_STATE_FULFILLED = 2;
+  OBLIGATION_STATE_WAIVED = 3;
+  OBLIGATION_STATE_BREACHED = 4;
+  OBLIGATION_STATE_CANCELLED = 5;
+}
+
+// Public evidence identity only. Content and provider locators remain with the
+// source owner and Blob custody boundary.
+message ObligationEvidenceLinkV1 {
+  bytes evidence_link_id = 1;
+  string evidence_owner_id = 2;
+  bytes evidence_record_id = 3;
+  uint64 evidence_revision = 4;
+  bytes evidence_digest = 5;
+}
+
+message ObligationSummaryV1 {
+  bytes obligation_id = 1;
+  string logical_owner_id = 2;
+  string statement = 3;
+  optional string condition = 4;
+  optional TimestampV1 due_at = 5;
+  ObligationStateV1 state = 6;
+  uint64 obligation_revision = 7;
+  bytes obligated_party_id = 8;
+  optional bytes beneficiary_party_id = 9;
+  TimestampV1 created_at = 10;
+  TimestampV1 updated_at = 11;
+}
+
+message UpdateObligationRequestV1 {
+  bytes operation_id = 1;
+  bytes obligation_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_obligation_revision = 4;
+  optional string statement = 5;
+  optional string condition = 6;
+  bool clear_condition = 7;
+  optional TimestampV1 due_at = 8;
+  bool clear_due_at = 9;
+  optional bytes obligated_party_id = 10;
+  optional bytes beneficiary_party_id = 11;
+  bool clear_beneficiary_party_id = 12;
+  TimestampV1 updated_at = 13;
+}
+
+message SetObligationStateRequestV1 {
+  bytes operation_id = 1;
+  bytes obligation_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_obligation_revision = 4;
+  ObligationStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddObligationEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes obligation_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_obligation_revision = 4;
+  ObligationEvidenceLinkV1 evidence = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message RemoveObligationEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes obligation_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_obligation_revision = 4;
+  bytes evidence_link_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message ObligationMutationResultV1 {
+  bytes operation_id = 1;
+  ObligationSummaryV1 obligation = 2;
+}
+
+message GetObligationRequestV1 {
+  string logical_owner_id = 1;
+  bytes obligation_id = 2;
+}
+
+message ListObligationsRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_obligation_id = 2;
+  uint32 limit = 3;
+}
+
+message ListObligationsResultV1 {
+  repeated ObligationSummaryV1 obligations = 1;
+  bytes next_after_obligation_id = 2;
+}
+
+message ListObligationEvidenceRequestV1 {
+  string logical_owner_id = 1;
+  bytes obligation_id = 2;
+  bytes after_evidence_link_id = 3;
+  uint32 limit = 4;
+}
+
+message ListObligationEvidenceResultV1 {
+  repeated ObligationEvidenceLinkV1 evidence_links = 1;
+  bytes next_after_evidence_link_id = 2;
+}
+
+// Public lifecycle event deliberately excludes owner-authored content, party
+// identities and evidence identities.
+message ObligationChangedV1 {
+  bytes event_id = 1;
+  bytes obligation_id = 2;
+  string logical_owner_id = 3;
+  uint64 obligation_revision = 4;
+  ObligationStateV1 state = 5;
+  TimestampV1 occurred_at = 6;
+}
+
+service ObligationsCommandService {
+  rpc Update(UpdateObligationRequestV1) returns (ObligationMutationResultV1);
+  rpc SetState(SetObligationStateRequestV1) returns (ObligationMutationResultV1);
+  rpc AddEvidence(AddObligationEvidenceRequestV1) returns (ObligationMutationResultV1);
+  rpc RemoveEvidence(RemoveObligationEvidenceRequestV1) returns (ObligationMutationResultV1);
+}
+
+service ObligationsQueryService {
+  rpc Get(GetObligationRequestV1) returns (ObligationSummaryV1);
+  rpc List(ListObligationsRequestV1) returns (ListObligationsResultV1);
+  rpc ListEvidence(ListObligationEvidenceRequestV1)
+      returns (ListObligationEvidenceResultV1);
+}

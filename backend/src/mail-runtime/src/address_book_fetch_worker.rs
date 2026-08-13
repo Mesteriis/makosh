@@ -37,18 +37,18 @@ pub enum MailAddressBookFetchWorkerErrorV1 {
     Envelope,
 }
 
-struct ProviderPageV1 {
-    provider_kind: MailAddressBookProviderKindV1,
-    entries: Vec<ProviderEntryV1>,
-    next_cursor: Option<Vec<u8>>,
+pub(crate) struct ProviderPageV1 {
+    pub(crate) provider_kind: MailAddressBookProviderKindV1,
+    pub(crate) entries: Vec<ProviderEntryV1>,
+    pub(crate) next_cursor: Option<Vec<u8>>,
 }
 
-struct ProviderEntryV1 {
-    provider_entry_id: String,
-    provider_etag: Option<String>,
-    display_name: String,
-    email_addresses: Vec<String>,
-    phone_numbers: Vec<String>,
+pub(crate) struct ProviderEntryV1 {
+    pub(crate) provider_entry_id: String,
+    pub(crate) provider_etag: Option<String>,
+    pub(crate) display_name: String,
+    pub(crate) email_addresses: Vec<String>,
+    pub(crate) phone_numbers: Vec<String>,
 }
 
 pub async fn process_next_mail_address_book_fetch_v1(
@@ -113,25 +113,50 @@ async fn fetch_provider_page(
     runtime: &mut MailAdmittedRuntime,
     job: &PendingMailAddressBookFetchV1,
 ) -> Result<ProviderPageV1, MailAddressBookRejectCodeV1> {
+    fetch_provider_person_source_page_v1(
+        runtime,
+        &job.admission.account_id,
+        job.admission.continuation_cursor.as_deref(),
+        job.admission.page_size,
+    )
+    .await
+}
+
+pub(crate) async fn fetch_provider_person_source_page_v1(
+    runtime: &mut MailAdmittedRuntime,
+    connection_id: &str,
+    provider_cursor: Option<&[u8]>,
+    page_size: u32,
+) -> Result<ProviderPageV1, MailAddressBookRejectCodeV1> {
+    if runtime.select_account(connection_id).is_err() || !runtime.provider_io_permitted() {
+        return Err(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeAccountUnavailable);
+    }
     match runtime.address_book.provider {
-        MailAddressBookProviderV1::GooglePeople => fetch_google_page(runtime, job).await,
-        MailAddressBookProviderV1::IcloudCardDav => fetch_carddav_page(runtime, job).await,
+        MailAddressBookProviderV1::GooglePeople => {
+            fetch_google_person_source_page(runtime, connection_id, provider_cursor, page_size)
+                .await
+        }
+        MailAddressBookProviderV1::IcloudCardDav => {
+            fetch_carddav_person_source_page(runtime, provider_cursor, page_size).await
+        }
         MailAddressBookProviderV1::None => {
             Err(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeAccountUnavailable)
         }
     }
 }
 
-async fn fetch_google_page(
+async fn fetch_google_person_source_page(
     runtime: &mut MailAdmittedRuntime,
-    job: &PendingMailAddressBookFetchV1,
+    connection_id: &str,
+    provider_cursor: Option<&[u8]>,
+    page_size: u32,
 ) -> Result<ProviderPageV1, MailAddressBookRejectCodeV1> {
     if !matches!(runtime.account.inbound, MailInboundTransportV1::Gmail(_)) {
         return Err(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeAccountUnavailable);
     }
     let binding = runtime
         .durable
-        .gmail_oauth_credential_binding(&job.admission.account_id)
+        .gmail_oauth_credential_binding(connection_id)
         .await
         .map_err(|_| MailAddressBookRejectCodeV1::MailAddressBookRejectCodeProviderUnavailable)?
         .ok_or(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeCredentialUnavailable)?;
@@ -144,8 +169,8 @@ async fn fetch_google_page(
         .map_err(map_bootstrap_error)?;
     let token = std::str::from_utf8(&token)
         .map_err(|_| MailAddressBookRejectCodeV1::MailAddressBookRejectCodeCredentialUnavailable)?;
-    let cursor = decode_google_cursor(job.admission.continuation_cursor.as_deref())?;
-    let page_size = u16::try_from(job.admission.page_size)
+    let cursor = decode_google_cursor(provider_cursor)?;
+    let page_size = u16::try_from(page_size)
         .map_err(|_| MailAddressBookRejectCodeV1::MailAddressBookRejectCodeInvalidRequest)?;
     let endpoint = runtime
         .address_book
@@ -168,9 +193,10 @@ async fn fetch_google_page(
     })
 }
 
-async fn fetch_carddav_page(
+async fn fetch_carddav_person_source_page(
     runtime: &MailAdmittedRuntime,
-    job: &PendingMailAddressBookFetchV1,
+    provider_cursor: Option<&[u8]>,
+    page_size: u32,
 ) -> Result<ProviderPageV1, MailAddressBookRejectCodeV1> {
     if !matches!(runtime.account.inbound, MailInboundTransportV1::Imap(_)) {
         return Err(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeAccountUnavailable);
@@ -189,11 +215,11 @@ async fn fetch_carddav_page(
         .await
         .map_err(map_carddav_error)?;
     contacts.sort_by(|left, right| left.href.cmp(&right.href));
-    let offset = decode_carddav_cursor(job.admission.continuation_cursor.as_deref())?;
+    let offset = decode_carddav_cursor(provider_cursor)?;
     if offset > contacts.len() {
         return Err(MailAddressBookRejectCodeV1::MailAddressBookRejectCodeInvalidRequest);
     }
-    let page_size = usize::try_from(job.admission.page_size)
+    let page_size = usize::try_from(page_size)
         .map_err(|_| MailAddressBookRejectCodeV1::MailAddressBookRejectCodeInvalidRequest)?;
     let total = contacts.len();
     let end = offset.saturating_add(page_size).min(total);

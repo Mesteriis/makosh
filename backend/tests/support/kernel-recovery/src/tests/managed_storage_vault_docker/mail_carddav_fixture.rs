@@ -25,6 +25,7 @@ pub(super) struct MailCardDavFixture {
     port: u16,
     ca_certificate_pem: String,
     reports: Arc<AtomicUsize>,
+    source_present: Arc<AtomicBool>,
     shutdown: Arc<AtomicBool>,
     worker: Option<JoinHandle<()>>,
 }
@@ -52,8 +53,10 @@ impl MailCardDavFixture {
             .expect("CardDAV fixture address")
             .port();
         let reports = Arc::new(AtomicUsize::new(0));
+        let source_present = Arc::new(AtomicBool::new(true));
         let shutdown = Arc::new(AtomicBool::new(false));
         let worker_reports = Arc::clone(&reports);
+        let worker_source_present = Arc::clone(&source_present);
         let worker_shutdown = Arc::clone(&shutdown);
         let worker = thread::spawn(move || {
             while !worker_shutdown.load(Ordering::SeqCst) {
@@ -73,6 +76,7 @@ impl MailCardDavFixture {
                         serve_connection(
                             &mut StreamOwned::new(connection, stream),
                             &worker_reports,
+                            &worker_source_present,
                         );
                     }
                     Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {
@@ -86,6 +90,7 @@ impl MailCardDavFixture {
             port,
             ca_certificate_pem,
             reports,
+            source_present,
             shutdown,
             worker: Some(worker),
         }
@@ -101,6 +106,10 @@ impl MailCardDavFixture {
 
     pub(super) fn reports(&self) -> usize {
         self.reports.load(Ordering::SeqCst)
+    }
+
+    pub(super) fn remove_source(&self) {
+        self.source_present.store(false, Ordering::SeqCst);
     }
 }
 
@@ -119,6 +128,7 @@ impl Drop for MailCardDavFixture {
 fn serve_connection(
     stream: &mut StreamOwned<ServerConnection, std::net::TcpStream>,
     reports: &AtomicUsize,
+    source_present: &AtomicBool,
 ) {
     let (method, path, headers) = read_request(stream);
     assert_eq!(
@@ -141,15 +151,22 @@ fn serve_connection(
         ),
         ("REPORT", "/contacts/book/") => {
             reports.fetch_add(1, Ordering::SeqCst);
-            concat!(
-                "<?xml version=\"1.0\"?><d:multistatus xmlns:d=\"DAV:\" ",
-                "xmlns:card=\"urn:ietf:params:xml:ns:carddav\"><d:response>",
-                "<d:href>/contacts/book/managed-1.vcf</d:href><d:propstat><d:prop>",
-                "<d:getetag>\"carddav-etag-1\"</d:getetag><card:address-data>",
-                "BEGIN:VCARD&#13;&#10;VERSION:3.0&#13;&#10;FN:Private CardDAV Contact&#13;&#10;",
-                "EMAIL:private-carddav@example.test&#13;&#10;TEL:+12025550126&#13;&#10;END:VCARD",
-                "</card:address-data></d:prop></d:propstat></d:response></d:multistatus>"
-            )
+            if source_present.load(Ordering::SeqCst) {
+                concat!(
+                    "<?xml version=\"1.0\"?><d:multistatus xmlns:d=\"DAV:\" ",
+                    "xmlns:card=\"urn:ietf:params:xml:ns:carddav\"><d:response>",
+                    "<d:href>/contacts/book/managed-1.vcf</d:href><d:propstat><d:prop>",
+                    "<d:getetag>\"carddav-etag-1\"</d:getetag><card:address-data>",
+                    "BEGIN:VCARD&#13;&#10;VERSION:3.0&#13;&#10;FN:Private CardDAV Contact&#13;&#10;",
+                    "EMAIL:private-carddav@example.test&#13;&#10;TEL:+12025550126&#13;&#10;END:VCARD",
+                    "</card:address-data></d:prop></d:propstat></d:response></d:multistatus>"
+                )
+            } else {
+                concat!(
+                    "<?xml version=\"1.0\"?><d:multistatus xmlns:d=\"DAV:\" ",
+                    "xmlns:card=\"urn:ietf:params:xml:ns:carddav\"></d:multistatus>"
+                )
+            }
         }
         _ => panic!("unsupported CardDAV request: {method} {path}"),
     };

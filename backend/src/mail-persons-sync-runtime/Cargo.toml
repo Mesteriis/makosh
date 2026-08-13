@@ -1,0 +1,36 @@
+[package]
+name = "makosh-mail-persons-sync-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-mail-persons-sync-runtime"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "workflow"
+owner = "mail_persons_sync"
+surface = "runtime"
+
+[dependencies]
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
+makosh-mail-persons-sync-api = { path = "../mail-persons-sync-api" }
+makosh-mail-persons-sync-core = { path = "../mail-persons-sync-core" }
+makosh-mail-persons-sync-persistence = { path = "../mail-persons-sync-persistence" }
+makosh-persons-api = { path = "../persons-api" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-scheduler-protocol = { path = "../platform/scheduler/protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+libc = "=0.2.186"
+prost = "=0.14.4"
+prost-types = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+tokio = { version = "=1.52.4", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "=1.9.0"

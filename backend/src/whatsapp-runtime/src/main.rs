@@ -75,6 +75,7 @@ where
         .ok_or_else(|| "WhatsApp runtime configuration is invalid".to_owned())?;
     let admission = WhatsAppRuntimeAdmission {
         logical_owner_id: configuration.logical_owner_id,
+        logical_human_owner_id: configuration.logical_human_owner_id,
         module_registration_id: configuration.registration_id,
         runtime_instance_id: configuration.runtime_instance_id,
         runtime_generation: configuration.runtime_generation,

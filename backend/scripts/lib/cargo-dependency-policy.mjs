@@ -46,6 +46,17 @@ function isAllowedDependency(policy, source, target, targetPackageName) {
   }
   if (target.surface !== 'contract') return false;
 
+  // The Review queue consumes the canonical sanitized Persons candidate event.
+  // This is the only domain-to-domain contract edge: it grants no access to
+  // Persons implementation, persistence, runtime, or any arbitrary domain.
+  if (source.role === 'domain'
+    && source.owner === 'review'
+    && source.surface === 'runtime'
+    && target.role === 'domain'
+    && target.owner === 'persons'
+    && target.surface === 'contract'
+    && targetPackageName === 'makosh-persons-api') return true;
+
   switch (source.role) {
     case 'domain':
       return target.role === 'platform';

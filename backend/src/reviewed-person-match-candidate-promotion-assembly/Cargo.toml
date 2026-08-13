@@ -1,0 +1,26 @@
+[package]
+name = "makosh-reviewed-person-match-candidate-promotion-assembly"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-reviewed-person-match-candidate-promotion-assembly"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "workflow"
+owner = "reviewed_person_match_candidate_promotion"
+surface = "assembly"
+
+[dependencies]
+makosh-reviewed-person-match-candidate-promotion-persistence = { path = "../reviewed-person-match-candidate-promotion-persistence" }
+makosh-reviewed-person-match-candidate-promotion-runtime = { path = "../reviewed-person-match-candidate-promotion-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+prost = "=0.14.4"
+serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
+serde_json = "=1.0.150"

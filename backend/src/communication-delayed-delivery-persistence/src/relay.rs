@@ -32,7 +32,8 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         if logical_owner_id.is_empty() || logical_owner_id.len() > 128 {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query_scalar::<_, bool>(
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let owned = sqlx::query_scalar::<_, bool>(
             "SELECT EXISTS (
                SELECT 1
                FROM makosh_data.communication_delayed_delivery_outbox
@@ -45,9 +46,14 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         .bind(logical_owner_id)
         .bind(delayed_operation_id.as_slice())
         .bind(message_id.as_slice())
-        .fetch_one(&self.pool)
+        .fetch_one(&mut *transaction)
         .await
-        .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)
+        .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(owned)
     }
 
     pub async fn pending_scheduler_commands(
@@ -55,13 +61,19 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         logical_owner_id: &str,
         limit: u16,
     ) -> Result<Vec<DelayedDeliveryOutboxRecordV1>, DelayedDeliveryPersistenceErrorV1> {
-        pending(
-            &self.pool,
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let records = pending(
+            &mut transaction,
             DelayedDeliveryOutboxStreamV1::SchedulerCommand,
             logical_owner_id,
             limit,
         )
-        .await
+        .await?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(records)
     }
 
     pub async fn pending_scheduler_receipts(
@@ -69,13 +81,19 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         logical_owner_id: &str,
         limit: u16,
     ) -> Result<Vec<DelayedDeliveryOutboxRecordV1>, DelayedDeliveryPersistenceErrorV1> {
-        pending(
-            &self.pool,
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let records = pending(
+            &mut transaction,
             DelayedDeliveryOutboxStreamV1::SchedulerReceipt,
             logical_owner_id,
             limit,
         )
-        .await
+        .await?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(records)
     }
 
     pub async fn mark_scheduler_message_published(
@@ -114,12 +132,13 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
                  RETURNING published_at_unix_millis"
             }
         };
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let row = sqlx::query(query)
             .bind(logical_owner_id)
             .bind(message_id.as_slice())
             .bind(envelope_sha256.as_slice())
             .bind(published_at)
-            .fetch_optional(&self.pool)
+            .fetch_optional(&mut *transaction)
             .await
             .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?
             .ok_or(DelayedDeliveryPersistenceErrorV1::Conflict)?;
@@ -129,12 +148,16 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         if recorded <= 0 {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidRow);
         }
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         Ok(())
     }
 }
 
 async fn pending(
-    pool: &sqlx::PgPool,
+    transaction: &mut sqlx::Transaction<'_, sqlx::Postgres>,
     stream: DelayedDeliveryOutboxStreamV1,
     logical_owner_id: &str,
     limit: u16,
@@ -167,7 +190,7 @@ async fn pending(
     let rows = sqlx::query(query)
         .bind(logical_owner_id)
         .bind(i64::from(limit))
-        .fetch_all(pool)
+        .fetch_all(&mut **transaction)
         .await
         .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
     rows.iter()

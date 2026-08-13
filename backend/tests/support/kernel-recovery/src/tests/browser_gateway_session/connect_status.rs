@@ -270,7 +270,7 @@ fn assert_current_owner_bootstrap(bootstrap: &ClientBootstrapResponseV1) {
 }
 
 fn assert_current_surface_availability(bootstrap: &ClientBootstrapResponseV1) {
-    assert_eq!(bootstrap.surfaces.len(), 13);
+    assert_eq!(bootstrap.surfaces.len(), 17);
     let catalog_module = bootstrap
         .modules
         .iter()

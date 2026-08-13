@@ -18,6 +18,7 @@ pub enum WhatsAppDurablePersistenceError {
     ConflictingDeliveryRouteLocator,
     ConflictingDeliveryIntentInbox,
     InvalidDeliveryIntentTransition,
+    OwnerScopeConflict,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -114,6 +115,53 @@ impl WhatsAppDurablePersistence {
     #[must_use]
     pub fn new(pool: PgPool) -> Self {
         Self { pool }
+    }
+
+    /// Claims or verifies the one logical human owner before any WhatsApp
+    /// state access. The scope follows the stable fenced Storage-principal
+    /// prefix across role epochs and rejects every other registration.
+    pub async fn bind_owner_scope(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<(), WhatsAppDurablePersistenceError> {
+        if !valid_logical_owner_id(logical_owner_id) {
+            return Err(WhatsAppDurablePersistenceError::InvalidRow);
+        }
+        let mut transaction = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
+        sqlx::query(
+            "INSERT INTO makosh_data.whatsapp_owner_scope
+                (singleton, logical_owner_id, runtime_principal_prefix)
+             SELECT TRUE, $1, regexp_replace(current_user::text, '_[0-9]+$', '')
+             WHERE current_user::text ~ '^storage_[a-f0-9]{16}_[1-9][0-9]*$'
+             ON CONFLICT (singleton) DO NOTHING",
+        )
+        .bind(logical_owner_id)
+        .execute(&mut *transaction)
+        .await
+        .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
+        let exact = sqlx::query(
+            "SELECT logical_owner_id
+             FROM makosh_data.whatsapp_owner_scope
+             WHERE singleton = TRUE
+               AND logical_owner_id = $1
+               AND runtime_principal_prefix =
+                   regexp_replace(current_user::text, '_[0-9]+$', '')",
+        )
+        .bind(logical_owner_id)
+        .fetch_optional(&mut *transaction)
+        .await
+        .map_err(|_| WhatsAppDurablePersistenceError::Database)?;
+        if exact.is_none() {
+            return Err(WhatsAppDurablePersistenceError::OwnerScopeConflict);
+        }
+        transaction
+            .commit()
+            .await
+            .map_err(|_| WhatsAppDurablePersistenceError::Database)
     }
 
     pub async fn initialize(&self) -> Result<(), WhatsAppDurablePersistenceError> {
@@ -353,4 +401,14 @@ impl WhatsAppDurablePersistence {
             .map(|result| result.rows_affected() == 1)
             .map_err(|_| WhatsAppDurablePersistenceError::Database)
     }
+}
+
+fn valid_logical_owner_id(value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= 128
+        && value.bytes().enumerate().all(|(index, byte)| match byte {
+            b'a'..=b'z' | b'0'..=b'9' => true,
+            b'_' | b'-' => index > 0,
+            _ => false,
+        })
 }

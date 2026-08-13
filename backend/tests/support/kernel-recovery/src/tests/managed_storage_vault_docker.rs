@@ -20,9 +20,10 @@ use makosh_kernel_control_store::{
 };
 use makosh_runtime_protocol::v1::{
     ManagedDomainRuntimeConfigurationV1, ManagedRuntimeEventCredentialDeliveryV1,
-    ManagedRuntimeEventCredentialRequestV1, SchedulerRuntimeControlRequestV1,
-    SchedulerRuntimeControlResponseV1, SchedulerScheduleUpsertOutcomeV1, SettingsSchemaRefV1,
-    SettingsSchemaV1, UpsertSchedulerScheduleRequestV1,
+    ManagedRuntimeEventCredentialRequestV1, ManagedWorkflowRuntimeConfigurationV1,
+    SchedulerRuntimeControlRequestV1, SchedulerRuntimeControlResponseV1,
+    SchedulerScheduleUpsertOutcomeV1, SettingsSchemaRefV1, SettingsSchemaV1,
+    UpsertSchedulerScheduleRequestV1,
     scheduler_runtime_control_request_v1::Operation as SchedulerOperation,
     scheduler_runtime_control_response_v1::Result as SchedulerResult,
 };
@@ -61,7 +62,7 @@ use crate::platform::{
 };
 use crate::runtime::lifecycle::control::{
     ManagedRuntimeBlobSessionHandler, ManagedRuntimeEventCredentialHandler,
-    ManagedRuntimeExpectation,
+    ManagedRuntimeExpectation, ManagedRuntimeVaultRouteHandler,
 };
 
 #[path = "managed_storage_vault_docker/shared_fixture.rs"]
@@ -79,9 +80,50 @@ use scheduler_setup::*;
 #[path = "managed_storage_vault_docker/scheduler_events.rs"]
 mod scheduler_events;
 use scheduler_events::*;
+#[path = "managed_storage_vault_docker/calendar_managed_setup.rs"]
+mod calendar_managed_setup;
+use calendar_managed_setup::*;
+#[path = "managed_storage_vault_docker/calendar_managed_flow.rs"]
+mod calendar_managed_flow;
+#[path = "managed_storage_vault_docker/decisions_managed_setup.rs"]
+mod decisions_managed_setup;
+#[path = "managed_storage_vault_docker/documents_blob_fixture.rs"]
+mod documents_blob_fixture;
+#[path = "managed_storage_vault_docker/documents_managed_setup.rs"]
+mod documents_managed_setup;
+#[path = "managed_storage_vault_docker/organizations_managed_setup.rs"]
+mod organizations_managed_setup;
+#[path = "managed_storage_vault_docker/projects_managed_setup.rs"]
+mod projects_managed_setup;
+#[path = "managed_storage_vault_docker/relationships_managed_setup.rs"]
+mod relationships_managed_setup;
+use decisions_managed_setup::*;
+use documents_blob_fixture::*;
+use documents_managed_setup::*;
+use organizations_managed_setup::*;
+use projects_managed_setup::*;
+use relationships_managed_setup::*;
 #[path = "managed_storage_vault_docker/communications_setup.rs"]
 mod communications_setup;
+#[path = "managed_storage_vault_docker/decisions_managed_flow.rs"]
+mod decisions_managed_flow;
+#[path = "managed_storage_vault_docker/documents_managed_flow.rs"]
+mod documents_managed_flow;
+#[path = "managed_storage_vault_docker/obligation_candidate_blob_fixture.rs"]
+mod obligation_candidate_blob_fixture;
+#[path = "managed_storage_vault_docker/obligation_candidate_managed_flow.rs"]
+mod obligation_candidate_managed_flow;
+#[path = "managed_storage_vault_docker/obligation_candidate_managed_setup.rs"]
+mod obligation_candidate_managed_setup;
+#[path = "managed_storage_vault_docker/organizations_managed_flow.rs"]
+mod organizations_managed_flow;
+#[path = "managed_storage_vault_docker/projects_managed_flow.rs"]
+mod projects_managed_flow;
+#[path = "managed_storage_vault_docker/relationships_managed_flow.rs"]
+mod relationships_managed_flow;
 use communications_setup::*;
+use obligation_candidate_blob_fixture::*;
+use obligation_candidate_managed_setup::*;
 #[path = "managed_storage_vault_docker/communications_ai_source_managed_flow.rs"]
 mod communications_ai_source_managed_flow;
 #[path = "managed_storage_vault_docker/reply_suggestion_managed_setup.rs"]
@@ -143,10 +185,16 @@ use telegram_event_flow::*;
 #[path = "managed_storage_vault_docker/telegram_managed_setup.rs"]
 mod telegram_managed_setup;
 use telegram_managed_setup::*;
+#[path = "managed_storage_vault_docker/telegram_owner_rls_conformance.rs"]
+mod telegram_owner_rls_conformance;
+use telegram_owner_rls_conformance::*;
 #[path = "managed_storage_vault_docker/ai_inference_blob_fixture.rs"]
 mod ai_inference_blob_fixture;
 #[path = "managed_storage_vault_docker/ai_inference_managed_flow.rs"]
 mod ai_inference_managed_flow;
+#[path = "managed_storage_vault_docker/ai_owner_rls_conformance.rs"]
+mod ai_owner_rls_conformance;
+use ai_owner_rls_conformance::*;
 #[path = "managed_storage_vault_docker/ai_inference_managed_setup.rs"]
 mod ai_inference_managed_setup;
 #[path = "managed_storage_vault_docker/archive_inspection_managed_setup.rs"]
@@ -204,21 +252,38 @@ use attachment_translation_managed_setup::*;
 mod archive_inspection_managed_flow;
 #[path = "managed_storage_vault_docker/attachment_security_persistence_fixture.rs"]
 mod attachment_security_persistence_fixture;
-#[path = "managed_storage_vault_docker/contacts_managed_flow.rs"]
-mod contacts_managed_flow;
-#[path = "managed_storage_vault_docker/contacts_managed_setup.rs"]
-mod contacts_managed_setup;
-#[path = "managed_storage_vault_docker/mail_contacts_sync_managed_setup.rs"]
-mod mail_contacts_sync_managed_setup;
-use mail_contacts_sync_managed_setup::*;
-#[path = "managed_storage_vault_docker/mail_address_book_provider_flow.rs"]
-mod mail_address_book_provider_flow;
+#[path = "managed_storage_vault_docker/persons_managed_flow.rs"]
+mod persons_managed_flow;
+#[path = "managed_storage_vault_docker/persons_managed_setup.rs"]
+mod persons_managed_setup;
+use persons_managed_setup::*;
+#[path = "managed_storage_vault_docker/identity_resolution_managed_setup.rs"]
+mod identity_resolution_managed_setup;
+use identity_resolution_managed_setup::*;
+#[path = "managed_storage_vault_docker/projection_managed_setup.rs"]
+mod projection_managed_setup;
+use projection_managed_setup::*;
+#[path = "managed_storage_vault_docker/projection_managed_flow.rs"]
+mod projection_managed_flow;
+#[path = "managed_storage_vault_docker/review_person_match_candidate_managed_setup.rs"]
+mod review_person_match_candidate_managed_setup;
+use review_person_match_candidate_managed_setup::*;
+#[path = "managed_storage_vault_docker/review_person_match_candidate_managed_flow.rs"]
+mod review_person_match_candidate_managed_flow;
+#[path = "managed_storage_vault_docker/reviewed_person_match_candidate_promotion_managed_setup.rs"]
+mod reviewed_person_match_candidate_promotion_managed_setup;
+use reviewed_person_match_candidate_promotion_managed_setup::*;
+#[path = "managed_storage_vault_docker/mail_persons_sync_managed_setup.rs"]
+mod mail_persons_sync_managed_setup;
+use mail_persons_sync_managed_setup::*;
 #[path = "managed_storage_vault_docker/mail_attachment_flow.rs"]
 mod mail_attachment_flow;
 #[path = "managed_storage_vault_docker/mail_carddav_fixture.rs"]
 mod mail_carddav_fixture;
-#[path = "managed_storage_vault_docker/mail_contacts_sync_managed_flow.rs"]
-mod mail_contacts_sync_managed_flow;
+#[path = "managed_storage_vault_docker/mail_persons_sync_managed_flow.rs"]
+mod mail_persons_sync_managed_flow;
+#[path = "managed_storage_vault_docker/persons_admission_cutover_flow.rs"]
+mod persons_admission_cutover_flow;
 use mail_carddav_fixture::*;
 #[path = "managed_storage_vault_docker/call_transcription_gateway_fixture.rs"]
 mod call_transcription_gateway_fixture;
@@ -270,27 +335,31 @@ mod ollama_ai_managed_flow;
 mod ollama_ai_managed_setup;
 #[path = "managed_storage_vault_docker/review_attention_managed_flow.rs"]
 mod review_attention_managed_flow;
+#[path = "managed_storage_vault_docker/review_owner_rls_conformance.rs"]
+mod review_owner_rls_conformance;
+use review_owner_rls_conformance::*;
 #[path = "managed_storage_vault_docker/review_attention_managed_setup.rs"]
 mod review_attention_managed_setup;
 #[path = "managed_storage_vault_docker/speech_to_text_managed_setup.rs"]
 mod speech_to_text_managed_setup;
+#[path = "managed_storage_vault_docker/speech_to_text_owner_rls_conformance.rs"]
+mod speech_to_text_owner_rls_conformance;
 #[path = "managed_storage_vault_docker/task_candidate_blob_negative.rs"]
 mod task_candidate_blob_negative;
 #[path = "managed_storage_vault_docker/task_candidate_gateway_flow.rs"]
 mod task_candidate_gateway_flow;
 #[path = "managed_storage_vault_docker/task_candidate_managed_flow.rs"]
 mod task_candidate_managed_flow;
+#[path = "managed_storage_vault_docker/task_candidate_managed_setup.rs"]
+mod task_candidate_managed_setup;
+#[path = "managed_storage_vault_docker/task_candidate_persistence_flow.rs"]
+mod task_candidate_persistence_flow;
 #[path = "managed_storage_vault_docker/whisper_stt_blob_fixture.rs"]
 mod whisper_stt_blob_fixture;
 #[path = "managed_storage_vault_docker/whisper_stt_managed_flow.rs"]
 mod whisper_stt_managed_flow;
 #[path = "managed_storage_vault_docker/whisper_stt_managed_setup.rs"]
 mod whisper_stt_managed_setup;
-use contacts_managed_setup::*;
-#[path = "managed_storage_vault_docker/task_candidate_managed_setup.rs"]
-mod task_candidate_managed_setup;
-#[path = "managed_storage_vault_docker/task_candidate_persistence_flow.rs"]
-mod task_candidate_persistence_flow;
 use ai_inference_blob_fixture::*;
 use ai_inference_managed_setup::*;
 use call_transcription_gateway_fixture::*;
@@ -312,6 +381,7 @@ use note_candidate_persistence_flow::*;
 use ollama_ai_managed_setup::*;
 use review_attention_managed_setup::*;
 use speech_to_text_managed_setup::*;
+use speech_to_text_owner_rls_conformance::*;
 use task_candidate_blob_negative::*;
 use task_candidate_gateway_flow::*;
 use task_candidate_managed_setup::*;
@@ -2380,6 +2450,9 @@ impl ManagedRuntimeEventCredentialHandler for UnauthenticatedNatsCredentialHandl
             .platform_event_hub_topology()
             .map_err(|_| "test Event topology is unavailable".to_owned())?
             .ok_or_else(|| "test Event topology is unavailable".to_owned())?;
+        if request.credential_revision != configuration.credential_revision() {
+            return Err("test Event credential fence is stale".to_owned());
+        }
         let topology = event_topology::plan(&contracts, &configuration)
             .map_err(|_| "test Event topology is unavailable".to_owned())?;
         let consumer_bindings = event_topology::managed_runtime_consumer_bindings(

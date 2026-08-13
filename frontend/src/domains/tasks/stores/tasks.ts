@@ -1,140 +1,272 @@
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type {
-  Decision,
-  DecisionEntityKind,
-  Obligation,
-  TaskCandidate
-} from '../types/task'
+import {
+  TaskPriorityV1,
+  TaskStateV1,
+  type TaskSummaryV1,
+  type TimestampV1
+} from '../../../gen/makosh/tasks/client/v1/tasks_pb'
+import {
+  getTasksCommandClient,
+  getTasksQueryClient
+} from '../../../platform/connect/tasksClient'
 
-export const useTasksStore = defineStore('tasks-ui', () => {
-  const tasksError = ref<string>('')
-  const contextReviewError = ref<string>('')
-  const isAiTaskRefreshSubmitting = ref<boolean>(false)
-  const reviewEntityKind = ref<DecisionEntityKind>('project')
-  const reviewEntityId = ref<string>('')
-  const reviewingContextItemId = ref<string | null>(null)
-  const decisions = ref<Decision[]>([])
-  const obligations = ref<Obligation[]>([])
-  const isContextReviewLoading = ref<boolean>(false)
+const PAGE_LIMIT = 50
 
-  function setError(msg: string) {
-    tasksError.value = msg
+export const useTasksStore = defineStore('tasks', () => {
+  const tasks = ref<TaskSummaryV1[]>([])
+  const error = ref('')
+  const mutatingTaskId = ref<string | null>(null)
+  const isLoading = ref(false)
+
+  const openTasks = computed(() => tasks.value.filter((task) =>
+    task.state === TaskStateV1.TASK_STATE_OPEN
+    || task.state === TaskStateV1.TASK_STATE_IN_PROGRESS
+  ))
+  const completedTasks = computed(() => tasks.value.filter((task) =>
+    task.state === TaskStateV1.TASK_STATE_COMPLETED
+    || task.state === TaskStateV1.TASK_STATE_CANCELLED
+  ))
+
+  async function loadAll(): Promise<void> {
+    isLoading.value = true
+    error.value = ''
+    try {
+      const loaded: TaskSummaryV1[] = []
+      let cursor: Uint8Array<ArrayBufferLike> = new Uint8Array()
+      do {
+        const page = await getTasksQueryClient().list({
+          logicalOwnerId: '',
+          afterTaskId: cursor,
+          limit: PAGE_LIMIT
+        })
+        loaded.push(...page.tasks)
+        cursor = page.nextAfterTaskId
+      } while (cursor.length > 0)
+      tasks.value = loaded
+    } catch (cause) {
+      error.value = message(cause)
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  function clearError() {
-    tasksError.value = ''
+  async function createTask(title: string, description?: string, dueAt?: Date): Promise<void> {
+    await run(null, async () => {
+      const result = await getTasksCommandClient().create({
+        operationId: randomId16(),
+        taskId: new Uint8Array(),
+        logicalOwnerId: '',
+        title,
+        description: description?.trim() || undefined,
+        dueAt: dueAt ? timestamp(dueAt) : undefined,
+        priority: TaskPriorityV1.TASK_PRIORITY_NORMAL,
+        createdAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setReviewEntityKind(kind: DecisionEntityKind) {
-    reviewEntityKind.value = kind
+  async function updateTask(
+    task: TaskSummaryV1,
+    values: { title?: string; description?: string; clearDescription?: boolean; dueAt?: Date; clearDueAt?: boolean }
+  ): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().update({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        title: values.title,
+        description: values.description,
+        clearDescription: values.clearDescription ?? false,
+        dueAt: values.dueAt ? timestamp(values.dueAt) : undefined,
+        clearDueAt: values.clearDueAt ?? false,
+        updatedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setReviewEntityId(entityId: string) {
-    reviewEntityId.value = entityId
+  async function setTaskState(task: TaskSummaryV1, state: TaskStateV1): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().setState({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        state,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setReviewingItemId(id: string | null) {
-    reviewingContextItemId.value = id
+  async function setTaskPriority(task: TaskSummaryV1, priority: TaskPriorityV1): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().setPriority({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        priority,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setDecisions(items: Decision[]) {
-    decisions.value = items
+  async function addDependency(task: TaskSummaryV1, dependsOnTaskId: Uint8Array): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().addDependency({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        dependencyId: randomId16(),
+        dependsOnTaskId,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setObligations(items: Obligation[]) {
-    obligations.value = items
+  async function removeDependency(task: TaskSummaryV1, dependencyId: Uint8Array): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().removeDependency({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        dependencyId,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setContextReviewLoading(val: boolean) {
-    isContextReviewLoading.value = val
+  async function addChecklistItem(task: TaskSummaryV1, label: string): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().addChecklistItem({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        checklistItemId: randomId16(),
+        label,
+        position: task.checklist.length,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
   }
 
-  function setContextReviewError(msg: string) {
-    contextReviewError.value = msg
+  async function updateChecklistItem(
+    task: TaskSummaryV1,
+    checklistItemId: Uint8Array,
+    values: { label?: string; completed?: boolean; position?: number }
+  ): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().updateChecklistItem({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        checklistItemId,
+        label: values.label,
+        completed: values.completed,
+        position: values.position,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
+  }
+
+  async function removeChecklistItem(task: TaskSummaryV1, checklistItemId: Uint8Array): Promise<void> {
+    await run(hex(task.taskId), async () => {
+      const result = await getTasksCommandClient().removeChecklistItem({
+        operationId: randomId16(),
+        taskId: task.taskId,
+        logicalOwnerId: '',
+        expectedTaskRevision: task.taskRevision,
+        checklistItemId,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.task)
+    })
+  }
+
+  async function run(taskId: string | null, operation: () => Promise<void>): Promise<void> {
+    mutatingTaskId.value = taskId
+    error.value = ''
+    try {
+      await operation()
+    } catch (cause) {
+      error.value = message(cause)
+      throw cause
+    } finally {
+      mutatingTaskId.value = null
+    }
+  }
+
+  function replaceResult(task: TaskSummaryV1 | undefined): void {
+    if (!task) throw new Error('tasks_invalid_response')
+    const index = tasks.value.findIndex((value) => sameBytes(value.taskId, task.taskId))
+    if (index === -1) tasks.value.push(task)
+    else tasks.value[index] = task
+    tasks.value.sort((left, right) => compareBytes(left.taskId, right.taskId))
   }
 
   return {
-    tasksError,
-    contextReviewError,
-    isAiTaskRefreshSubmitting,
-    reviewEntityKind,
-    reviewEntityId,
-    reviewingContextItemId,
-    decisions,
-    obligations,
-    isContextReviewLoading,
-    setError,
-    clearError,
-    setReviewEntityKind,
-    setReviewEntityId,
-    setReviewingItemId,
-    setDecisions,
-    setObligations,
-    setContextReviewLoading,
-    setContextReviewError
+    tasks,
+    error,
+    mutatingTaskId,
+    isLoading,
+    openTasks,
+    completedTasks,
+    loadAll,
+    createTask,
+    updateTask,
+    setTaskState,
+    setTaskPriority,
+    addDependency,
+    removeDependency,
+    addChecklistItem,
+    updateChecklistItem,
+    removeChecklistItem
   }
 })
 
-// Utility functions
-
-export function taskSourceLabel(item: TaskCandidate | { source_kind: string; source_id: string }): string {
-  const kind = item.source_kind
-  return `${kind.charAt(0).toUpperCase()}${kind.slice(1)} · ${item.source_id}`
+function timestamp(value: Date): TimestampV1 {
+  const milliseconds = value.getTime()
+  return {
+    $typeName: 'makosh.tasks.client.v1.TimestampV1',
+    unixSeconds: BigInt(Math.floor(milliseconds / 1_000)),
+    nanos: Math.trunc(milliseconds % 1_000) * 1_000_000
+  }
 }
 
-export function taskConfidence(item: TaskCandidate): string {
-  return `${Math.round(item.confidence * 100)}%`
+function randomId16(): Uint8Array {
+  return globalThis.crypto.getRandomValues(new Uint8Array(16))
 }
 
-export function taskCreatedTime(value: string | null): string {
-  if (!value) return ''
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Unknown date'
-  return new Intl.DateTimeFormat('en', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
+function sameBytes(left: Uint8Array, right: Uint8Array): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index])
 }
 
-export function formatDecisionTime(value: string | null): string {
-  if (!value) return 'No decision date'
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Unknown date'
-  return new Intl.DateTimeFormat('en', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
+function compareBytes(left: Uint8Array, right: Uint8Array): number {
+  const length = Math.min(left.length, right.length)
+  for (let index = 0; index < length; index += 1) {
+    const comparison = (left[index] ?? 0) - (right[index] ?? 0)
+    if (comparison !== 0) return comparison
+  }
+  return left.length - right.length
 }
 
-export function formatEntityKind(kind: string): string {
-  return kind
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
+function hex(value: Uint8Array): string {
+  return Array.from(value, (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
-export function formatDecisionEntity(kind: string | null, entityId: string | null): string {
-  if (!kind || !entityId) return 'No decider'
-  return `${formatEntityKind(kind)} · ${entityId}`
-}
-
-export function formatObligationDueTime(value: string | null): string {
-  if (!value) return 'No due date'
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Unknown date'
-  return new Intl.DateTimeFormat('en', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(date)
-}
-
-export function formatObligationEntity(kind: string, entityId: string): string {
-  return `${formatEntityKind(kind)} · ${entityId}`
+function message(cause: unknown): string {
+  return cause instanceof Error ? cause.message : 'tasks_unavailable'
 }

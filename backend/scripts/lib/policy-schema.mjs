@@ -457,6 +457,20 @@ export function validatePolicy(policy) {
     ));
   }
 
+  const centralPersonOwners = registered.filter(
+    (owner) => ['contacts', 'persons'].includes(owner),
+  );
+  if (centralPersonOwners.length !== 1
+    || centralPersonOwners[0] !== 'persons'
+    || !allowed.includes('persons')
+    || allowed.includes('contacts')) {
+    violations.push(violation(
+      'central_person_owner',
+      'domains',
+      'persons must be the only registered and development-allowlisted central person owner',
+    ));
+  }
+
   const constitutionalCore = new Set(list(policy?.kernel?.constitutionalComponents));
   const exclusiveCore = new Set(list(policy?.kernel?.exclusiveComponents));
   if (!constitutionalCore.has('event_hub')

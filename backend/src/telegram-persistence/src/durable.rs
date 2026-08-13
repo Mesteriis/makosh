@@ -241,6 +241,15 @@ pub struct TelegramDurablePersistence {
     pub(crate) pool: PgPool,
 }
 
+fn valid_logical_owner_id(value: &str) -> bool {
+    (1..=128).contains(&value.len())
+        && value.bytes().enumerate().all(|(index, byte)| match byte {
+            b'a'..=b'z' | b'0'..=b'9' => true,
+            b'_' | b'-' => index > 0,
+            _ => false,
+        })
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TelegramDurablePersistenceError {
     Database,
@@ -255,6 +264,7 @@ pub enum TelegramDurablePersistenceError {
     ConflictingDeliveryRouteLocator,
     ConflictingDeliveryIntentInbox,
     InvalidDeliveryIntentTransition,
+    OwnerScopeConflict,
 }
 
 impl TelegramDurablePersistence {
@@ -314,6 +324,54 @@ impl TelegramDurablePersistence {
             .execute(&self.pool)
             .await
             .map(|_| ())
+            .map_err(|_| TelegramDurablePersistenceError::Database)
+    }
+
+    /// Claims or verifies the single logical owner of this owner-local
+    /// database before any Telegram state is accessed. RLS binds the claim to
+    /// the stable prefix of the fenced Storage runtime principal, so a later
+    /// role epoch can reopen it while another registration remains invisible.
+    pub async fn bind_owner_scope(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<(), TelegramDurablePersistenceError> {
+        if !valid_logical_owner_id(logical_owner_id) {
+            return Err(TelegramDurablePersistenceError::InvalidRow);
+        }
+        let mut transaction = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| TelegramDurablePersistenceError::Database)?;
+        sqlx::query(
+            "INSERT INTO makosh_data.telegram_owner_scope
+                (singleton, logical_owner_id, runtime_principal_prefix)
+             SELECT TRUE, $1, regexp_replace(current_user::text, '_[0-9]+$', '')
+             WHERE current_user::text ~ '^storage_[a-f0-9]{16}_[1-9][0-9]*$'
+             ON CONFLICT (singleton) DO NOTHING",
+        )
+        .bind(logical_owner_id)
+        .execute(&mut *transaction)
+        .await
+        .map_err(|_| TelegramDurablePersistenceError::Database)?;
+        let exact = sqlx::query(
+            "SELECT logical_owner_id
+             FROM makosh_data.telegram_owner_scope
+             WHERE singleton = TRUE
+               AND logical_owner_id = $1
+               AND runtime_principal_prefix =
+                   regexp_replace(current_user::text, '_[0-9]+$', '')",
+        )
+        .bind(logical_owner_id)
+        .fetch_optional(&mut *transaction)
+        .await
+        .map_err(|_| TelegramDurablePersistenceError::Database)?;
+        if exact.is_none() {
+            return Err(TelegramDurablePersistenceError::OwnerScopeConflict);
+        }
+        transaction
+            .commit()
+            .await
             .map_err(|_| TelegramDurablePersistenceError::Database)
     }
 

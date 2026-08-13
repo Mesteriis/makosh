@@ -172,8 +172,8 @@ fn client_surface_availability(
 ) -> Result<Vec<ClientSurfaceAvailabilityProjectionV1>, String> {
     use ClientSurfaceAvailabilityStateV1::{Available, Blocked, NotAdmitted};
     use ClientSurfaceIdV1::{
-        Calendar, Communications, Dashboard, Documents, Knowledge, Mail, Personas, Review,
-        Settings, Tasks, Telegram, WhatsApp, Zulip,
+        Calendar, Communications, Dashboard, Decisions, Documents, Knowledge, Mail, Obligations,
+        Organizations, Personas, Projects, Review, Settings, Tasks, Telegram, WhatsApp, Zulip,
     };
 
     [
@@ -190,6 +190,10 @@ fn client_surface_availability(
         Settings,
         WhatsApp,
         Zulip,
+        Organizations,
+        Projects,
+        Obligations,
+        Decisions,
     ]
     .into_iter()
     .map(|surface_id| {

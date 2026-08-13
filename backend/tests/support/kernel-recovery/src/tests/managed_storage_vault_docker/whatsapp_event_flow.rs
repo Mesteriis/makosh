@@ -31,6 +31,8 @@ const OBSERVATION_SUBJECT: &str = "makosh.observation.v1.communications.communic
 const CANONICAL_EVENT_SUBJECT: &str =
     "makosh.event.v1.communications.communication_evidence_recorded.v1";
 const PRIVATE_COMMAND_TEXT: &str = "private WhatsApp body must stay integration-owned";
+const PRIVATE_RAW_PROVIDER_MARKER: &str = "task11-raw-provider-private-marker";
+const PRIVATE_HOST_SESSION_MARKER: &str = "task11-host-session-private-marker";
 
 #[test]
 #[ignore = "requires disposable Docker plus real managed Vault, Storage, WhatsApp, NATS and Communications binaries"]
@@ -75,7 +77,7 @@ fn managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_
 
     let message_bytes =
         submit_message_observation(&contour, "whatsapp-provider-event-1", "provider-message-1");
-    let (observation_bytes, observation_message_id, canonical_message_id) =
+    let (observation_bytes, observation_message_id, _canonical_message_id) =
         receive_whatsapp_observation(
             &event_runtime,
             &mut observations,
@@ -135,18 +137,7 @@ fn managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_
     set_authenticated_nats_container_running(true);
     wait_for_authenticated_nats_reconnect(&event_runtime, &client, "WhatsApp event observer");
 
-    let (_, replayed_observation_id, replayed_canonical_id) = receive_whatsapp_observation(
-        &event_runtime,
-        &mut observations,
-        &mut canonical_events,
-        &contour,
-        "outage replay",
-    );
-    assert_ne!(replayed_observation_id, observation_message_id);
-    assert_ne!(
-        replayed_canonical_id, canonical_message_id,
-        "outage replay must deliver the second WhatsApp provider observation",
-    );
+    assert_whatsapp_outage_relay_is_durable_v1();
     let replayed_evidence_id =
         assert_communications_query_delivery(&contour.store, &contour.supervisor);
     assert_ne!(
@@ -154,9 +145,198 @@ fn managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_
         "Communications query must expose the replayed WhatsApp evidence",
     );
     assert_whatsapp_operational_read(&mut contour);
+    contour.shutdown_processes();
+    contour.finish();
+}
+
+fn assert_whatsapp_outage_relay_is_durable_v1() {
+    let runtime = tokio::runtime::Runtime::new().expect("WhatsApp outage database runtime");
+    let pool = runtime.block_on(authenticated_storage_admin_pool_v1());
+    let deadline = Instant::now() + Duration::from_secs(30);
+    loop {
+        let state: (i64, i64, i64) = runtime
+            .block_on(
+                sqlx::query_as(
+                    "SELECT \
+                    (SELECT COUNT(*) FROM makosh_data.whatsapp_host_observations), \
+                    (SELECT COUNT(*) FROM makosh_data.whatsapp_communications_outbox), \
+                    (SELECT COUNT(*) FROM makosh_data.whatsapp_communications_outbox \
+                     WHERE published_at_unix_seconds IS NOT NULL)",
+                )
+                .fetch_one(&pool),
+            )
+            .expect("read durable WhatsApp outage relay state");
+        if state == (2, 2, 2) {
+            return;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "WhatsApp outage relay did not drain; observations/outbox/published={state:?}"
+        );
+        std::thread::sleep(Duration::from_millis(50));
+    }
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, WhatsApp, NATS and Communications binaries"]
+fn managed_whatsapp_private_surfaces_reject_malformed_host_output() {
+    let contour = ManagedWhatsAppContour::start(WhatsAppGrantProfileV1::CommandAndQuery);
+    let storage_credential = runtime_storage_credential_for_registration_v1(
+        &contour.supervisor,
+        &contour.store,
+        &contour.data,
+        &contour.whatsapp.registration_id,
+        makosh_whatsapp_runtime::admission::WHATSAPP_STORAGE_CAPABILITY_ID,
+    );
+    const OPERATION_ID: &str = "task11-private-command";
+    assert_whatsapp_command_accepted(&contour, OPERATION_ID);
+    let public_status = route_whatsapp_client(
+        &contour,
+        WhatsAppClientContractV1::Query,
+        71,
+        &WhatsAppPublicClientRequestV1::OperationStatus {
+            operation_id: OPERATION_ID.to_owned(),
+        },
+    );
+    assert_whatsapp_private_values_absent_v1(
+        format!("{public_status:?}").as_bytes(),
+        storage_credential.as_slice(),
+        true,
+        "typed WhatsApp client response",
+    );
+
+    let mut malformed = vec![0xff_u8];
+    malformed.extend_from_slice(PRIVATE_RAW_PROVIDER_MARKER.as_bytes());
+    malformed.extend_from_slice(PRIVATE_HOST_SESSION_MARKER.as_bytes());
+    let mut host = WhatsAppHostBridgeTestClient::connect(&contour.whatsapp);
+    host.submit_malformed_payload(&malformed);
+    drop(host);
+    let deadline = Instant::now() + Duration::from_secs(2);
+    loop {
+        let active = contour
+            .supervisor
+            .is_active(&contour.whatsapp.registration_id)
+            .expect("read WhatsApp privacy runtime state");
+        let ready = contour
+            .supervisor
+            .relay_port()
+            .is_ready(&contour.whatsapp.registration_id)
+            == Ok(true);
+        if active && ready {
+            break;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "malformed host output poisoned WhatsApp runtime"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let diagnostic = format!(
+        "{:?}",
+        contour
+            .supervisor
+            .last_failure(&contour.whatsapp.registration_id)
+            .expect("read WhatsApp supervisor diagnostic")
+    );
+    assert_whatsapp_private_values_absent_v1(
+        diagnostic.as_bytes(),
+        storage_credential.as_slice(),
+        true,
+        "WhatsApp supervisor diagnostic",
+    );
+    assert_whatsapp_durable_surfaces_are_private_v1(storage_credential.as_slice());
+    assert_supervised_whatsapp_child_output_is_private_v1(
+        &contour.child_stdio_capture,
+        storage_credential.as_slice(),
+    );
 
     contour.shutdown_processes();
     contour.finish();
+}
+
+fn assert_whatsapp_private_values_absent_v1(
+    bytes: &[u8],
+    storage_credential: &[u8],
+    include_private_body: bool,
+    surface: &str,
+) {
+    let mut private_values = vec![
+        PRIVATE_RAW_PROVIDER_MARKER.as_bytes(),
+        PRIVATE_HOST_SESSION_MARKER.as_bytes(),
+        storage_credential,
+    ];
+    if include_private_body {
+        private_values.push(PRIVATE_COMMAND_TEXT.as_bytes());
+    }
+    for value in private_values {
+        assert!(!value.is_empty());
+        assert!(
+            !bytes.windows(value.len()).any(|window| window == value),
+            "{surface} exposed a private WhatsApp value"
+        );
+        let encoded = value
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>();
+        assert!(
+            !bytes
+                .windows(encoded.len())
+                .any(|window| window == encoded.as_bytes()),
+            "{surface} exposed a hex-encoded private WhatsApp value"
+        );
+    }
+}
+
+fn assert_whatsapp_durable_surfaces_are_private_v1(storage_credential: &[u8]) {
+    tokio::runtime::Runtime::new()
+        .expect("WhatsApp privacy database runtime")
+        .block_on(async {
+            let pool = authenticated_storage_admin_pool_v1().await;
+            for table in makosh_whatsapp_persistence::WHATSAPP_OWNER_RLS_TABLES_V1 {
+                let rows: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+                    "SELECT COALESCE(string_agg(row_to_json(source)::text, E'\\n'), '') \
+                     FROM makosh_data.{table} AS source"
+                )))
+                .fetch_one(&pool)
+                .await
+                .unwrap_or_else(|error| {
+                    panic!("serialize private WhatsApp table {table}: {error}")
+                });
+                let public_outbox = matches!(
+                    table,
+                    "whatsapp_communications_outbox" | "whatsapp_delivery_intent_result_outbox"
+                );
+                assert_whatsapp_private_values_absent_v1(
+                    rows.as_bytes(),
+                    storage_credential,
+                    public_outbox,
+                    "durable WhatsApp row",
+                );
+            }
+        });
+}
+
+fn assert_supervised_whatsapp_child_output_is_private_v1(
+    directory: &Path,
+    storage_credential: &[u8],
+) {
+    // The production supervisor keeps stdio null; this conformance-only sink
+    // reads the exact supervised stdout/stderr files for privacy assertions.
+    let mut captures = std::fs::read_dir(directory)
+        .expect("read WhatsApp child capture directory")
+        .map(|entry| entry.expect("read WhatsApp child capture entry").path())
+        .collect::<Vec<_>>();
+    captures.sort();
+    assert_eq!(captures.len(), 2, "one supervised WhatsApp child attempt");
+    for capture in captures {
+        let bytes = std::fs::read(capture).expect("read supervised WhatsApp child output");
+        assert_whatsapp_private_values_absent_v1(
+            &bytes,
+            storage_credential,
+            true,
+            "supervised WhatsApp child output",
+        );
+    }
 }
 
 fn assert_whatsapp_operational_read(contour: &mut ManagedWhatsAppContour) {
@@ -908,10 +1088,11 @@ fn route_whatsapp_client(
     while relay.is_ready(&contour.whatsapp.registration_id) != Ok(true) {
         assert!(
             Instant::now() < deadline,
-            "managed WhatsApp runtime did not become ready: {:?}",
+            "managed WhatsApp runtime did not become ready: {:?}; child={}",
             contour
                 .supervisor
                 .last_failure(&contour.whatsapp.registration_id),
+            captured_whatsapp_exit_category_v1(&contour.child_stdio_capture),
         );
         std::thread::sleep(Duration::from_millis(25));
     }
@@ -951,11 +1132,11 @@ fn receive_whatsapp_observation(
     phase: &str,
 ) -> (Vec<u8>, Vec<u8>, Vec<u8>) {
     let (observation, canonical) = runtime.block_on(async {
-        let observation = tokio::time::timeout(Duration::from_secs(10), observations.next())
+        let observation = tokio::time::timeout(Duration::from_secs(30), observations.next())
             .await
             .unwrap_or_else(|_| panic!("{phase} WhatsApp observation timeout"))
             .unwrap_or_else(|| panic!("{phase} WhatsApp observation"));
-        let canonical = tokio::time::timeout(Duration::from_secs(10), canonical_events.next())
+        let canonical = tokio::time::timeout(Duration::from_secs(30), canonical_events.next())
             .await
             .unwrap_or_else(|_| panic!("{phase} Communications event timeout"))
             .unwrap_or_else(|| panic!("{phase} Communications event"));

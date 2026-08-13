@@ -36,6 +36,25 @@ function isExactRuntimeProtocolDescriptor(policy, descriptor) {
     && descriptor.components.length === 0;
 }
 
+function isExactDeclaredPreCutoverContactTokenPackage(policy, pkg, descriptor) {
+  if (!policy.domains.registered.includes('persons')
+    || policy.domains.registered.includes('contacts')
+    || !policy.domains.developmentAllowlist.includes('persons')
+    || policy.domains.developmentAllowlist.includes('contacts')) return false;
+
+  return list(policy?.implementation?.productionPackages).some((entry) => (
+    entry?.name === pkg.name
+    && entry?.role === descriptor.role
+    && entry?.owner === descriptor.owner
+    && entry?.surface === descriptor.surface
+  ));
+}
+
+function isExactPreCutoverContactsInventoryPackage(policy, pkg, descriptor) {
+  return descriptor?.owner === 'contacts'
+    && isExactDeclaredPreCutoverContactTokenPackage(policy, pkg, descriptor);
+}
+
 function vaultPackageSpecifications(policy) {
   return [
     { name: policy.vault.protocolPackage, surface: 'contract', components: [] },
@@ -184,10 +203,26 @@ function validateDescriptor(policy, pkg, descriptor, violations) {
     }
   }
 
+  const claimsRetiredContactsOwner = [...ownerAliases('contacts')].some(
+    (alias) => ownerTokens.has(alias) || packageTokens.has(alias),
+  );
+  if (policy.domains.registered.includes('persons')
+    && !policy.domains.registered.includes('contacts')
+    && claimsRetiredContactsOwner
+    && !isExactDeclaredPreCutoverContactTokenPackage(policy, pkg, descriptor)) {
+    violations.push(violation(
+      'blocked_domain',
+      location,
+      'retired contacts identity is allowed only for the exact pre-cutover production inventory',
+    ));
+  }
+
   if (!pkg.name.startsWith(policy.cargo.packagePrefix)) {
     violations.push(violation('package_prefix', location, `workspace package must start with ${policy.cargo.packagePrefix}`));
   }
-  if (role === 'domain' && !policy.domains.developmentAllowlist.includes(owner)) {
+  if (role === 'domain'
+    && !policy.domains.developmentAllowlist.includes(owner)
+    && !isExactPreCutoverContactsInventoryPackage(policy, pkg, descriptor)) {
     violations.push(violation('blocked_domain', location, `domain owner ${owner} is not in the development allowlist`));
   }
   if (role === 'integration' && policy.domains.registered.some(

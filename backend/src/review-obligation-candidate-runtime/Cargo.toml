@@ -1,0 +1,34 @@
+[package]
+name = "makosh-review-obligation-candidate-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-review-obligation-candidate-runtime"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "review"
+surface = "runtime"
+
+[dependencies]
+makosh-blob-client = { path = "../platform/blob/client" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-review-obligation-candidate-api = { path = "../review-obligation-candidate-api" }
+makosh-review-obligation-candidate-core = { path = "../review-obligation-candidate-core" }
+makosh-review-obligation-candidate-persistence = { path = "../review-obligation-candidate-persistence" }
+makosh-review-obligation-candidate-promotion-api = { path = "../review-obligation-candidate-promotion-api" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+libc = "=0.2.186"
+prost = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+tokio = { version = "=1.52.4", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "=1.9.0"

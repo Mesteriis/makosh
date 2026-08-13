@@ -38,10 +38,8 @@ impl CommunicationBulkActionPersistenceV1 {
         let target_count = i16::try_from(draft.targets.len())
             .map_err(|_| BulkDeliveryPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+            .begin_owner_transaction(&command.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.communication_bulk_action_batches (
                logical_owner_id, batch_id, request_fingerprint, target_count,

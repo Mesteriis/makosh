@@ -67,10 +67,8 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let claimed_at = signed(command.claimed_at_unix_millis)?;
         let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+            .begin_owner_transaction(&command.logical_owner_id)
+            .await?;
         let inserted = insert_due_inbox(&mut transaction, command, claimed_at).await?;
         if !inserted {
             verify_due_inbox(&mut transaction, command).await?;
@@ -132,10 +130,8 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let accepted_at = signed(command.accepted_at_unix_millis)?;
         let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+            .begin_owner_transaction(&command.claim.logical_owner_id)
+            .await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = $3, state_revision = state_revision + 1,
@@ -206,10 +202,8 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let failed_at = signed(command.failed_at_unix_millis)?;
         let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+            .begin_owner_transaction(&command.claim.logical_owner_id)
+            .await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.communication_delayed_delivery_operations
              SET state = $3, state_revision = state_revision + 1,

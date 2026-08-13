@@ -90,7 +90,7 @@ test('attachment translation agreement keeps workflow source engine and provider
   assert.match(adr, /distinct capability/);
   assert.match(adr, /Source text и translated[\s\S]*не попадают в SQL workflow owner/);
   assert.match(adr, /`attachment_translation_v1` переведён в `implemented`/);
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   assert(policy.implementation.ownerInventory.workflows.includes('attachment_translation'));
   for (const packageName of [
     'makosh-attachment-translation-api',
@@ -229,7 +229,7 @@ test('text extraction produces translation source only through durable target-ow
   assert.match(release, /attachment_translation\.release-artifacts\.json/);
   assert.match(developmentAssembly, /ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT/);
   assert.match(developmentAssembly, /PRE_ATTACHMENT_TRANSLATION_MODULE_PLAN_RUNTIME_ARTIFACTS_V3/);
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   assert(policy.implementation.ownerInventory.businessCapabilities.includes(
     'attachment_text_extraction.translation-source.v1',
   ));

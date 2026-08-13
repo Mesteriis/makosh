@@ -79,6 +79,10 @@ impl WhatsAppHostBridgeTestClient {
             .expect("decode accepted WhatsApp host observation")
     }
 
+    pub(super) fn submit_malformed_payload(&mut self, payload: &[u8]) {
+        write_frame(&mut self.stream, payload);
+    }
+
     fn round_trip(&mut self, request_payload: Vec<u8>) -> Vec<u8> {
         let request_id = self.next_request_id;
         self.next_request_id = request_id.checked_add(1).expect("bounded host request id");

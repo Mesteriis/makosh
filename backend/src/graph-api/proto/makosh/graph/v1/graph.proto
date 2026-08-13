@@ -1,0 +1,11 @@
+syntax="proto3";
+package makosh.graph.v1;
+message GraphNodeRefV1 { string node_owner=1; string node_kind=2; bytes node_id=3; }
+message GraphEdgeV1 { bytes edge_id=1; GraphNodeRefV1 source=2; GraphNodeRefV1 target=3; string edge_kind=4; uint64 source_revision=5; int64 occurred_at_unix_millis=6; }
+message GraphNeighborsRequestV1 { string logical_owner_id=1; GraphNodeRefV1 node=2; bytes after_edge_id=3; uint32 limit=4; }
+message GraphNeighborsResultV1 { repeated GraphEdgeV1 edges=1; bytes next_after_edge_id=2; uint64 projection_generation=3; }
+message GraphPathRequestV1 { string logical_owner_id=1; GraphNodeRefV1 source=2; GraphNodeRefV1 target=3; uint32 max_hops=4; }
+message GraphPathResultV1 { repeated GraphEdgeV1 edges=1; uint64 projection_generation=2; }
+message GraphStatusRequestV1 { string logical_owner_id=1; }
+message GraphStatusV1 { uint64 active_generation=1; uint64 nodes=2; uint64 edges=3; uint64 source_events=4; int64 rebuilt_at_unix_millis=5; }
+service GraphQueryService { rpc Neighbors(GraphNeighborsRequestV1) returns(GraphNeighborsResultV1); rpc Path(GraphPathRequestV1) returns(GraphPathResultV1); rpc GetStatus(GraphStatusRequestV1) returns(GraphStatusV1); }

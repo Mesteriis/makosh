@@ -11,6 +11,11 @@ TARGET ?= $(shell rustc +$(RUST_TOOLCHAIN) -vV | sed -n 's/^host: //p')
 	architecture-evidence-check \
 	test-architecture fmt-check clippy test-workspace test-integration \
 	dependency-policy-check supply-chain-check check-target check-linux-container ci \
+	persons-postgres-conformance \
+	mail-persons-sync-postgres-conformance \
+	review-person-match-candidate-postgres-conformance \
+	mail-persons-sync-managed-conformance \
+	persons-admission-cutover-conformance \
 	restore-postgres-backup verify-release-reproducibility
 
 build:
@@ -61,6 +66,21 @@ test-workspace:
 
 test-integration:
 	cargo nextest run --locked --workspace --profile integration
+
+persons-postgres-conformance:
+	@MAKOSH_PERSONS_POSTGRES_TEST_FILTER=all node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)
+
+mail-persons-sync-postgres-conformance:
+	@MAKOSH_MAIL_PERSONS_SYNC_POSTGRES_TEST_FILTER=all node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)
+
+review-person-match-candidate-postgres-conformance:
+	@MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_POSTGRES_TEST_FILTER=all node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)
+
+mail-persons-sync-managed-conformance:
+	@MAKOSH_STORAGE_MANAGED_TEST_FILTER=managed_mail_persons_sync_actual_binary_bootstraps_exact_private_contour node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)
+
+persons-admission-cutover-conformance:
+	@MAKOSH_STORAGE_MANAGED_TEST_FILTER=empty_start_provider_resync_without_contacts_import node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)
 
 dependency-policy-check:
 	node scripts/check-dependency-policy.mjs

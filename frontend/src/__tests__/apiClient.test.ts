@@ -18,7 +18,7 @@ describe('ApiClient', () => {
 
 	it('rejects an empty secret', () => {
 		expect(() => ApiClient.init('http://localhost:3000', '   ')).toThrow(
-			'X-Макошь-Secret cannot be empty'
+			'x-makosh-secret cannot be empty'
 		)
 	})
 
@@ -28,7 +28,7 @@ describe('ApiClient', () => {
 		expect(client).toBeInstanceOf(ApiClient)
 	})
 
-	it('sends X-Макошь-Secret header with GET requests', async () => {
+	it('sends x-makosh-secret header with GET requests', async () => {
 		const mockFetch = vi.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
@@ -42,7 +42,7 @@ describe('ApiClient', () => {
 		expect(mockFetch).toHaveBeenCalledTimes(1)
 		const [url, options] = mockFetch.mock.calls[0]
 		expect(url).toBe('http://localhost:3000/api/v1/test')
-		expect(options.headers['X-Макошь-Secret']).toBe('my-secret')
+		expect(options.headers['x-makosh-secret']).toBe('my-secret')
 		expect(options.method).toBe('GET')
 
 		vi.unstubAllGlobals()

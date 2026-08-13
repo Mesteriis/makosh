@@ -623,7 +623,7 @@ for (const { owner, adapters } of [
 
 
 
-for (const owner of ['contacts', 'organizations', 'tasks', 'calendar', 'documents', 'ai']) {
+for (const owner of ['persons', 'organizations', 'tasks', 'calendar', 'documents', 'ai']) {
   test(`accepts an isolated package graph for enabled domain ${owner}`, () => {
     const packages = [
       kernel(),
@@ -716,8 +716,13 @@ test('keeps WhatsApp implementation in the hidden host WebView boundary', () => 
 
 
 
-for (const owner of ['relationships', 'projects', 'obligations', 'decisions']) {
+for (const owner of ['decisions']) {
   test(`rejects a Cargo package owned by blocked domain ${owner}`, () => {
+    const blockedPolicy = canonicalPolicyForTests();
+    blockedPolicy.domains.developmentAllowlist = blockedPolicy.domains.developmentAllowlist.filter(
+      (value) => value !== owner,
+    );
+    blockedPolicy.domains.blocked.push(owner);
     const packages = [
       kernel(),
       workspacePackage(`makosh-${owner}-runtime`, {
@@ -727,6 +732,6 @@ for (const owner of ['relationships', 'projects', 'obligations', 'decisions']) {
       }),
     ];
 
-    assert.ok(codes(validateCargoMetadata(canonicalPolicyForTests(), metadata(packages))).has('blocked_domain'));
+    assert.ok(codes(validateCargoMetadata(blockedPolicy, metadata(packages))).has('blocked_domain'));
   });
 }

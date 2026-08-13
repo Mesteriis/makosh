@@ -1,9 +1,15 @@
 //! Live managed Telegram process through Kernel leases into managed Communications.
 
 use super::*;
-use std::time::Instant;
+use std::{
+    io::Read as _,
+    os::unix::fs::{MetadataExt as _, PermissionsExt as _},
+    process::{Command, Stdio},
+    time::Instant,
+};
 
 use crate::platform::client_realtime::ClientRealtimePublishHandlerV1;
+use base64::Engine as _;
 use makosh_events_protocol::validation::envelope::decode_envelope_v1;
 use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
@@ -46,17 +52,35 @@ use makosh_telegram_calls_api::{
         calls_query_request_v1, calls_query_response_v1,
     },
 };
+use makosh_telegram_runtime::admission::{
+    TELEGRAM_STORAGE_CAPABILITY_ID, TELEGRAM_TDJSON_ARTIFACT_ID, TELEGRAM_TGCALLS_ARTIFACT_ID,
+};
 use makosh_telegram_runtime::client_port::{
     TelegramClientPortError, decode_module_response, encode_module_request,
 };
 use prost::Message as _;
 use sha2::Digest as _;
+use zeroize::Zeroizing;
 
 const AUTOMATION_TEMPLATE_ID: &str = "managed-template-1";
 const AUTOMATION_POLICY_ID: &str = "managed-policy-1";
 const AUTOMATION_PREVIEW_ID: &str = "managed-preview-1";
 const AUTOMATION_CHAT_ID: &str = "telegram-chat-1";
 const MODULE_CLIENT_PROTOCOL_MAJOR: u32 = 1;
+const TASK10_PRIVATE_BODY_SENTINEL_V1: &[u8] = b"task10-private-body-sentinel";
+const TASK10_RAW_PROVIDER_SENTINEL_V1: &[u8] = b"task10-raw-provider-sentinel";
+const TASK10_PRIVATE_API_HASH_SENTINEL_V1: &[u8] = b"managed-telegram-api-hash";
+const TASK10_PRIVATE_CALL_CONFIG_SENTINEL_V1: &[u8] = b"managed-private-config";
+const TASK10_PRIVATE_CALL_PARAMETERS_SENTINEL_V1: &[u8] = b"managed-private-parameters";
+const TASK10_PRIVATE_PROVIDER_ERROR_SENTINEL_V1: &[u8] = b"private fixture failure";
+const TASK10_REAL_TDJSON_ENV_V1: &str = "MAKOSH_TELEGRAM_REAL_TDJSON";
+const TASK10_REAL_TGCALLS_ROOT_ENV_V1: &str = "MAKOSH_TELEGRAM_REAL_TGCALLS_ROOT";
+const TASK10_REAL_API_ID_FILE_ENV_V1: &str = "MAKOSH_TELEGRAM_REAL_API_ID_FILE";
+const TASK10_REAL_API_HASH_FILE_ENV_V1: &str = "MAKOSH_TELEGRAM_REAL_API_HASH_FILE";
+const TASK10_REAL_TDJSON_SHA256_V1: &str =
+    "5cae8a2457076befc948c9203e8158af880a4d4ac6bd29a2f68475d4660fedb8";
+const TASK10_TGCALLS_BRIDGE_V1: &str = "libmakosh_tgcalls_bridge.dylib";
+const TASK10_TGCALLS_AUDIO_PROBE_V1: &str = "makosh_tgcalls_audio_device_conformance";
 
 #[derive(Debug)]
 enum TelegramClientRouteError {
@@ -103,6 +127,22 @@ impl PreparedManagedTelegramFixture {
         )
     }
 
+    pub(super) fn start_telegram_with_capture_v1(
+        &mut self,
+        capture_directory: &Path,
+    ) -> StartedTelegramRuntime {
+        start_telegram_runtime_with_capture_v1(
+            &self.supervisor,
+            &self.store,
+            &self.data,
+            &self.root.join("runtime"),
+            self.admitted_telegram
+                .take()
+                .expect("prepared Telegram admission"),
+            capture_directory,
+        )
+    }
+
     pub(super) fn restart_telegram(
         &self,
         predecessor: StartedTelegramRuntime,
@@ -135,6 +175,27 @@ pub(super) fn prepare_managed_telegram_fixture() -> PreparedManagedTelegramFixtu
 fn prepare_managed_telegram_fixture_without_capability(
     excluded_capability_id: Option<&str>,
 ) -> PreparedManagedTelegramFixture {
+    let tdjson = telegram_tdjson_fixture();
+    let tgcalls = telegram_tgcalls_fixture();
+    prepare_managed_telegram_fixture_with_inputs_v1(
+        excluded_capability_id,
+        &tdjson,
+        &tgcalls,
+        42,
+        b"managed-telegram-api-hash",
+        &[31_u8; 32],
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn prepare_managed_telegram_fixture_with_inputs_v1(
+    excluded_capability_id: Option<&str>,
+    tdjson: &Path,
+    tgcalls: &Path,
+    api_id: i64,
+    api_hash: &[u8],
+    session_encryption_key: &[u8],
+) -> PreparedManagedTelegramFixture {
     assert_eq!(
         std::env::var("MAKOSH_STORAGE_AUTHENTICATED_TEST").as_deref(),
         Ok("1")
@@ -143,8 +204,8 @@ fn prepare_managed_telegram_fixture_without_capability(
     let data = private_directory(short_communications_kernel_data_directory());
     let vault_dir = private_directory(data.join("vault"));
     initialize_vault(&vault_dir, &credential_directory());
-    seed_telegram_vault(&vault_dir);
-    let release = installed_communications_telegram_release(&root);
+    seed_telegram_vault_with_secrets_v1(&vault_dir, api_hash, session_encryption_key);
+    let release = installed_communications_telegram_release_with_native_v1(&root, tdjson, tgcalls);
     unsafe {
         std::env::set_var("MAKOSH_TEST_KERNEL_EXECUTABLE", release.kernel());
     }
@@ -158,7 +219,7 @@ fn prepare_managed_telegram_fixture_without_capability(
         .expect("claim initial owner");
     super::super::browser_gateway_session::admit_browser_test_device(&store, "owner-1");
     let admitted_telegram =
-        admit_telegram_runtime_without_capability(&store, excluded_capability_id);
+        admit_telegram_runtime_with_api_id_v1(&store, excluded_capability_id, api_id);
     let _ = FileDeviceSigner::open_or_create_for_instance(&data).expect("Kernel signer");
     let shutdown = Arc::new(AtomicBool::new(false));
     let supervisor = ManagedRuntimeSupervisor::new(Arc::clone(&shutdown));
@@ -212,6 +273,977 @@ fn prepare_managed_telegram_fixture_without_capability(
         realtime,
         admitted_telegram: Some(admitted_telegram),
     }
+}
+
+fn prepare_managed_telegram_real_provider_fixture_v1(
+    tdjson: &Path,
+    tgcalls: &Path,
+    api_id: i64,
+    api_hash: &[u8],
+    session_encryption_key: &[u8],
+) -> PreparedManagedTelegramFixture {
+    prepare_managed_telegram_fixture_with_inputs_v1(
+        None,
+        tdjson,
+        tgcalls,
+        api_id,
+        api_hash,
+        session_encryption_key,
+    )
+}
+
+#[test]
+#[ignore = "requires an approved real TDLib user credential contour and release-eligible native artifacts"]
+fn managed_telegram_real_tdlib_reaches_qr_authorization() {
+    let tdjson = required_regular_artifact_v1(TASK10_REAL_TDJSON_ENV_V1, false);
+    assert_eq!(
+        tdjson.file_name().and_then(|name| name.to_str()),
+        Some("libtdjson.1.8.0.dylib"),
+        "Task 10 TDLib gate requires the exact admitted Homebrew TDLib artifact",
+    );
+    assert_eq!(
+        sha256_hex_v1(&std::fs::read(&tdjson).expect("read exact Task 10 TDLib artifact")),
+        TASK10_REAL_TDJSON_SHA256_V1,
+        "Task 10 TDLib artifact digest is not exact",
+    );
+    let (tgcalls, _) = task10_release_tgcalls_artifacts_v1();
+    let api_id_bytes = read_private_input_file_v1(TASK10_REAL_API_ID_FILE_ENV_V1, 32);
+    let api_id = std::str::from_utf8(api_id_bytes.as_slice())
+        .ok()
+        .and_then(|value| value.trim().parse::<i64>().ok())
+        .filter(|value| *value > 0)
+        .expect("Task 10 Telegram API ID file must contain one positive integer");
+    let api_hash_file = read_private_input_file_v1(TASK10_REAL_API_HASH_FILE_ENV_V1, 128);
+    let api_hash = Zeroizing::new(trim_single_line_secret_v1(api_hash_file.as_slice()));
+    assert!(
+        api_hash.len() == 32
+            && api_hash
+                .iter()
+                .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(byte)),
+        "Task 10 Telegram API hash must be one canonical lowercase hexadecimal value",
+    );
+    let mut session_encryption_key = Zeroizing::new([0_u8; 32]);
+    getrandom::fill(session_encryption_key.as_mut())
+        .expect("generate fresh Telegram session encryption key");
+
+    let mut fixture = prepare_managed_telegram_real_provider_fixture_v1(
+        &tdjson,
+        &tgcalls,
+        api_id,
+        api_hash.as_slice(),
+        session_encryption_key.as_slice(),
+    );
+    let child_stdio = telegram_child_capture_v1(&fixture.root, "real-tdlib-qr");
+    let telegram = fixture.start_telegram_with_capture_v1(&child_stdio);
+    let storage_credential = runtime_storage_credential_for_registration_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &telegram.registration_id,
+        TELEGRAM_STORAGE_CAPABILITY_ID,
+    );
+    let relay = fixture.supervisor.relay_port();
+    let deadline = Instant::now() + Duration::from_secs(60);
+    let mut request_id = 80_000_u64;
+    let qr_link = loop {
+        request_id = request_id.saturating_add(1);
+        match route_telegram_client(
+            &fixture.store,
+            &relay,
+            &telegram,
+            TelegramClientContractV1::Authorization,
+            request_id,
+            &TelegramClientRequest::AuthorizationStatus,
+        ) {
+            Ok(TelegramClientResponse::AuthorizationStatus(status)) => {
+                assert_dynamic_private_bytes_absent_v1(
+                    format!("{status:?}").as_bytes(),
+                    &[
+                        api_hash.as_slice(),
+                        session_encryption_key.as_slice(),
+                        storage_credential.as_slice(),
+                    ],
+                    "typed real Telegram authorization response",
+                );
+                if status.state == "waiting_qr_scan"
+                    && let Some(link) = status.qr_link
+                {
+                    assert!(
+                        link.starts_with("tg://login?token=")
+                            && link.len() > "tg://login?token=".len(),
+                        "TDLib returned a non-canonical Telegram QR authorization link",
+                    );
+                    break Zeroizing::new(link);
+                }
+            }
+            Err(error) if error.is_retryable() => {}
+            Err(_) => panic!("real Telegram authorization status route failed closed"),
+            Ok(_) => panic!("real Telegram authorization route returned the wrong response type"),
+        }
+        assert!(
+            Instant::now() < deadline,
+            "real TDLib did not reach the bounded QR authorization state",
+        );
+        std::thread::sleep(Duration::from_millis(100));
+    };
+
+    let diagnostic = format!(
+        "{:?}",
+        fixture
+            .supervisor
+            .last_failure(&telegram.registration_id)
+            .expect("read real Telegram supervisor diagnostic"),
+    );
+    assert_dynamic_private_bytes_absent_v1(
+        diagnostic.as_bytes(),
+        &[
+            api_hash.as_slice(),
+            session_encryption_key.as_slice(),
+            qr_link.as_bytes(),
+            storage_credential.as_slice(),
+        ],
+        "real Telegram supervisor diagnostic",
+    );
+    assert!(
+        fixture
+            .supervisor
+            .request_stop_if_active(&telegram.registration_id)
+            .expect("request real Telegram runtime stop"),
+        "real Telegram runtime must remain active until the QR gate stops it",
+    );
+    let stop_started = Instant::now();
+    assert!(
+        fixture
+            .supervisor
+            .stop_if_active(&telegram.registration_id)
+            .expect("join real Telegram runtime stop"),
+        "real Telegram runtime must join after the stop request",
+    );
+    assert!(
+        stop_started.elapsed() < Duration::from_secs(2),
+        "real Telegram runtime did not stop within the control deadline",
+    );
+    clear_telegram_child_capture_v1();
+    assert_dynamic_private_durable_surfaces_v1(&[
+        api_hash.as_slice(),
+        session_encryption_key.as_slice(),
+        qr_link.as_bytes(),
+        storage_credential.as_slice(),
+    ]);
+    assert_dynamic_supervised_child_output_is_private_v1(
+        &child_stdio,
+        &[
+            api_hash.as_slice(),
+            session_encryption_key.as_slice(),
+            qr_link.as_bytes(),
+            storage_credential.as_slice(),
+        ],
+    );
+}
+
+#[test]
+#[ignore = "requires the pinned release-eligible tgcalls build and explicit local audio-device consent"]
+fn managed_telegram_real_tgcalls_audio_device_conformance() {
+    let (_, audio_probe) = task10_release_tgcalls_artifacts_v1();
+    let mut child = Command::new(audio_probe)
+        .arg("--allow-microphone-and-speaker-access")
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("start pinned tgcalls audio-device conformance probe");
+    let deadline = Instant::now() + Duration::from_secs(30);
+    let status = loop {
+        if let Some(status) = child
+            .try_wait()
+            .expect("poll tgcalls audio-device conformance probe")
+        {
+            break status;
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let _ = child.wait();
+            panic!("tgcalls audio-device conformance probe exceeded its bounded deadline");
+        }
+        std::thread::sleep(Duration::from_millis(25));
+    };
+    let mut output = Vec::new();
+    child
+        .stdout
+        .take()
+        .expect("captured tgcalls audio probe stdout")
+        .read_to_end(&mut output)
+        .expect("read tgcalls audio probe stdout");
+    child
+        .stderr
+        .take()
+        .expect("captured tgcalls audio probe stderr")
+        .read_to_end(&mut output)
+        .expect("read tgcalls audio probe stderr");
+    assert!(
+        status.success(),
+        "real tgcalls audio-device conformance failed"
+    );
+    assert!(
+        output
+            .windows(b"audio-device-conformance: ok".len())
+            .any(|window| window == b"audio-device-conformance: ok"),
+        "real tgcalls audio-device conformance did not return its exact success marker",
+    );
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Communications and Telegram binaries"]
+fn managed_telegram_runtime_bootstrap_fails_closed_and_stops_promptly() {
+    let excluded_query = TelegramClientContractV1::Query.capability_id();
+    let mut fixture = prepare_managed_telegram_fixture_without_capability(Some(excluded_query));
+    let runtime_dir = fixture.root.join("runtime");
+    let admitted = fixture
+        .admitted_telegram
+        .take()
+        .expect("prepared Telegram admission");
+
+    let capture = telegram_child_capture_v1(&fixture.root, "missing-settings");
+    let started = launch_telegram_runtime_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        admitted,
+        TelegramBootstrapOverrideV1::MissingSettings,
+        &capture,
+    );
+    assert_telegram_pre_spawn_denied_v1(
+        &fixture.supervisor,
+        &started,
+        "missing settings",
+        &capture,
+    );
+
+    let capture = telegram_child_capture_v1(&fixture.root, "invalid-settings");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        started,
+        TelegramBootstrapOverrideV1::InvalidSettingsValue,
+        &capture,
+    );
+    assert_telegram_bounded_runtime_denied_v1(
+        &fixture.supervisor,
+        &started,
+        "invalid settings",
+        &capture,
+    );
+
+    let capture = telegram_child_capture_v1(&fixture.root, "missing-storage");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        started,
+        TelegramBootstrapOverrideV1::MissingStorage,
+        &capture,
+    );
+    assert_telegram_pre_spawn_denied_v1(&fixture.supervisor, &started, "missing Storage", &capture);
+
+    let capture = telegram_child_capture_v1(&fixture.root, "stale-storage");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        started,
+        TelegramBootstrapOverrideV1::StaleStorageFence,
+        &capture,
+    );
+    assert_telegram_active_until_requested_stop_v1(
+        &fixture.supervisor,
+        &started,
+        "stale Storage fence",
+        &capture,
+    );
+
+    let capture = telegram_child_capture_v1(&fixture.root, "stale-vault");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        started,
+        TelegramBootstrapOverrideV1::StaleVaultFence,
+        &capture,
+    );
+    assert_telegram_active_until_requested_stop_v1(
+        &fixture.supervisor,
+        &started,
+        "stale Vault fence",
+        &capture,
+    );
+
+    let capture = telegram_child_capture_v1(&fixture.root, "stale-event");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        started,
+        TelegramBootstrapOverrideV1::StaleEventFence,
+        &capture,
+    );
+    assert_telegram_active_until_requested_stop_v1(
+        &fixture.supervisor,
+        &started,
+        "stale Event fence",
+        &capture,
+    );
+
+    let healthy = fixture.restart_telegram(started);
+    let request = encode_module_request(
+        68,
+        &TelegramClientRequest::Query(TelegramProviderQuery::CachedChats {
+            account_id: TELEGRAM_ACCOUNT_ID.to_owned(),
+            limit: 1,
+        }),
+    )
+    .expect("encode ungranted Telegram query");
+    let route = crate::modules::capability::router::ManagedCapabilityRouteRequest::new(
+        &healthy.registration_id,
+        &healthy.runtime_instance_id,
+        healthy.runtime_generation,
+        healthy.grant_epoch,
+        excluded_query,
+        &request,
+    );
+    assert_eq!(
+        crate::modules::capability::router::route_managed_client_request(
+            &*fixture.store,
+            &fixture.supervisor.relay_port(),
+            &route,
+        )
+        .expect_err("ungranted Telegram query route"),
+        "capability is not granted to this registration"
+    );
+    fixture
+        .supervisor
+        .stop(&healthy.registration_id)
+        .expect("stop healthy Telegram predecessor");
+
+    let native_root = fixture
+        .root
+        .join("Макошь.app/Contents/Resources/makosh-kernel-release/distribution/lib");
+    std::fs::remove_file(native_root.join(TELEGRAM_TDJSON_ARTIFACT_ID))
+        .expect("remove signed TDJSON artifact");
+    std::fs::remove_file(native_root.join(TELEGRAM_TGCALLS_ARTIFACT_ID))
+        .expect("remove signed tgcalls artifact");
+    let capture = telegram_child_capture_v1(&fixture.root, "missing-native-artifacts");
+    let started = launch_telegram_successor_without_ready_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &runtime_dir,
+        healthy,
+        TelegramBootstrapOverrideV1::MissingNativeArtifacts,
+        &capture,
+    );
+    assert_telegram_pre_spawn_denied_v1(
+        &fixture.supervisor,
+        &started,
+        "missing native artifacts",
+        &capture,
+    );
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Communications and Telegram binaries"]
+fn managed_telegram_private_surfaces_reject_malformed_provider_output() {
+    let mut fixture = prepare_managed_telegram_fixture();
+    let child_stdio = telegram_child_capture_v1(&fixture.root, "private-surfaces");
+    unsafe {
+        std::env::set_var(
+            crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+            &child_stdio,
+        );
+    }
+    let telegram = fixture.start_telegram();
+    let storage_credential = runtime_storage_credential_for_registration_v1(
+        &fixture.supervisor,
+        &fixture.store,
+        &fixture.data,
+        &telegram.registration_id,
+        makosh_telegram_runtime::admission::TELEGRAM_STORAGE_CAPABILITY_ID,
+    );
+    assert_telegram_lifecycle_query(&fixture.store, &fixture.supervisor, &telegram);
+    assert_telegram_account_started(&fixture.store, &fixture.supervisor, &telegram);
+
+    let typed_response_deadline = Instant::now() + Duration::from_secs(10);
+    let typed_response = loop {
+        match route_telegram_client(
+            &fixture.store,
+            &fixture.supervisor.relay_port(),
+            &telegram,
+            TelegramClientContractV1::Lifecycle,
+            96,
+            &TelegramClientRequest::ListAccounts,
+        ) {
+            Ok(response) => break response,
+            Err(error) if error.is_retryable() => {
+                assert!(
+                    Instant::now() < typed_response_deadline,
+                    "typed Telegram lifecycle response remained unavailable: {error:?}"
+                );
+                std::thread::sleep(Duration::from_millis(25));
+            }
+            Err(error) => panic!("read typed Telegram lifecycle response: {error:?}"),
+        }
+    };
+    assert_telegram_private_bytes_absent_v1(
+        format!("{typed_response:?}").as_bytes(),
+        storage_credential.as_slice(),
+        "typed Telegram lifecycle response",
+    );
+
+    assert_telegram_command_accepted(
+        &fixture.store,
+        &fixture.supervisor,
+        &telegram,
+        "task10-private-malformed-provider",
+        "managed malformed provider trigger",
+    );
+    assert_telegram_operation_state_v1("task10-private-malformed-provider", "dead_letter");
+    let failed_operation = telegram_operation_response_v1(
+        &fixture.store,
+        &fixture.supervisor,
+        &telegram,
+        "task10-private-malformed-provider",
+    );
+    assert_eq!(failed_operation.state, TelegramOperationState::DeadLetter);
+    assert_telegram_private_bytes_absent_v1(
+        format!("{failed_operation:?}").as_bytes(),
+        storage_credential.as_slice(),
+        "typed Telegram operation terminal",
+    );
+    let diagnostic = format!(
+        "{:?}",
+        fixture
+            .supervisor
+            .last_failure(&telegram.registration_id)
+            .expect("read malformed Telegram runtime diagnostic")
+    );
+    assert_telegram_private_bytes_absent_v1(
+        diagnostic.as_bytes(),
+        storage_credential.as_slice(),
+        "Telegram supervisor diagnostic",
+    );
+    if fixture
+        .supervisor
+        .request_stop_if_active(&telegram.registration_id)
+        .expect("request malformed Telegram runtime stop")
+    {
+        assert!(
+            fixture
+                .supervisor
+                .stop_if_active(&telegram.registration_id)
+                .expect("join malformed Telegram runtime stop")
+        );
+    }
+
+    assert_telegram_durable_surfaces_are_private_v1(storage_credential.as_slice());
+    clear_telegram_child_capture_v1();
+    assert_supervised_telegram_child_output_is_private_v1(
+        &child_stdio,
+        storage_credential.as_slice(),
+    );
+}
+
+fn telegram_operation_response_v1(
+    store: &SqliteControlStore,
+    supervisor: &ManagedRuntimeSupervisor,
+    telegram: &StartedTelegramRuntime,
+    operation_id: &str,
+) -> makosh_telegram_api::TelegramOperation {
+    let deadline = Instant::now() + Duration::from_secs(10);
+    loop {
+        match route_telegram_client(
+            store,
+            &supervisor.relay_port(),
+            telegram,
+            TelegramClientContractV1::Query,
+            97,
+            &TelegramClientRequest::Query(TelegramProviderQuery::Operations {
+                account_id: TELEGRAM_ACCOUNT_ID.to_owned(),
+                limit: 16,
+            }),
+        ) {
+            Ok(TelegramClientResponse::Query(TelegramProviderQueryResponse::Operations(
+                operations,
+            ))) => {
+                if let Some(operation) = operations
+                    .into_iter()
+                    .find(|operation| operation.operation_id == operation_id)
+                {
+                    return operation;
+                }
+            }
+            Ok(_) => panic!("Telegram operation query returned the wrong response type"),
+            Err(error) if error.is_retryable() => {}
+            Err(error) => panic!("Telegram operation query failed: {error:?}"),
+        }
+        assert!(
+            Instant::now() < deadline,
+            "Telegram typed operation terminal remained unavailable"
+        );
+        std::thread::sleep(Duration::from_millis(25));
+    }
+}
+
+fn assert_telegram_operation_state_v1(operation_id: &str, expected_state: &str) {
+    let runtime = tokio::runtime::Runtime::new().expect("Telegram operation state runtime");
+    let pool = runtime.block_on(telegram_admin_pool());
+    let deadline = Instant::now() + Duration::from_secs(10);
+    loop {
+        let state = runtime
+            .block_on(
+                sqlx::query_scalar::<_, String>(
+                    "SELECT state FROM makosh_data.telegram_runtime_operations WHERE operation_id = $1",
+                )
+                .bind(operation_id)
+                .fetch_optional(&pool),
+            )
+            .expect("read Telegram operation state");
+        if state.as_deref() == Some(expected_state) {
+            return;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "Telegram privacy operation did not reach {expected_state}; last state={state:?}"
+        );
+        std::thread::sleep(Duration::from_millis(25));
+    }
+}
+
+fn assert_telegram_private_bytes_absent_v1(bytes: &[u8], storage_credential: &[u8], surface: &str) {
+    for marker in telegram_private_markers_v1() {
+        assert!(
+            !bytes.windows(marker.len()).any(|value| value == marker),
+            "{surface} exposed a private Telegram marker"
+        );
+    }
+    assert!(
+        !bytes
+            .windows(storage_credential.len())
+            .any(|value| value == storage_credential),
+        "{surface} exposed the exact Telegram Storage credential"
+    );
+}
+
+fn telegram_private_markers_v1() -> [&'static [u8]; 6] {
+    [
+        TASK10_PRIVATE_BODY_SENTINEL_V1,
+        TASK10_RAW_PROVIDER_SENTINEL_V1,
+        TASK10_PRIVATE_API_HASH_SENTINEL_V1,
+        TASK10_PRIVATE_CALL_CONFIG_SENTINEL_V1,
+        TASK10_PRIVATE_CALL_PARAMETERS_SENTINEL_V1,
+        TASK10_PRIVATE_PROVIDER_ERROR_SENTINEL_V1,
+    ]
+}
+
+fn assert_telegram_durable_surfaces_are_private_v1(storage_credential: &[u8]) {
+    tokio::runtime::Runtime::new()
+        .expect("Telegram privacy database runtime")
+        .block_on(async {
+            let pool = telegram_admin_pool().await;
+            let credential_hex = storage_credential
+                .iter()
+                .map(|byte| format!("{byte:02x}"))
+                .collect::<String>();
+            for table in makosh_telegram_persistence::TELEGRAM_OWNER_RLS_TABLES_V1 {
+                let rows: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+                    "SELECT COALESCE(string_agg(row_to_json(source)::text, E'\\n'), '') \
+                     FROM makosh_data.{table} AS source"
+                )))
+                .fetch_one(&pool)
+                .await
+                .unwrap_or_else(|error| {
+                    panic!("serialize private Telegram table {table}: {error}")
+                });
+                for marker in telegram_private_markers_v1() {
+                    let marker = std::str::from_utf8(marker).expect("ASCII Telegram marker");
+                    let marker_hex = marker
+                        .as_bytes()
+                        .iter()
+                        .map(|byte| format!("{byte:02x}"))
+                        .collect::<String>();
+                    assert!(
+                        !rows.contains(marker) && !rows.contains(&marker_hex),
+                        "durable Telegram table {table} exposed a private marker"
+                    );
+                }
+                assert!(
+                    !rows.contains(&credential_hex),
+                    "durable Telegram table {table} exposed the exact Storage credential"
+                );
+            }
+        });
+}
+
+fn assert_supervised_telegram_child_output_is_private_v1(
+    directory: &Path,
+    storage_credential: &[u8],
+) {
+    let captures = telegram_child_capture_paths_v1(directory);
+    assert!(
+        captures.len() >= 2 && captures.len().is_multiple_of(2),
+        "Telegram privacy contour must capture complete supervised child attempts"
+    );
+    for capture in captures {
+        let bytes = std::fs::read(capture).expect("read supervised Telegram child output");
+        assert_telegram_private_bytes_absent_v1(
+            &bytes,
+            storage_credential,
+            "supervised Telegram child output",
+        );
+    }
+}
+
+fn telegram_child_capture_v1(root: &Path, phase: &str) -> PathBuf {
+    private_directory(root.join(format!("telegram-stdio-{phase}")))
+}
+
+fn telegram_child_capture_paths_v1(directory: &Path) -> Vec<PathBuf> {
+    let mut paths = std::fs::read_dir(directory)
+        .expect("read Telegram child capture directory")
+        .map(|entry| entry.expect("read Telegram child capture entry").path())
+        .collect::<Vec<_>>();
+    paths.sort();
+    paths
+}
+
+fn clear_telegram_child_capture_v1() {
+    unsafe {
+        std::env::remove_var(
+            crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+        );
+    }
+}
+
+fn required_regular_artifact_v1(name: &str, executable: bool) -> PathBuf {
+    let path = PathBuf::from(required(name));
+    assert!(path.is_absolute(), "{name} must be an absolute path");
+    let metadata = std::fs::symlink_metadata(&path)
+        .unwrap_or_else(|_| panic!("{name} must name an existing regular file"));
+    assert!(
+        metadata.file_type().is_file(),
+        "{name} must name a regular non-symlink file",
+    );
+    if executable {
+        assert!(
+            metadata.permissions().mode() & 0o111 != 0,
+            "{name} must name an executable file",
+        );
+    }
+    path
+}
+
+fn read_private_input_file_v1(name: &str, maximum_bytes: u64) -> Zeroizing<Vec<u8>> {
+    let path = PathBuf::from(required(name));
+    assert!(path.is_absolute(), "{name} must be an absolute path");
+    let metadata = std::fs::symlink_metadata(&path)
+        .unwrap_or_else(|_| panic!("{name} must name an existing private file"));
+    assert!(
+        metadata.file_type().is_file()
+            && metadata.uid() == unsafe { libc::geteuid() }
+            && metadata.permissions().mode() & 0o077 == 0
+            && (1..=maximum_bytes).contains(&metadata.len()),
+        "{name} must be a bounded owner-private regular non-symlink file",
+    );
+    Zeroizing::new(
+        std::fs::read(path).unwrap_or_else(|_| panic!("{name} private file could not be read")),
+    )
+}
+
+fn trim_single_line_secret_v1(value: &[u8]) -> Vec<u8> {
+    let value = value.strip_suffix(b"\n").unwrap_or(value);
+    let value = value.strip_suffix(b"\r").unwrap_or(value);
+    assert!(
+        !value.is_empty() && !value.iter().any(u8::is_ascii_whitespace),
+        "Task 10 secret file must contain exactly one non-empty value",
+    );
+    value.to_vec()
+}
+
+fn task10_release_tgcalls_artifacts_v1() -> (PathBuf, PathBuf) {
+    let root = PathBuf::from(required(TASK10_REAL_TGCALLS_ROOT_ENV_V1));
+    assert!(
+        root.is_absolute(),
+        "Task 10 tgcalls root must be an absolute path",
+    );
+    let root_metadata = std::fs::symlink_metadata(&root).expect("Task 10 tgcalls root must exist");
+    assert!(
+        root_metadata.file_type().is_dir(),
+        "Task 10 tgcalls root must be a real directory",
+    );
+    let bridge = root.join(TASK10_TGCALLS_BRIDGE_V1);
+    let audio_probe = root.join(TASK10_TGCALLS_AUDIO_PROBE_V1);
+    for (path, executable) in [(&bridge, false), (&audio_probe, true)] {
+        let metadata =
+            std::fs::symlink_metadata(path).expect("Task 10 tgcalls release artifact must exist");
+        assert!(
+            metadata.file_type().is_file(),
+            "Task 10 tgcalls release artifact must be a regular non-symlink file",
+        );
+        if executable {
+            assert!(
+                metadata.permissions().mode() & 0o111 != 0,
+                "Task 10 tgcalls audio probe must be executable",
+            );
+        }
+    }
+    let provenance_bytes =
+        std::fs::read(root.join("provenance.json")).expect("read Task 10 tgcalls provenance");
+    assert!(
+        provenance_bytes.len() <= 16 * 1024,
+        "Task 10 tgcalls provenance exceeds its bounded size",
+    );
+    let provenance: serde_json::Value =
+        serde_json::from_slice(&provenance_bytes).expect("decode Task 10 tgcalls provenance");
+    for (field, expected) in [
+        ("artifact", TASK10_TGCALLS_BRIDGE_V1),
+        (
+            "audio_device_conformance_artifact",
+            TASK10_TGCALLS_AUDIO_PROBE_V1,
+        ),
+        ("build_profile", "release"),
+        ("platform", "darwin-arm64"),
+        ("xcode_version", "26.2"),
+        ("xcode_version_pin", "26.2"),
+        ("bazel_version", "8.4.2"),
+        (
+            "telegram_ios_commit",
+            "6ad963e5b62d354da79040f388ae2b9132fb17b8",
+        ),
+        ("tgcalls_commit", "e3069322a3d1e16ecb11a5e302242e59ddd7f09e"),
+        ("webrtc_commit", "3817e906cb6c22ec9cc62023b073e1a668d9cb33"),
+        ("libvpx_commit", "e7bfd8b6c230a6824e7fd1efa2378a7322986128"),
+        ("dav1d_commit", "330e20672e85f9de1678dccd6957845898ef57a1"),
+    ] {
+        assert_eq!(
+            provenance.get(field).and_then(serde_json::Value::as_str),
+            Some(expected),
+            "Task 10 tgcalls provenance field {field} is not exact",
+        );
+    }
+    assert_eq!(
+        provenance
+            .get("release_eligible")
+            .and_then(serde_json::Value::as_bool),
+        Some(true),
+        "Task 10 tgcalls artifact is not release eligible",
+    );
+    assert_eq!(
+        provenance
+            .get("bridge_abi")
+            .and_then(serde_json::Value::as_u64),
+        Some(1),
+        "Task 10 tgcalls bridge ABI is not exact",
+    );
+    let bridge_sha = sha256_hex_v1(
+        &std::fs::read(&bridge).expect("read Task 10 tgcalls bridge for provenance binding"),
+    );
+    assert_eq!(
+        provenance
+            .get("artifact_sha256")
+            .and_then(serde_json::Value::as_str),
+        Some(bridge_sha.as_str()),
+        "Task 10 tgcalls provenance does not bind the exact bridge bytes",
+    );
+    (bridge, audio_probe)
+}
+
+fn assert_dynamic_private_bytes_absent_v1(bytes: &[u8], private_values: &[&[u8]], surface: &str) {
+    for value in private_values {
+        assert!(
+            !value.is_empty(),
+            "Task 10 private probe value must be non-empty"
+        );
+        assert!(
+            !bytes.windows(value.len()).any(|window| window == *value),
+            "{surface} exposed a Task 10 private value",
+        );
+        let value_hex = value
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>();
+        let value_base64 = base64::engine::general_purpose::STANDARD.encode(value);
+        let value_base64_unpadded = base64::engine::general_purpose::STANDARD_NO_PAD.encode(value);
+        for encoded in [&value_hex, &value_base64, &value_base64_unpadded] {
+            assert!(
+                !bytes
+                    .windows(encoded.len())
+                    .any(|window| window == encoded.as_bytes()),
+                "{surface} exposed an encoded Task 10 private value",
+            );
+        }
+    }
+}
+
+fn sha256_hex_v1(bytes: &[u8]) -> String {
+    Sha256::digest(bytes)
+        .iter()
+        .map(|byte| format!("{byte:02x}"))
+        .collect()
+}
+
+fn assert_dynamic_private_durable_surfaces_v1(private_values: &[&[u8]]) {
+    tokio::runtime::Runtime::new()
+        .expect("real Telegram privacy database runtime")
+        .block_on(async {
+            let pool = telegram_admin_pool().await;
+            for table in makosh_telegram_persistence::TELEGRAM_OWNER_RLS_TABLES_V1 {
+                let rows: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+                    "SELECT COALESCE(string_agg(row_to_json(source)::text, E'\\n'), '') \
+                     FROM makosh_data.{table} AS source"
+                )))
+                .fetch_one(&pool)
+                .await
+                .unwrap_or_else(|error| panic!("serialize real Telegram table {table}: {error}"));
+                for value in private_values {
+                    assert_dynamic_private_bytes_absent_v1(
+                        rows.as_bytes(),
+                        &[*value],
+                        "real Telegram durable row",
+                    );
+                }
+            }
+        });
+}
+
+fn assert_dynamic_supervised_child_output_is_private_v1(
+    directory: &Path,
+    private_values: &[&[u8]],
+) {
+    let captures = telegram_child_capture_paths_v1(directory);
+    assert_eq!(
+        captures.len(),
+        2,
+        "real Telegram QR gate must capture exactly one supervised child attempt",
+    );
+    for capture in captures {
+        let bytes = std::fs::read(capture).expect("read real Telegram supervised child output");
+        assert_dynamic_private_bytes_absent_v1(
+            &bytes,
+            private_values,
+            "real Telegram supervised child output",
+        );
+    }
+}
+
+fn assert_telegram_pre_spawn_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedTelegramRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    assert!(
+        !matches!(
+            supervisor.relay_port().is_ready(&started.registration_id),
+            Ok(true)
+        ),
+        "{phase} must not signal Ready"
+    );
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("Telegram pre-spawn activity"),
+        "{phase} must be denied before child spawn"
+    );
+    assert!(
+        telegram_child_capture_paths_v1(capture).is_empty(),
+        "{phase} must not create supervised child output"
+    );
+    clear_telegram_child_capture_v1();
+}
+
+fn assert_telegram_bounded_runtime_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedTelegramRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = Instant::now() + Duration::from_secs(2);
+    while supervisor
+        .is_active(&started.registration_id)
+        .expect("Telegram bounded denial activity")
+    {
+        assert!(Instant::now() < deadline, "{phase} did not terminate");
+        assert!(
+            !matches!(
+                supervisor.relay_port().is_ready(&started.registration_id),
+                Ok(true)
+            ),
+            "{phase} must not signal Ready"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let captures = telegram_child_capture_paths_v1(capture);
+    assert!(
+        captures.len() >= 2 && captures.len().is_multiple_of(2),
+        "{phase} must have bounded complete supervised child attempts"
+    );
+    clear_telegram_child_capture_v1();
+}
+
+fn assert_telegram_active_until_requested_stop_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedTelegramRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = Instant::now() + Duration::from_millis(100);
+    while Instant::now() < deadline {
+        assert!(
+            supervisor
+                .is_active(&started.registration_id)
+                .expect("Telegram bootstrap activity"),
+            "{phase} child exited before requested stop"
+        );
+        assert!(
+            !matches!(
+                supervisor.relay_port().is_ready(&started.registration_id),
+                Ok(true)
+            ),
+            "{phase} must not signal Ready"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let stopped_at = Instant::now();
+    assert!(
+        supervisor
+            .request_stop_if_active(&started.registration_id)
+            .expect("request Telegram bootstrap stop"),
+        "{phase} must own the active child"
+    );
+    assert!(
+        supervisor
+            .stop_if_active(&started.registration_id)
+            .expect("join Telegram bootstrap stop"),
+        "{phase} requested child must join"
+    );
+    assert!(stopped_at.elapsed() < Duration::from_secs(2));
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("Telegram stopped activity"),
+        "{phase} must not install a replacement"
+    );
+    assert_eq!(
+        telegram_child_capture_paths_v1(capture).len(),
+        2,
+        "{phase} must spawn exactly one supervised child"
+    );
+    clear_telegram_child_capture_v1();
 }
 
 #[test]
@@ -858,9 +1890,13 @@ fn assert_telegram_core_operational(
             },
         ),
         TelegramProviderQueryResponse::ChatPositions(positions)
-            if positions.len() == 1
-                && positions[0].provider_folder_id == Some(7)
-                && positions[0].is_pinned
+            if positions.len() == 2
+                && positions.iter().any(|position|
+                    position.provider_folder_id == Some(7) && position.is_pinned
+                )
+                && positions.iter().any(|position|
+                    position.provider_folder_id == Some(9) && !position.is_pinned
+                )
     ));
     assert!(matches!(
         telegram_query(
@@ -1098,9 +2134,13 @@ fn assert_telegram_core_operational_after_restart(
             },
         ),
         TelegramProviderQueryResponse::ChatPositions(positions)
-            if positions.len() == 1
-                && positions[0].provider_folder_id == Some(7)
-                && positions[0].is_pinned
+            if positions.len() == 2
+                && positions.iter().any(|position|
+                    position.provider_folder_id == Some(7) && position.is_pinned
+                )
+                && positions.iter().any(|position|
+                    position.provider_folder_id == Some(9) && !position.is_pinned
+                )
     ));
     assert!(matches!(
         telegram_query(
@@ -1288,16 +2328,23 @@ fn managed_telegram_automation_route_is_durable_and_provider_side_effect_free() 
 
     let telegram = fixture.start_telegram();
     assert_telegram_lifecycle_query(&store, &fixture.supervisor, &telegram);
-    let (baseline_observation, baseline_canonical) = event_runtime.block_on(async {
-        let observation = tokio::time::timeout(Duration::from_secs(10), observations.next())
-            .await
-            .expect("baseline Telegram observation timeout")
-            .expect("baseline Telegram observation");
-        let canonical = tokio::time::timeout(Duration::from_secs(10), canonical_events.next())
+    assert_telegram_account_started(&store, &fixture.supervisor, &telegram);
+    let baseline_observation = event_runtime.block_on(async {
+        tokio::time::timeout(Duration::from_secs(10), observations.next()).await
+    });
+    let baseline_observation = baseline_observation.unwrap_or_else(|error| {
+        panic!(
+            "baseline Telegram observation timeout: {error:?}; active={:?}; failure={:?}",
+            fixture.supervisor.is_active(&telegram.registration_id),
+            fixture.supervisor.last_failure(&telegram.registration_id),
+        );
+    });
+    let baseline_observation = baseline_observation.expect("baseline Telegram observation");
+    let baseline_canonical = event_runtime.block_on(async {
+        tokio::time::timeout(Duration::from_secs(10), canonical_events.next())
             .await
             .expect("baseline Communications event timeout")
-            .expect("baseline Communications event");
-        (observation, canonical)
+            .expect("baseline Communications event")
     });
     let baseline_observation = decode_envelope_v1(baseline_observation.payload.as_ref())
         .expect("baseline Telegram observation envelope");
@@ -1368,6 +2415,8 @@ fn managed_telegram_automation_route_is_durable_and_provider_side_effect_free() 
         Err(TelegramClientRouteError::Kernel(error))
             if error == "managed runtime fence is stale"
     ));
+    // Admission-grade NOBYPASSRLS proof covers the complete 46-table store.
+    assert_telegram_owner_rls_v1("makosh_storage_authenticated");
 }
 
 #[test]
@@ -2171,7 +3220,9 @@ fn route_telegram_automation_until_ready(
             Err(error) if error.is_retryable() => {
                 assert!(
                     std::time::Instant::now() < deadline,
-                    "Telegram automation route remained busy"
+                    "Telegram automation route remained busy: {error:?}; active={:?}; failure={:?}",
+                    supervisor.is_active(&telegram.registration_id),
+                    supervisor.last_failure(&telegram.registration_id),
                 );
                 std::thread::sleep(Duration::from_millis(25));
             }
@@ -2347,9 +3398,18 @@ fn assert_telegram_account_started(
             72,
             &request,
         ) {
-            Ok(TelegramClientResponse::Account(account)) => {
-                assert_eq!(account.runtime_state, TelegramRuntimeState::Running);
+            Ok(TelegramClientResponse::Account(account))
+                if account.runtime_state == TelegramRuntimeState::Running =>
+            {
                 return;
+            }
+            Ok(TelegramClientResponse::Account(_)) => {
+                assert!(
+                    std::time::Instant::now() < deadline,
+                    "Telegram managed account did not reach Running: {:?}",
+                    supervisor.last_failure(&telegram.registration_id),
+                );
+                std::thread::sleep(Duration::from_millis(25));
             }
             Ok(_) => panic!("Telegram lifecycle query returned the wrong response type"),
             Err(error) if error.is_retryable() => {

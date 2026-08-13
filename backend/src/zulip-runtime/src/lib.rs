@@ -61,6 +61,7 @@ pub struct ZulipRuntimeIdentityV1 {
 #[derive(Clone)]
 pub struct ZulipRuntimeAdmissionV1 {
     pub logical_owner_id: String,
+    pub logical_human_owner_id: String,
     pub configuration_instance_id: String,
     pub module_registration_id: String,
     pub runtime_instance_id: String,

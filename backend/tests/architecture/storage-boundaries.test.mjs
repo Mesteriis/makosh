@@ -61,6 +61,44 @@ test('allows schema-qualified owner-local SQL and additive migrations', () => {
   assert.deepEqual(violations, []);
 });
 
+test('allows only the exact byte-bound Tasks lifecycle migration exception', async () => {
+  const content = await readFile(
+    new URL('../../src/tasks-persistence/migrations/0002_tasks_lifecycle_owner_rls.sql', import.meta.url),
+    'utf8',
+  );
+  const exact = storageEntry(content, {
+    path: 'src/tasks-persistence/migrations/0002_tasks_lifecycle_owner_rls.sql',
+  });
+  assert.equal(codes(validateStorageEntries(policy(), [exact])).has('forbidden_migration_construct'), false);
+
+  for (const changed of [
+    { ...exact, path: 'src/tasks-persistence/migrations/0002_tasks_lifecycle_alias.sql' },
+    { ...exact, content: `${content}\n-- edited` },
+  ]) {
+    assert.equal(codes(validateStorageEntries(policy(), [changed])).has('forbidden_migration_construct'), true);
+  }
+});
+
+test('allows only the exact byte-bound Knowledge lifecycle migration exception', async () => {
+  const content = await readFile(
+    new URL('../../src/knowledge-persistence/migrations/0002_knowledge_lifecycle_owner_rls.sql', import.meta.url),
+    'utf8',
+  );
+  const exact = storageEntry(content, {
+    path: 'src/knowledge-persistence/migrations/0002_knowledge_lifecycle_owner_rls.sql',
+    packageName: 'makosh-knowledge-persistence',
+    owner: 'knowledge',
+  });
+  assert.equal(codes(validateStorageEntries(policy(), [exact])).has('forbidden_migration_construct'), false);
+
+  for (const changed of [
+    { ...exact, path: 'src/knowledge-persistence/migrations/0002_knowledge_lifecycle_alias.sql' },
+    { ...exact, content: `${content}\n-- edited` },
+  ]) {
+    assert.equal(codes(validateStorageEntries(policy(), [changed])).has('forbidden_migration_construct'), true);
+  }
+});
+
 test('allows platform persistence only in makosh_platform', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
@@ -135,10 +173,10 @@ test('rejects SQL files outside a persistence surface', () => {
 test('rejects raw cross-owner SQL reads and foreign keys', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      SELECT * FROM makosh_data.contacts_people;
+      SELECT * FROM makosh_data.persons_people;
       CREATE TABLE makosh_data.tasks_items (
         id UUID PRIMARY KEY,
-        contact_id UUID REFERENCES makosh_data.contacts_people(id)
+        person_id UUID REFERENCES makosh_data.persons_people(id)
       );
     `),
   ]);
@@ -159,9 +197,9 @@ test('prevents AI persistence from reading another owner table for context', () 
 });
 
 for (const statement of [
-  'INSERT INTO makosh_data.contacts_people (id) VALUES ($1);',
-  'UPDATE makosh_data.contacts_people SET name = $2 WHERE id = $1;',
-  'DELETE FROM makosh_data.contacts_people WHERE id = $1;',
+  'INSERT INTO makosh_data.persons_people (id) VALUES ($1);',
+  'UPDATE makosh_data.persons_people SET name = $2 WHERE id = $1;',
+  'DELETE FROM makosh_data.persons_people WHERE id = $1;',
 ]) {
   test(`rejects raw cross-owner DML: ${statement.split(' ')[0]}`, () => {
     const violations = validateStorageEntries(policy(), [
@@ -183,7 +221,7 @@ test('rejects unqualified PostgreSQL identifiers', () => {
 test('rejects a cross-owner PostgreSQL index name while keeping its table qualified', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`
-      CREATE INDEX contacts_items_id_idx ON makosh_data.tasks_items (id);
+      CREATE INDEX persons_items_id_idx ON makosh_data.tasks_items (id);
     `),
   ]);
 
@@ -293,6 +331,19 @@ const forbiddenMigrationCases = [
   ['prepared SQL', 'PREPARE remove_task AS DELETE FROM makosh_data.tasks_items;'],
   ['function', 'CREATE FUNCTION makosh_data.tasks_touch_v1() RETURNS void AS $$ BEGIN END $$ LANGUAGE plpgsql;'],
   ['trigger', 'CREATE TRIGGER tasks_touch BEFORE UPDATE ON makosh_data.tasks_items EXECUTE FUNCTION makosh_data.tasks_touch_v1();'],
+  ['DISABLE named trigger', 'ALTER TABLE makosh_data.tasks_items DISABLE TRIGGER tasks_touch;'],
+  ['DISABLE ALL triggers', 'ALTER TABLE makosh_data.tasks_items DISABLE TRIGGER ALL;'],
+  ['DISABLE USER triggers', 'ALTER TABLE makosh_data.tasks_items DISABLE TRIGGER USER;'],
+  ['ENABLE REPLICA trigger', 'ALTER TABLE makosh_data.tasks_items ENABLE REPLICA TRIGGER tasks_touch;'],
+  ['ENABLE ALWAYS trigger', 'ALTER TABLE makosh_data.tasks_items ENABLE ALWAYS TRIGGER tasks_touch;'],
+  ['ALTER TRIGGER rename', 'ALTER TRIGGER tasks_touch ON makosh_data.tasks_items RENAME TO tasks_touch_bypass;'],
+  ['SET session replication role', 'SET session_replication_role = replica;'],
+  ['RESET session replication role', 'RESET session_replication_role;'],
+  ['set_config session replication role local', "SELECT set_config('session_replication_role', 'replica', true);"],
+  ['set_config session replication role session', "SELECT set_config('session_replication_role', 'replica', false);"],
+  ['pg_catalog set_config', "SELECT pg_catalog.set_config('session_replication_role', 'replica', false);"],
+  ['quoted set_config', "SELECT \"set_config\"('session_replication_role', 'replica', false);"],
+  ['quoted pg_catalog set_config', "SELECT \"pg_catalog\".\"set_config\"('session_replication_role', 'replica', false);"],
   ['FDW', 'CREATE FOREIGN TABLE makosh_data.tasks_remote (id UUID) SERVER remote;'],
   ['COPY PROGRAM', "COPY makosh_data.tasks_items FROM PROGRAM 'cat /tmp/tasks';"],
   ['ALTER SYSTEM', "ALTER SYSTEM SET shared_buffers = '1GB';"],
@@ -346,4 +397,60 @@ test('migration heuristics ignore forbidden words in comments and literals', () 
   ]);
 
   assert.deepEqual(violations, []);
+});
+
+const personsProfileGuard = `
+  CREATE TABLE makosh_data.persons_profiles (logical_owner_id TEXT PRIMARY KEY);
+  CREATE FUNCTION makosh_data.persons_reject_profile_history_mutation()
+  RETURNS trigger LANGUAGE plpgsql AS $$
+  BEGIN
+    RAISE EXCEPTION 'persons profile history is immutable' USING ERRCODE = '55000';
+  END;
+  $$;
+  CREATE TRIGGER persons_profiles_immutable
+  BEFORE UPDATE OR DELETE ON makosh_data.persons_profiles
+  FOR EACH ROW EXECUTE FUNCTION makosh_data.persons_reject_profile_history_mutation();
+`;
+
+function personsMigration(content = personsProfileGuard, overrides = {}) {
+  return storageEntry(content, {
+    path: 'src/persons-persistence/migrations/0001_persons.sql',
+    packageName: 'makosh-persons-persistence',
+    owner: 'persons',
+    ...overrides,
+  });
+}
+
+test('allows only the exact Persons profile-history immutability guard', () => {
+  assert.deepEqual(validateStorageEntries(policy(), [personsMigration()]), []);
+  for (const entry of [
+    personsMigration(personsProfileGuard, { path: 'modules/persons/migrations/0001.sql' }),
+    personsMigration(`${personsProfileGuard}\nCREATE FUNCTION makosh_data.persons_other() RETURNS void LANGUAGE sql AS $$ SELECT 1 $$;`),
+    personsMigration(personsProfileGuard.replace('persons_profiles_immutable', 'persons_profiles_mutable')),
+    personsMigration(personsProfileGuard.replace('makosh_data.persons_profiles\n', 'makosh_data.persons_current\n')),
+    personsMigration(personsProfileGuard.replace("RAISE EXCEPTION 'persons profile history is immutable' USING ERRCODE = '55000';", 'RETURN OLD;')),
+    personsMigration(personsProfileGuard.replace("RAISE EXCEPTION 'persons profile history is immutable' USING ERRCODE = '55000';", 'NULL;')),
+    personsMigration(personsProfileGuard.replace('persons profile history is immutable', 'altered message')),
+    personsMigration(personsProfileGuard.replace("ERRCODE = '55000'", "ERRCODE = 'P0001'")),
+    personsMigration(personsProfileGuard.replace('BEGIN', 'BEGIN DELETE FROM makosh_data.persons_profiles;')),
+    personsMigration(personsProfileGuard.replace('BEGIN', "BEGIN EXECUTE 'DELETE FROM makosh_data.persons_profiles';")),
+    personsMigration(personsProfileGuard.replace('RETURNS trigger LANGUAGE plpgsql', 'RETURNS trigger SECURITY DEFINER LANGUAGE plpgsql')),
+    personsMigration(personsProfileGuard.replace('LANGUAGE plpgsql AS', 'LANGUAGE plpgsql SET search_path = makosh_data AS')),
+    personsMigration(`${personsProfileGuard}\nPREPARE persons_bypass AS DELETE FROM makosh_data.persons_profiles;`),
+    personsMigration(`${personsProfileGuard}\nALTER TABLE makosh_data.persons_profiles DISABLE TRIGGER persons_profiles_immutable;`),
+    personsMigration(`${personsProfileGuard}\nALTER TABLE makosh_data.persons_profiles DISABLE TRIGGER ALL;`),
+    personsMigration(`${personsProfileGuard}\nALTER TABLE makosh_data.persons_profiles DISABLE TRIGGER USER;`),
+    personsMigration(`${personsProfileGuard}\nALTER TABLE makosh_data.persons_profiles ENABLE REPLICA TRIGGER persons_profiles_immutable;`),
+    personsMigration(`${personsProfileGuard}\nALTER TABLE makosh_data.persons_profiles ENABLE ALWAYS TRIGGER persons_profiles_immutable;`),
+    personsMigration(`${personsProfileGuard}\nALTER TRIGGER persons_profiles_immutable ON makosh_data.persons_profiles RENAME TO persons_profiles_mutable;`),
+    personsMigration(`${personsProfileGuard}\nSET session_replication_role = replica;`),
+    personsMigration(`${personsProfileGuard}\nRESET session_replication_role;`),
+    personsMigration(`${personsProfileGuard}\nSELECT set_config('session_replication_role', 'replica', true);`),
+    personsMigration(`${personsProfileGuard}\nSELECT set_config('session_replication_role', 'replica', false);`),
+    personsMigration(`${personsProfileGuard}\nSELECT pg_catalog.set_config('session_replication_role', 'replica', false);`),
+    personsMigration(`${personsProfileGuard}\nSELECT "set_config"('session_replication_role', 'replica', false);`),
+    personsMigration(`${personsProfileGuard}\nSELECT "pg_catalog"."set_config"('session_replication_role', 'replica', false);`),
+  ]) {
+    assert.ok(codes(validateStorageEntries(policy(), [entry])).has('forbidden_migration_construct'));
+  }
 });

@@ -8,9 +8,11 @@
 
 | Область | Текущее состояние |
 |---|---|
-| Clean-room backend | Cargo workspace реализует Kernel/Core platform gates, Communications owner и отдельный Attachment Security engine; provider integrations остаются отдельными units и открываются по независимым capability gates |
+| Production admission | `speech_to_text_whisper_admission_v1`: 283 exact production packages и 253 business capabilities |
+| Implemented workspace | 420 Cargo packages / 421 manifests; 403 production-role packages, включая 120 `implemented-not-admitted` packages Tasks 10–26 |
+| Development release | 41 managed modules с compiler-consumed runtime/Storage fragments; наличие артефакта не равно production admission |
 | Предыдущий backend | Перенесён в `references/backend-legacy/` и используется только как evidence/reference |
-| Desktop frontend | Vue 3 + Vite + Tauri страницы Communications/Settings используют generated clean-room Core Gateway contracts и capability-driven availability |
+| Desktop frontend | Vue 3 + Vite + Tauri используют generated clean-room Core Gateway contracts; staged owner clients остаются capability-gated |
 | Android | Запланирован; код клиента и окончательная Kernel topology отсутствуют |
 | Local development | Root `make dev` поднимает Compose, Kernel/Core Gateway и Vite, проверяет readiness и предоставляет loopback browser contour на `http://127.0.0.1:5173` |
 | Active architecture | Clean-room ADR находятся в `docs/adr/`; executable policy, scripts и tests находятся внутри `backend/` |
@@ -21,6 +23,15 @@ live provider readiness. `make dev` не создаёт provider credentials и 
 запускает managed domain/integration runtimes за пределами их отдельных
 assembly/admission units; клиент показывает фактическую availability из
 Gateway bootstrap.
+
+Последовательный admission после Task 9 пока заблокирован Task 10: нужны
+авторизованные Apple/Xcode/device и Telegram provider evidence. Поэтому
+Telegram, WhatsApp, Zulip, Review, lifecycle owners, Calendar, Organizations,
+Documents, Relationships, Projects, Obligations, Decisions, Identity,
+Search/Timeline/Graph и Memory/Consistency/Risk остаются
+`implemented-not-admitted`. Zoom, Yandex Telemost и OmniRoute дополнительно
+ожидают собственные реальные OAuth/API credentials и provider-success contours.
+Эти блокировки нельзя обходить перестановкой slice или mock-success.
 
 ## Запуск и validation
 
@@ -211,13 +222,12 @@ Tauri / planned Android / headless client
 7. [Vault and credential leases](docs/architecture/vault-and-credential-leases.md).
 8. [Executable architecture policy](backend/architecture/README.md).
 
-ADR-0225 разрешает первый production slice как один точный набор из шести
-packages: Events Protocol, Runtime Protocol, Gateway Protocol, Control Store
-port, его SQLite adapter и Kernel. Этот exact inventory реализован; Kernel
-может достичь только `recovery_only`, а фактический inventory domains,
-integrations, workflows и engines остаётся пустым. Любой дополнительный package
-или runtime capability требует открытия отдельного phase gate через ADR,
-executable policy и tests.
+ADR-0225 открыл первый recovery slice; последующие exact gates довели текущий
+admitted inventory до `speech_to_text_whisper_admission_v1`. Источником истины
+является `backend/architecture/policy.json`, а не историческое описание первого
+среза. Любой следующий package/runtime capability всё ещё требует
+последовательного phase gate, executable policy и свежих provider/conformance
+evidence; 120 production-role packages Tasks 10–26 пока не admitted.
 
 Cargo topology уже зафиксирована ADR-0212 и executable guard: owner runtimes не
 агрегируют друг друга, Kernel/Gateway не компилируют module packages, а

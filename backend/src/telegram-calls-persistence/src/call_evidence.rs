@@ -166,4 +166,15 @@ mod tests {
         );
         assert_eq!(lifecycle_state(&ended), CallLifecycleStateV1::Ended);
     }
+
+    #[test]
+    fn replay_identity_is_stable_across_runtime_instance_replacement() {
+        let session = session(TelegramProviderCallState::Pending);
+        let first = call_evidence_record_v1(&session, "owner-1", "tg-1").expect("first");
+        let replacement =
+            call_evidence_record_v1(&session, "owner-1", "tg-2").expect("replacement");
+
+        assert_eq!(first.message_id(), replacement.message_id());
+        assert_ne!(first.exact_bytes(), replacement.exact_bytes());
+    }
 }

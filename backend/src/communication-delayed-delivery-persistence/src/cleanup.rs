@@ -37,11 +37,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
         }
         let now = signed(now_unix_millis)?;
-        let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         reconcile_terminal_cleanup(&mut transaction, logical_owner_id, now).await?;
         let row = sqlx::query(
             "SELECT cleanup.delayed_operation_id, cleanup.reason, cleanup.attempt_count,
@@ -83,6 +79,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
         }
         let completed_at = signed(completed_at_unix_millis)?;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.communication_delayed_delivery_body_cleanup
              SET completed_at_unix_millis = $3, updated_at_unix_millis = $3
@@ -92,13 +89,17 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         .bind(logical_owner_id)
         .bind(delayed_operation_id.as_slice())
         .bind(completed_at)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?
         .rows_affected();
         if affected != 1 {
             return Err(DelayedDeliveryPersistenceErrorV1::Conflict);
         }
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         Ok(())
     }
 
@@ -121,6 +122,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         }
         let next_attempt_at = signed(next_attempt_at_unix_millis)?;
         let rescheduled_at = signed(rescheduled_at_unix_millis)?;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let affected = sqlx::query(
             "UPDATE makosh_data.communication_delayed_delivery_body_cleanup
              SET attempt_count = LEAST(attempt_count + 1, 32),
@@ -138,13 +140,17 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         )
         .bind(next_attempt_at)
         .bind(rescheduled_at)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?
         .rows_affected();
         if affected != 1 {
             return Err(DelayedDeliveryPersistenceErrorV1::Conflict);
         }
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
         Ok(())
     }
 }

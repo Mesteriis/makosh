@@ -1,12 +1,8 @@
 //! Typed Mail managed-runtime admission contract.
 
 pub mod account_lifecycle;
-pub mod address_book_consumer;
 pub mod address_book_fetch_worker;
-pub mod address_book_outbox;
 mod address_book_provider;
-pub mod address_book_snapshot;
-pub mod address_book_worker;
 pub mod admission;
 pub mod attachment_anchor_mapping;
 pub mod attachment_safety_projection;
@@ -21,6 +17,8 @@ pub mod delivery_intent_worker;
 pub mod gmail_oauth;
 pub mod gmail_sync_worker;
 pub mod managed;
+pub mod person_source_fetch_worker;
+pub mod person_source_producer;
 pub mod retained_evidence_replay;
 pub mod retained_evidence_replay_consumer;
 pub mod retained_evidence_replay_result;

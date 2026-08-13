@@ -12,6 +12,12 @@ use rcgen::{
 
 use super::*;
 
+pub(super) const PRIVATE_ZULIP_MESSAGE_MARKER: &str = "private-zulip-message-task12-do-not-export";
+pub(super) const PRIVATE_ZULIP_RAW_PROVIDER_MARKER: &str =
+    "raw-zulip-provider-task12-do-not-export";
+pub(super) const PRIVATE_ZULIP_LOCATOR_MARKER: &str = "private-zulip-realm-task12.example.invalid";
+pub(super) const PRIVATE_ZULIP_QUEUE_MARKER: &str = "private-zulip-queue-task12-do-not-export";
+
 pub(super) struct ZulipHttpsFixture {
     realm_url: String,
     ca_certificate_path: PathBuf,
@@ -27,6 +33,8 @@ struct ZulipHttpsFixtureState {
     message_commands: AtomicU64,
     history_pages: AtomicU64,
     credential_v2_requests: AtomicU64,
+    malformed_events: AtomicU64,
+    served_malformed_events: AtomicU64,
 }
 
 impl ZulipHttpsFixture {
@@ -58,6 +66,8 @@ impl ZulipHttpsFixture {
             message_commands: AtomicU64::new(0),
             history_pages: AtomicU64::new(0),
             credential_v2_requests: AtomicU64::new(0),
+            malformed_events: AtomicU64::new(0),
+            served_malformed_events: AtomicU64::new(0),
         });
         let server_state = Arc::clone(&state);
         let shutdown = Arc::new(AtomicBool::new(false));
@@ -104,6 +114,14 @@ impl ZulipHttpsFixture {
 
     pub(super) fn credential_v2_requests(&self) -> u64 {
         self.state.credential_v2_requests.load(Ordering::Acquire)
+    }
+
+    pub(super) fn release_malformed_event(&self) -> u64 {
+        self.state.malformed_events.fetch_add(1, Ordering::Release) + 1
+    }
+
+    pub(super) fn served_malformed_events(&self) -> u64 {
+        self.state.served_malformed_events.load(Ordering::Acquire)
     }
 }
 
@@ -253,11 +271,25 @@ fn history_response(request_line: &str) -> String {
 }
 
 fn next_event_response(state: &ZulipHttpsFixtureState) -> String {
+    if state
+        .malformed_events
+        .fetch_update(Ordering::AcqRel, Ordering::Acquire, |pending| {
+            (pending > 0).then(|| pending - 1)
+        })
+        .is_ok()
+    {
+        state
+            .served_malformed_events
+            .fetch_add(1, Ordering::Release);
+        return format!(
+            r#"{{"result":"success","msg":"{PRIVATE_ZULIP_RAW_PROVIDER_MARKER}","queue_id":"{PRIVATE_ZULIP_QUEUE_MARKER}","realm":"{PRIVATE_ZULIP_LOCATOR_MARKER}","events":[{{"type":"message","content":"{PRIVATE_ZULIP_MESSAGE_MARKER}"}}"#
+        );
+    }
     let released = state.released_events.load(Ordering::Acquire);
     let event_id = state
         .served_events
         .fetch_update(Ordering::AcqRel, Ordering::Acquire, |served| {
-            (served < released).then_some(served + 1)
+            (served < released).then(|| served + 1)
         })
         .ok()
         .map(|served| served + 1);

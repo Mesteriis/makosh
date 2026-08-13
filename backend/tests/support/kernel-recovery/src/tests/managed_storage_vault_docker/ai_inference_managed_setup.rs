@@ -27,7 +27,18 @@ pub(super) struct StartedAiInferenceRuntimeV1 {
     pub(super) registration_id: String,
     pub(super) runtime_instance_id: String,
     pub(super) runtime_generation: u64,
+    pub(super) grant_epoch: u64,
     capability_ids: Vec<String>,
+}
+
+#[derive(Clone, Copy)]
+pub(super) enum AiInferenceBootstrapOverrideV1 {
+    None,
+    MissingSettings,
+    DriftedSettingsRevision,
+    MissingStorage,
+    StaleStorageFence,
+    StopVaultAfterConfiguration,
 }
 
 pub(super) fn installed_ai_inference_release_v1(root: &Path) -> InstalledSignedBundle {
@@ -171,7 +182,73 @@ pub(super) fn start_ai_inference_runtime_v1(
 ) -> StartedAiInferenceRuntimeV1 {
     let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
         .expect("load AI inference launch reservation");
-    start_reserved_ai_inference_runtime_v1(supervisor, store, runtime_dir, reservation, admitted)
+    launch_reserved_ai_inference_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        admitted,
+        AiInferenceBootstrapOverrideV1::None,
+        true,
+        None,
+    )
+}
+
+pub(super) fn launch_ai_inference_runtime_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    admitted: AdmittedAiInferenceRuntimeV1,
+    bootstrap_override: AiInferenceBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedAiInferenceRuntimeV1 {
+    let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
+        .expect("load AI inference launch reservation");
+    launch_reserved_ai_inference_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        admitted,
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
+}
+
+pub(super) fn launch_ai_inference_successor_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    predecessor: StartedAiInferenceRuntimeV1,
+    bootstrap_override: AiInferenceBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedAiInferenceRuntimeV1 {
+    let binding = ai_inference_storage_binding_v1(store, &predecessor.registration_id);
+    let issue = storage_successor::issue_after(&binding).expect("derive AI inference successor");
+    let (reservation, binding) = storage_successor::reserve(
+        supervisor,
+        store,
+        &predecessor.registration_id,
+        AI_INFERENCE_STORAGE_CAPABILITY_ID_V1,
+        issue,
+    )
+    .expect("reserve AI inference successor");
+    crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
+        .expect("provision AI inference successor");
+    launch_reserved_ai_inference_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        AdmittedAiInferenceRuntimeV1 {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
 }
 
 pub(super) fn restart_ai_inference_runtime_v1(
@@ -194,7 +271,7 @@ pub(super) fn restart_ai_inference_runtime_v1(
     .expect("reserve AI inference successor");
     crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
         .expect("provision AI inference successor");
-    let successor = start_reserved_ai_inference_runtime_v1(
+    let successor = launch_reserved_ai_inference_runtime_v1(
         supervisor,
         store,
         runtime_dir,
@@ -203,18 +280,25 @@ pub(super) fn restart_ai_inference_runtime_v1(
             registration_id: predecessor.registration_id,
             capability_ids: predecessor.capability_ids,
         },
+        AiInferenceBootstrapOverrideV1::None,
+        true,
+        None,
     );
     assert_eq!(successor.runtime_generation, previous_generation + 1);
     assert_ne!(successor.runtime_instance_id, previous_instance);
     successor
 }
 
-fn start_reserved_ai_inference_runtime_v1(
+#[allow(clippy::too_many_arguments)]
+fn launch_reserved_ai_inference_runtime_v1(
     supervisor: &ManagedRuntimeSupervisor,
     store: &SqliteControlStore,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
     admitted: AdmittedAiInferenceRuntimeV1,
+    bootstrap_override: AiInferenceBootstrapOverrideV1,
+    wait_until_ready: bool,
+    test_stdio_capture_directory: Option<&Path>,
 ) -> StartedAiInferenceRuntimeV1 {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
@@ -224,7 +308,7 @@ fn start_reserved_ai_inference_runtime_v1(
         crate::platform::storage::topology::current(store).expect("AI inference Storage topology");
     let vault =
         vault_status::read_current(store, &supervisor.relay_port()).expect("live Vault status");
-    let storage = crate::platform::storage::topology::to_managed_runtime_configuration(
+    let mut storage = crate::platform::storage::topology::to_managed_runtime_configuration(
         &topology,
         &binding,
         store.snapshot().instance_id(),
@@ -232,6 +316,30 @@ fn start_reserved_ai_inference_runtime_v1(
         vault.hpke_public_key_x25519(),
     )
     .expect("AI inference Storage configuration");
+    let mut settings = SettingsSnapshotV1 {
+        target_id: admitted.registration_id.clone(),
+        revision: 1,
+        values: Vec::new(),
+    };
+    let include_storage = match bootstrap_override {
+        AiInferenceBootstrapOverrideV1::None => true,
+        AiInferenceBootstrapOverrideV1::MissingSettings => true,
+        AiInferenceBootstrapOverrideV1::DriftedSettingsRevision => {
+            settings.revision = 2;
+            true
+        }
+        AiInferenceBootstrapOverrideV1::MissingStorage => false,
+        AiInferenceBootstrapOverrideV1::StaleStorageFence => {
+            storage.credential_revision = storage.credential_revision.saturating_add(1);
+            true
+        }
+        AiInferenceBootstrapOverrideV1::StopVaultAfterConfiguration => {
+            supervisor
+                .stop(vault_binding::VAULT_PROCESS_ID)
+                .expect("stop Vault after AI inference configuration");
+            true
+        }
+    };
     let configuration = ManagedEngineRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: AI_OWNER_V1.to_owned(),
@@ -239,39 +347,60 @@ fn start_reserved_ai_inference_runtime_v1(
         runtime_instance_id: runtime_instance_id.clone(),
         runtime_generation,
         grant_epoch,
-        storage: Some(storage),
+        storage: include_storage.then_some(storage),
         event_hub_endpoint: String::new(),
         event_credential_revision: 0,
         settings_revision: 1,
         logical_human_owner_id: AI_INFERENCE_LOGICAL_OWNER_ID_V1.to_owned(),
         runtime_artifacts: Vec::new(),
     };
-    managed_launch::start_reserved_engine(
+    if let Some(directory) = test_stdio_capture_directory {
+        unsafe {
+            std::env::set_var(
+                crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+                directory,
+            );
+        }
+    }
+    let started = managed_launch::start_reserved_engine(
         supervisor,
         runtime_dir,
         reservation,
         configuration,
-        SettingsSnapshotV1 {
-            target_id: admitted.registration_id.clone(),
-            revision: 1,
-            values: Vec::new(),
-        }
-        .encode_to_vec(),
+        if matches!(
+            bootstrap_override,
+            AiInferenceBootstrapOverrideV1::MissingSettings
+        ) {
+            Vec::new()
+        } else {
+            settings.encode_to_vec()
+        },
         &[],
-    )
-    .expect("start managed AI inference engine");
-    supervisor
-        .wait_until_ready(&admitted.registration_id)
-        .unwrap_or_else(|error| {
-            panic!(
-                "AI inference readiness: {error}; last_failure={:?}",
-                supervisor.last_failure(&admitted.registration_id)
-            )
-        });
+    );
+    if matches!(
+        bootstrap_override,
+        AiInferenceBootstrapOverrideV1::MissingSettings
+            | AiInferenceBootstrapOverrideV1::MissingStorage
+    ) {
+        assert!(started.is_err(), "Kernel must deny incomplete AI bootstrap");
+    } else {
+        started.expect("start managed AI inference engine");
+    }
+    if wait_until_ready {
+        supervisor
+            .wait_until_ready(&admitted.registration_id)
+            .unwrap_or_else(|error| {
+                panic!(
+                    "AI inference readiness: {error}; last_failure={:?}",
+                    supervisor.last_failure(&admitted.registration_id)
+                )
+            });
+    }
     StartedAiInferenceRuntimeV1 {
         registration_id: admitted.registration_id,
         runtime_instance_id,
         runtime_generation,
+        grant_epoch,
         capability_ids: admitted.capability_ids,
     }
 }

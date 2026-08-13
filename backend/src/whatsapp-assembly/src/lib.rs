@@ -11,8 +11,11 @@ use std::path::{Path, PathBuf};
 use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use makosh_storage_protocol::validation::validate_storage_bundle;
-use makosh_whatsapp_persistence::whatsapp_storage_bundle_v1;
+use makosh_storage_protocol::{v1::StorageBundleV1, validation::validate_storage_bundle};
+use makosh_whatsapp_persistence::{
+    WHATSAPP_OWNER_RLS_STORAGE_REVISION_V1, whatsapp_owner_rls_storage_migration_v1,
+    whatsapp_storage_bundle_v1,
+};
 use makosh_whatsapp_runtime::admission::whatsapp_module_descriptor_v1;
 use makosh_whatsapp_runtime::settings::whatsapp_settings_schema_v1;
 use prost::Message;
@@ -24,6 +27,7 @@ pub const WHATSAPP_ASSEMBLY_MODULE_ID: &str =
     makosh_whatsapp_runtime::admission::WHATSAPP_MODULE_ID;
 pub const WHATSAPP_RUNTIME_ARTIFACT_ID: &str = "whatsapp.runtime.v1";
 pub const WHATSAPP_STORAGE_ARTIFACT_ID: &str = "whatsapp.storage.v1";
+pub const WHATSAPP_STORAGE_BUNDLE_REVISION_V5: u32 = WHATSAPP_OWNER_RLS_STORAGE_REVISION_V1;
 pub const WHATSAPP_DESCRIPTOR_FILE: &str = "whatsapp.runtime.descriptor.pb";
 pub const WHATSAPP_SETTINGS_FILE: &str = "whatsapp.runtime.settings.pb";
 pub const WHATSAPP_STORAGE_BUNDLE_FILE: &str = "whatsapp.storage.bundle.pb";
@@ -106,6 +110,14 @@ pub enum WhatsAppReleaseAssemblyErrorV1 {
     FragmentEncodingFailed,
 }
 
+#[must_use]
+pub fn whatsapp_storage_bundle_with_owner_rls_v5() -> StorageBundleV1 {
+    let mut bundle = whatsapp_storage_bundle_v1();
+    bundle.revision = WHATSAPP_STORAGE_BUNDLE_REVISION_V5;
+    bundle.steps.push(whatsapp_owner_rls_storage_migration_v1());
+    bundle
+}
+
 /// Materializes one unsigned, exact WhatsApp release artifact set.
 ///
 /// The output directory must be an absolute path that does not exist. The
@@ -120,7 +132,7 @@ pub fn materialize_whatsapp_release_assembly_v1(
 
     let descriptor = whatsapp_module_descriptor_v1(build_id);
     let settings_schema = whatsapp_settings_schema_v1();
-    let storage_bundle = whatsapp_storage_bundle_v1();
+    let storage_bundle = whatsapp_storage_bundle_with_owner_rls_v5();
     if validate_descriptor_v1(&descriptor).is_err()
         || validate_settings_schema_v1(&settings_schema).is_err()
         || validate_storage_bundle(&storage_bundle).is_err()
@@ -294,7 +306,11 @@ mod tests {
             settings_bytes,
             whatsapp_settings_schema_v1().encode_to_vec()
         );
-        assert_eq!(storage_bytes, whatsapp_storage_bundle_v1().encode_to_vec());
+        assert_eq!(
+            storage_bytes,
+            whatsapp_storage_bundle_with_owner_rls_v5().encode_to_vec()
+        );
+        assert_eq!(storage.revision, WHATSAPP_STORAGE_BUNDLE_REVISION_V5);
         assert_eq!(descriptor.module_id, WHATSAPP_ASSEMBLY_MODULE_ID);
         assert_eq!(settings.major, 1);
         assert_eq!(storage.owner_id, WHATSAPP_ASSEMBLY_OWNER_ID);

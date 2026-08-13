@@ -1,0 +1,43 @@
+use makosh_identity_resolution_assembly::materialize_identity_resolution_release_assembly_v1;
+use std::{path::PathBuf, process::ExitCode};
+fn main() -> ExitCode {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    if args.len() != 6 {
+        return fail();
+    }
+    let mut values = std::collections::BTreeMap::new();
+    for pair in args.chunks_exact(2) {
+        if !["--build-id", "--output-dir", "--runtime"].contains(&pair[0].as_str())
+            || pair[1].is_empty()
+            || values.insert(pair[0].clone(), pair[1].clone()).is_some()
+        {
+            return fail();
+        }
+    }
+    let Some(build) = values.remove("--build-id") else {
+        return fail();
+    };
+    let Some(output) = values.remove("--output-dir") else {
+        return fail();
+    };
+    let Some(runtime) = values.remove("--runtime") else {
+        return fail();
+    };
+    if materialize_identity_resolution_release_assembly_v1(
+        &PathBuf::from(output),
+        &build,
+        &PathBuf::from(runtime),
+    )
+    .is_err()
+    {
+        return fail();
+    }
+    println!("identity-resolution-release-assembly: ok");
+    ExitCode::SUCCESS
+}
+fn fail() -> ExitCode {
+    eprintln!(
+        "usage: makosh-identity-resolution-assembly --build-id <id> --output-dir <absolute-path> --runtime <absolute-path>"
+    );
+    ExitCode::FAILURE
+}

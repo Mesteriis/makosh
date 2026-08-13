@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import {
   ownerAliases,
   pathTokens,
@@ -70,6 +72,57 @@ function isDownMigration(path) {
   return /(?:^|[._-])down(?:[._-]|$)/u.test(fileName);
 }
 
+function isExactPersonsProfileImmutabilityGuard(entry, construct) {
+  if (
+    entry.path !== 'src/persons-persistence/migrations/0001_persons.sql'
+    || entry.packageName !== 'makosh-persons-persistence'
+    || entry.role !== 'domain'
+    || entry.owner !== 'persons'
+    || entry.surface !== 'persistence'
+    || !new Set(['function_or_procedure', 'trigger', 'dynamic_or_prepared_sql']).has(construct)
+  ) return false;
+  const functions = entry.content.match(
+    /\b(?:CREATE(?:\s+OR\s+REPLACE)?|ALTER)\s+(?:FUNCTION|PROCEDURE)\b/giu,
+  ) ?? [];
+  const triggers = entry.content.match(
+    /\b(?:CREATE\s+(?:CONSTRAINT\s+)?|ALTER\s+)TRIGGER\b/giu,
+  ) ?? [];
+  const dynamicTokens = entry.content.match(/\b(?:PREPARE|EXECUTE|DEALLOCATE)\b/giu) ?? [];
+  const exactFunction = entry.content.match(
+    /CREATE\s+FUNCTION\s+makosh_data\.persons_reject_profile_history_mutation\s*\(\s*\)\s+RETURNS\s+TRIGGER\s+LANGUAGE\s+plpgsql\s+AS\s+\$\$([\s\S]*?)\$\$\s*;/iu,
+  );
+  const exactBody = exactFunction?.[1]?.trim().replace(/\s+/gu, ' ');
+  const exactTrigger = /CREATE\s+TRIGGER\s+persons_profiles_immutable\s+BEFORE\s+UPDATE\s+OR\s+DELETE\s+ON\s+makosh_data\.persons_profiles\s+FOR\s+EACH\s+ROW\s+EXECUTE\s+FUNCTION\s+makosh_data\.persons_reject_profile_history_mutation\s*\(\s*\)\s*;/iu;
+  return functions.length === 1
+    && triggers.length === 1
+    && dynamicTokens.length === 1
+    && dynamicTokens[0].toUpperCase() === 'EXECUTE'
+    && exactBody === "BEGIN RAISE EXCEPTION 'persons profile history is immutable' USING ERRCODE = '55000'; END;"
+    && exactTrigger.test(entry.content);
+}
+
+function isExactTasksLifecycleMigration(entry, construct) {
+  return entry.path === 'src/tasks-persistence/migrations/0002_tasks_lifecycle_owner_rls.sql'
+    && entry.packageName === 'makosh-tasks-persistence'
+    && entry.role === 'domain'
+    && entry.owner === 'tasks'
+    && entry.surface === 'persistence'
+    && new Set(['drop', 'destructive_alter']).has(construct)
+    && createHash('sha256').update(entry.content, 'utf8').digest('hex')
+      === 'b089988877ff2837e894fd47411a21a7ff4a00e917085fee296647c4ffbc7ade';
+}
+
+function isExactKnowledgeLifecycleMigration(entry, construct) {
+  return entry.path === 'src/knowledge-persistence/migrations/0002_knowledge_lifecycle_owner_rls.sql'
+    && entry.packageName === 'makosh-knowledge-persistence'
+    && entry.role === 'domain'
+    && entry.owner === 'knowledge'
+    && entry.surface === 'persistence'
+    && new Set(['drop', 'destructive_alter']).has(construct)
+    && createHash('sha256').update(entry.content, 'utf8').digest('hex')
+      === '67d64e39f8150e9c889b6ac3544ea889f91010ab1b7d58005be7375cb09e4d6e';
+}
+
 export function validateStorageEntries(policy, entries) {
   const violations = [];
   const emitted = new Set();
@@ -100,6 +153,9 @@ export function validateStorageEntries(policy, entries) {
         emit('down_migration', entry.path, 'V1 storage accepts forward-only migration files');
       }
       for (const construct of forbiddenMigrationConstructs(entry.content)) {
+        if (isExactPersonsProfileImmutabilityGuard(entry, construct)) continue;
+        if (isExactTasksLifecycleMigration(entry, construct)) continue;
+        if (isExactKnowledgeLifecycleMigration(entry, construct)) continue;
         emit(
           'forbidden_migration_construct',
           entry.path,
@@ -120,6 +176,10 @@ export function validateStorageEntries(policy, entries) {
 
     for (const reference of sqlReferencedObjects(entry.content)) {
       const { identifier } = reference;
+      if (
+        identifier.toLowerCase() === 'or'
+        && isExactPersonsProfileImmutabilityGuard(entry, 'trigger')
+      ) continue;
       const parts = identifierParts(identifier);
 
       if (!sqlitePackage && reference.kind === 'index') {

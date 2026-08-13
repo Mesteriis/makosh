@@ -20,22 +20,13 @@ export function useTasksSurface() {
         contract: 'useTasksPageSurface.tasks'
       },
       {
-        id: 'tasks-candidates',
-        labelKey: 'Task candidates',
-        descriptionKey: 'Potential tasks extracted from communications and evidence.',
-        icon: 'tabler:list-search',
+        id: 'tasks-checklist',
+        labelKey: 'Task checklist',
+        descriptionKey: 'Owner-managed checklist items and task dependencies.',
+        icon: 'tabler:list-check',
         status: 'active',
-        kind: 'review',
-        contract: 'useTasksPageSurface.taskCandidates'
-      },
-      {
-        id: 'tasks-obligations',
-        labelKey: 'Obligations',
-        descriptionKey: 'Commitments and owner obligations that may become tasks.',
-        icon: 'tabler:scale',
-        status: 'active',
-        kind: 'evidence',
-        contract: 'useTasksPageSurface.obligationCandidates'
+        kind: 'command',
+        contract: 'useTasksPageSurface.checklist'
       }
     ],
     childSurfaces: [
@@ -47,20 +38,12 @@ export function useTasksSurface() {
         capabilityIds: ['tasks-worklist']
       },
       {
-        id: 'tasks-candidates',
-        labelKey: 'Candidates',
+        id: 'tasks-checklist',
+        labelKey: 'Checklist',
         status: 'facade',
         surfacePath,
-        capabilityIds: ['tasks-candidates']
-      },
-      {
-        id: 'tasks-obligations',
-        labelKey: 'Obligations',
-        status: 'facade',
-        surfacePath,
-        capabilityIds: ['tasks-obligations']
+        capabilityIds: ['tasks-checklist']
       }
     ]
   })
 }
-

@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package makosh.review.obligation_candidate.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+message ReviewObligationEvidenceLinkV1 {
+  bytes evidence_link_id = 1;
+  string evidence_owner_id = 2;
+  bytes evidence_record_id = 3;
+  uint64 evidence_revision = 4;
+  bytes evidence_digest = 5;
+}
+
+message DecideReviewObligationCandidateRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes review_id = 3;
+  uint64 expected_review_revision = 4;
+  ReviewObligationCandidateDecisionV1 decision = 5;
+}
+
+message DecideReviewObligationCandidateResponseV1 {
+  ReviewObligationCandidateSummaryV1 review = 1;
+  bool replayed = 2;
+  ReviewObligationCandidateErrorCodeV1 error = 15;
+}
+
+message GetReviewObligationCandidateRequestV1 {
+  uint32 protocol_major = 1;
+  bytes review_id = 2;
+}
+
+message GetReviewObligationCandidateResponseV1 {
+  ReviewObligationCandidateSummaryV1 review = 1;
+  ReviewObligationCandidateErrorCodeV1 error = 15;
+}
+
+message ListReviewObligationCandidatesRequestV1 {
+  uint32 protocol_major = 1;
+  optional ReviewObligationCandidateStateV1 state = 2;
+  bytes after_review_id = 3;
+  uint32 limit = 4;
+}
+
+message ListReviewObligationCandidatesResponseV1 {
+  repeated ReviewObligationCandidateSummaryV1 reviews = 1;
+  bytes next_after_review_id = 2;
+  ReviewObligationCandidateErrorCodeV1 error = 15;
+}
+
+message ReviewObligationCandidateSummaryV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  string statement = 6;
+  optional TimestampV1 due_at = 7;
+  optional string condition = 8;
+  ReviewObligationCandidateStateV1 state = 9;
+  ReviewObligationCandidatePromotionStatusV1 promotion_status = 10;
+  uint64 review_revision = 11;
+  optional bytes decided_by_owner_device_id = 12;
+  optional uint64 decided_at_unix_millis = 13;
+  bytes obligated_party_id = 14;
+  optional bytes beneficiary_party_id = 15;
+  repeated ReviewObligationEvidenceLinkV1 evidence_links = 16;
+}
+
+message ReviewObligationCandidateStatusChangedV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  ReviewObligationCandidateStateV1 state = 3;
+  ReviewObligationCandidatePromotionStatusV1 promotion_status = 4;
+  uint64 review_revision = 5;
+  uint64 occurred_at_unix_millis = 6;
+  ReviewObligationCandidateErrorCodeV1 error = 15;
+}
+
+service ReviewObligationCandidateCommandService {
+  rpc Decide(DecideReviewObligationCandidateRequestV1)
+      returns (DecideReviewObligationCandidateResponseV1);
+}
+
+service ReviewObligationCandidateQueryService {
+  rpc Get(GetReviewObligationCandidateRequestV1)
+      returns (GetReviewObligationCandidateResponseV1);
+  rpc List(ListReviewObligationCandidatesRequestV1)
+      returns (ListReviewObligationCandidatesResponseV1);
+}
+
+// Exact workflow-to-Review durable command. Candidate presentation bytes are
+// held only by the Review-target-bound Blob referenced here.
+message SubmitObligationCandidateForReviewCommandV1 {
+  bytes submission_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  ReviewTargetBoundCandidateReceiptV1 candidate_content = 6;
+  string logical_owner_id = 7;
+}
+
+message ObligationCandidateReviewSubmittedV1 {
+  bytes submission_id = 1;
+  bytes review_id = 2;
+  bytes candidate_id = 3;
+  bytes candidate_digest = 4;
+  uint64 review_revision = 5;
+  string logical_owner_id = 6;
+}
+
+message ObligationCandidateReviewSubmissionRejectedV1 {
+  bytes submission_id = 1;
+  bytes candidate_id = 2;
+  ReviewObligationCandidateSubmissionRejectCodeV1 code = 3;
+  string logical_owner_id = 4;
+}
+
+// Exact Review-to-Obligations durable event. Presentation bytes are transferred to
+// a new Obligations-target-bound Blob before this event is persisted.
+message ObligationCandidateApprovedForPromotionV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes source_evidence_id = 4;
+  uint64 source_evidence_revision = 5;
+  uint64 decision_revision = 6;
+  bytes decided_by_owner_device_id = 7;
+  ReviewTargetBoundCandidateReceiptV1 candidate_content = 8;
+  string logical_owner_id = 9;
+}
+
+message ReviewTargetBoundCandidateReceiptV1 {
+  bytes reference_id = 1;
+  uint64 declared_bytes = 2;
+  bytes sha256 = 3;
+  bytes custody_transfer_source_proof = 4;
+}
+
+// Plaintext schema inside a target-bound Blob. It is never embedded in a
+// durable command, result, event or realtime frame.
+message ReviewObligationCandidateContentV1 {
+  string statement = 1;
+  optional TimestampV1 due_at = 2;
+  optional string condition = 3;
+  bytes obligated_party_id = 4;
+  optional bytes beneficiary_party_id = 5;
+  repeated ReviewObligationEvidenceLinkV1 evidence_links = 6;
+}
+
+enum ReviewObligationCandidateDecisionV1 {
+  REVIEW_OBLIGATION_CANDIDATE_DECISION_UNSPECIFIED = 0;
+  REVIEW_OBLIGATION_CANDIDATE_DECISION_APPROVE = 1;
+  REVIEW_OBLIGATION_CANDIDATE_DECISION_REJECT = 2;
+}
+
+enum ReviewObligationCandidateStateV1 {
+  REVIEW_OBLIGATION_CANDIDATE_STATE_UNSPECIFIED = 0;
+  REVIEW_OBLIGATION_CANDIDATE_STATE_PENDING = 1;
+  REVIEW_OBLIGATION_CANDIDATE_STATE_APPROVED = 2;
+  REVIEW_OBLIGATION_CANDIDATE_STATE_REJECTED = 3;
+}
+
+enum ReviewObligationCandidatePromotionStatusV1 {
+  REVIEW_OBLIGATION_CANDIDATE_PROMOTION_STATUS_UNSPECIFIED = 0;
+  REVIEW_OBLIGATION_CANDIDATE_PROMOTION_STATUS_NOT_REQUESTED = 1;
+  REVIEW_OBLIGATION_CANDIDATE_PROMOTION_STATUS_PENDING = 2;
+  REVIEW_OBLIGATION_CANDIDATE_PROMOTION_STATUS_SUCCEEDED = 3;
+  REVIEW_OBLIGATION_CANDIDATE_PROMOTION_STATUS_FAILED = 4;
+}
+
+enum ReviewObligationCandidateSubmissionRejectCodeV1 {
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_UNSPECIFIED = 0;
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_INVALID_REQUEST = 1;
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_BLOB_UNAVAILABLE = 2;
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_BLOB_MISMATCH = 3;
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_CONFLICT = 4;
+  REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_REJECT_CODE_POLICY = 5;
+}
+
+enum ReviewObligationCandidateErrorCodeV1 {
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_UNSPECIFIED = 0;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_INVALID_REQUEST = 1;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_NOT_FOUND = 2;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_REVISION_CONFLICT = 3;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_TERMINAL_DECISION = 4;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_OPERATION_CONFLICT = 5;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_POLICY = 6;
+  REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_UNAVAILABLE = 7;
+}

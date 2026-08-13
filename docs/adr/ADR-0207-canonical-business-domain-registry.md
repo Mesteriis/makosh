@@ -4,6 +4,11 @@
 Дата: 2026-07-15
 Состояние реализации: Не реализовано
 
+Часть решения о центральном домене `contacts` заменена
+[ADR-0402](ADR-0402-persons-canonical-owner-and-contacts-cutover-boundary.md):
+каноническим владельцем человека и направлением новой разработки является
+`persons`. Остальные ownership-разделения этого ADR сохраняют силу.
+
 Зависит от:
 
 - [ADR-0200: Модульная модель и изоляция runtime](ADR-0200-clean-room-module-model-and-runtime-isolation.md);

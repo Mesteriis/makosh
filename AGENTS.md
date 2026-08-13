@@ -143,17 +143,24 @@ truth, если текущие ADR и реализация явно не зад�
 Файлы репозитория являются источником истины. На момент этого файла Макошь
 использует:
 
-- clean-room Cargo workspace в `backend/` с private module control plane,
-  открытыми platform gates и exact `attachment_security_engine_v1` inventory:
-  Communications domain плюс отдельный Attachment Security engine; отдельное
-  Kernel state `ready` ещё не реализовано;
+- exact production admission `speech_to_text_whisper_admission_v1`: 283
+  production packages и 253 business capabilities;
+- clean-room Cargo workspace в `backend/`: 420 packages / 421 manifests, из
+  которых 403 имеют production role; 120 packages Tasks 10–26 находятся в
+  состоянии `implemented-not-admitted`;
+- development release plan из 41 managed modules. Release fragment, generated
+  client или прошедший focused contour сам по себе не даёт production admission;
+- последовательный blocker Task 10: авторизованные Apple/Xcode/device и
+  Telegram evidence. Zoom, Yandex Telemost и OmniRoute дополнительно требуют
+  собственные real-provider credentials/evidence; не переставляй slices и не
+  подменяй эти gates mock-success;
 - полный предыдущий Rust workspace только как reference в
   `references/backend-legacy/`;
 - Vue 3 + Vite frontend в `frontend/`;
 - Tauri desktop shell в `frontend/src-tauri/`;
-- legacy PostgreSQL migrations в
-  `references/backend-legacy/backend/migrations/`; новая canonical schema ещё
-  не создана;
+- legacy PostgreSQL migrations находятся в
+  `references/backend-legacy/backend/migrations/`; active owner schemas живут
+  только в package-local immutable migrations и проходят Storage admission;
 - только clean-room ADR и минимальные architecture summaries в `docs/`;
 - полное дерево прежней документации в
   `references/backend-legacy/docs/` только как historical evidence;
@@ -635,15 +642,18 @@ Clean-room backend command surface принадлежит `backend/`:
 
 ```sh
 make -C backend architecture-policy-check
+make -C backend architecture-evidence-check
+make -C backend srp-policy-check
 make -C backend cargo-boundaries-check
 make -C backend test-architecture
-make -C backend architecture-check
-make -C backend validate
+make -C backend ci
+make pre-push
 ```
 
-Эти команды являются evidence только для architecture policy и её self-tests,
-пока production packages отсутствуют. Legacy Makefile и scripts из
-`references/backend-legacy/` не запускаются как активная проверка.
+`cargo-boundaries-check`, `ci` и root `pre-push` обязаны оставаться RED, если
+production-role packages присутствуют вне exact admitted inventory. Такой RED
+является admission evidence, а не поводом добавлять исключение. Legacy Makefile
+и scripts из `references/backend-legacy/` не запускаются как активная проверка.
 
 Для существующего frontend разрешены прямые команды, если соответствующий
 script всё ещё присутствует в `frontend/package.json`:

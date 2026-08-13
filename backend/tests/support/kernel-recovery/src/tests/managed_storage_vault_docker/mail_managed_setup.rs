@@ -2,8 +2,7 @@
 
 use super::*;
 
-use makosh_contacts_mail_sync_source_api::CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1;
-use makosh_mail_address_book_contract::MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1;
+use makosh_mail_address_book_contract::MAIL_PERSON_SOURCE_CAPABILITY_ID_V1;
 use makosh_mail_api::{
     MailCredentialPurpose,
     account::{MailBindCredentialRequestV1, MailCredentialPurposeV1},
@@ -490,13 +489,12 @@ fn admit_mail_runtime_profile(
                 .to_owned(),
         ],
         MailAdmissionProfileV1::GooglePeopleAddressBook => vec![
-            CONTACT_MAIL_SYNC_SOURCE_BLOB_TARGET_CAPABILITY_ID_V1.to_owned(),
-            MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1.to_owned(),
+            MAIL_PERSON_SOURCE_CAPABILITY_ID_V1.to_owned(),
             MAIL_GMAIL_CREDENTIALS_CAPABILITY_ID.to_owned(),
             MAIL_STORAGE_CAPABILITY_ID.to_owned(),
         ],
         MailAdmissionProfileV1::CardDavAddressBook => vec![
-            MAIL_ADDRESS_BOOK_CAPABILITY_ID_V1.to_owned(),
+            MAIL_PERSON_SOURCE_CAPABILITY_ID_V1.to_owned(),
             MAIL_IMAP_CREDENTIALS_CAPABILITY_ID.to_owned(),
             MAIL_STORAGE_CAPABILITY_ID.to_owned(),
         ],
@@ -821,6 +819,46 @@ pub(super) fn start_mail_carddav_runtime(
             ca_certificate_pem: carddav.ca_certificate_pem,
         },
     )
+}
+
+pub(super) fn restart_mail_carddav_runtime(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: StartedMailRuntime,
+    carddav: MailCardDavFixtureSettingsV1,
+) -> StartedMailRuntime {
+    let predecessor_generation = predecessor.runtime_generation;
+    let predecessor_binding = store
+        .platform_storage_binding(&predecessor.registration_id, MAIL_STORAGE_CAPABILITY_ID)
+        .expect("read predecessor Mail Storage binding")
+        .expect("predecessor Mail Storage binding");
+    let issue = storage_successor::issue_after(&predecessor_binding)
+        .expect("derive Mail successor storage fences");
+    let (_, binding) = storage_successor::reserve(
+        supervisor,
+        store,
+        &predecessor.registration_id,
+        MAIL_STORAGE_CAPABILITY_ID,
+        issue,
+    )
+    .expect("reserve successor Mail launch and Storage binding");
+    crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
+        .expect("provision successor Mail Storage binding");
+    let successor = start_mail_carddav_runtime(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        AdmittedMailRuntime {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        carddav,
+    );
+    assert_eq!(successor.runtime_generation, predecessor_generation + 1);
+    successor
 }
 
 fn seed_carddav_binding() {

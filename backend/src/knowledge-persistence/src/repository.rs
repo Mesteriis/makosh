@@ -3,14 +3,15 @@ use makosh_knowledge_core::{
     VerifiedKnowledgeNoteV1, create_verified_knowledge_note_from_reviewed_candidate_v1,
 };
 use makosh_storage_protocol::StorageBindingV1;
+use sha2::{Digest, Sha256};
 use sqlx::{
-    PgPool, Postgres, Transaction,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions},
 };
 
 use crate::model::{
-    KNOWLEDGE_OUTBOX_LIMIT_V1, KNOWLEDGE_RECOVERY_LIMIT_V1, valid_cleanup, valid_identity,
-    valid_note, valid_outbox, valid_reservation,
+    KNOWLEDGE_RECOVERY_LIMIT_V1, valid_cleanup, valid_identity, valid_note, valid_outbox,
+    valid_reservation,
 };
 use crate::row_codec::{decode_command, decode_outbox};
 use crate::{
@@ -34,7 +35,66 @@ pub struct KnowledgePersistenceV1 {
     pool: PgPool,
 }
 
+pub struct KnowledgeOutboxPublishClaimV1 {
+    transaction: Transaction<'static, Postgres>,
+    logical_owner_id: String,
+    record: KnowledgeOutboxRecordV1,
+    created_at_unix_millis: i64,
+}
+
+impl KnowledgeOutboxPublishClaimV1 {
+    #[must_use]
+    pub fn record(&self) -> &KnowledgeOutboxRecordV1 {
+        &self.record
+    }
+
+    pub async fn mark_published(
+        mut self,
+        expected_sha256: [u8; 32],
+        published_at_unix_millis: i64,
+    ) -> Result<(), KnowledgePersistenceErrorV1> {
+        if expected_sha256 != self.record.envelope_sha256
+            || Sha256::digest(&self.record.envelope_bytes).as_slice() != expected_sha256
+            || published_at_unix_millis < self.created_at_unix_millis
+        {
+            return Err(KnowledgePersistenceErrorV1::InboxConflict);
+        }
+        let affected = sqlx::query(
+            "UPDATE makosh_data.knowledge_outbox SET published_at_unix_millis=$3 \
+             WHERE logical_owner_id=$1 AND message_id=$2 AND envelope_sha256=$4 \
+             AND published_at_unix_millis IS NULL",
+        )
+        .bind(&self.logical_owner_id)
+        .bind(self.record.message_id.as_slice())
+        .bind(published_at_unix_millis)
+        .bind(expected_sha256.as_slice())
+        .execute(&mut *self.transaction)
+        .await
+        .map_err(storage)?
+        .rows_affected();
+        if affected != 1 {
+            return Err(KnowledgePersistenceErrorV1::InboxConflict);
+        }
+        self.transaction.commit().await.map_err(storage)
+    }
+}
+
 impl KnowledgePersistenceV1 {
+    pub(crate) async fn begin_owner(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<Transaction<'_, Postgres>, KnowledgePersistenceErrorV1> {
+        if !valid_identity(logical_owner_id) {
+            return Err(KnowledgePersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage)?;
+        Ok(transaction)
+    }
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,
@@ -89,6 +149,7 @@ impl KnowledgePersistenceV1 {
         if !valid_reservation(input) {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner(&input.logical_owner_id).await?;
         let fingerprint = input.command_fingerprint();
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.knowledge_reviewed_candidate_inbox (\
@@ -117,15 +178,19 @@ impl KnowledgePersistenceV1 {
         .bind(input.candidate_content.sha256.as_slice())
         .bind(&input.candidate_content.custody_transfer_source_proof)
         .bind(input.received_at_unix_millis)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage)?
         .rows_affected()
             == 1;
-        let persisted = self
-            .load_command(&input.logical_owner_id, input.command_message_id)
-            .await?
-            .ok_or(KnowledgePersistenceErrorV1::CommandConflict)?;
+        let persisted = load_command_in_transaction(
+            &mut transaction,
+            &input.logical_owner_id,
+            input.command_message_id,
+            false,
+        )
+        .await?
+        .ok_or(KnowledgePersistenceErrorV1::CommandConflict)?;
         if persisted.command_message_id != input.command_message_id
             || persisted.command_envelope_sha256 != input.command_envelope_sha256
             || persisted.command_id != input.command_id
@@ -134,11 +199,13 @@ impl KnowledgePersistenceV1 {
         {
             return Err(KnowledgePersistenceErrorV1::CommandConflict);
         }
-        Ok(if inserted {
+        let outcome = if inserted {
             ReserveReviewedCandidateCommandOutcomeV1::Reserved(persisted)
         } else {
             ReserveReviewedCandidateCommandOutcomeV1::Existing(persisted)
-        })
+        };
+        transaction.commit().await.map_err(storage)?;
+        Ok(outcome)
     }
 
     pub async fn persist_materialization(
@@ -148,6 +215,7 @@ impl KnowledgePersistenceV1 {
         if !valid_identity(&input.logical_owner_id) || !valid_cleanup(&input.materialization) {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner(&input.logical_owner_id).await?;
         let result = sqlx::query(
             "UPDATE makosh_data.knowledge_reviewed_candidate_inbox \
              SET materialized_blob_reference_id = $3, materialized_blob_declared_bytes = $4, \
@@ -163,13 +231,13 @@ impl KnowledgePersistenceV1 {
         .bind(i64_value(input.materialization.declared_bytes)?)
         .bind(input.materialization.sha256.as_slice())
         .bind(&input.materialization.custody_proof)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage)?;
         if result.rows_affected() != 1 {
             return Err(KnowledgePersistenceErrorV1::CommandConflict);
         }
-        Ok(())
+        transaction.commit().await.map_err(storage)
     }
 
     pub async fn complete_note(
@@ -188,7 +256,7 @@ impl KnowledgePersistenceV1 {
         if !valid_note(&note) || note.logical_owner_id != input.logical_owner_id {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
-        let mut transaction = self.pool.begin().await.map_err(storage)?;
+        let mut transaction = self.begin_owner(&input.logical_owner_id).await?;
         let command = lock_command(
             &mut transaction,
             &input.logical_owner_id,
@@ -259,7 +327,7 @@ impl KnowledgePersistenceV1 {
         {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
-        let mut transaction = self.pool.begin().await.map_err(storage)?;
+        let mut transaction = self.begin_owner(&input.logical_owner_id).await?;
         let command = lock_command(
             &mut transaction,
             &input.logical_owner_id,
@@ -310,6 +378,7 @@ impl KnowledgePersistenceV1 {
         if !valid_identity(logical_owner_id) || completed_at_unix_millis <= 0 {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner(logical_owner_id).await?;
         let result = sqlx::query(
             "UPDATE makosh_data.knowledge_reviewed_candidate_inbox \
              SET cleanup_completed_at_unix_millis = $3 \
@@ -320,13 +389,13 @@ impl KnowledgePersistenceV1 {
         .bind(logical_owner_id)
         .bind(command_message_id.as_slice())
         .bind(completed_at_unix_millis)
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage)?;
         if result.rows_affected() != 1 {
             return Err(KnowledgePersistenceErrorV1::CommandConflict);
         }
-        Ok(())
+        transaction.commit().await.map_err(storage)
     }
 
     pub async fn load_recoverable_commands(
@@ -336,90 +405,87 @@ impl KnowledgePersistenceV1 {
         if !valid_identity(logical_owner_id) {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner(logical_owner_id).await?;
         let query = format!(
             "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
              WHERE logical_owner_id = $1 AND (NOT completed OR \
              (materialized_blob_reference_id IS NOT NULL AND cleanup_completed_at_unix_millis IS NULL)) \
              ORDER BY received_at_unix_millis, command_message_id LIMIT $2"
         );
-        sqlx::query(sqlx::AssertSqlSafe(query))
+        let commands = sqlx::query(sqlx::AssertSqlSafe(query))
             .bind(logical_owner_id)
             .bind(i64::from(KNOWLEDGE_RECOVERY_LIMIT_V1))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
             .map_err(storage)?
             .iter()
             .map(decode_command)
-            .collect()
+            .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage)?;
+        Ok(commands)
     }
 
-    pub async fn load_pending_outbox(
+    pub async fn claim_next_pending_outbox(
         &self,
         logical_owner_id: &str,
-    ) -> Result<Vec<KnowledgeOutboxRecordV1>, KnowledgePersistenceErrorV1> {
+    ) -> Result<Option<KnowledgeOutboxPublishClaimV1>, KnowledgePersistenceErrorV1> {
         if !valid_identity(logical_owner_id) {
             return Err(KnowledgePersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(
-            "SELECT message_id, envelope_sha256, envelope_bytes FROM makosh_data.knowledge_outbox \
+        let mut transaction = self.pool.begin().await.map_err(storage)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage)?;
+        let row = sqlx::query(
+            "SELECT message_id, envelope_sha256, envelope_bytes, created_at_unix_millis \
+             FROM makosh_data.knowledge_outbox \
              WHERE logical_owner_id = $1 AND published_at_unix_millis IS NULL \
-             ORDER BY created_at_unix_millis, message_id LIMIT $2",
+             ORDER BY outbox_sequence FOR UPDATE SKIP LOCKED LIMIT 1",
         )
         .bind(logical_owner_id)
-        .bind(i64::from(KNOWLEDGE_OUTBOX_LIMIT_V1))
-        .fetch_all(&self.pool)
-        .await
-        .map_err(storage)?
-        .iter()
-        .map(decode_outbox)
-        .collect()
-    }
-
-    pub async fn mark_outbox_published(
-        &self,
-        logical_owner_id: &str,
-        message_id: [u8; 16],
-        published_at_unix_millis: i64,
-    ) -> Result<(), KnowledgePersistenceErrorV1> {
-        if !valid_identity(logical_owner_id)
-            || message_id.iter().all(|byte| *byte == 0)
-            || published_at_unix_millis <= 0
-        {
-            return Err(KnowledgePersistenceErrorV1::InvalidInput);
-        }
-        sqlx::query(
-            "UPDATE makosh_data.knowledge_outbox SET published_at_unix_millis = $3 \
-             WHERE logical_owner_id = $1 AND message_id = $2 \
-             AND (published_at_unix_millis IS NULL OR published_at_unix_millis = $3)",
-        )
-        .bind(logical_owner_id)
-        .bind(message_id.as_slice())
-        .bind(published_at_unix_millis)
-        .execute(&self.pool)
+        .fetch_optional(&mut *transaction)
         .await
         .map_err(storage)?;
-        Ok(())
+        let Some(row) = row else {
+            transaction.rollback().await.map_err(storage)?;
+            return Ok(None);
+        };
+        let record = decode_outbox(&row)?;
+        if !valid_outbox(&record) {
+            return Err(KnowledgePersistenceErrorV1::InvalidRow);
+        }
+        let created_at_unix_millis = row.try_get("created_at_unix_millis").map_err(storage)?;
+        Ok(Some(KnowledgeOutboxPublishClaimV1 {
+            transaction,
+            logical_owner_id: logical_owner_id.to_owned(),
+            record,
+            created_at_unix_millis,
+        }))
     }
+}
 
-    async fn load_command(
-        &self,
-        logical_owner_id: &str,
-        command_message_id: [u8; 16],
-    ) -> Result<Option<PersistedReviewedCandidateCommandV1>, KnowledgePersistenceErrorV1> {
-        let query = format!(
-            "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
-             WHERE logical_owner_id = $1 AND command_message_id = $2"
-        );
-        sqlx::query(sqlx::AssertSqlSafe(query))
-            .bind(logical_owner_id)
-            .bind(command_message_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage)?
-            .as_ref()
-            .map(decode_command)
-            .transpose()
-    }
+async fn load_command_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    command_message_id: [u8; 16],
+    lock: bool,
+) -> Result<Option<PersistedReviewedCandidateCommandV1>, KnowledgePersistenceErrorV1> {
+    let lock_clause = if lock { " FOR UPDATE" } else { "" };
+    let query = format!(
+        "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
+         WHERE logical_owner_id = $1 AND command_message_id = $2{lock_clause}"
+    );
+    sqlx::query(sqlx::AssertSqlSafe(query))
+        .bind(logical_owner_id)
+        .bind(command_message_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage)?
+        .as_ref()
+        .map(decode_command)
+        .transpose()
 }
 
 async fn lock_command(
@@ -427,18 +493,9 @@ async fn lock_command(
     logical_owner_id: &str,
     command_message_id: [u8; 16],
 ) -> Result<PersistedReviewedCandidateCommandV1, KnowledgePersistenceErrorV1> {
-    let query = format!(
-        "SELECT {COMMAND_COLUMNS} FROM makosh_data.knowledge_reviewed_candidate_inbox \
-         WHERE logical_owner_id = $1 AND command_message_id = $2 FOR UPDATE"
-    );
-    let row = sqlx::query(sqlx::AssertSqlSafe(query))
-        .bind(logical_owner_id)
-        .bind(command_message_id.as_slice())
-        .fetch_optional(&mut **transaction)
-        .await
-        .map_err(storage)?
-        .ok_or(KnowledgePersistenceErrorV1::NotFound)?;
-    decode_command(&row)
+    load_command_in_transaction(transaction, logical_owner_id, command_message_id, true)
+        .await?
+        .ok_or(KnowledgePersistenceErrorV1::NotFound)
 }
 
 async fn insert_note(

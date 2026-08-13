@@ -1,0 +1,23 @@
+[package]
+name = "makosh-persons-api"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "persons"
+surface = "contract"
+
+[dependencies]
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+prost = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+
+[build-dependencies]
+prost-build = "=0.14.4"
+protoc-bin-vendored = "=3.2.0"
+sha2 = { version = "=0.11.0", default-features = false }

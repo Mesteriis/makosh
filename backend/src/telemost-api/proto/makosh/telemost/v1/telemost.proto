@@ -1,0 +1,8 @@
+syntax = "proto3";
+package makosh.telemost.v1;
+message ListAccountsRequestV1 { string logical_owner_id = 1; bytes after_account_cursor_sha256 = 2; uint32 limit = 3; }
+message ProviderAccountV1 { bytes account_cursor_sha256 = 1; uint64 mapping_revision = 2; uint32 lifecycle_state = 3; int64 updated_at_unix_millis = 4; }
+message ListAccountsResultV1 { repeated ProviderAccountV1 accounts = 1; bytes next_account_cursor_sha256 = 2; }
+message ProviderStatusRequestV1 { string logical_owner_id = 1; }
+message ProviderStatusV1 { uint64 accounts = 1; uint64 observations = 2; uint64 pending_call_evidence = 3; }
+service YandexTelemostQueryService { rpc ListAccounts(ListAccountsRequestV1) returns (ListAccountsResultV1); rpc GetStatus(ProviderStatusRequestV1) returns (ProviderStatusV1); }

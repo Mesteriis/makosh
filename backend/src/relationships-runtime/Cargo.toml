@@ -1,0 +1,31 @@
+[package]
+name = "makosh-relationships-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-relationships-runtime"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "relationships"
+surface = "runtime"
+
+[dependencies]
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-relationships-api = { path = "../relationships-api" }
+makosh-relationships-core = { path = "../relationships-core" }
+makosh-relationships-persistence = { path = "../relationships-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+libc = "=0.2.186"
+prost = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+tokio = { version = "=1.52.4", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "=1.9.0"

@@ -1,6 +1,6 @@
 use crate::repository::{
     ReviewAttentionPersistenceErrorV1, ReviewAttentionPersistenceV1, attention_from_row,
-    disposition_code, importance_code,
+    disposition_code, importance_code, valid_owner,
 };
 use makosh_review_attention_core::{
     ReviewAttentionV1, ReviewDispositionV1, ReviewImportanceV1, STABLE_ID_BYTES_V1,
@@ -33,7 +33,8 @@ impl ReviewAttentionPersistenceV1 {
         if !valid_owner(logical_owner_id) || attention_id.iter().all(|byte| *byte == 0) {
             return Err(ReviewAttentionPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let result = sqlx::query(
             "SELECT attention_id, source_evidence_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
                     snoozed_until_nanos, updated_at_unix_seconds, updated_at_nanos
@@ -42,11 +43,16 @@ impl ReviewAttentionPersistenceV1 {
         )
         .bind(logical_owner_id)
         .bind(attention_id.as_slice())
-        .fetch_optional(&self.pool)
+        .fetch_optional(&mut *transaction)
         .await
         .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?
         .map(|row| attention_from_row(&row))
-        .transpose()
+        .transpose()?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?;
+        Ok(result)
     }
 
     pub async fn list_attention(
@@ -64,6 +70,7 @@ impl ReviewAttentionPersistenceV1 {
             return Err(ReviewAttentionPersistenceErrorV1::InvalidInput);
         }
         let fetch_limit = i64::from(filter.limit) + 1;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let rows = sqlx::query(
             "SELECT attention_id, source_evidence_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
@@ -89,7 +96,7 @@ impl ReviewAttentionPersistenceV1 {
         .bind(filter.importance.map(importance_code))
         .bind(filter.snoozed)
         .bind(fetch_limit)
-        .fetch_all(&self.pool)
+        .fetch_all(&mut *transaction)
         .await
         .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?;
         let mut attention = rows
@@ -103,19 +110,16 @@ impl ReviewAttentionPersistenceV1 {
         let next_cursor = has_more
             .then(|| attention.last().map(|item| item.attention_id))
             .flatten();
-        Ok(ReviewAttentionPageV1 {
+        let page = ReviewAttentionPageV1 {
             attention,
             next_cursor,
-        })
+        };
+        transaction
+            .commit()
+            .await
+            .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?;
+        Ok(page)
     }
-}
-
-fn valid_owner(owner: &str) -> bool {
-    !owner.is_empty()
-        && owner.len() <= 128
-        && owner.bytes().all(|byte| {
-            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'.' | b'_' | b'-')
-        })
 }
 
 #[cfg(test)]

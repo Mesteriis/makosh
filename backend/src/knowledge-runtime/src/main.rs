@@ -105,7 +105,7 @@ where
             .as_millis()
             .try_into()
             .map_err(|_| "Knowledge clock is invalid".to_owned())?;
-        retry_runtime(runtime.pump_control_once())?;
+        retry_runtime(executor.block_on(runtime.pump_control_once(now)))?;
         retry_runtime(executor.block_on(runtime.recover_command_once(now)))?;
         retry_runtime(executor.block_on(runtime.consume_command_once(now)))?;
         retry_runtime(executor.block_on(runtime.relay_outbox_once(now)))?;

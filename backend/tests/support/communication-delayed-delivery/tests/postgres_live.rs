@@ -29,7 +29,8 @@ async fn durable_lifecycle_survives_restart_and_fences_duplicates_and_cancel_rac
         .await
         .expect("connect disposable Delayed Delivery PostgreSQL");
     install_schema(&admin).await;
-    let persistence = connect(&database_url).await;
+    install_nobypass_rls_role(&admin).await;
+    let persistence = connect_nobypass(&database_url).await;
     persistence
         .verify_storage_ready()
         .await
@@ -151,7 +152,7 @@ async fn durable_lifecycle_survives_restart_and_fences_duplicates_and_cancel_rac
     assert_cancelled_cleanup_enqueued(&persistence).await;
     drop(persistence);
 
-    let reopened = connect(&database_url).await;
+    let reopened = connect_nobypass(&database_url).await;
     let terminal = reopened
         .status(OWNER, &[1; 16])
         .await
@@ -216,6 +217,7 @@ async fn durable_lifecycle_survives_restart_and_fences_duplicates_and_cancel_rac
             .expect("read completed cleanup queue"),
         None
     );
+    assert_owner_rls(&admin, &database_url).await;
 }
 
 async fn assert_cancel_too_late_race(
@@ -384,12 +386,138 @@ async fn install_schema(pool: &PgPool) {
     }
 }
 
-async fn connect(
+async fn connect_nobypass(
     database_url: &str,
 ) -> makosh_communication_delayed_delivery_persistence::CommunicationDelayedDeliveryPersistenceV1 {
-    DelayedDeliveryPersistenceConformanceV1::connect_url(database_url)
+    DelayedDeliveryPersistenceConformanceV1::connect_url_as_nobypass_rls_role(database_url)
         .await
-        .expect("connect Delayed Delivery persistence")
+        .expect("connect Delayed Delivery persistence as NOSUPERUSER NOBYPASSRLS role")
+}
+
+async fn install_nobypass_rls_role(admin: &PgPool) {
+    sqlx::raw_sql(
+        "CREATE ROLE makosh_delayed_delivery_rls_test \
+           NOLOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOINHERIT; \
+         GRANT USAGE ON SCHEMA makosh_data TO makosh_delayed_delivery_rls_test; \
+         GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA makosh_data \
+           TO makosh_delayed_delivery_rls_test; \
+         GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA makosh_data \
+           TO makosh_delayed_delivery_rls_test;",
+    )
+    .execute(admin)
+    .await
+    .expect("create exact non-bypass Delayed Delivery RLS role");
+    let attributes: (bool, bool) = sqlx::query_as(
+        "SELECT rolsuper, rolbypassrls FROM pg_roles \
+         WHERE rolname = 'makosh_delayed_delivery_rls_test'",
+    )
+    .fetch_one(admin)
+    .await
+    .expect("read Delayed Delivery RLS role attributes");
+    assert_eq!(attributes, (false, false));
+}
+
+async fn assert_owner_rls(admin: &PgPool, database_url: &str) {
+    let options = database_url
+        .parse::<sqlx::postgres::PgConnectOptions>()
+        .expect("parse Delayed Delivery PostgreSQL URL");
+    let pool = PgPoolOptions::new()
+        .max_connections(1)
+        .after_connect(|connection, _meta| {
+            Box::pin(async move {
+                sqlx::query("SET ROLE makosh_delayed_delivery_rls_test")
+                    .execute(connection)
+                    .await?;
+                Ok(())
+            })
+        })
+        .connect_with(options)
+        .await
+        .expect("connect raw Delayed Delivery RLS role");
+    for table in [
+        "communication_delayed_delivery_operations",
+        "communication_delayed_delivery_scheduler_inbox",
+        "communication_delayed_delivery_outbox",
+        "communication_delayed_delivery_scheduler_receipt_outbox",
+        "communication_delayed_delivery_realtime",
+        "communication_delayed_delivery_body_cleanup",
+    ] {
+        let row_json: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+            "SELECT row_to_json(source)::text FROM (\
+               SELECT * FROM makosh_data.{table} \
+               WHERE logical_owner_id = $1 LIMIT 1\
+             ) source"
+        )))
+        .bind(OWNER)
+        .fetch_one(admin)
+        .await
+        .unwrap_or_else(|error| panic!("read owner-1 {table} fixture: {error}"));
+
+        let mut transaction = pool
+            .begin()
+            .await
+            .expect("begin owner2 RLS read transaction");
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', 'owner-2', true)")
+            .execute(&mut *transaction)
+            .await
+            .expect("set owner2 RLS context");
+        let visible: i64 = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+            "SELECT COUNT(*) FROM makosh_data.{table} WHERE logical_owner_id = $1"
+        )))
+        .bind(OWNER)
+        .fetch_one(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 SELECT {table}: {error}"));
+        assert_eq!(visible, 0, "owner2 must not see owner1 {table}");
+        let updated = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "UPDATE makosh_data.{table} SET logical_owner_id = logical_owner_id \
+             WHERE logical_owner_id = $1"
+        )))
+        .bind(OWNER)
+        .execute(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 UPDATE {table}: {error}"))
+        .rows_affected();
+        assert_eq!(updated, 0, "owner2 must not update owner1 {table}");
+        let deleted = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "DELETE FROM makosh_data.{table} WHERE logical_owner_id = $1"
+        )))
+        .bind(OWNER)
+        .execute(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 DELETE {table}: {error}"))
+        .rows_affected();
+        assert_eq!(deleted, 0, "owner2 must not delete owner1 {table}");
+        transaction
+            .commit()
+            .await
+            .expect("commit owner2 invisible DML");
+
+        let mut insert_transaction = pool
+            .begin()
+            .await
+            .expect("begin owner2 RLS insert transaction");
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', 'owner-2', true)")
+            .execute(&mut *insert_transaction)
+            .await
+            .expect("set owner2 insert context");
+        let error = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "INSERT INTO makosh_data.{table} OVERRIDING SYSTEM VALUE \
+             SELECT (json_populate_record(NULL::makosh_data.{table}, $1::json)).*"
+        )))
+        .bind(&row_json)
+        .execute(&mut *insert_transaction)
+        .await
+        .expect_err("owner2 cross-owner INSERT must fail");
+        assert_eq!(
+            error
+                .as_database_error()
+                .and_then(|error| error.code())
+                .as_deref(),
+            Some("42501"),
+            "owner2 INSERT into {table} must fail through RLS"
+        );
+    }
 }
 
 fn required(name: &str) -> String {

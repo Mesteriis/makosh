@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package makosh.tasks.client.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+enum TaskStateV1 {
+  TASK_STATE_UNSPECIFIED = 0;
+  TASK_STATE_OPEN = 1;
+  TASK_STATE_IN_PROGRESS = 2;
+  TASK_STATE_COMPLETED = 3;
+  TASK_STATE_CANCELLED = 4;
+}
+
+enum TaskPriorityV1 {
+  TASK_PRIORITY_UNSPECIFIED = 0;
+  TASK_PRIORITY_LOW = 1;
+  TASK_PRIORITY_NORMAL = 2;
+  TASK_PRIORITY_HIGH = 3;
+  TASK_PRIORITY_URGENT = 4;
+}
+
+message TaskDependencyV1 {
+  bytes dependency_id = 1;
+  bytes depends_on_task_id = 2;
+  uint64 created_at_task_revision = 3;
+}
+
+message TaskChecklistItemV1 {
+  bytes checklist_item_id = 1;
+  string label = 2;
+  bool completed = 3;
+  uint32 position = 4;
+  uint64 updated_at_task_revision = 5;
+}
+
+message TaskSummaryV1 {
+  bytes task_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  optional string description = 4;
+  optional TimestampV1 due_at = 5;
+  TaskStateV1 state = 6;
+  TaskPriorityV1 priority = 7;
+  uint64 task_revision = 8;
+  repeated TaskDependencyV1 dependencies = 9;
+  repeated TaskChecklistItemV1 checklist = 10;
+  TimestampV1 created_at = 11;
+  TimestampV1 updated_at = 12;
+}
+
+message CreateTaskRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  string title = 4;
+  optional string description = 5;
+  optional TimestampV1 due_at = 6;
+  TaskPriorityV1 priority = 7;
+  TimestampV1 created_at = 8;
+}
+
+message UpdateTaskRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  optional string title = 5;
+  optional string description = 6;
+  bool clear_description = 7;
+  optional TimestampV1 due_at = 8;
+  bool clear_due_at = 9;
+  TimestampV1 updated_at = 10;
+}
+
+message SetTaskStateRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  TaskStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message SetTaskPriorityRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  TaskPriorityV1 priority = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddTaskDependencyRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  bytes dependency_id = 5;
+  bytes depends_on_task_id = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message RemoveTaskDependencyRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  bytes dependency_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddChecklistItemRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  bytes checklist_item_id = 5;
+  string label = 6;
+  uint32 position = 7;
+  TimestampV1 changed_at = 8;
+}
+
+message UpdateChecklistItemRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  bytes checklist_item_id = 5;
+  optional string label = 6;
+  optional bool completed = 7;
+  optional uint32 position = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message RemoveChecklistItemRequestV1 {
+  bytes operation_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_task_revision = 4;
+  bytes checklist_item_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message TaskMutationResultV1 {
+  bytes operation_id = 1;
+  TaskSummaryV1 task = 2;
+}
+
+message GetTaskRequestV1 {
+  string logical_owner_id = 1;
+  bytes task_id = 2;
+}
+
+message ListTasksRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_task_id = 2;
+  uint32 limit = 3;
+}
+
+message ListTasksResultV1 {
+  repeated TaskSummaryV1 tasks = 1;
+  bytes next_after_task_id = 2;
+}
+
+// Public lifecycle event deliberately excludes owner-authored task content.
+message TaskChangedV1 {
+  bytes event_id = 1;
+  bytes task_id = 2;
+  string logical_owner_id = 3;
+  uint64 task_revision = 4;
+  TaskStateV1 state = 5;
+  TaskPriorityV1 priority = 6;
+  TimestampV1 occurred_at = 7;
+}
+
+service TasksCommandService {
+  rpc Create(CreateTaskRequestV1) returns (TaskMutationResultV1);
+  rpc Update(UpdateTaskRequestV1) returns (TaskMutationResultV1);
+  rpc SetState(SetTaskStateRequestV1) returns (TaskMutationResultV1);
+  rpc SetPriority(SetTaskPriorityRequestV1) returns (TaskMutationResultV1);
+  rpc AddDependency(AddTaskDependencyRequestV1) returns (TaskMutationResultV1);
+  rpc RemoveDependency(RemoveTaskDependencyRequestV1) returns (TaskMutationResultV1);
+  rpc AddChecklistItem(AddChecklistItemRequestV1) returns (TaskMutationResultV1);
+  rpc UpdateChecklistItem(UpdateChecklistItemRequestV1) returns (TaskMutationResultV1);
+  rpc RemoveChecklistItem(RemoveChecklistItemRequestV1) returns (TaskMutationResultV1);
+}
+
+service TasksQueryService {
+  rpc Get(GetTaskRequestV1) returns (TaskSummaryV1);
+  rpc List(ListTasksRequestV1) returns (ListTasksResultV1);
+}

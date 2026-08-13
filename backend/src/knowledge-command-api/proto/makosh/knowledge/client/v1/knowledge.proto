@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package makosh.knowledge.client.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+enum KnowledgeNoteStateV1 {
+  KNOWLEDGE_NOTE_STATE_UNSPECIFIED = 0;
+  KNOWLEDGE_NOTE_STATE_ACTIVE = 1;
+  KNOWLEDGE_NOTE_STATE_ARCHIVED = 2;
+}
+
+enum KnowledgeNoteOriginV1 {
+  KNOWLEDGE_NOTE_ORIGIN_UNSPECIFIED = 0;
+  KNOWLEDGE_NOTE_ORIGIN_REVIEWED_CANDIDATE = 1;
+  KNOWLEDGE_NOTE_ORIGIN_OWNER_AUTHORED = 2;
+}
+
+enum KnowledgeSourceStateV1 {
+  KNOWLEDGE_SOURCE_STATE_UNSPECIFIED = 0;
+  KNOWLEDGE_SOURCE_STATE_ACTIVE = 1;
+  KNOWLEDGE_SOURCE_STATE_REMOVED = 2;
+}
+
+message ReviewedCandidateProvenanceV1 {
+  bytes approved_candidate_id = 1;
+  bytes candidate_digest = 2;
+  bytes source_evidence_id = 3;
+  uint64 source_evidence_revision = 4;
+  bytes review_id = 5;
+  uint64 decision_revision = 6;
+  bytes decided_by_owner_device_id = 7;
+}
+
+message KnowledgeSourceV1 {
+  bytes source_id = 1;
+  string source_owner_id = 2;
+  bytes source_record_id = 3;
+  uint64 source_revision = 4;
+  bytes evidence_digest = 5;
+  KnowledgeSourceStateV1 state = 6;
+  uint64 updated_at_note_revision = 7;
+  TimestampV1 created_at = 8;
+  TimestampV1 updated_at = 9;
+}
+
+message KnowledgeNoteV1 {
+  bytes note_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string body = 4;
+  KnowledgeNoteStateV1 state = 5;
+  KnowledgeNoteOriginV1 origin = 6;
+  uint64 note_revision = 7;
+  optional ReviewedCandidateProvenanceV1 reviewed_provenance = 8;
+  TimestampV1 created_at = 9;
+  TimestampV1 updated_at = 10;
+}
+
+message CreateKnowledgeNoteRequestV1 {
+  bytes operation_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  string title = 4;
+  string body = 5;
+  TimestampV1 created_at = 6;
+}
+
+message UpdateKnowledgeNoteRequestV1 {
+  bytes operation_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_note_revision = 4;
+  optional string title = 5;
+  optional string body = 6;
+  TimestampV1 updated_at = 7;
+}
+
+message SetKnowledgeNoteStateRequestV1 {
+  bytes operation_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_note_revision = 4;
+  KnowledgeNoteStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddKnowledgeSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_note_revision = 4;
+  bytes source_id = 5;
+  string source_owner_id = 6;
+  bytes source_record_id = 7;
+  uint64 source_revision = 8;
+  bytes evidence_digest = 9;
+  TimestampV1 changed_at = 10;
+}
+
+message RemoveKnowledgeSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_note_revision = 4;
+  bytes source_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message KnowledgeNoteMutationResultV1 {
+  bytes operation_id = 1;
+  KnowledgeNoteV1 note = 2;
+}
+
+message GetKnowledgeNoteRequestV1 {
+  string logical_owner_id = 1;
+  bytes note_id = 2;
+}
+
+message ListKnowledgeNotesRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_note_id = 2;
+  uint32 limit = 3;
+}
+
+message SearchKnowledgeNotesRequestV1 {
+  string logical_owner_id = 1;
+  string query = 2;
+  bytes after_note_id = 3;
+  uint32 limit = 4;
+}
+
+message ListKnowledgeNotesResultV1 {
+  repeated KnowledgeNoteV1 notes = 1;
+  bytes next_after_note_id = 2;
+}
+
+message ListKnowledgeSourcesRequestV1 {
+  string logical_owner_id = 1;
+  bytes note_id = 2;
+  bytes after_source_id = 3;
+  uint32 limit = 4;
+}
+
+message ListKnowledgeSourcesResultV1 {
+  repeated KnowledgeSourceV1 sources = 1;
+  bytes next_after_source_id = 2;
+}
+
+// Public lifecycle event deliberately excludes owner-authored note content,
+// source records and reviewed provenance.
+message KnowledgeNoteChangedV1 {
+  bytes event_id = 1;
+  bytes note_id = 2;
+  string logical_owner_id = 3;
+  uint64 note_revision = 4;
+  KnowledgeNoteStateV1 state = 5;
+  TimestampV1 occurred_at = 6;
+}
+
+service KnowledgeCommandService {
+  rpc Create(CreateKnowledgeNoteRequestV1) returns (KnowledgeNoteMutationResultV1);
+  rpc Update(UpdateKnowledgeNoteRequestV1) returns (KnowledgeNoteMutationResultV1);
+  rpc SetState(SetKnowledgeNoteStateRequestV1) returns (KnowledgeNoteMutationResultV1);
+  rpc AddSource(AddKnowledgeSourceRequestV1) returns (KnowledgeNoteMutationResultV1);
+  rpc RemoveSource(RemoveKnowledgeSourceRequestV1) returns (KnowledgeNoteMutationResultV1);
+}
+
+service KnowledgeQueryService {
+  rpc Get(GetKnowledgeNoteRequestV1) returns (KnowledgeNoteV1);
+  rpc List(ListKnowledgeNotesRequestV1) returns (ListKnowledgeNotesResultV1);
+  rpc Search(SearchKnowledgeNotesRequestV1) returns (ListKnowledgeNotesResultV1);
+  rpc ListSources(ListKnowledgeSourcesRequestV1) returns (ListKnowledgeSourcesResultV1);
+}

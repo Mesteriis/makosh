@@ -1,19 +1,30 @@
 # Core Closure Plan
 
-Статус: закрыт по текущему closure-gate. Этот файл описывает подтверждённое
-состояние clean-room Core для `first_owner_v1`; он не открывает phase gates.
-Текущая честная картина:
+Статус: исторический Core closure закрыт; текущий production admission намного
+дальше этого первоначального плана. Файл не открывает phase gates. Источник
+истины — `backend/architecture/policy.json` и executable tests.
 
-- Закрыты срезы `whole_instance_backup_v1` и `client_gateway_v1` на уровне evidence/валидации.
-- `first_owner_v1` снят: исключение для Mail/Communications больше не используется.
-  `mail/communications` остаётся в общем owner stack без отдельного targeted gate-исключения.
-- ADR-0239 теперь закрыт на уровне production inventory: exact ten-package срез
-  (`makosh-mail-*`, `makosh-communications-*`) включён в `implementation.currentSlice`
-  как `gateway_runtime_plus_mail_communications_v1`; добавлены `Cargo.toml`/`src`-скелеты
-  для всех 10 крейтов, и все новые пакеты проходят проверку архитектурного policy/evidence.
-- Подтверждение: `first_owner_v1` больше не присутствует в `phaseGates`; это
-  проверено через `make -C backend architecture-policy-check`,
-  `make -C backend architecture-evidence-check` и `node --test tests/architecture/architecture-policy.test/part-01.test.mjs`.
+Текущая честная картина на 2026-08-13:
+
+- admitted slice: `speech_to_text_whisper_admission_v1`;
+- 283 exact production packages и 253 business capabilities;
+- workspace: 420 packages / 421 manifests, включая 120 production-role
+  packages Tasks 10–26 в состоянии `implemented-not-admitted`;
+- development release plan: 41 managed modules;
+- Tasks 10–25 не могут быть admitted до авторизованного Apple/Xcode/device и
+  Telegram evidence из Task 10;
+- Zoom, Yandex Telemost и OmniRoute дополнительно ожидают реальные OAuth/API
+  credentials и provider-success evidence;
+- `whole_instance_backup_v1`, `client_gateway_v1` и `first_owner_v1` ниже —
+  подтверждённые исторические ступени, а не название текущего slice.
+
+Подтверждение текущего состояния выполняется через существующие цели:
+`make -C backend architecture-policy-check`,
+`make -C backend architecture-evidence-check`,
+`make -C backend srp-policy-check`, `make -C backend cargo-boundaries-check` и
+`make -C backend test-architecture`. Последние две проверки честно RED, пока
+domain/workflow packages Tasks 16–26 не admitted; исключения ради зелёного
+статуса запрещены.
 
 Короткая матрица закрытия:
 

@@ -67,6 +67,7 @@ where
         .ok_or_else(|| "Zulip runtime configuration is invalid".to_owned())?;
     let admission = ZulipRuntimeAdmissionV1 {
         logical_owner_id: configuration.logical_owner_id,
+        logical_human_owner_id: configuration.logical_human_owner_id,
         configuration_instance_id: configuration.configuration_instance_id,
         module_registration_id: configuration.registration_id,
         runtime_instance_id: configuration.runtime_instance_id,

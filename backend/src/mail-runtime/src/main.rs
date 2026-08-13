@@ -15,12 +15,6 @@ use makosh_mail_runtime::managed::{
 };
 use makosh_mail_runtime::{
     MailRuntimeAdmission,
-    address_book_consumer::MailAddressBookConsumeErrorV1,
-    address_book_fetch_worker::{
-        MailAddressBookFetchWorkerErrorV1, process_next_mail_address_book_fetch_v1,
-    },
-    address_book_outbox::MailAddressBookOutboxRelayErrorV1,
-    address_book_worker::{MailAddressBookWorkerErrorV1, process_next_mail_address_book_upsert_v1},
     attachment_security_outbox::MailAttachmentSecurityOutboxRelayError,
     communications_outbox::MailCommunicationsOutboxRelayError,
     delivery_intent_consumer::MailDeliveryIntentConsumeErrorV1,
@@ -37,6 +31,7 @@ use makosh_mail_runtime::{
         execute_gmail_sync_provider_operation,
     },
     managed,
+    person_source_fetch_worker::MailPersonSourceFetchWorkerErrorV1,
     retained_evidence_replay_consumer::MailReplayCommandConsumeErrorV1,
     retained_evidence_replay_result::MailReplayResultRelayErrorV1,
     settings,
@@ -421,65 +416,19 @@ where
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
-        match runtime.block_on(admitted.try_consume_address_book_upsert(now)) {
-            Ok(_) | Err(MailAddressBookConsumeErrorV1::Unavailable) => {}
-            Err(MailAddressBookConsumeErrorV1::Persistence) => {
-                developer_diagnostic("developer_mail_address_book_inbox_persistence_failed");
+        match runtime.block_on(admitted.try_consume_person_source_fetch(now)) {
+            Ok(_) | Err(MailPersonSourceFetchWorkerErrorV1::ProviderUnavailable) => {}
+            Err(MailPersonSourceFetchWorkerErrorV1::Persistence)
+            | Err(MailPersonSourceFetchWorkerErrorV1::EventUnavailable) => {
+                developer_diagnostic("developer_mail_person_source_fetch_retryable");
                 defer_runtime_tick();
                 continue 'runtime;
             }
             Err(error) => {
                 developer_diagnostic(&format!(
-                    "developer_mail_address_book_command_error={error:?}"
+                    "developer_mail_person_source_fetch_error={error:?}"
                 ));
-                return Err("Mail address-book command is invalid".to_owned());
-            }
-        }
-        drain_client_deliveries(&runtime, &mut admitted)?;
-        match runtime.block_on(admitted.try_consume_address_book_fetch(now)) {
-            Ok(_) | Err(MailAddressBookConsumeErrorV1::Unavailable) => {}
-            Err(MailAddressBookConsumeErrorV1::Persistence) => {
-                developer_diagnostic("developer_mail_address_book_fetch_inbox_persistence_failed");
-                defer_runtime_tick();
-                continue 'runtime;
-            }
-            Err(error) => {
-                developer_diagnostic(&format!(
-                    "developer_mail_address_book_fetch_command_error={error:?}"
-                ));
-                return Err("Mail address-book fetch command is invalid".to_owned());
-            }
-        }
-        drain_client_deliveries(&runtime, &mut admitted)?;
-        match runtime.block_on(process_next_mail_address_book_fetch_v1(&mut admitted, now)) {
-            Ok(_) => {}
-            Err(MailAddressBookFetchWorkerErrorV1::InvalidClock) => {
-                return Err("Mail address-book fetch worker clock is invalid".to_owned());
-            }
-            Err(MailAddressBookFetchWorkerErrorV1::Persistence) => {
-                developer_diagnostic("developer_mail_address_book_fetch_worker_persistence_failed");
-                defer_runtime_tick();
-                continue 'runtime;
-            }
-            Err(MailAddressBookFetchWorkerErrorV1::Envelope) => {
-                developer_diagnostic("developer_mail_address_book_fetch_worker_envelope_failed");
-                return Err("Mail address-book fetch worker result is invalid".to_owned());
-            }
-        }
-        drain_client_deliveries(&runtime, &mut admitted)?;
-        match runtime.block_on(process_next_mail_address_book_upsert_v1(&mut admitted, now)) {
-            Ok(_) => {}
-            Err(MailAddressBookWorkerErrorV1::InvalidClock) => {
-                return Err("Mail address-book worker clock is invalid".to_owned());
-            }
-            Err(MailAddressBookWorkerErrorV1::Persistence) => {
-                developer_diagnostic("developer_mail_address_book_worker_persistence_failed");
-                defer_runtime_tick();
-                continue 'runtime;
-            }
-            Err(MailAddressBookWorkerErrorV1::ResultEnvelope) => {
-                developer_diagnostic("developer_mail_address_book_result_invalid");
-                return Err("Mail address-book result is invalid".to_owned());
+                return Err("Mail Person-source fetch command is invalid".to_owned());
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
@@ -529,13 +478,28 @@ where
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
-        match runtime.block_on(admitted.relay_address_book_outbox(now)) {
-            Ok(_) | Err(MailAddressBookOutboxRelayErrorV1::Unavailable) => {}
-            Err(MailAddressBookOutboxRelayErrorV1::Persistence) => {
-                developer_diagnostic("developer_mail_address_book_outbox_persistence_failed");
+        let now_unix_millis = now
+            .checked_mul(1_000)
+            .ok_or_else(|| "Mail runtime clock overflow".to_owned())?;
+        match runtime.block_on(admitted.relay_person_source_lifecycle_outbox(now_unix_millis)) {
+            Ok(_) | Err(makosh_mail_runtime::person_source_producer::MailPersonSourceProducerErrorV1::EventUnavailable) => {}
+            Err(makosh_mail_runtime::person_source_producer::MailPersonSourceProducerErrorV1::PersistenceUnavailable) => {
+                developer_diagnostic("developer_mail_person_source_lifecycle_persistence_failed");
                 defer_runtime_tick();
                 continue 'runtime;
             }
+            Err(_) => return Err("Mail Person-source lifecycle outbox is invalid".to_owned()),
+        }
+        match runtime.block_on(admitted.relay_person_source_fetch_outbox(now_unix_millis)) {
+            Ok(_) | Err(MailPersonSourceFetchWorkerErrorV1::EventUnavailable) => {}
+            Err(MailPersonSourceFetchWorkerErrorV1::Persistence) => {
+                developer_diagnostic(
+                    "developer_mail_person_source_fetch_outbox_persistence_failed",
+                );
+                defer_runtime_tick();
+                continue 'runtime;
+            }
+            Err(_) => return Err("Mail Person-source fetch outbox is invalid".to_owned()),
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
         match runtime.block_on(admitted.relay_attachment_security_outbox(now)) {

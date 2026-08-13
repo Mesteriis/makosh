@@ -36,7 +36,7 @@ test('attachment preview is an implemented workflow and not a Communications fac
     state: 'implemented',
     dependsOn: ['blob_v1', 'attachment_security_engine_v1'],
   });
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   assert(policy.implementation.ownerInventory.workflows.includes('attachment_preview'));
   assert(policy.implementation.ownerInventory.businessCapabilities.includes(
     'attachment.preview.v1',

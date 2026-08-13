@@ -104,8 +104,8 @@ test('allows test support only through a dev dependency', () => {
     kernel(),
     support,
     workspacePackage(
-      'makosh-contacts-runtime',
-      { role: 'domain', owner: 'contacts', surface: 'runtime' },
+      'makosh-persons-runtime',
+      { role: 'domain', owner: 'persons', surface: 'runtime' },
       [dependency('makosh-test-support', 'dev')],
     ),
   ];
@@ -115,8 +115,8 @@ test('allows test support only through a dev dependency', () => {
     kernel(),
     support,
     workspacePackage(
-      'makosh-contacts-runtime',
-      { role: 'domain', owner: 'contacts', surface: 'runtime' },
+      'makosh-persons-runtime',
+      { role: 'domain', owner: 'persons', surface: 'runtime' },
       [dependency('makosh-test-support')],
     ),
   ];

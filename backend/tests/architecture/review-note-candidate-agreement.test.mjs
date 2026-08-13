@@ -91,7 +91,7 @@ test('Review note-candidate is a distinct domain capability without Task or Know
   ]);
   const policy = JSON.parse(policySource);
 
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   for (const unit of [
     'makosh-review-note-candidate-api',
     'makosh-review-note-candidate-core',

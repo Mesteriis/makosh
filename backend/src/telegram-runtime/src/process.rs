@@ -46,6 +46,7 @@ use sha2::{Digest, Sha256};
 use crate::{
     TelegramCallProviderUpdate, TelegramDurableProjectionError, TelegramRuntime,
     TelegramRuntimeComposition,
+    admission::TELEGRAM_BLOB_CAPABILITY_ID,
     bootstrap::{
         TelegramAdmittedProviderLoop, TelegramAdmittedRuntime,
         TelegramProviderReconfigurationContextV1, resolve_provider_reconfiguration_parameters,
@@ -657,7 +658,7 @@ pub fn serve_admitted_provider_loop(
                             &mut control_channel,
                             &mut dispatcher,
                             ManagedBlobSessionRequestV1 {
-                                capability_id: "blob.content",
+                                capability_id: TELEGRAM_BLOB_CAPABILITY_ID,
                                 operation: BlobDataOperationV1::BlobDataOperationReadRangeV1,
                                 reference_id: &intent.reference_id,
                                 declared_size: intent.declared_size,
@@ -782,7 +783,7 @@ fn admit_telegram_plaintext(
         control_channel,
         &mut dispatcher,
         ManagedBlobSessionRequestV1 {
-            capability_id: "blob.content",
+            capability_id: TELEGRAM_BLOB_CAPABILITY_ID,
             operation: BlobDataOperationV1::BlobDataOperationWriteV1,
             reference_id: &reference_id,
             declared_size: u64::try_from(plaintext.len())
@@ -1075,7 +1076,7 @@ fn authorize_media_for_request<T: makosh_telegram_tdlib::TdlibTransport>(
         channel,
         &mut dispatcher,
         ManagedBlobSessionRequestV1 {
-            capability_id: "blob.content",
+            capability_id: TELEGRAM_BLOB_CAPABILITY_ID,
             operation: BlobDataOperationV1::BlobDataOperationReadRangeV1,
             reference_id: &media.blob.reference_id,
             declared_size: media.blob.declared_size,

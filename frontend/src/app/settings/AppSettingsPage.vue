@@ -33,9 +33,6 @@ const emit = defineEmits<{
 const selectedOwner = ref<SettingsOwnerId>(props.initialOwner ?? 'system')
 
 const mailModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'mail'))
-const mailContactsSyncModule = computed(() => props.bootstrap.modules.find(
-	(module) => module.moduleId === 'makosh-mail-contacts-sync-runtime',
-) ?? null)
 const telegramModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'telegram'))
 const whatsAppModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'whatsapp'))
 const zulipModule = computed(() => clientSettingsModule(props.bootstrap.modules, 'zulip'))
@@ -172,9 +169,7 @@ const compositionNavigation = [
 				/>
 				<MailSettingsComposition
 					v-else-if="selectedOwner === 'mail'"
-					:modules="bootstrap.modules"
 					:mail-module="mailModule"
-					:sync-module="mailContactsSyncModule"
 					@changed="emit('refreshRequest')"
 				/>
 				<TelegramSettingsPanel v-else-if="selectedOwner === 'telegram'" :module="telegramModule" />

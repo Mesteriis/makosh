@@ -1,9 +1,9 @@
 use makosh_events_protocol::{
     delivery::{OutboxRecordError, OutboxRecordV1},
     v1::{
-        ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1, FenceKindV1,
-        ResultMetadataV1, ResultOutcomeV1, SourceFenceV1, SourceRefV1,
-        durable_envelope_v1::Semantics,
+        ActorKindV1, ActorRefV1, CommandMetadataV1, ContractRefV1, DurableEnvelopeV1,
+        EventMetadataV1, FenceKindV1, ResultMetadataV1, ResultOutcomeV1, SourceFenceV1,
+        SourceRefV1, durable_envelope_v1::Semantics,
     },
     validation::envelope::validate_envelope_v1,
 };
@@ -19,6 +19,8 @@ use crate::{
     TASKS_COMMAND_SCHEMA_SHA256_V1, TASKS_OWNER_ID_V1,
     TASKS_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1, TASKS_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1,
     TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1,
+    client_wire::TaskChangedV1,
+    tasks_lifecycle_event_contract_reference_v1,
     wire::{
         CreateTaskFromReviewedCandidateCommandV1, TaskCreatedFromReviewedCandidateV1,
         TaskCreationFromReviewedCandidateRejectedV1,
@@ -126,6 +128,81 @@ pub fn build_task_creation_from_reviewed_candidate_rejected_outbox_record_v1(
         payload.encode_to_vec(),
         context,
     )
+}
+
+pub fn build_task_changed_outbox_record_v1(
+    operation_id: [u8; 16],
+    payload: TaskChangedV1,
+    context: &TasksCommandEnvelopeContextV1,
+) -> Result<OutboxRecordV1, TasksCommandEnvelopeBuildErrorV1> {
+    validate_context(context)?;
+    if !nonzero(&operation_id)
+        || id16(&payload.event_id).is_err()
+        || id16(&payload.task_id).is_err()
+        || payload.task_revision == 0
+        || payload.state == 0
+        || payload.priority == 0
+        || !valid_owner(&payload.logical_owner_id)
+        || payload.occurred_at.as_ref().is_none_or(|value| {
+            value.unix_seconds <= 0 || !(0..1_000_000_000).contains(&value.nanos)
+        })
+    {
+        return Err(TasksCommandEnvelopeBuildErrorV1::InvalidPayload);
+    }
+    let event_id = id16(&payload.event_id)?;
+    let task_id = id16(&payload.task_id)?;
+    let occurred_at = payload
+        .occurred_at
+        .as_ref()
+        .map(|value| Timestamp {
+            seconds: value.unix_seconds,
+            nanos: value.nanos,
+        })
+        .ok_or(TasksCommandEnvelopeBuildErrorV1::InvalidPayload)?;
+    let contract = tasks_lifecycle_event_contract_reference_v1();
+    let envelope = DurableEnvelopeV1 {
+        envelope_major: 1,
+        envelope_revision: 1,
+        message_id: event_id.to_vec(),
+        contract: Some(ContractRefV1 {
+            owner: contract.owner,
+            name: contract.name,
+            major: contract.major,
+            revision: contract.revision,
+            schema_sha256: contract.schema_sha256,
+        }),
+        source: Some(SourceRefV1 {
+            module_id: context.module_id.clone(),
+            runtime_instance_id: digest(
+                b"tasks-runtime-instance-v1",
+                context.runtime_instance_id.as_bytes(),
+                b"source",
+            )
+            .to_vec(),
+            runtime_generation: context.runtime_generation,
+        }),
+        recorded_at: Some(timestamp(context)),
+        partition_key: task_id.to_vec(),
+        causation_message_id: operation_id.to_vec(),
+        correlation_id: task_id.to_vec(),
+        actor: Some(ActorRefV1 {
+            kind: ActorKindV1::Module as i32,
+            actor_id: context.module_id.as_bytes().to_vec(),
+        }),
+        trace: None,
+        source_fence: Some(SourceFenceV1 {
+            kind: FenceKindV1::RuntimeLease as i32,
+            scope_id: context.module_id.as_bytes().to_vec(),
+            epoch: context.runtime_generation,
+        }),
+        semantics: Some(Semantics::Event(EventMetadataV1 {
+            occurred_at: Some(occurred_at),
+        })),
+        payload: payload.encode_to_vec(),
+    };
+    validate_envelope_v1(&envelope)
+        .map_err(|_| TasksCommandEnvelopeBuildErrorV1::InvalidEnvelope)?;
+    OutboxRecordV1::accept(envelope.encode_to_vec()).map_err(outbox_error)
 }
 
 #[allow(clippy::too_many_arguments)]

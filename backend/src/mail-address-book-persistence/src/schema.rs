@@ -12,11 +12,66 @@ pub const MAIL_ADDRESS_BOOK_CUSTODY_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0002_snapshot_custody.sql");
 pub const MAIL_ADDRESS_BOOK_PROVIDER_PAGE_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0003_provider_page.sql");
+pub const MAIL_ADDRESS_BOOK_PERSON_SOURCE_STORAGE_BUNDLE_REVISION_V1: u32 = 29;
+pub const MAIL_ADDRESS_BOOK_PERSON_SOURCE_ADMITTED_STORAGE_BUNDLE_REVISION_V1: u32 = 32;
+pub const MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1: &[u8] =
+    include_bytes!("../migrations/0004_person_source_dormant.sql");
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MailAddressBookSchemaErrorV1 {
     InvalidPredecessor,
     InvalidSuccessor,
+}
+
+pub fn append_mail_address_book_person_source_storage_v1(
+    mut predecessor: StorageBundleV1,
+) -> Result<StorageBundleV1, MailAddressBookSchemaErrorV1> {
+    if predecessor.major != 1
+        || predecessor.revision != MAIL_ADDRESS_BOOK_STORAGE_BUNDLE_REVISION_V1
+        || predecessor.bundle_id != "mail_state"
+        || predecessor.owner_id != "mail"
+        || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
+        || validate_storage_bundle(&predecessor).is_err()
+    {
+        return Err(MailAddressBookSchemaErrorV1::InvalidPredecessor);
+    }
+    predecessor.steps.push(StorageMigrationStepV1 {
+        revision: MAIL_ADDRESS_BOOK_PERSON_SOURCE_STORAGE_BUNDLE_REVISION_V1,
+        migration_id: "mail_address_book_person_source_dormant".to_owned(),
+        forward_sql_utf8: MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1.to_vec(),
+        sha256: Sha256::digest(MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1).to_vec(),
+    });
+    predecessor.revision = MAIL_ADDRESS_BOOK_PERSON_SOURCE_STORAGE_BUNDLE_REVISION_V1;
+    validate_storage_bundle(&predecessor)
+        .map(|()| predecessor)
+        .map_err(|_| MailAddressBookSchemaErrorV1::InvalidSuccessor)
+}
+
+/// Appends the Task 6 production admission step after the already admitted
+/// Mail revision 31 lineage. Revision 29 remains a standalone Task 5
+/// conformance bundle and is never inserted into the production lineage.
+pub fn append_mail_address_book_person_source_admitted_storage_v1(
+    mut predecessor: StorageBundleV1,
+) -> Result<StorageBundleV1, MailAddressBookSchemaErrorV1> {
+    if predecessor.major != 1
+        || predecessor.revision != 31
+        || predecessor.bundle_id != "mail_state"
+        || predecessor.owner_id != "mail"
+        || predecessor.steps.last().map(|step| step.revision) != Some(predecessor.revision)
+        || validate_storage_bundle(&predecessor).is_err()
+    {
+        return Err(MailAddressBookSchemaErrorV1::InvalidPredecessor);
+    }
+    predecessor.steps.push(StorageMigrationStepV1 {
+        revision: MAIL_ADDRESS_BOOK_PERSON_SOURCE_ADMITTED_STORAGE_BUNDLE_REVISION_V1,
+        migration_id: "mail_address_book_person_source_admitted".to_owned(),
+        forward_sql_utf8: MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1.to_vec(),
+        sha256: Sha256::digest(MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1).to_vec(),
+    });
+    predecessor.revision = MAIL_ADDRESS_BOOK_PERSON_SOURCE_ADMITTED_STORAGE_BUNDLE_REVISION_V1;
+    validate_storage_bundle(&predecessor)
+        .map(|()| predecessor)
+        .map_err(|_| MailAddressBookSchemaErrorV1::InvalidSuccessor)
 }
 
 pub fn append_mail_address_book_storage_v1(

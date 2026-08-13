@@ -300,5 +300,5 @@ function themeMode(theme: UiThemeName): string {
 }
 
 function safeSnapshotPart(value: string): string {
-	return value.replace(/[^a-z0-9-]+/gi, '-').toLowerCase()
+	return value.replace(/^макошь/i, 'makosh').replace(/[^a-z0-9-]+/gi, '-').toLowerCase()
 }

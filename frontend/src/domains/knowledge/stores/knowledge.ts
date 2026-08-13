@@ -1,320 +1,238 @@
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type {
-	GraphSummary,
-	GraphNode,
-	GraphNeighborhood,
-	GraphEdge,
-	ContradictionObservation,
-	ContradictionSeverity,
-	GraphNodeKind
-} from '../types/knowledge'
 import {
-	fetchGraphNodes,
-	searchGraphNodes,
-	fetchGraphNeighborhood,
-	reviewContradiction
-} from '../api/knowledge'
+  KnowledgeNoteStateV1,
+  type KnowledgeNoteV1,
+  type KnowledgeSourceV1,
+  type TimestampV1
+} from '../../../gen/makosh/knowledge/client/v1/knowledge_pb'
+import {
+  getKnowledgeCommandClient,
+  getKnowledgeQueryClient
+} from '../../../platform/connect/knowledgeClient'
 
-export interface GraphCanvasNode {
-	node_id: string
-	node_kind: GraphNodeKind
-	label: string
-	x: number
-	y: number
-	isSelected: boolean
-	layoutClass: string
-}
-
-export interface GraphCanvasEdge {
-	x1: number
-	y1: number
-	x2: number
-	y2: number
-	label: string
-	review_state: string
-}
-
-export type GraphFilterChip = {
-	kind: string
-	label: string
-	icon: string
-	count: number
-}
-
-const RADIUS = 38
-
-function buildRadialLayout(
-	center: GraphNode,
-	neighbors: GraphNode[],
-	radius: number
-): GraphCanvasNode[] {
-	const maxNeighbors = 14
-	const nodes: GraphCanvasNode[] = [
-		{
-			node_id: center.node_id,
-			node_kind: center.node_kind,
-			label: center.label,
-			x: 50,
-			y: 50,
-			isSelected: true,
-			layoutClass: 'center'
-		}
-	]
-
-	const limited = neighbors.slice(0, maxNeighbors)
-	const count = limited.length
-	for (let i = 0; i < count; i++) {
-		const angle = (2 * Math.PI * i) / count - Math.PI / 2
-		nodes.push({
-			node_id: limited[i].node_id,
-			node_kind: limited[i].node_kind,
-			label: limited[i].label,
-			x: 50 + radius * Math.cos(angle),
-			y: 50 + radius * Math.sin(angle),
-			isSelected: false,
-			layoutClass: `neighbor-${i}`
-		})
-	}
-	return nodes
-}
-
-function buildEdges(
-	centerId: string,
-	edges: GraphEdge[],
-	canvasNodes: GraphCanvasNode[]
-): GraphCanvasEdge[] {
-	const nodeMap = new Map(canvasNodes.map((n) => [n.node_id, n]))
-	return edges.map((edge) => {
-		const source = nodeMap.get(edge.source_node_id)
-		const target = nodeMap.get(edge.target_node_id)
-		return {
-			x1: source?.x ?? 50,
-			y1: source?.y ?? 50,
-			x2: target?.x ?? 50,
-			y2: target?.y ?? 50,
-			label: edge.relationship_type.replace(/_/g, ' '),
-			review_state: edge.review_state
-		}
-	})
-}
-
-export function graphNodeKindIcon(kind: string): string {
-	switch (kind) {
-		case 'person':
-			return 'tabler:user'
-		case 'email_address':
-			return 'tabler:mail'
-		case 'message':
-			return 'tabler:message'
-		case 'document':
-			return 'tabler:file'
-		case 'project':
-			return 'tabler:folder'
-		case 'organization':
-			return 'tabler:building'
-		case 'task':
-			return 'tabler:checkbox'
-		case 'event':
-			return 'tabler:calendar'
-		case 'decision':
-			return 'tabler:scale'
-		case 'obligation':
-			return 'tabler:gavel'
-		case 'knowledge':
-			return 'tabler:brain'
-		default:
-			return 'tabler:circle'
-	}
-}
-
-export function graphNodeKindLabel(kind: string): string {
-	return kind
-		.split('_')
-		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-		.join(' ')
-}
-
-export function contradictionSeverityTone(severity: ContradictionSeverity): ContradictionSeverity {
-	return severity
-}
-
-export function formatContradictionClaim(observation: ContradictionObservation): string {
-	return `${observation.old_claim} -> ${observation.new_claim}`
-}
-
-export function formatContradictionTime(value: string): string {
-	const date = new Date(value)
-	if (Number.isNaN(date.getTime())) {
-		return 'Unknown date'
-	}
-	return new Intl.DateTimeFormat('en', {
-		month: 'short',
-		day: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	}).format(date)
-}
-
-export function formatContradictionSource(kind: string, sourceId: string): string {
-	const label = kind
-		.split('_')
-		.map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-		.join(' ')
-	return `${label} · ${sourceId}`
-}
+const PAGE_LIMIT = 50
 
 export const useKnowledgeStore = defineStore('knowledge', () => {
-	const graphSummary = ref<GraphSummary | null>(null)
-	const graphError = ref('')
-	const graphSearchQuery = ref('')
-	const graphSearchResults = ref<GraphNode[]>([])
-	const graphNeighborhood = ref<GraphNeighborhood | null>(null)
-	const selectedGraphNode = ref<GraphNode | null>(null)
-	const contradictionObservations = ref<ContradictionObservation[]>([])
-	const reviewingContradictionObservationId = ref<string | null>(null)
+  const notes = ref<KnowledgeNoteV1[]>([])
+  const sourcesByNote = ref<Record<string, KnowledgeSourceV1[]>>({})
+  const searchQuery = ref('')
+  const error = ref('')
+  const isLoading = ref(false)
+  const mutatingNoteId = ref<string | null>(null)
 
-	const graphCanvasNodes = computed<GraphCanvasNode[]>(() => {
-		const neighborhood = graphNeighborhood.value
-		if (!neighborhood) return []
-		return buildRadialLayout(neighborhood.selected_node, neighborhood.nodes, RADIUS)
-	})
+  const activeNotes = computed(() => notes.value.filter((note) =>
+    note.state === KnowledgeNoteStateV1.KNOWLEDGE_NOTE_STATE_ACTIVE
+  ))
+  const archivedNotes = computed(() => notes.value.filter((note) =>
+    note.state === KnowledgeNoteStateV1.KNOWLEDGE_NOTE_STATE_ARCHIVED
+  ))
 
-	const graphCanvasEdges = computed<GraphCanvasEdge[]>(() => {
-		const neighborhood = graphNeighborhood.value
-		if (!neighborhood) return []
-		return buildEdges(neighborhood.selected_node.node_id, neighborhood.edges, graphCanvasNodes.value)
-	})
+  async function loadAll(): Promise<void> {
+    await loadPages('')
+  }
 
-	const selectedGraphProperties = computed(() => {
-		const node = selectedGraphNode.value
-		if (!node) return []
-		return Object.entries(node.properties)
-			.slice(0, 8)
-			.sort(([a], [b]) => a.localeCompare(b))
-			.map(([key, value]) => ({ key, value }))
-	})
+  async function search(query: string): Promise<void> {
+    const normalized = query.trim()
+    searchQuery.value = normalized
+    await loadPages(normalized)
+  }
 
-	const graphNeighborCounts = computed(() => {
-		const neighborhood = graphNeighborhood.value
-		if (!neighborhood) return []
-		const counts = new Map<string, number>()
-		for (const node of neighborhood.nodes) {
-			counts.set(node.node_kind, (counts.get(node.node_kind) ?? 0) + 1)
-		}
-		return Array.from(counts.entries())
-			.sort(([, a], [, b]) => b - a)
-			.map(([kind, count]) => ({ kind, count }))
-	})
+  async function loadSources(note: KnowledgeNoteV1): Promise<void> {
+    const loaded: KnowledgeSourceV1[] = []
+    let cursor: Uint8Array<ArrayBufferLike> = new Uint8Array()
+    do {
+      const page = await getKnowledgeQueryClient().listSources({
+        logicalOwnerId: '',
+        noteId: note.noteId,
+        afterSourceId: cursor,
+        limit: PAGE_LIMIT
+      })
+      loaded.push(...page.sources)
+      cursor = page.nextAfterSourceId
+    } while (cursor.length > 0)
+    sourcesByNote.value[hex(note.noteId)] = loaded
+  }
 
-	const graphFilterChips = computed<GraphFilterChip[]>(() => {
-		const summary = graphSummary.value
-		if (!summary) return []
-		return summary.node_counts.map((c) => ({
-			kind: c.key,
-			label: graphNodeKindLabel(c.key),
-			icon: graphNodeKindIcon(c.key),
-			count: c.count
-		}))
-	})
+  async function createNote(title: string, body: string): Promise<void> {
+    await run(null, async () => {
+      const result = await getKnowledgeCommandClient().create({
+        operationId: randomId16(),
+        noteId: new Uint8Array(),
+        logicalOwnerId: '',
+        title,
+        body,
+        createdAt: timestamp(new Date())
+      })
+      replaceResult(result.note)
+    })
+  }
 
-	function setGraphSummary(summary: GraphSummary | null, error: string) {
-		graphSummary.value = summary
-		graphError.value = error
-	}
+  async function updateNote(note: KnowledgeNoteV1, title: string, body: string): Promise<void> {
+    await run(hex(note.noteId), async () => {
+      const result = await getKnowledgeCommandClient().update({
+        operationId: randomId16(),
+        noteId: note.noteId,
+        logicalOwnerId: '',
+        expectedNoteRevision: note.noteRevision,
+        title,
+        body,
+        updatedAt: timestamp(new Date())
+      })
+      replaceResult(result.note)
+    })
+  }
 
-	function setGraphSearchResults(results: GraphNode[], query: string) {
-		graphSearchResults.value = results
-		graphSearchQuery.value = query
-	}
+  async function setNoteState(note: KnowledgeNoteV1, state: KnowledgeNoteStateV1): Promise<void> {
+    await run(hex(note.noteId), async () => {
+      const result = await getKnowledgeCommandClient().setState({
+        operationId: randomId16(),
+        noteId: note.noteId,
+        logicalOwnerId: '',
+        expectedNoteRevision: note.noteRevision,
+        state,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.note)
+    })
+  }
 
-	async function selectGraphNode(node: GraphNode) {
-		selectedGraphNode.value = node
-		graphNeighborhood.value = null
-		try {
-			const neighborhood = await fetchGraphNeighborhood(node.node_id, 1)
-			graphNeighborhood.value = neighborhood
-		} catch (error) {
-			graphError.value = error instanceof Error ? error.message : 'Unknown graph neighborhood error'
-		}
-	}
+  async function addSource(
+    note: KnowledgeNoteV1,
+    sourceOwnerId: string,
+    sourceRecordId: Uint8Array,
+    sourceRevision: bigint,
+    evidenceDigest: Uint8Array
+  ): Promise<void> {
+    await run(hex(note.noteId), async () => {
+      const result = await getKnowledgeCommandClient().addSource({
+        operationId: randomId16(),
+        noteId: note.noteId,
+        logicalOwnerId: '',
+        expectedNoteRevision: note.noteRevision,
+        sourceId: new Uint8Array(),
+        sourceOwnerId,
+        sourceRecordId,
+        sourceRevision,
+        evidenceDigest,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.note)
+      if (result.note) await loadSources(result.note)
+    })
+  }
 
-	async function runGraphSearch(query: string) {
-		if (!query.trim()) {
-			graphSearchResults.value = []
-			graphSearchQuery.value = ''
-			return
-		}
-		try {
-			const results = await searchGraphNodes(query, 20)
-			graphSearchResults.value = results
-			graphSearchQuery.value = query
-		} catch (error) {
-			graphError.value = error instanceof Error ? error.message : 'Unknown graph search error'
-		}
-	}
+  async function removeSource(note: KnowledgeNoteV1, source: KnowledgeSourceV1): Promise<void> {
+    await run(hex(note.noteId), async () => {
+      const result = await getKnowledgeCommandClient().removeSource({
+        operationId: randomId16(),
+        noteId: note.noteId,
+        logicalOwnerId: '',
+        expectedNoteRevision: note.noteRevision,
+        sourceId: source.sourceId,
+        changedAt: timestamp(new Date())
+      })
+      replaceResult(result.note)
+      if (result.note) await loadSources(result.note)
+    })
+  }
 
-	async function loadGraphNodeChoices() {
-		try {
-			const nodes = await fetchGraphNodes(20)
-			return nodes
-		} catch (error) {
-			graphError.value = error instanceof Error ? error.message : 'Unknown graph node picker error'
-			return []
-		}
-	}
+  async function loadPages(query: string): Promise<void> {
+    isLoading.value = true
+    error.value = ''
+    try {
+      const loaded: KnowledgeNoteV1[] = []
+      let cursor: Uint8Array<ArrayBufferLike> = new Uint8Array()
+      do {
+        const page = query
+          ? await getKnowledgeQueryClient().search({
+              logicalOwnerId: '', query, afterNoteId: cursor, limit: PAGE_LIMIT
+            })
+          : await getKnowledgeQueryClient().list({
+              logicalOwnerId: '', afterNoteId: cursor, limit: PAGE_LIMIT
+            })
+        loaded.push(...page.notes)
+        cursor = page.nextAfterNoteId
+      } while (cursor.length > 0)
+      notes.value = loaded
+    } catch (cause) {
+      error.value = message(cause)
+    } finally {
+      isLoading.value = false
+    }
+  }
 
-	function setContradictionObservations(observations: ContradictionObservation[]) {
-		contradictionObservations.value = observations
-	}
+  async function run(noteId: string | null, operation: () => Promise<void>): Promise<void> {
+    mutatingNoteId.value = noteId
+    error.value = ''
+    try {
+      await operation()
+    } catch (cause) {
+      error.value = message(cause)
+      throw cause
+    } finally {
+      mutatingNoteId.value = null
+    }
+  }
 
-	async function reviewContradictionObservation(
-		observation: ContradictionObservation,
-		reviewState: Exclude<ContradictionObservation['review_state'], 'suggested'>,
-		resolution?: string
-	) {
-		reviewingContradictionObservationId.value = observation.observation_id
-		try {
-			await reviewContradiction(observation.observation_id, {
-				review_state: reviewState,
-				resolution: resolution?.trim() || undefined
-			})
-			const idx = contradictionObservations.value.findIndex(
-				(o) => o.observation_id === observation.observation_id
-			)
-			if (idx !== -1) {
-				contradictionObservations.value[idx] = {
-					...contradictionObservations.value[idx],
-					review_state: reviewState
-				}
-			}
-		} catch (error) {
-			graphError.value = error instanceof Error ? error.message : 'Unknown contradiction review action error'
-		} finally {
-			reviewingContradictionObservationId.value = null
-		}
-	}
+  function replaceResult(note: KnowledgeNoteV1 | undefined): void {
+    if (!note) throw new Error('knowledge_invalid_response')
+    const index = notes.value.findIndex((value) => sameBytes(value.noteId, note.noteId))
+    if (index === -1) notes.value.push(note)
+    else notes.value[index] = note
+    notes.value.sort((left, right) => compareBytes(left.noteId, right.noteId))
+  }
 
-	return {
-		graphSummary,
-		graphError,
-		graphSearchQuery,
-		graphSearchResults,
-		graphNeighborhood,
-		selectedGraphNode,
-		contradictionObservations,
-		reviewingContradictionObservationId,
-		graphCanvasNodes,
-		graphCanvasEdges,
-		selectedGraphProperties,
-		graphNeighborCounts,
-		graphFilterChips,
-		setGraphSummary,
-		setGraphSearchResults,
-		selectGraphNode,
-		runGraphSearch,
-		loadGraphNodeChoices,
-		setContradictionObservations,
-		reviewContradictionObservation
-	}
+  return {
+    notes,
+    sourcesByNote,
+    searchQuery,
+    error,
+    isLoading,
+    mutatingNoteId,
+    activeNotes,
+    archivedNotes,
+    loadAll,
+    search,
+    loadSources,
+    createNote,
+    updateNote,
+    setNoteState,
+    addSource,
+    removeSource
+  }
 })
+
+function timestamp(value: Date): TimestampV1 {
+  const milliseconds = value.getTime()
+  return {
+    $typeName: 'makosh.knowledge.client.v1.TimestampV1',
+    unixSeconds: BigInt(Math.floor(milliseconds / 1_000)),
+    nanos: Math.trunc(milliseconds % 1_000) * 1_000_000
+  }
+}
+
+function randomId16(): Uint8Array {
+  return globalThis.crypto.getRandomValues(new Uint8Array(16))
+}
+
+function sameBytes(left: Uint8Array, right: Uint8Array): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index])
+}
+
+function compareBytes(left: Uint8Array, right: Uint8Array): number {
+  const length = Math.min(left.length, right.length)
+  for (let index = 0; index < length; index += 1) {
+    const comparison = (left[index] ?? 0) - (right[index] ?? 0)
+    if (comparison !== 0) return comparison
+  }
+  return left.length - right.length
+}
+
+export function hex(value: Uint8Array): string {
+  return Array.from(value, (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
+function message(cause: unknown): string {
+  return cause instanceof Error ? cause.message : 'knowledge_unavailable'
+}

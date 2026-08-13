@@ -1,0 +1,23 @@
+[package]
+name = "makosh-zoom-assembly"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[[bin]]
+name = "makosh-zoom-assembly"
+path = "src/main.rs"
+[package.metadata.makosh]
+role = "integration"
+owner = "zoom"
+surface = "assembly"
+[dependencies]
+makosh-zoom-api = { path = "../zoom-api" }
+makosh-zoom-persistence = { path = "../zoom-persistence" }
+makosh-zoom-runtime = { path = "../zoom-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+prost = "=0.14.4"
+serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
+serde_json = "=1.0.150"

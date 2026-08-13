@@ -29,9 +29,9 @@ test('accepts a minimal clean-room workspace', () => {
       surface: 'contract',
     }),
     runtimeProtocol(),
-    workspacePackage('makosh-contacts-contracts', {
+    workspacePackage('makosh-persons-contracts', {
       role: 'domain',
-      owner: 'contacts',
+      owner: 'persons',
       surface: 'contract',
     }),
     workspacePackage('makosh-ai-runtime', {

@@ -1,0 +1,11 @@
+[package]
+name = "makosh-memory-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[package.metadata.makosh]
+role = "projection"
+owner = "memory"
+surface = "core"

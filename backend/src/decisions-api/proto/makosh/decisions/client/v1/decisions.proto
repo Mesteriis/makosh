@@ -1,0 +1,198 @@
+syntax = "proto3";
+package makosh.decisions.client.v1;
+
+message TimestampV1 { int64 unix_seconds = 1; int32 nanos = 2; }
+
+enum DecisionStateV1 {
+  DECISION_STATE_UNSPECIFIED = 0;
+  DECISION_STATE_DRAFT = 1;
+  DECISION_STATE_DECIDED = 2;
+  DECISION_STATE_SUPERSEDED = 3;
+  DECISION_STATE_CANCELLED = 4;
+}
+
+enum DecisionAlternativeStateV1 {
+  DECISION_ALTERNATIVE_STATE_UNSPECIFIED = 0;
+  DECISION_ALTERNATIVE_STATE_CANDIDATE = 1;
+  DECISION_ALTERNATIVE_STATE_SELECTED = 2;
+  DECISION_ALTERNATIVE_STATE_REJECTED = 3;
+}
+
+message DecisionAlternativeV1 {
+  bytes alternative_id = 1;
+  bytes decision_id = 2;
+  string title = 3;
+  string description = 4;
+  DecisionAlternativeStateV1 state = 5;
+  uint64 alternative_revision = 6;
+  uint64 updated_at_decision_revision = 7;
+  TimestampV1 created_at = 8;
+  TimestampV1 updated_at = 9;
+}
+
+// Public evidence identity only. Content and private locators remain with the
+// source owner and Blob custody boundary.
+message DecisionEvidenceLinkV1 {
+  bytes evidence_link_id = 1;
+  string evidence_owner_id = 2;
+  bytes evidence_record_id = 3;
+  uint64 evidence_revision = 4;
+  bytes evidence_digest = 5;
+}
+
+message DecisionV1 {
+  bytes decision_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string question = 4;
+  string rationale = 5;
+  DecisionStateV1 state = 6;
+  optional bytes selected_alternative_id = 7;
+  optional bytes superseded_by_decision_id = 8;
+  uint64 decision_revision = 9;
+  TimestampV1 created_at = 10;
+  TimestampV1 updated_at = 11;
+}
+
+message CreateDecisionRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string question = 4;
+  TimestampV1 created_at = 5;
+}
+
+message UpdateDecisionRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  optional string title = 5;
+  optional string question = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message AddDecisionAlternativeRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  string title = 5;
+  string description = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message UpdateDecisionAlternativeRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  bytes alternative_id = 5;
+  uint64 expected_alternative_revision = 6;
+  optional string title = 7;
+  optional string description = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message RemoveDecisionAlternativeRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  bytes alternative_id = 5;
+  uint64 expected_alternative_revision = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message AddDecisionEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  DecisionEvidenceLinkV1 evidence = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message RemoveDecisionEvidenceRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  bytes evidence_link_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message DecideRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  bytes selected_alternative_id = 5;
+  string rationale = 6;
+  TimestampV1 decided_at = 7;
+}
+
+message SupersedeDecisionRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  bytes replacement_decision_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message CancelDecisionRequestV1 {
+  bytes operation_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_decision_revision = 4;
+  TimestampV1 changed_at = 5;
+}
+
+message DecisionMutationResultV1 { bytes operation_id = 1; DecisionV1 decision = 2; }
+message GetDecisionRequestV1 { string logical_owner_id = 1; bytes decision_id = 2; }
+message ListDecisionsRequestV1 { string logical_owner_id = 1; bytes after_decision_id = 2; uint32 limit = 3; }
+message ListDecisionsResultV1 { repeated DecisionV1 decisions = 1; bytes next_after_decision_id = 2; }
+message ListDecisionAlternativesRequestV1 {
+  string logical_owner_id = 1; bytes decision_id = 2; bytes after_alternative_id = 3; uint32 limit = 4;
+}
+message ListDecisionAlternativesResultV1 {
+  repeated DecisionAlternativeV1 alternatives = 1; bytes next_after_alternative_id = 2;
+}
+message ListDecisionEvidenceRequestV1 {
+  string logical_owner_id = 1; bytes decision_id = 2; bytes after_evidence_link_id = 3; uint32 limit = 4;
+}
+message ListDecisionEvidenceResultV1 {
+  repeated DecisionEvidenceLinkV1 evidence_links = 1; bytes next_after_evidence_link_id = 2;
+}
+
+// Public lifecycle event deliberately excludes title, question, rationale,
+// alternative text and evidence identities.
+message DecisionChangedV1 {
+  bytes event_id = 1;
+  bytes decision_id = 2;
+  string logical_owner_id = 3;
+  uint64 decision_revision = 4;
+  DecisionStateV1 state = 5;
+  TimestampV1 occurred_at = 6;
+}
+
+service DecisionsCommandService {
+  rpc Create(CreateDecisionRequestV1) returns (DecisionMutationResultV1);
+  rpc Update(UpdateDecisionRequestV1) returns (DecisionMutationResultV1);
+  rpc AddAlternative(AddDecisionAlternativeRequestV1) returns (DecisionMutationResultV1);
+  rpc UpdateAlternative(UpdateDecisionAlternativeRequestV1) returns (DecisionMutationResultV1);
+  rpc RemoveAlternative(RemoveDecisionAlternativeRequestV1) returns (DecisionMutationResultV1);
+  rpc AddEvidence(AddDecisionEvidenceRequestV1) returns (DecisionMutationResultV1);
+  rpc RemoveEvidence(RemoveDecisionEvidenceRequestV1) returns (DecisionMutationResultV1);
+  rpc Decide(DecideRequestV1) returns (DecisionMutationResultV1);
+  rpc Supersede(SupersedeDecisionRequestV1) returns (DecisionMutationResultV1);
+  rpc Cancel(CancelDecisionRequestV1) returns (DecisionMutationResultV1);
+}
+
+service DecisionsQueryService {
+  rpc Get(GetDecisionRequestV1) returns (DecisionV1);
+  rpc List(ListDecisionsRequestV1) returns (ListDecisionsResultV1);
+  rpc ListAlternatives(ListDecisionAlternativesRequestV1) returns (ListDecisionAlternativesResultV1);
+  rpc ListEvidence(ListDecisionEvidenceRequestV1) returns (ListDecisionEvidenceResultV1);
+}

@@ -26,6 +26,19 @@ message GetReviewTaskCandidateResponseV1 {
   ReviewTaskCandidateErrorCodeV1 error = 15;
 }
 
+message ListReviewTaskCandidatesRequestV1 {
+  uint32 protocol_major = 1;
+  optional ReviewTaskCandidateStateV1 state = 2;
+  bytes after_review_id = 3;
+  uint32 limit = 4;
+}
+
+message ListReviewTaskCandidatesResponseV1 {
+  repeated ReviewTaskCandidateSummaryV1 reviews = 1;
+  bytes next_after_review_id = 2;
+  ReviewTaskCandidateErrorCodeV1 error = 15;
+}
+
 message ReviewTaskCandidateSummaryV1 {
   bytes review_id = 1;
   bytes candidate_id = 2;
@@ -60,6 +73,8 @@ service ReviewTaskCandidateCommandService {
 service ReviewTaskCandidateQueryService {
   rpc Get(GetReviewTaskCandidateRequestV1)
       returns (GetReviewTaskCandidateResponseV1);
+  rpc List(ListReviewTaskCandidatesRequestV1)
+      returns (ListReviewTaskCandidatesResponseV1);
 }
 
 // Exact workflow-to-Review durable command. Candidate presentation bytes are

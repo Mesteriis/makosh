@@ -1,14 +1,15 @@
 use makosh_knowledge_core::{
-    ReviewedCandidateKnowledgeNoteDraftV1, VerifiedKnowledgeNoteV1,
+    KnowledgeLifecycleStateV1, KnowledgeNoteRecordV1, KnowledgeNoteTimestampV1,
+    ManualKnowledgeNoteDraftV1, ReviewedCandidateKnowledgeNoteDraftV1, VerifiedKnowledgeNoteV1,
     knowledge_note_creation_fingerprint_v1,
 };
 use sha2::{Digest, Sha256};
 
 pub const KNOWLEDGE_RECOVERY_LIMIT_V1: u16 = 128;
-pub const KNOWLEDGE_OUTBOX_LIMIT_V1: u16 = 128;
 pub const KNOWLEDGE_MAX_EVENT_BYTES_V1: usize = 64 * 1024;
 pub const KNOWLEDGE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
 pub const KNOWLEDGE_MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
+pub const KNOWLEDGE_MAX_CLIENT_MESSAGE_BYTES_V1: usize = 64 * 1024;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct KnowledgeBlobReceiptV1 {
@@ -139,6 +140,97 @@ pub enum KnowledgePersistenceErrorV1 {
     InboxConflict,
     KnowledgeNoteConflict,
     NotFound,
+    OperationConflict,
+    RevisionConflict,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum KnowledgeLifecycleMutationV1 {
+    Create(ManualKnowledgeNoteDraftV1),
+    Update {
+        operation_id: [u8; 16],
+        note_id: [u8; 16],
+        expected_revision: u64,
+        title: Option<String>,
+        body: Option<String>,
+        changed_at: KnowledgeNoteTimestampV1,
+    },
+    SetState {
+        operation_id: [u8; 16],
+        note_id: [u8; 16],
+        expected_revision: u64,
+        state: KnowledgeLifecycleStateV1,
+        changed_at: KnowledgeNoteTimestampV1,
+    },
+    AddSource {
+        operation_id: [u8; 16],
+        note_id: [u8; 16],
+        expected_revision: u64,
+        source_owner_id: String,
+        source_record_id: [u8; 16],
+        source_revision: u64,
+        evidence_digest: [u8; 32],
+        changed_at: KnowledgeNoteTimestampV1,
+    },
+    RemoveSource {
+        operation_id: [u8; 16],
+        note_id: [u8; 16],
+        expected_revision: u64,
+        source_id: [u8; 16],
+        changed_at: KnowledgeNoteTimestampV1,
+    },
+}
+
+impl KnowledgeLifecycleMutationV1 {
+    #[must_use]
+    pub fn operation_kind(&self) -> i16 {
+        match self {
+            Self::Create(_) => 1,
+            Self::Update { .. } => 2,
+            Self::SetState { .. } => 3,
+            Self::AddSource { .. } => 4,
+            Self::RemoveSource { .. } => 5,
+        }
+    }
+
+    #[must_use]
+    pub fn operation_id(&self) -> [u8; 16] {
+        match self {
+            Self::Create(value) => value.operation_id,
+            Self::Update { operation_id, .. }
+            | Self::SetState { operation_id, .. }
+            | Self::AddSource { operation_id, .. }
+            | Self::RemoveSource { operation_id, .. } => *operation_id,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct KnowledgeLifecycleOperationV1 {
+    pub logical_owner_id: String,
+    pub operation_id: [u8; 16],
+    pub request_sha256: [u8; 32],
+    pub request_bytes: Vec<u8>,
+    pub received_at_unix_millis: i64,
+    pub mutation: KnowledgeLifecycleMutationV1,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct KnowledgeLifecycleCommitV1 {
+    pub response_sha256: [u8; 32],
+    pub response_bytes: Vec<u8>,
+    pub lifecycle_event: KnowledgeOutboxRecordV1,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum KnowledgeLifecycleOperationOutcomeV1 {
+    Applied {
+        note: Box<KnowledgeNoteRecordV1>,
+        response_bytes: Vec<u8>,
+    },
+    Replayed {
+        response_bytes: Vec<u8>,
+    },
 }
 
 pub(crate) fn valid_reservation(value: &ReserveReviewedCandidateCommandV1) -> bool {
@@ -197,6 +289,25 @@ pub(crate) fn valid_note(value: &VerifiedKnowledgeNoteV1) -> bool {
     makosh_knowledge_core::validate_verified_knowledge_note_v1(value).is_ok()
 }
 
+pub(crate) fn valid_lifecycle_operation(value: &KnowledgeLifecycleOperationV1) -> bool {
+    valid_identity(&value.logical_owner_id)
+        && nonzero(&value.operation_id)
+        && nonzero(&value.request_sha256)
+        && !value.request_bytes.is_empty()
+        && value.request_bytes.len() <= KNOWLEDGE_MAX_CLIENT_MESSAGE_BYTES_V1
+        && Sha256::digest(&value.request_bytes).as_slice() == value.request_sha256
+        && value.received_at_unix_millis > 0
+        && value.mutation.operation_id() == value.operation_id
+}
+
+pub(crate) fn valid_lifecycle_commit(value: &KnowledgeLifecycleCommitV1) -> bool {
+    nonzero(&value.response_sha256)
+        && !value.response_bytes.is_empty()
+        && value.response_bytes.len() <= KNOWLEDGE_MAX_CLIENT_MESSAGE_BYTES_V1
+        && Sha256::digest(&value.response_bytes).as_slice() == value.response_sha256
+        && valid_outbox(&value.lifecycle_event)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -224,6 +335,32 @@ mod tests {
         let mut invalid = record;
         invalid.envelope_sha256 = [9; 32];
         assert!(!valid_outbox(&invalid));
+    }
+
+    #[test]
+    fn lifecycle_operation_binds_exact_request_bytes() {
+        let bytes = vec![7; 32];
+        let operation = KnowledgeLifecycleOperationV1 {
+            logical_owner_id: "owner-1".to_owned(),
+            operation_id: [1; 16],
+            request_sha256: Sha256::digest(&bytes).into(),
+            request_bytes: bytes,
+            received_at_unix_millis: 1_800_000_000_000,
+            mutation: KnowledgeLifecycleMutationV1::SetState {
+                operation_id: [1; 16],
+                note_id: [2; 16],
+                expected_revision: 1,
+                state: KnowledgeLifecycleStateV1::Archived,
+                changed_at: KnowledgeNoteTimestampV1 {
+                    unix_seconds: 10,
+                    nanos: 0,
+                },
+            },
+        };
+        assert!(valid_lifecycle_operation(&operation));
+        let mut changed = operation;
+        changed.request_bytes.push(9);
+        assert!(!valid_lifecycle_operation(&changed));
     }
 
     fn reservation() -> ReserveReviewedCandidateCommandV1 {

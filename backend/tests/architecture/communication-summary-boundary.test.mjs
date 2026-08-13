@@ -180,7 +180,7 @@ test('summary runtime and assembly expose only exact event request and release b
 
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert.deepEqual(
     policy.implementation.productionPackages

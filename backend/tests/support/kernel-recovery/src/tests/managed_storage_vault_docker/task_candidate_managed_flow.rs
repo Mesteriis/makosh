@@ -2,7 +2,10 @@
 
 use super::*;
 
+use std::time::Instant;
+
 use crate::identity::device::signer::DeviceSigner;
+use hyper::{Request, StatusCode, body::Bytes};
 use makosh_communication_task_candidate_api::{
     COMMUNICATION_TASK_CANDIDATE_CAPABILITY_ID_V1,
     COMMUNICATION_TASK_CANDIDATE_COMMAND_CONTRACT_NAME_V1,
@@ -27,7 +30,21 @@ use makosh_reviewed_task_candidate_promotion_core::{
 use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
-use makosh_tasks_command_api::{TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1};
+use makosh_tasks_command_api::{
+    TASKS_ADD_CHECKLIST_ITEM_CONNECT_PATH_V1, TASKS_ADD_DEPENDENCY_CONNECT_PATH_V1,
+    TASKS_CLIENT_CAPABILITY_ID_V1, TASKS_CREATE_CONNECT_PATH_V1, TASKS_GET_CONNECT_PATH_V1,
+    TASKS_LIST_CONNECT_PATH_V1, TASKS_MODULE_ID_V1, TASKS_OWNER_ID_V1,
+    TASKS_SET_PRIORITY_CONNECT_PATH_V1, TASKS_SET_STATE_CONNECT_PATH_V1,
+    TASKS_UPDATE_CHECKLIST_ITEM_CONNECT_PATH_V1, TASKS_UPDATE_CONNECT_PATH_V1,
+    client_wire::{
+        AddChecklistItemRequestV1, AddTaskDependencyRequestV1, CreateTaskRequestV1,
+        GetTaskRequestV1, ListTasksRequestV1, ListTasksResultV1, SetTaskPriorityRequestV1,
+        SetTaskStateRequestV1, TaskMutationResultV1, TaskPriorityV1, TaskStateV1, TaskSummaryV1,
+        TimestampV1, UpdateChecklistItemRequestV1, UpdateTaskRequestV1,
+    },
+    tasks_client_add_dependency_contract_reference_v1,
+    tasks_client_set_priority_contract_reference_v1,
+};
 
 const TASK_CANDIDATE_SOURCE_BODY_V1: &[u8] =
     b"Action: prepare the release brief by Friday\nCould you check the backup before Monday?";
@@ -173,6 +190,17 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
         &router,
         &gateway_runtime,
     );
+    let extraction_sse = gateway_runtime.block_on(
+        router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Task candidate extraction Gateway SSE request"),
+        ),
+    );
+    assert_eq!(extraction_sse.status(), StatusCode::OK);
     let start = start_task_candidate_extraction_v1(
         &router,
         &gateway_runtime,
@@ -205,9 +233,8 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
         .map(|candidate| candidate.title.as_bytes().to_vec())
         .collect::<Vec<_>>();
     let extraction_event = read_task_candidate_extraction_terminal_event_v1(
-        &router,
+        extraction_sse,
         &gateway_runtime,
-        &cookie,
         &start.run_id,
     );
     for title in &candidate_titles {
@@ -287,6 +314,17 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
         &ready.candidates,
     );
     assert_no_task_materialization_v1(&gateway_runtime, &reviews);
+    let terminal_sse = gateway_runtime.block_on(
+        router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Task candidate terminal Gateway SSE request"),
+        ),
+    );
+    assert_eq!(terminal_sse.status(), StatusCode::OK);
 
     let approved = decide_task_candidate_v1(
         &router,
@@ -356,6 +394,29 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     let (approved_final, rejected_final) =
         wait_for_task_candidate_terminal_states_v1(&router, &gateway_runtime, &cookie, &reviews);
     assert_task_candidate_response_states_v1(&approved_final, &rejected_final);
+    let first_page = list_task_candidates_v1(&router, &gateway_runtime, &cookie, Vec::new(), 1);
+    assert_eq!(
+        first_page.error,
+        ReviewTaskCandidateErrorCodeV1::ReviewTaskCandidateErrorCodeUnspecified as i32
+    );
+    assert_eq!(first_page.reviews.len(), 1);
+    assert_eq!(
+        first_page.next_after_review_id,
+        first_page.reviews[0].review_id
+    );
+    let second_page = list_task_candidates_v1(
+        &router,
+        &gateway_runtime,
+        &cookie,
+        first_page.next_after_review_id.clone(),
+        1,
+    );
+    assert_eq!(second_page.reviews.len(), 1);
+    assert!(second_page.next_after_review_id.is_empty());
+    assert_ne!(
+        first_page.reviews[0].review_id,
+        second_page.reviews[0].review_id
+    );
     let approved_replay = decide_task_candidate_v1(
         &router,
         &gateway_runtime,
@@ -392,8 +453,7 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     );
     assert!(operation_conflict.review.is_none());
 
-    let terminal =
-        read_task_candidate_terminal_events_v1(&router, &gateway_runtime, &cookie, &reviews);
+    let terminal = read_task_candidate_terminal_events_v1(terminal_sse, &gateway_runtime, &reviews);
     assert_exact_task_materialization_v1(&gateway_runtime, &reviews);
     for title in &candidate_titles {
         for event in [&terminal.approved, &terminal.rejected] {
@@ -414,6 +474,36 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
             .revoke_owner(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
             .expect("clear Task candidate Gateway replay cache")
     );
+    let restarted_router =
+        task_candidate_gateway_v1(&store, &supervisor, &root, &data, realtime.clone());
+    let restarted_cookie =
+        super::super::browser_gateway_session::authenticate_gateway_router_with_sign_count(
+            &restarted_router,
+            &gateway_runtime,
+            2,
+        );
+    let replay_sse = gateway_runtime.block_on(
+        restarted_router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &restarted_cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Task candidate replay Gateway SSE request"),
+        ),
+    );
+    assert_eq!(replay_sse.status(), StatusCode::OK);
+    let terminal_replay_sse = gateway_runtime.block_on(
+        restarted_router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &restarted_cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Task candidate terminal replay Gateway SSE request"),
+        ),
+    );
+    assert_eq!(terminal_replay_sse.status(), StatusCode::OK);
     let extraction_position = started
         .iter()
         .position(|runtime| runtime.module_id == COMMUNICATION_TASK_CANDIDATE_MODULE_ID_V1)
@@ -430,30 +520,48 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
     let review =
         restart_task_candidate_runtime_v1(&supervisor, &store, &root.join("runtime"), review);
     started.insert(review_position, review);
-    let restarted_router =
-        task_candidate_gateway_v1(&store, &supervisor, &root, &data, realtime.clone());
-    let restarted_cookie =
-        super::super::browser_gateway_session::authenticate_gateway_router_with_sign_count(
-            &restarted_router,
-            &gateway_runtime,
-            2,
-        );
     let replayed_extraction = read_task_candidate_extraction_terminal_event_v1(
-        &restarted_router,
+        replay_sse,
         &gateway_runtime,
-        &restarted_cookie,
         &start.run_id,
     );
-    let replayed = read_task_candidate_terminal_events_v1(
-        &restarted_router,
-        &gateway_runtime,
-        &restarted_cookie,
-        &reviews,
-    );
+    let replayed =
+        read_task_candidate_terminal_events_v1(terminal_replay_sse, &gateway_runtime, &reviews);
     assert_eq!(replayed_extraction.cursor, extraction_cursor);
     assert_eq!(replayed.approved.cursor, approved_cursor);
     assert_eq!(replayed.rejected.cursor, rejected_cursor);
+    let restarted_page = list_task_candidates_v1(
+        &restarted_router,
+        &gateway_runtime,
+        &restarted_cookie,
+        Vec::new(),
+        2,
+    );
+    assert_eq!(restarted_page.reviews.len(), 2);
+    assert!(restarted_page.next_after_review_id.is_empty());
     assert_tasks_reject_stale_blob_receipt_v1(&gateway_runtime, &store);
+    assert_tasks_lifecycle_v1(
+        &store,
+        &supervisor,
+        &root,
+        &router,
+        &gateway_runtime,
+        &cookie,
+        &mut started,
+    );
+
+    // Effective NOLOGIN/NOSUPERUSER/NOBYPASSRLS proof for all Task Review tables.
+    gateway_runtime.block_on(assert_review_owner_rls_v1(
+        "makosh_review_task_rls_test",
+        &[
+            "review_task_candidate_submissions",
+            "review_task_candidate_state",
+            "review_task_candidate_operations",
+            "review_task_candidate_promotion_inbox",
+            "review_task_candidate_outbox",
+            "review_task_candidate_realtime",
+        ],
+    ));
 
     supervisor.shutdown().expect("stop managed processes");
     assert_reviewed_task_candidate_persistence_negatives_v1(&gateway_runtime);
@@ -461,6 +569,390 @@ fn managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_r
         std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove reviewed Task candidate fixture");
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, Blob, NATS and Tasks binaries"]
+fn managed_tasks_lifecycle_replays_and_restarts_with_owner_rls() {
+    managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn assert_tasks_lifecycle_v1(
+    store: &Arc<SqliteControlStore>,
+    supervisor: &ManagedRuntimeSupervisor,
+    root: &Path,
+    router: &TaskCandidateGateway,
+    runtime: &tokio::runtime::Runtime,
+    cookie: &str,
+    started: &mut Vec<StartedTaskCandidateRuntimeV1>,
+) {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .expect("Tasks lifecycle wall clock")
+        .as_millis() as i64
+        - 1_000;
+    let time = |offset: i64| TimestampV1 {
+        unix_seconds: (now + offset) / 1_000,
+        nanos: (((now + offset) % 1_000) * 1_000_000) as i32,
+    };
+    let create = |operation: u8, title: &str| -> TaskMutationResultV1 {
+        post_proto(
+            router,
+            runtime,
+            cookie,
+            TASKS_CREATE_CONNECT_PATH_V1,
+            CreateTaskRequestV1 {
+                operation_id: vec![operation; 16],
+                task_id: Vec::new(),
+                logical_owner_id: String::new(),
+                title: title.to_owned(),
+                description: Some(format!("{title} private owner detail")),
+                due_at: Some(time(86_400_000)),
+                priority: TaskPriorityV1::TaskPriorityNormal as i32,
+                created_at: Some(time(0)),
+            },
+        )
+    };
+    let first = create(0xa1, "Lifecycle primary");
+    let first_task = first.task.expect("created primary Task");
+    assert_eq!(first_task.task_revision, 1);
+    let second = create(0xa2, "Lifecycle dependency");
+    let second_task = second.task.expect("created dependency Task");
+
+    let updated: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_UPDATE_CONNECT_PATH_V1,
+        UpdateTaskRequestV1 {
+            operation_id: vec![0xa3; 16],
+            task_id: first_task.task_id.clone(),
+            logical_owner_id: String::new(),
+            expected_task_revision: 1,
+            title: Some("Lifecycle primary updated".to_owned()),
+            description: None,
+            clear_description: false,
+            due_at: None,
+            clear_due_at: false,
+            updated_at: Some(time(1)),
+        },
+    );
+    assert_eq!(
+        updated.task.as_ref().expect("updated Task").task_revision,
+        2
+    );
+    let state: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_SET_STATE_CONNECT_PATH_V1,
+        SetTaskStateRequestV1 {
+            operation_id: vec![0xa4; 16],
+            task_id: first_task.task_id.clone(),
+            logical_owner_id: String::new(),
+            expected_task_revision: 2,
+            state: TaskStateV1::TaskStateInProgress as i32,
+            changed_at: Some(time(2)),
+        },
+    );
+    assert_eq!(state.task.as_ref().expect("state Task").task_revision, 3);
+    let priority: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_SET_PRIORITY_CONNECT_PATH_V1,
+        SetTaskPriorityRequestV1 {
+            operation_id: vec![0xa5; 16],
+            task_id: first_task.task_id.clone(),
+            logical_owner_id: String::new(),
+            expected_task_revision: 3,
+            priority: TaskPriorityV1::TaskPriorityHigh as i32,
+            changed_at: Some(time(3)),
+        },
+    );
+    assert_eq!(
+        priority.task.as_ref().expect("priority Task").task_revision,
+        4
+    );
+    let dependency: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_ADD_DEPENDENCY_CONNECT_PATH_V1,
+        AddTaskDependencyRequestV1 {
+            operation_id: vec![0xa6; 16],
+            task_id: first_task.task_id.clone(),
+            logical_owner_id: String::new(),
+            expected_task_revision: 4,
+            dependency_id: vec![0xd1; 16],
+            depends_on_task_id: second_task.task_id.clone(),
+            changed_at: Some(time(4)),
+        },
+    );
+    assert_eq!(
+        dependency
+            .task
+            .as_ref()
+            .expect("dependency Task")
+            .dependencies
+            .len(),
+        1
+    );
+    let checklist: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_ADD_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        AddChecklistItemRequestV1 {
+            operation_id: vec![0xa7; 16],
+            task_id: first_task.task_id.clone(),
+            logical_owner_id: String::new(),
+            expected_task_revision: 5,
+            checklist_item_id: vec![0xc1; 16],
+            label: "Verify exact restart".to_owned(),
+            position: 10,
+            changed_at: Some(time(5)),
+        },
+    );
+    assert_eq!(
+        checklist
+            .task
+            .as_ref()
+            .expect("checklist Task")
+            .task_revision,
+        6
+    );
+    let checklist_request = UpdateChecklistItemRequestV1 {
+        operation_id: vec![0xa8; 16],
+        task_id: first_task.task_id.clone(),
+        logical_owner_id: String::new(),
+        expected_task_revision: 6,
+        checklist_item_id: vec![0xc1; 16],
+        label: None,
+        completed: Some(true),
+        position: None,
+        changed_at: Some(time(6)),
+    };
+    let checked: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_UPDATE_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        checklist_request.clone(),
+    );
+    let replay: TaskMutationResultV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_UPDATE_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        checklist_request,
+    );
+    assert_eq!(checked, replay, "exact operation replay response");
+    assert!(checked.task.as_ref().expect("checked Task").checklist[0].completed);
+
+    let mut cursor = Vec::new();
+    let mut ids = Vec::new();
+    loop {
+        let page: ListTasksResultV1 = post_proto(
+            router,
+            runtime,
+            cookie,
+            TASKS_LIST_CONNECT_PATH_V1,
+            ListTasksRequestV1 {
+                logical_owner_id: String::new(),
+                after_task_id: cursor,
+                limit: 1,
+            },
+        );
+        assert_eq!(page.tasks.len(), 1);
+        ids.push(page.tasks[0].task_id.clone());
+        if page.next_after_task_id.is_empty() {
+            break;
+        }
+        cursor = page.next_after_task_id;
+    }
+    let unique = ids.iter().collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        unique.len(),
+        ids.len(),
+        "Tasks pagination has no duplicates"
+    );
+    assert!(ids.contains(&first_task.task_id));
+    assert!(ids.contains(&second_task.task_id));
+
+    let tasks_position = started
+        .iter()
+        .position(|value| value.module_id == TASKS_MODULE_ID_V1)
+        .expect("started Tasks runtime");
+    let tasks = started.remove(tasks_position);
+    let tasks = restart_task_candidate_runtime_v1(supervisor, store, &root.join("runtime"), tasks);
+    started.insert(tasks_position, tasks);
+    let restarted: TaskSummaryV1 = post_proto(
+        router,
+        runtime,
+        cookie,
+        TASKS_GET_CONNECT_PATH_V1,
+        GetTaskRequestV1 {
+            logical_owner_id: String::new(),
+            task_id: first_task.task_id.clone(),
+        },
+    );
+    assert_eq!(restarted.task_revision, 7);
+    assert_eq!(restarted.dependencies.len(), 1);
+    assert_eq!(restarted.checklist.len(), 1);
+
+    let tasks_runtime = started
+        .iter()
+        .find(|value| value.module_id == TASKS_MODULE_ID_V1)
+        .expect("restarted Tasks runtime");
+    let cycle_request = AddTaskDependencyRequestV1 {
+        operation_id: vec![0xa9; 16],
+        task_id: second_task.task_id,
+        logical_owner_id: String::new(),
+        expected_task_revision: 1,
+        dependency_id: vec![0xd2; 16],
+        depends_on_task_id: restarted.task_id.clone(),
+        changed_at: Some(time(7)),
+    };
+    let request = ModuleClientRequestV1 {
+        protocol_major: 1,
+        module_id: TASKS_MODULE_ID_V1.to_owned(),
+        owner_id: TASKS_OWNER_ID_V1.to_owned(),
+        contract: Some(tasks_client_add_dependency_contract_reference_v1()),
+        request_id: 9_001,
+        request_payload: cycle_request.encode_to_vec(),
+        logical_owner_id: TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1.to_owned(),
+        authenticated_device_id: "desktop-1".to_owned(),
+        authenticated_client_session_id: "session-1".to_owned(),
+    }
+    .encode_to_vec();
+    let route = crate::modules::capability::router::ManagedCapabilityRouteRequest::new(
+        &tasks_runtime.registration_id,
+        &tasks_runtime.runtime_instance_id,
+        tasks_runtime.runtime_generation,
+        tasks_runtime.grant_epoch,
+        TASKS_CLIENT_CAPABILITY_ID_V1,
+        &request,
+    );
+    let response = ModuleClientResponseV1::decode(
+        crate::modules::capability::router::route_managed_client_request(
+            store.as_ref(),
+            &supervisor.relay_port(),
+            &route,
+        )
+        .expect("route cycle negative")
+        .as_slice(),
+    )
+    .expect("decode cycle negative");
+    assert_eq!(response.error_code, "FAILED_PRECONDITION");
+
+    let stale = SetTaskPriorityRequestV1 {
+        operation_id: vec![0xaa; 16],
+        task_id: restarted.task_id,
+        logical_owner_id: String::new(),
+        expected_task_revision: 1,
+        priority: TaskPriorityV1::TaskPriorityUrgent as i32,
+        changed_at: Some(time(8)),
+    };
+    let stale_request = ModuleClientRequestV1 {
+        protocol_major: 1,
+        module_id: TASKS_MODULE_ID_V1.to_owned(),
+        owner_id: TASKS_OWNER_ID_V1.to_owned(),
+        contract: Some(tasks_client_set_priority_contract_reference_v1()),
+        request_id: 9_002,
+        request_payload: stale.encode_to_vec(),
+        logical_owner_id: TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1.to_owned(),
+        authenticated_device_id: "desktop-1".to_owned(),
+        authenticated_client_session_id: "session-1".to_owned(),
+    }
+    .encode_to_vec();
+    let stale_route = crate::modules::capability::router::ManagedCapabilityRouteRequest::new(
+        &tasks_runtime.registration_id,
+        &tasks_runtime.runtime_instance_id,
+        tasks_runtime.runtime_generation,
+        tasks_runtime.grant_epoch,
+        TASKS_CLIENT_CAPABILITY_ID_V1,
+        &stale_request,
+    );
+    let stale_response = ModuleClientResponseV1::decode(
+        crate::modules::capability::router::route_managed_client_request(
+            store.as_ref(),
+            &supervisor.relay_port(),
+            &stale_route,
+        )
+        .expect("route stale revision negative")
+        .as_slice(),
+    )
+    .expect("decode stale revision negative");
+    assert_eq!(stale_response.error_code, "FAILED_PRECONDITION");
+
+    let deadline = Instant::now() + Duration::from_secs(8);
+    loop {
+        let (operations, pending, public_envelopes): (i64, i64, Vec<Vec<u8>>) =
+            runtime.block_on(async {
+                let pool = task_candidate_admin_pool_v1().await;
+                let operations = sqlx::query_scalar(
+                    "SELECT count(*) FROM makosh_data.tasks_client_operations \
+                 WHERE logical_owner_id=$1",
+                )
+                .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
+                .fetch_one(&pool)
+                .await
+                .expect("count Tasks lifecycle operations");
+                let pending = sqlx::query_scalar(
+                    "SELECT count(*) FROM makosh_data.tasks_outbox \
+                 WHERE logical_owner_id=$1 AND published_at_unix_millis IS NULL",
+                )
+                .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
+                .fetch_one(&pool)
+                .await
+                .expect("count pending Tasks outbox");
+                let public_envelopes = sqlx::query_scalar(
+                    "SELECT envelope_bytes FROM makosh_data.tasks_outbox WHERE logical_owner_id=$1",
+                )
+                .bind(TASK_CANDIDATE_LOGICAL_HUMAN_OWNER_ID_V1)
+                .fetch_all(&pool)
+                .await
+                .expect("load Tasks public outbox envelopes");
+                pool.close().await;
+                (operations, pending, public_envelopes)
+            });
+        for envelope in &public_envelopes {
+            for private_marker in [
+                b"Lifecycle primary".as_slice(),
+                b"private owner detail".as_slice(),
+                b"Verify exact restart".as_slice(),
+            ] {
+                assert!(
+                    !envelope
+                        .windows(private_marker.len())
+                        .any(|window| window == private_marker),
+                    "Tasks public event retained owner-private content"
+                );
+            }
+        }
+        if operations == 8 && pending == 0 {
+            break;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "Tasks lifecycle relay did not drain: operations={operations}, pending={pending}"
+        );
+        std::thread::sleep(Duration::from_millis(50));
+    }
+
+    runtime.block_on(assert_review_owner_rls_v1(
+        "makosh_tasks_rls_test",
+        &[
+            "tasks_reviewed_candidate_inbox",
+            "tasks_state",
+            "tasks_outbox",
+            "tasks_dependencies",
+            "tasks_checklist",
+            "tasks_client_operations",
+        ],
+    ));
 }
 
 fn task_candidate_start_request_v1(

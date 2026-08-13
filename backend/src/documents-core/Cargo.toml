@@ -1,0 +1,13 @@
+[package]
+name = "makosh-documents-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[package.metadata.makosh]
+role = "core"
+owner = "documents"
+surface = "implementation"
+
+[dependencies]
+sha2 = "0.10"

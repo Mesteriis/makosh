@@ -75,7 +75,7 @@ test('provider delivery intents are four separate integration-owned contract bui
 
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert.equal(
     reconstruction.slices.find(({ gate }) => gate === 'communication_delivery_intent_v1')
@@ -85,6 +85,8 @@ test('provider delivery intents are four separate integration-owned contract bui
   assert.deepEqual(policy.implementation.ownerInventory.integrations, [
     'desktop_call_recording',
     'mail',
+    'ollama',
+    'whisper_stt',
   ]);
   assert.deepEqual(
     policy.implementation.productionPackages

@@ -12,7 +12,7 @@ use makosh_review_attention_api::{
     REVIEW_ATTENTION_COMMAND_CONNECT_PATH_V1, REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1,
     REVIEW_ATTENTION_REALTIME_CONTRACT_NAME_V1, REVIEW_ATTENTION_REALTIME_EVENT_KIND_V1,
     wire::{
-        GetReviewAttentionV1, MarkPendingV1, ReviewAttentionChangedV1,
+        GetReviewAttentionV1, ListReviewAttentionV1, MarkPendingV1, ReviewAttentionChangedV1,
         ReviewAttentionCommandRequestV1, ReviewAttentionCommandResponseV1,
         ReviewAttentionQueryRequestV1, ReviewAttentionQueryResponseV1, SetPinnedV1,
         review_attention_command_request_v1::Operation as CommandOperation,
@@ -79,6 +79,17 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
         &router,
         &gateway_runtime,
     );
+    let first_sse = gateway_runtime.block_on(
+        router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Review Gateway first SSE request"),
+        ),
+    );
+    assert_eq!(first_sse.status(), StatusCode::OK);
 
     let operation_id = vec![0x41; 16];
     let source_evidence_id = vec![0x52; 16];
@@ -101,6 +112,37 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
     let attention = response.attention.expect("created attention");
     assert_eq!(attention.revision, 1);
     assert_eq!(attention.source_evidence_id, source_evidence_id);
+    let durable_counts: (i64, i64) = gateway_runtime.block_on(async {
+        let admin = authenticated_storage_admin_pool_v1().await;
+        sqlx::query_as(
+            "SELECT
+               (SELECT COUNT(*) FROM makosh_data.review_attention_state
+                WHERE logical_owner_id='owner-1'),
+               (SELECT COUNT(*) FROM makosh_data.review_attention_realtime
+                WHERE logical_owner_id='owner-1')",
+        )
+        .fetch_one(&admin)
+        .await
+        .expect("read durable Review Attention stages")
+    });
+    assert_eq!(durable_counts, (1, 1));
+
+    let immediate_query: ReviewAttentionQueryResponseV1 = post_proto(
+        &router,
+        &gateway_runtime,
+        &cookie,
+        REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1,
+        ReviewAttentionQueryRequestV1 {
+            protocol_major: 1,
+            operation: Some(QueryOperation::Get(GetReviewAttentionV1 {
+                attention_id: attention.attention_id.clone(),
+            })),
+        },
+    );
+    assert!(matches!(
+        immediate_query.result,
+        Some(QueryResult::Attention(ref value)) if value.revision == 1
+    ));
 
     let stale_response: ReviewAttentionCommandResponseV1 = post_proto(
         &router,
@@ -118,7 +160,13 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
     assert_eq!(stale_response.error_code, "stale_revision");
     assert!(stale_response.attention.is_none());
 
-    let first = read_review_attention_sse_event(&router, &gateway_runtime, &cookie);
+    let first = read_review_attention_sse_event(
+        first_sse,
+        &gateway_runtime,
+        "first",
+        &supervisor,
+        &review.registration_id,
+    );
     let first_payload = ReviewAttentionChangedV1::decode(first.payload.as_slice())
         .expect("Review realtime payload");
     assert_eq!(first_payload.attention_id, attention.attention_id);
@@ -150,16 +198,34 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
         query_response.result,
         Some(QueryResult::Attention(ref value)) if value.revision == 1
     ));
+    let list_response: ReviewAttentionQueryResponseV1 = post_proto(
+        &router,
+        &gateway_runtime,
+        &cookie,
+        REVIEW_ATTENTION_QUERY_CONNECT_PATH_V1,
+        ReviewAttentionQueryRequestV1 {
+            protocol_major: 1,
+            operation: Some(QueryOperation::List(ListReviewAttentionV1 {
+                limit: 1,
+                cursor: Vec::new(),
+                disposition: None,
+                pinned: None,
+                importance: None,
+                snoozed: None,
+            })),
+        },
+    );
+    assert!(matches!(
+        list_response.result,
+        Some(QueryResult::Page(ref page))
+            if page.attention.len() == 1 && page.next_cursor.is_empty()
+    ));
 
     assert!(
         realtime
             .revoke_owner(REVIEW_ATTENTION_LOGICAL_OWNER_ID_V1)
             .expect("clear Review Gateway replay cache")
     );
-    let previous_generation = review.runtime_generation;
-    let review =
-        restart_review_attention_runtime_v1(&supervisor, &store, &root.join("runtime"), review);
-    assert_eq!(review.runtime_generation, previous_generation + 1);
     let restarted_router =
         review_attention_gateway(&store, &supervisor, &root, &data, realtime.clone());
     let restarted_cookie =
@@ -168,13 +234,43 @@ fn managed_review_attention_reaches_gateway_sse_and_replays_after_restart() {
             &gateway_runtime,
             2,
         );
-    let replayed =
-        read_review_attention_sse_event(&restarted_router, &gateway_runtime, &restarted_cookie);
+    let replay_sse = gateway_runtime.block_on(
+        restarted_router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &restarted_cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Review Gateway replay SSE request"),
+        ),
+    );
+    assert_eq!(replay_sse.status(), StatusCode::OK);
+    let previous_generation = review.runtime_generation;
+    let review =
+        restart_review_attention_runtime_v1(&supervisor, &store, &root.join("runtime"), review);
+    assert_eq!(review.runtime_generation, previous_generation + 1);
+    let replayed = read_review_attention_sse_event(
+        replay_sse,
+        &gateway_runtime,
+        "restart",
+        &supervisor,
+        &review.registration_id,
+    );
     assert_eq!(replayed.cursor, first_cursor);
     let replayed_payload = ReviewAttentionChangedV1::decode(replayed.payload.as_slice())
         .expect("replayed Review payload");
     assert_eq!(replayed_payload.attention_id, attention.attention_id);
     assert_eq!(replayed_payload.revision, 1);
+
+    // Effective NOLOGIN/NOSUPERUSER/NOBYPASSRLS proof for all Review Attention tables.
+    gateway_runtime.block_on(assert_review_owner_rls_v1(
+        "makosh_review_attention_rls_test",
+        &[
+            "review_attention_state",
+            "review_attention_operations",
+            "review_attention_realtime",
+        ],
+    ));
 
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
@@ -241,29 +337,30 @@ where
     R::decode(bytes.as_ref()).expect("decode Review Gateway response")
 }
 
-fn read_review_attention_sse_event(
-    router: &ReviewAttentionGateway,
+fn read_review_attention_sse_event<B>(
+    response: hyper::Response<B>,
     runtime: &tokio::runtime::Runtime,
-    cookie: &str,
-) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
-    let response = runtime.block_on(
-        router.route(
-            Request::builder()
-                .method("GET")
-                .uri("/api/realtime/v1/events")
-                .header("cookie", cookie)
-                .body(http_body_util::Full::new(Bytes::new()))
-                .expect("Review Gateway SSE request"),
-        ),
-    );
-    assert_eq!(response.status(), StatusCode::OK);
-    runtime.block_on(async {
+    stage: &str,
+    supervisor: &ManagedRuntimeSupervisor,
+    registration_id: &str,
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1
+where
+    B: hyper::body::Body<Data = Bytes> + Unpin,
+    B::Error: std::fmt::Debug,
+{
+    let result = runtime.block_on(async {
         tokio::time::timeout(
             Duration::from_secs(8),
             find_review_attention_event(response.into_body()),
         )
         .await
-        .expect("Review SSE timeout")
+    });
+    result.unwrap_or_else(|error| {
+        panic!(
+            "Review SSE timeout stage={stage} error={error:?} active={:?} last_failure={:?}",
+            supervisor.is_active(registration_id),
+            supervisor.last_failure(registration_id)
+        )
     })
 }
 

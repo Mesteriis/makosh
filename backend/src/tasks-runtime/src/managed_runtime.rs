@@ -7,8 +7,13 @@ use makosh_events_jetstream::{
 use makosh_runtime_protocol::{
     managed_control::{ManagedControlChannelV2, RejectManagedControlRequestsV2},
     v1::{
-        ContractReferenceV1, ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
-        ManagedStorageRuntimeConfigurationV1,
+        ContractReferenceV1, ManagedRuntimeClientDeliveryResponseV1,
+        ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
+        ManagedStorageRuntimeConfigurationV1, managed_runtime_control_request_v1::Operation,
+        managed_runtime_control_response_v1::Result as ControlResult,
+    },
+    validation::module_client::{
+        validate_module_client_request_v1, validate_module_client_response_v1,
     },
 };
 use makosh_storage_protocol::{
@@ -24,6 +29,7 @@ use makosh_tasks_command_api::{
 use makosh_tasks_persistence::{TasksPersistenceErrorV1, TasksPersistenceV1};
 
 use crate::{
+    client::dispatch_tasks_client_request_v1,
     command::{
         TasksCommandErrorV1, TasksCommandRuntimeContextV1, consume_task_command_once_v1,
         recover_task_command_once_v1,
@@ -172,24 +178,73 @@ impl TasksManagedRuntimeV1 {
         })
     }
 
-    pub fn pump_control_once(&mut self) -> Result<bool, TasksManagedRuntimeErrorV1> {
-        let Some((correlation_id, _request)) = self
+    pub async fn pump_control_once(
+        &mut self,
+        now_unix_millis: i64,
+    ) -> Result<bool, TasksManagedRuntimeErrorV1> {
+        let Some((correlation_id, request)) = self
             .control_channel
             .try_receive_request()
             .map_err(|_| TasksManagedRuntimeErrorV1::Unavailable)?
         else {
             return Ok(false);
         };
+        let Some(Operation::ClientDelivery(delivery)) = request.operation else {
+            self.write_control_error(correlation_id, "managed_runtime_control_unexpected_request")?;
+            return Ok(true);
+        };
+        let Some(request) = delivery
+            .request
+            .filter(|request| validate_module_client_request_v1(request).is_ok())
+        else {
+            self.write_control_error(
+                correlation_id,
+                "managed_runtime_control_invalid_client_delivery",
+            )?;
+            return Ok(true);
+        };
+        let response = dispatch_tasks_client_request_v1(
+            &self.persistence,
+            &self.admission.runtime_instance_id,
+            self.admission.runtime_generation,
+            &self.admission.logical_human_owner_id,
+            request,
+            now_unix_millis,
+        )
+        .await;
+        if validate_module_client_response_v1(&response).is_err() {
+            return Err(TasksManagedRuntimeErrorV1::Unavailable);
+        }
+        self.control_channel
+            .write_response(
+                correlation_id,
+                ManagedRuntimeControlResponseV1 {
+                    result: Some(ControlResult::ClientDelivery(
+                        ManagedRuntimeClientDeliveryResponseV1 {
+                            response: Some(response),
+                        },
+                    )),
+                    error_code: String::new(),
+                },
+            )
+            .map_err(|_| TasksManagedRuntimeErrorV1::Unavailable)?;
+        Ok(true)
+    }
+
+    fn write_control_error(
+        &mut self,
+        correlation_id: [u8; 16],
+        error_code: &str,
+    ) -> Result<(), TasksManagedRuntimeErrorV1> {
         self.control_channel
             .write_response(
                 correlation_id,
                 ManagedRuntimeControlResponseV1 {
                     result: None,
-                    error_code: "managed_runtime_control_unexpected_request".to_owned(),
+                    error_code: error_code.to_owned(),
                 },
             )
-            .map_err(|_| TasksManagedRuntimeErrorV1::Unavailable)?;
-        Ok(true)
+            .map_err(|_| TasksManagedRuntimeErrorV1::Unavailable)
     }
 
     pub async fn recover_command_once(

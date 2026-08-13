@@ -35,7 +35,30 @@ pub(super) struct StartedWhisperSttRuntimeV1 {
     capability_ids: Vec<String>,
 }
 
+#[derive(Clone, Copy)]
+pub(super) enum WhisperSttBootstrapOverrideV1 {
+    None,
+    MissingOrDriftedRuntimeArtifact,
+    MissingSettings,
+    DriftedSettingsTarget,
+    MissingStorage,
+    StaleStorageFence,
+    StopVaultAfterConfiguration,
+}
+
 pub(super) fn installed_whisper_stt_release_v1(root: &Path) -> InstalledSignedBundle {
+    installed_whisper_stt_release_from_paths_v1(
+        root,
+        &binary("MAKOSH_WHISPER_STT_MODEL"),
+        &binary("MAKOSH_WHISPER_STT_RUNNER"),
+    )
+}
+
+pub(super) fn installed_whisper_stt_release_from_paths_v1(
+    root: &Path,
+    model: &Path,
+    runner: &Path,
+) -> InstalledSignedBundle {
     InstalledSignedBundle::install_with_runtime_resources(
         root,
         &[
@@ -54,7 +77,7 @@ pub(super) fn installed_whisper_stt_release_v1(root: &Path) -> InstalledSignedBu
             whisper_stt_release_artifact_v1(),
         ],
         &[],
-        &whisper_stt_runtime_resources_v1(),
+        &whisper_stt_runtime_resources_from_paths_v1(model, runner),
     )
     .expect("install signed Whisper STT release")
 }
@@ -155,13 +178,149 @@ pub(super) fn start_whisper_stt_runtime_v1(
 ) -> StartedWhisperSttRuntimeV1 {
     let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
         .expect("load Whisper STT launch reservation");
-    start_reserved_whisper_stt_runtime_v1(
+    launch_reserved_whisper_stt_runtime_v1(
         supervisor,
         store,
         kernel_data,
         runtime_dir,
         reservation,
         admitted,
+        WhisperSttBootstrapOverrideV1::None,
+        true,
+        None,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn launch_whisper_stt_runtime_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    admitted: AdmittedWhisperSttRuntimeV1,
+    bootstrap_override: WhisperSttBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedWhisperSttRuntimeV1 {
+    let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
+        .expect("load Whisper STT launch reservation");
+    launch_reserved_whisper_stt_runtime_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        reservation,
+        admitted,
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
+}
+
+pub(super) fn retry_whisper_stt_runtime_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: StartedWhisperSttRuntimeV1,
+) -> StartedWhisperSttRuntimeV1 {
+    retry_whisper_stt_runtime_with_override_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        predecessor,
+        WhisperSttBootstrapOverrideV1::None,
+        true,
+        None,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn retry_whisper_stt_runtime_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: StartedWhisperSttRuntimeV1,
+    bootstrap_override: WhisperSttBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedWhisperSttRuntimeV1 {
+    retry_whisper_stt_runtime_with_override_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        predecessor,
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn retry_whisper_stt_runtime_with_override_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: StartedWhisperSttRuntimeV1,
+    bootstrap_override: WhisperSttBootstrapOverrideV1,
+    wait_until_ready: bool,
+    test_stdio_capture_directory: Option<&Path>,
+) -> StartedWhisperSttRuntimeV1 {
+    let reservation = managed_launch::load(supervisor, store, &predecessor.registration_id)
+        .expect("reload Whisper STT launch reservation");
+    launch_reserved_whisper_stt_runtime_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        reservation,
+        AdmittedWhisperSttRuntimeV1 {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        bootstrap_override,
+        wait_until_ready,
+        test_stdio_capture_directory,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn launch_whisper_stt_successor_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: StartedWhisperSttRuntimeV1,
+    bootstrap_override: WhisperSttBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedWhisperSttRuntimeV1 {
+    let binding = whisper_stt_storage_binding_v1(store, &predecessor.registration_id);
+    let issue = storage_successor::issue_after(&binding).expect("derive Whisper STT successor");
+    let (reservation, binding) = storage_successor::reserve(
+        supervisor,
+        store,
+        &predecessor.registration_id,
+        WHISPER_STT_STORAGE_CAPABILITY_ID_V1,
+        issue,
+    )
+    .expect("reserve Whisper STT successor");
+    crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
+        .expect("provision Whisper STT successor");
+    launch_reserved_whisper_stt_runtime_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        reservation,
+        AdmittedWhisperSttRuntimeV1 {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
     )
 }
 
@@ -186,7 +345,7 @@ pub(super) fn restart_whisper_stt_runtime_v1(
     .expect("reserve Whisper STT successor");
     crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
         .expect("provision Whisper STT successor");
-    let successor = start_reserved_whisper_stt_runtime_v1(
+    let successor = launch_reserved_whisper_stt_runtime_v1(
         supervisor,
         store,
         kernel_data,
@@ -196,19 +355,26 @@ pub(super) fn restart_whisper_stt_runtime_v1(
             registration_id: predecessor.registration_id,
             capability_ids: predecessor.capability_ids,
         },
+        WhisperSttBootstrapOverrideV1::None,
+        true,
+        None,
     );
     assert_eq!(successor.runtime_generation, previous_generation + 1);
     assert_ne!(successor.runtime_instance_id, previous_instance);
     successor
 }
 
-fn start_reserved_whisper_stt_runtime_v1(
+#[allow(clippy::too_many_arguments)]
+fn launch_reserved_whisper_stt_runtime_v1(
     supervisor: &ManagedRuntimeSupervisor,
     store: &SqliteControlStore,
     kernel_data: &Path,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
     admitted: AdmittedWhisperSttRuntimeV1,
+    bootstrap_override: WhisperSttBootstrapOverrideV1,
+    wait_until_ready: bool,
+    test_stdio_capture_directory: Option<&Path>,
 ) -> StartedWhisperSttRuntimeV1 {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
@@ -218,7 +384,7 @@ fn start_reserved_whisper_stt_runtime_v1(
         crate::platform::storage::topology::current(store).expect("Whisper STT Storage topology");
     let vault =
         vault_status::read_current(store, &supervisor.relay_port()).expect("live Vault status");
-    let storage = crate::platform::storage::topology::to_managed_runtime_configuration(
+    let mut storage = crate::platform::storage::topology::to_managed_runtime_configuration(
         &topology,
         &binding,
         store.snapshot().instance_id(),
@@ -226,6 +392,27 @@ fn start_reserved_whisper_stt_runtime_v1(
         vault.hpke_public_key_x25519(),
     )
     .expect("Whisper STT Storage configuration");
+    let mut settings = whisper_stt_settings_snapshot_v1();
+    let include_storage = match bootstrap_override {
+        WhisperSttBootstrapOverrideV1::None
+        | WhisperSttBootstrapOverrideV1::MissingOrDriftedRuntimeArtifact
+        | WhisperSttBootstrapOverrideV1::MissingSettings => true,
+        WhisperSttBootstrapOverrideV1::DriftedSettingsTarget => {
+            settings.target_id = "whisper-stt-drifted".to_owned();
+            true
+        }
+        WhisperSttBootstrapOverrideV1::MissingStorage => false,
+        WhisperSttBootstrapOverrideV1::StaleStorageFence => {
+            storage.credential_revision = storage.credential_revision.saturating_add(1);
+            true
+        }
+        WhisperSttBootstrapOverrideV1::StopVaultAfterConfiguration => {
+            supervisor
+                .stop(vault_binding::VAULT_PROCESS_ID)
+                .expect("stop Vault after Whisper STT configuration");
+            true
+        }
+    };
     let configuration = ManagedIntegrationRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: WHISPER_STT_OWNER_ID_V1.to_owned(),
@@ -233,7 +420,7 @@ fn start_reserved_whisper_stt_runtime_v1(
         runtime_instance_id: runtime_instance_id.clone(),
         runtime_generation,
         grant_epoch,
-        storage: Some(storage),
+        storage: include_storage.then_some(storage),
         event_hub_endpoint: String::new(),
         event_credential_revision: 0,
         configuration_instance_id: WHISPER_STT_CONFIGURATION_INSTANCE_ID_V1.to_owned(),
@@ -242,26 +429,55 @@ fn start_reserved_whisper_stt_runtime_v1(
         configuration_instances: Vec::new(),
         logical_human_owner_id: WHISPER_STT_LOGICAL_OWNER_ID_V1.to_owned(),
     };
-    managed_launch::start_reserved_integration(
+    if let Some(directory) = test_stdio_capture_directory {
+        unsafe {
+            std::env::set_var(
+                crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+                directory,
+            );
+        }
+    }
+    let started = managed_launch::start_reserved_integration(
         supervisor,
         kernel_data,
         runtime_dir,
         reservation,
         managed_launch::ManagedIntegrationLaunchConfiguration {
             runtime: configuration,
-            settings_snapshot_bytes: whisper_stt_settings_snapshot_v1().encode_to_vec(),
+            settings_snapshot_bytes: if matches!(
+                bootstrap_override,
+                WhisperSttBootstrapOverrideV1::MissingSettings
+            ) {
+                Vec::new()
+            } else {
+                settings.encode_to_vec()
+            },
             granted_capability_ids: &admitted.capability_ids,
         },
-    )
-    .expect("start managed Whisper STT integration");
-    supervisor
-        .wait_until_ready(&admitted.registration_id)
-        .unwrap_or_else(|error| {
-            panic!(
-                "Whisper STT readiness: {error}; last_failure={:?}",
-                supervisor.last_failure(&admitted.registration_id)
-            )
-        });
+    );
+    if matches!(
+        bootstrap_override,
+        WhisperSttBootstrapOverrideV1::MissingOrDriftedRuntimeArtifact
+            | WhisperSttBootstrapOverrideV1::MissingSettings
+            | WhisperSttBootstrapOverrideV1::MissingStorage
+    ) {
+        assert!(
+            started.is_err(),
+            "Kernel must deny incomplete Whisper STT bootstrap"
+        );
+    } else {
+        started.expect("start managed Whisper STT integration");
+    }
+    if wait_until_ready {
+        supervisor
+            .wait_until_ready(&admitted.registration_id)
+            .unwrap_or_else(|error| {
+                panic!(
+                    "Whisper STT readiness: {error}; last_failure={:?}",
+                    supervisor.last_failure(&admitted.registration_id)
+                )
+            });
+    }
     StartedWhisperSttRuntimeV1 {
         registration_id: admitted.registration_id,
         runtime_instance_id,
@@ -315,18 +531,40 @@ pub(super) fn whisper_stt_release_artifact_v1() -> SignedRuntimeArtifact {
 }
 
 pub(super) fn whisper_stt_runtime_resources_v1() -> [SignedRuntimeResource; 2] {
+    whisper_stt_runtime_resources_from_paths_v1(
+        &binary("MAKOSH_WHISPER_STT_MODEL"),
+        &binary("MAKOSH_WHISPER_STT_RUNNER"),
+    )
+}
+
+fn whisper_stt_runtime_resources_from_paths_v1(
+    model: &Path,
+    runner: &Path,
+) -> [SignedRuntimeResource; 2] {
     [
         SignedRuntimeResource::read_only_data(
             WHISPER_STT_MODEL_ARTIFACT_ID_V1,
-            binary("MAKOSH_WHISPER_STT_MODEL"),
+            model.to_owned(),
             WHISPER_STT_MODULE_ID_V1,
         ),
         SignedRuntimeResource::native_executable(
             WHISPER_STT_RUNNER_ARTIFACT_ID_V1,
-            binary("MAKOSH_WHISPER_STT_RUNNER"),
+            runner.to_owned(),
             WHISPER_STT_MODULE_ID_V1,
         ),
     ]
+}
+
+pub(super) fn installed_whisper_stt_model_path_v1(root: &Path) -> PathBuf {
+    root.join(
+        "Макошь.app/Contents/Resources/makosh-kernel-release/distribution/data/whisper_stt.model.v1",
+    )
+}
+
+pub(super) fn installed_whisper_stt_runner_path_v1(root: &Path) -> PathBuf {
+    root.join(
+        "Макошь.app/Contents/Resources/makosh-kernel-release/distribution/native-bin/whisper_stt.runner.v1",
+    )
 }
 
 fn whisper_stt_binary() -> PathBuf {

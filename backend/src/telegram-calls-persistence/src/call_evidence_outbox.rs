@@ -99,6 +99,39 @@ pub(crate) async fn insert_call_evidence_outbox(
     Ok(())
 }
 
+pub(crate) async fn ensure_call_evidence_outbox_replay(
+    transaction: &mut Transaction<'_, Postgres>,
+    record: &OutboxRecordV1,
+    created_at_unix_seconds: u64,
+) -> Result<(), TelegramCallsPersistenceError> {
+    let existing = sqlx::query(
+        "SELECT envelope_sha256, exact_envelope_bytes \
+         FROM makosh_data.telegram_call_evidence_outbox WHERE message_id = $1",
+    )
+    .bind(record.message_id().as_slice())
+    .fetch_optional(&mut **transaction)
+    .await
+    .map_err(|_| TelegramCallsPersistenceError::Database)?;
+    if let Some(existing) = existing {
+        let existing_hash: Vec<u8> = existing
+            .try_get("envelope_sha256")
+            .map_err(|_| TelegramCallsPersistenceError::Database)?;
+        let existing_bytes: Vec<u8> = existing
+            .try_get("exact_envelope_bytes")
+            .map_err(|_| TelegramCallsPersistenceError::Database)?;
+        let existing = OutboxRecordV1::accept(existing_bytes)
+            .map_err(|_| TelegramCallsPersistenceError::InvalidRow)?;
+        if existing.message_id() != record.message_id()
+            || existing_hash.as_slice() != existing.envelope_sha256()
+        {
+            return Err(TelegramCallsPersistenceError::InvalidRow);
+        }
+        return Ok(());
+    }
+
+    insert_call_evidence_outbox(transaction, record, created_at_unix_seconds).await
+}
+
 impl TelegramCallsPersistence {
     async fn pending_call_evidence_outbox(
         &self,

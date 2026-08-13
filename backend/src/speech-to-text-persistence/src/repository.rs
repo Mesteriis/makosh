@@ -4,7 +4,7 @@ use makosh_speech_to_text_core::{
 };
 use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
-    PgPool, Row,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
 };
 
@@ -22,6 +22,22 @@ pub struct SpeechToTextPersistenceV1 {
 }
 
 impl SpeechToTextPersistenceV1 {
+    async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<Transaction<'_, Postgres>, SpeechToTextPersistenceErrorV1> {
+        if !valid_owner(logical_owner_id) {
+            return Err(SpeechToTextPersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage_error)?;
+        Ok(transaction)
+    }
+
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,
@@ -69,6 +85,9 @@ impl SpeechToTextPersistenceV1 {
     ) -> Result<SpeechToTextPersistenceOutcomeV1, SpeechToTextPersistenceErrorV1> {
         validate_accepted(&run)?;
         let request = &run.request;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.speech_to_text_runs (
                logical_owner_id, request_id, request_digest, source_reference_id,
@@ -94,18 +113,22 @@ impl SpeechToTextPersistenceV1 {
         .bind(i32::try_from(request.maximum_segments).map_err(|_| invalid_input())?)
         .bind(signed(run.revision)?)
         .bind(run_state_code(run.state))
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected()
             == 1;
-        let persisted = self
-            .load_run(&request.logical_owner_id, request.request_id)
-            .await?
-            .ok_or(SpeechToTextPersistenceErrorV1::InvalidRow)?;
+        let persisted = load_run_in_transaction(
+            &mut transaction,
+            &request.logical_owner_id,
+            request.request_id,
+        )
+        .await?
+        .ok_or(SpeechToTextPersistenceErrorV1::InvalidRow)?;
         if !request_matches(&persisted.request, request) {
             return Err(SpeechToTextPersistenceErrorV1::RequestConflict);
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(SpeechToTextPersistenceOutcomeV1 {
             persisted,
             replayed: !inserted,
@@ -120,14 +143,11 @@ impl SpeechToTextPersistenceV1 {
         if !valid_owner(logical_owner_id) || request_id == [0; 16] {
             return Err(SpeechToTextPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RUN)
-            .bind(logical_owner_id)
-            .bind(request_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage_error)?
-            .map(|row| persisted_from_row(&row))
-            .transpose()
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted =
+            load_run_in_transaction(&mut transaction, logical_owner_id, request_id).await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn load_recoverable_runs(
@@ -140,15 +160,18 @@ impl SpeechToTextPersistenceV1 {
         {
             return Err(SpeechToTextPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RECOVERABLE)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted = sqlx::query(SELECT_RECOVERABLE)
             .bind(logical_owner_id)
             .bind(i64::from(limit))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
             .map_err(storage_error)?
             .iter()
             .map(persisted_from_row)
-            .collect()
+            .collect::<Result<Vec<_>, _>>()?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn persist_transition(
@@ -156,7 +179,9 @@ impl SpeechToTextPersistenceV1 {
         transition: SpeechToTextTransitionV1,
     ) -> Result<PersistedSpeechToTextRunV1, SpeechToTextPersistenceErrorV1> {
         let request = &transition.next_run.request;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let current_row = sqlx::query(SELECT_RUN_FOR_UPDATE)
             .bind(&request.logical_owner_id)
             .bind(request.request_id.as_slice())
@@ -268,6 +293,21 @@ const SELECT_RECOVERABLE: &str = concat!(
     "logical_owner_id, request_id, request_digest, source_reference_id, source_declared_bytes, source_sha256, audio_format, duration_millis, requested_language, consent_receipt_id, consent_policy_revision, maximum_transcript_bytes, maximum_segments, state_revision, run_state, transcript_reference_id, transcript_declared_bytes, transcript_sha256, detected_language, segment_count, completeness, confidence_basis_points, provider_contract_schema_sha256, model_revision_sha256, provider_settings_revision, provider_policy_revision, rejection_code ",
     "FROM makosh_data.speech_to_text_runs WHERE logical_owner_id = $1 AND run_state IN (1, 2) ORDER BY state_revision, request_id LIMIT $2"
 );
+
+async fn load_run_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    request_id: [u8; 16],
+) -> Result<Option<PersistedSpeechToTextRunV1>, SpeechToTextPersistenceErrorV1> {
+    sqlx::query(SELECT_RUN)
+        .bind(logical_owner_id)
+        .bind(request_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .map(|row| persisted_from_row(&row))
+        .transpose()
+}
 
 fn persisted_from_row(
     row: &PgRow,

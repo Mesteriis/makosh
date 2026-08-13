@@ -6,7 +6,7 @@ use makosh_communication_delayed_delivery_api::{
     COMMUNICATION_DELAYED_DELIVERY_MODULE_ID_V1, COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
 };
 use makosh_communication_delayed_delivery_persistence::schema::{
-    COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V4,
+    COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V5,
     communication_delayed_delivery_storage_bundle_v1,
 };
 use makosh_communication_delayed_delivery_runtime::{
@@ -92,7 +92,7 @@ pub(super) fn admit_delayed_delivery_runtime(
         .record_platform_storage_bundle(
             &PlatformStorageBundleV1::new(
                 COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
-                u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V4),
+                u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V5),
                 Sha256::digest(&bundle).into(),
                 bundle,
             )
@@ -115,7 +115,7 @@ pub(super) fn prepare_delayed_delivery_runtime(
     let bundle = store
         .platform_storage_bundle(
             COMMUNICATION_DELAYED_DELIVERY_OWNER_V1,
-            u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V4),
+            u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V5),
         )
         .expect("read delayed-delivery Storage bundle")
         .expect("delayed-delivery Storage bundle");
@@ -128,7 +128,7 @@ pub(super) fn prepare_delayed_delivery_runtime(
         StorageBindingIssueV1::new(
             1,
             1,
-            u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V4),
+            u64::from(COMMUNICATION_DELAYED_DELIVERY_STORAGE_BUNDLE_REVISION_V5),
             *bundle.digest(),
         )
         .expect("delayed-delivery Storage binding issue"),

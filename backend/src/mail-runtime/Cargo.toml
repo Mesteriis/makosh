@@ -38,7 +38,6 @@ makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
 makosh-mail-address-book-persistence = { path = "../mail-address-book-persistence" }
 makosh-mail-google-people = { path = "../mail-google-people" }
 makosh-mail-carddav = { path = "../mail-carddav" }
-makosh-contacts-mail-sync-source-api = { path = "../contacts-mail-sync-source-api" }
 makosh-mail-delivery-intent-contract = { path = "../mail-delivery-intent-contract" }
 makosh-attachment-security-contract = { path = "../attachment-security-contract" }
 makosh-communications-attachment-contract = { path = "../communications-attachment-contract" }

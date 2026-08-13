@@ -183,9 +183,14 @@ test('requires an explicit single-layout policy', () => {
 
 
 
-for (const owner of ['relationships', 'projects', 'obligations', 'decisions']) {
+for (const owner of ['decisions']) {
   test(`rejects a production path for blocked domain ${owner}`, () => {
-    const violations = validateSourceEntries(policy(), [
+    const blockedPolicy = policy();
+    blockedPolicy.domains.developmentAllowlist = blockedPolicy.domains.developmentAllowlist.filter(
+      (value) => value !== owner,
+    );
+    blockedPolicy.domains.blocked.push(owner);
+    const violations = validateSourceEntries(blockedPolicy, [
       { path: `modules/${owner}/src/lib.rs`, content: '' },
     ]);
 
@@ -196,7 +201,12 @@ for (const owner of ['relationships', 'projects', 'obligations', 'decisions']) {
 
 
 test('rejects singular aliases of blocked owners in production paths', () => {
-  const violations = validateSourceEntries(policy(), [
+  const blockedPolicy = policy();
+  blockedPolicy.domains.developmentAllowlist = blockedPolicy.domains.developmentAllowlist.filter(
+    (owner) => owner !== 'projects',
+  );
+  blockedPolicy.domains.blocked.push('projects');
+  const violations = validateSourceEntries(blockedPolicy, [
     { path: 'modules/project/src/lib.rs', content: '' },
   ]);
 
@@ -218,7 +228,12 @@ for (const owner of ['graph', 'timeline', 'search', 'context']) {
 
 
 test('rejects SQL ownership for a blocked domain', () => {
-  const violations = validateSourceEntries(policy(), [
+  const blockedPolicy = policy();
+  blockedPolicy.domains.developmentAllowlist = blockedPolicy.domains.developmentAllowlist.filter(
+    (owner) => owner !== 'projects',
+  );
+  blockedPolicy.domains.blocked.push('projects');
+  const violations = validateSourceEntries(blockedPolicy, [
     {
       path: 'modules/tasks/migrations/0001.sql',
       content: 'CREATE TABLE projects (id UUID PRIMARY KEY);',
@@ -226,6 +241,32 @@ test('rejects SQL ownership for a blocked domain', () => {
   ]);
 
   assert.ok(codes(violations).has('blocked_sql_owner'));
+});
+
+test('Persons decision evidence exception is exact and does not admit a Decisions owner', () => {
+  const blockedPolicy = policy();
+  blockedPolicy.domains.developmentAllowlist = blockedPolicy.domains.developmentAllowlist.filter(
+    (owner) => owner !== 'decisions',
+  );
+  blockedPolicy.domains.blocked.push('decisions');
+  const exact = validateSourceEntries(blockedPolicy, [{
+    path: 'src/persons-persistence/migrations/0002_persons_durable.sql',
+    content: 'CREATE TABLE makosh_data.persons_decision_receipts (decision_id BYTEA);',
+  }]);
+  assert.ok(!codes(exact).has('blocked_sql_owner'));
+
+  for (const entry of [
+    {
+      path: 'src/persons-persistence/migrations/0003_decisions.sql',
+      content: 'CREATE TABLE makosh_data.persons_decision_receipts (decision_id BYTEA);',
+    },
+    {
+      path: 'src/persons-persistence/migrations/0002_persons_durable.sql',
+      content: 'CREATE TABLE makosh_data.decisions (decision_id BYTEA);',
+    },
+  ]) {
+    assert.ok(codes(validateSourceEntries(blockedPolicy, [entry])).has('blocked_sql_owner'));
+  }
 });
 
 
@@ -246,7 +287,7 @@ test('does not treat SQL comments as ownership declarations', () => {
 test('allows source paths for enabled domains including Knowledge and AI', () => {
   const violations = validateSourceEntries(policy(), [
     { path: 'modules/communications/src/lib.rs', content: '' },
-    { path: 'modules/contacts/src/lib.rs', content: '' },
+    { path: 'modules/persons/src/lib.rs', content: '' },
     { path: 'modules/organizations/src/lib.rs', content: '' },
     { path: 'modules/tasks/src/lib.rs', content: '' },
     { path: 'modules/calendar/src/lib.rs', content: '' },

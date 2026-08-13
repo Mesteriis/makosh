@@ -12,7 +12,7 @@ describe('system control presentation', () => {
     const bootstrap = recoveryClientBootstrap()
     const rows = systemControlSurfaceRows(bootstrap, ['system-control'])
 
-    expect(rows).toHaveLength(13)
+    expect(rows).toHaveLength(17)
     expect(systemControlAvailableSurfaceCount(bootstrap)).toBe(1)
     expect(rows.find((row) => row.routeId === 'settings')?.available).toBe(true)
     expect(systemControlSurfaceStateLabel('dashboard', ClientSurfaceAvailabilityStateV1.BLOCKED, false)).toBe('Blocked')

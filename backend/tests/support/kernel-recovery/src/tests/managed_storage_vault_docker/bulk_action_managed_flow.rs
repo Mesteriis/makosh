@@ -19,6 +19,8 @@ use makosh_communication_bulk_action_api::{
 use makosh_gateway_protocol::v1::{
     ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
+use sqlx::postgres::{PgConnectOptions, PgPoolOptions, PgSslMode};
+use zeroize::Zeroizing;
 
 type BulkActionGateway = makosh_gateway_runtime::GatewayApplicationRouter<
     crate::identity::browser_gateway::ControlStoreBrowserAuthority,
@@ -127,6 +129,24 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
     let batch_id = vec![0x51; 16];
     let target_operation_id = vec![0x52; 16];
     let private_body = b"managed delivery body must never enter realtime";
+    let initial_sse_response = gateway_runtime.block_on(
+        router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Gateway SSE request before bulk action"),
+        ),
+    );
+    assert_eq!(initial_sse_response.status(), StatusCode::OK);
+    assert_eq!(
+        initial_sse_response
+            .headers()
+            .get("content-type")
+            .and_then(|value| value.to_str().ok()),
+        Some("text/event-stream")
+    );
     let response = gateway_runtime.block_on(
         router.route(
             Request::builder()
@@ -168,13 +188,17 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
         BulkDeliveryBatchStateV1::BulkDeliveryBatchStateAccepted as i32
     );
 
-    let first = read_bulk_action_sse_event(
-        &router,
-        &gateway_runtime,
-        &cookie,
-        None,
-        BulkDeliveryBatchStateV1::BulkDeliveryBatchStateAccepted,
-    );
+    let first = gateway_runtime.block_on(async {
+        tokio::time::timeout(
+            Duration::from_secs(8),
+            find_bulk_action_event(
+                initial_sse_response.into_body(),
+                BulkDeliveryBatchStateV1::BulkDeliveryBatchStateAccepted,
+            ),
+        )
+        .await
+        .expect("bulk-action Accepted SSE event timeout")
+    });
     assert_client_safe_event(
         &first,
         &batch_id,
@@ -209,9 +233,6 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
         "the first managed publication must admit the logical owner"
     );
     let previous_generation = bulk_action.runtime_generation;
-    let bulk_action =
-        restart_bulk_action_runtime(&supervisor, &store, &root.join("runtime"), bulk_action);
-    assert_eq!(bulk_action.runtime_generation, previous_generation + 1);
     let restarted_router = bulk_action_gateway(&store, &supervisor, &root, &data, realtime.clone());
     let restarted_cookie =
         super::super::browser_gateway_session::authenticate_gateway_router_with_sign_count(
@@ -219,13 +240,31 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
             &gateway_runtime,
             2,
         );
-    let replayed = read_bulk_action_sse_event(
-        &restarted_router,
-        &gateway_runtime,
-        &restarted_cookie,
-        None,
-        BulkDeliveryBatchStateV1::BulkDeliveryBatchStateAccepted,
+    let restarted_sse_response = gateway_runtime.block_on(
+        restarted_router.route(
+            Request::builder()
+                .method("GET")
+                .uri("/api/realtime/v1/events")
+                .header("cookie", &restarted_cookie)
+                .body(http_body_util::Full::new(Bytes::new()))
+                .expect("Gateway SSE request before bulk-action restart"),
+        ),
     );
+    assert_eq!(restarted_sse_response.status(), StatusCode::OK);
+    let bulk_action =
+        restart_bulk_action_runtime(&supervisor, &store, &root.join("runtime"), bulk_action);
+    assert_eq!(bulk_action.runtime_generation, previous_generation + 1);
+    let replayed = gateway_runtime.block_on(async {
+        tokio::time::timeout(
+            Duration::from_secs(8),
+            find_bulk_action_event(
+                restarted_sse_response.into_body(),
+                BulkDeliveryBatchStateV1::BulkDeliveryBatchStateAccepted,
+            ),
+        )
+        .await
+        .expect("bulk-action restart replay SSE event timeout")
+    });
     assert_client_safe_event(
         &replayed,
         &batch_id,
@@ -236,12 +275,167 @@ fn managed_bulk_action_reaches_gateway_sse_and_replays_after_restart() {
         replayed.cursor, cursor,
         "runtime restart must reconstruct the exact stable owner cursor"
     );
+    gateway_runtime.block_on(assert_bulk_action_owner_rls(
+        "makosh_storage_authenticated",
+        private_body,
+    ));
     supervisor.shutdown().expect("stop managed processes");
     unsafe {
         std::env::remove_var("MAKOSH_TEST_KERNEL_EXECUTABLE");
     }
     std::fs::remove_dir_all(root).expect("remove fixture");
     std::fs::remove_dir_all(data).expect("remove kernel fixture");
+}
+
+async fn assert_bulk_action_owner_rls(database_id: &str, private_body: &[u8]) {
+    let password = Zeroizing::new(
+        std::fs::read_to_string(required(
+            "MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PASSWORD_FILE",
+        ))
+        .expect("read disposable PostgreSQL credential")
+        .trim()
+        .to_owned(),
+    );
+    let options = PgConnectOptions::new()
+        .host(&required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_HOST"))
+        .port(
+            required("MAKOSH_STORAGE_AUTHENTICATED_POSTGRES_PORT")
+                .parse()
+                .expect("valid PostgreSQL port"),
+        )
+        .username("makosh_postgres_admin")
+        .password(password.as_str())
+        .database(database_id)
+        .ssl_mode(PgSslMode::Disable);
+    let admin = PgPoolOptions::new()
+        .max_connections(1)
+        .connect_with(options.clone())
+        .await
+        .expect("connect Bulk action conformance database");
+    sqlx::raw_sql(
+        "CREATE ROLE makosh_bulk_action_rls_test \
+           NOLOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOINHERIT; \
+         GRANT USAGE ON SCHEMA makosh_data TO makosh_bulk_action_rls_test; \
+         GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA makosh_data \
+           TO makosh_bulk_action_rls_test; \
+         GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA makosh_data \
+           TO makosh_bulk_action_rls_test;",
+    )
+    .execute(&admin)
+    .await
+    .expect("create exact non-bypass Bulk action RLS role");
+    let attributes: (bool, bool) = sqlx::query_as(
+        "SELECT rolsuper, rolbypassrls FROM pg_roles \
+         WHERE rolname = 'makosh_bulk_action_rls_test'",
+    )
+    .fetch_one(&admin)
+    .await
+    .expect("read Bulk action RLS role attributes");
+    assert_eq!(attributes, (false, false));
+    let stored_private_body: Vec<u8> = sqlx::query_scalar(
+        "SELECT body_utf8 FROM makosh_data.communication_bulk_action_targets \
+         WHERE logical_owner_id = $1 LIMIT 1",
+    )
+    .bind(BULK_ACTION_LOGICAL_OWNER_ID)
+    .fetch_one(&admin)
+    .await
+    .expect("read owner1 private Bulk body through conformance admin");
+    assert_eq!(stored_private_body, private_body);
+
+    let pool = PgPoolOptions::new()
+        .max_connections(1)
+        .after_connect(|connection, _meta| {
+            Box::pin(async move {
+                sqlx::query("SET ROLE makosh_bulk_action_rls_test")
+                    .execute(connection)
+                    .await?;
+                Ok(())
+            })
+        })
+        .connect_with(options)
+        .await
+        .expect("connect raw Bulk action RLS role");
+    for table in [
+        "communication_bulk_action_batches",
+        "communication_bulk_action_targets",
+        "communication_bulk_action_realtime",
+    ] {
+        let row_json: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+            "SELECT row_to_json(source)::text FROM (\
+               SELECT * FROM makosh_data.{table} \
+               WHERE logical_owner_id = $1 LIMIT 1\
+             ) source"
+        )))
+        .bind(BULK_ACTION_LOGICAL_OWNER_ID)
+        .fetch_one(&admin)
+        .await
+        .unwrap_or_else(|error| panic!("read owner1 {table} fixture: {error}"));
+
+        let mut transaction = pool
+            .begin()
+            .await
+            .expect("begin owner2 Bulk RLS transaction");
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', 'owner-2', true)")
+            .execute(&mut *transaction)
+            .await
+            .expect("set owner2 Bulk RLS context");
+        let visible: i64 = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+            "SELECT COUNT(*) FROM makosh_data.{table} WHERE logical_owner_id = $1"
+        )))
+        .bind(BULK_ACTION_LOGICAL_OWNER_ID)
+        .fetch_one(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 SELECT {table}: {error}"));
+        assert_eq!(visible, 0, "owner2 must not see owner1 {table}");
+        let updated = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "UPDATE makosh_data.{table} SET logical_owner_id = logical_owner_id \
+             WHERE logical_owner_id = $1"
+        )))
+        .bind(BULK_ACTION_LOGICAL_OWNER_ID)
+        .execute(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 UPDATE {table}: {error}"))
+        .rows_affected();
+        assert_eq!(updated, 0, "owner2 must not update owner1 {table}");
+        let deleted = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "DELETE FROM makosh_data.{table} WHERE logical_owner_id = $1"
+        )))
+        .bind(BULK_ACTION_LOGICAL_OWNER_ID)
+        .execute(&mut *transaction)
+        .await
+        .unwrap_or_else(|error| panic!("owner2 DELETE {table}: {error}"))
+        .rows_affected();
+        assert_eq!(deleted, 0, "owner2 must not delete owner1 {table}");
+        transaction
+            .commit()
+            .await
+            .expect("commit owner2 invisible Bulk DML");
+
+        let mut insert_transaction = pool
+            .begin()
+            .await
+            .expect("begin owner2 Bulk RLS insert transaction");
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', 'owner-2', true)")
+            .execute(&mut *insert_transaction)
+            .await
+            .expect("set owner2 Bulk insert context");
+        let error = sqlx::query(sqlx::AssertSqlSafe(format!(
+            "INSERT INTO makosh_data.{table} OVERRIDING SYSTEM VALUE \
+             SELECT (json_populate_record(NULL::makosh_data.{table}, $1::json)).*"
+        )))
+        .bind(row_json)
+        .execute(&mut *insert_transaction)
+        .await
+        .expect_err("owner2 cross-owner Bulk INSERT must fail");
+        assert_eq!(
+            error
+                .as_database_error()
+                .and_then(|error| error.code())
+                .as_deref(),
+            Some("42501"),
+            "owner2 INSERT into {table} must fail through RLS"
+        );
+    }
 }
 
 fn canonical_conversation_for_message(
@@ -355,7 +549,7 @@ fn read_bulk_action_sse_event(
             find_bulk_action_event(response.into_body(), expected_state),
         )
         .await
-        .expect("bulk-action SSE event timeout")
+        .unwrap_or_else(|_| panic!("bulk-action SSE event timeout for {expected_state:?}"))
     })
 }
 

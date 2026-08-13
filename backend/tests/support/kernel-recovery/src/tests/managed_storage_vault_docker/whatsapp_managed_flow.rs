@@ -13,6 +13,7 @@ use makosh_whatsapp_api::{
     operational::WhatsAppOperationalQueryV1,
     realtime::WhatsAppOperationalReplayRequestV1,
 };
+use makosh_whatsapp_persistence::WHATSAPP_OWNER_RLS_TABLES_V1;
 use makosh_whatsapp_runtime::{
     admission::WHATSAPP_STORAGE_CAPABILITY_ID,
     client_port::{decode_module_response, encode_module_request},
@@ -49,6 +50,12 @@ fn managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing(
         &contour.supervisor,
         &contour.whatsapp,
     );
+    // Admission-grade NOBYPASSRLS proof covers the complete owner-local WhatsApp store.
+    assert_owner_rls_tables_v1(
+        "makosh_storage_authenticated",
+        &WHATSAPP_OWNER_RLS_TABLES_V1,
+        "whatsapp_owner_scope",
+    );
     let (owner_runtime_dir, owner_control) = start_owner_control(
         &contour.data,
         &contour.store,
@@ -69,6 +76,219 @@ fn managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing(
         .expect("join owner control server")
         .expect("owner control server");
     contour.finish();
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, WhatsApp and NATS binaries"]
+fn managed_whatsapp_runtime_bootstrap_fails_closed_and_stops_promptly() {
+    let contour = ManagedWhatsAppContour::start(WhatsAppGrantProfileV1::QueryOnly);
+    assert_whatsapp_query_is_admitted(&contour.store, &contour.supervisor, &contour.whatsapp);
+    contour
+        .supervisor
+        .stop(&contour.whatsapp.registration_id)
+        .expect("stop healthy WhatsApp predecessor");
+    let runtime_dir = contour.data.join("runtime");
+    let mut predecessor = contour.whatsapp.clone();
+
+    for (phase, bootstrap_override) in [
+        (
+            "missing-settings",
+            WhatsAppBootstrapOverrideV1::MissingSettings,
+        ),
+        (
+            "missing-storage",
+            WhatsAppBootstrapOverrideV1::MissingStorage,
+        ),
+        (
+            "stale-host-fence",
+            WhatsAppBootstrapOverrideV1::StaleHostFence,
+        ),
+    ] {
+        let capture = whatsapp_child_capture_v1(&contour.root, phase);
+        predecessor = launch_whatsapp_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            bootstrap_override,
+            &capture,
+        );
+        assert_whatsapp_pre_spawn_denied_v1(&contour.supervisor, &predecessor, phase, &capture);
+    }
+
+    for (phase, bootstrap_override) in [
+        (
+            "invalid-settings",
+            WhatsAppBootstrapOverrideV1::InvalidSettings,
+        ),
+        (
+            "missing-host-route",
+            WhatsAppBootstrapOverrideV1::MissingHostRoute,
+        ),
+        (
+            "stale-event-fence",
+            WhatsAppBootstrapOverrideV1::StaleEventFence,
+        ),
+    ] {
+        let capture = whatsapp_child_capture_v1(&contour.root, phase);
+        predecessor = launch_whatsapp_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            bootstrap_override,
+            &capture,
+        );
+        assert_whatsapp_bounded_runtime_denied_v1(
+            &contour.supervisor,
+            &predecessor,
+            phase,
+            &capture,
+        );
+    }
+
+    for (phase, bootstrap_override) in [
+        (
+            "stale-storage-fence",
+            WhatsAppBootstrapOverrideV1::StaleStorageFence,
+        ),
+        (
+            "stale-vault-fence",
+            WhatsAppBootstrapOverrideV1::StaleVaultFence,
+        ),
+    ] {
+        let capture = whatsapp_child_capture_v1(&contour.root, phase);
+        predecessor = launch_whatsapp_successor_without_ready_v1(
+            &contour.supervisor,
+            &contour.store,
+            &contour.data,
+            &runtime_dir,
+            &predecessor,
+            bootstrap_override,
+            &capture,
+        );
+        assert_whatsapp_active_until_requested_stop_v1(
+            &contour.supervisor,
+            &predecessor,
+            phase,
+            &capture,
+        );
+    }
+
+    contour.shutdown_processes();
+    contour.finish();
+}
+
+fn whatsapp_child_capture_v1(root: &Path, phase: &str) -> PathBuf {
+    private_directory(root.join(format!("whatsapp-stdio-{phase}")))
+}
+
+fn whatsapp_child_capture_paths_v1(directory: &Path) -> Vec<PathBuf> {
+    let mut paths = std::fs::read_dir(directory)
+        .expect("read WhatsApp child capture directory")
+        .map(|entry| entry.expect("read WhatsApp child capture entry").path())
+        .collect::<Vec<_>>();
+    paths.sort();
+    paths
+}
+
+fn assert_whatsapp_pre_spawn_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedWhatsAppRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    assert_ne!(
+        supervisor.relay_port().is_ready(&started.registration_id),
+        Ok(true)
+    );
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("WhatsApp pre-spawn activity"),
+        "{phase} must be denied before child spawn"
+    );
+    assert!(
+        whatsapp_child_capture_paths_v1(capture).is_empty(),
+        "{phase} must not create supervised child output"
+    );
+}
+
+fn assert_whatsapp_bounded_runtime_denied_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedWhatsAppRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = std::time::Instant::now() + Duration::from_secs(2);
+    while supervisor
+        .is_active(&started.registration_id)
+        .expect("WhatsApp bounded denial activity")
+    {
+        assert!(
+            std::time::Instant::now() < deadline,
+            "{phase} did not terminate"
+        );
+        assert_ne!(
+            supervisor.relay_port().is_ready(&started.registration_id),
+            Ok(true),
+            "{phase} must not signal Ready"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let captures = whatsapp_child_capture_paths_v1(capture);
+    assert!(
+        captures.len() >= 2 && captures.len().is_multiple_of(2),
+        "{phase} must have bounded complete supervised child attempts"
+    );
+}
+
+fn assert_whatsapp_active_until_requested_stop_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    started: &StartedWhatsAppRuntime,
+    phase: &str,
+    capture: &Path,
+) {
+    let deadline = std::time::Instant::now() + Duration::from_millis(100);
+    while std::time::Instant::now() < deadline {
+        assert!(
+            supervisor
+                .is_active(&started.registration_id)
+                .expect("WhatsApp bootstrap activity"),
+            "{phase} child exited before requested stop"
+        );
+        assert_ne!(
+            supervisor.relay_port().is_ready(&started.registration_id),
+            Ok(true)
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    let stopped_at = std::time::Instant::now();
+    assert!(
+        supervisor
+            .request_stop_if_active(&started.registration_id)
+            .expect("request WhatsApp bootstrap stop"),
+        "{phase} must own the active child"
+    );
+    assert!(
+        supervisor
+            .stop_if_active(&started.registration_id)
+            .expect("join WhatsApp bootstrap stop")
+    );
+    assert!(stopped_at.elapsed() < Duration::from_secs(2));
+    assert!(
+        !supervisor
+            .is_active(&started.registration_id)
+            .expect("WhatsApp stopped activity"),
+        "{phase} must not install a replacement"
+    );
+    assert_eq!(
+        whatsapp_child_capture_paths_v1(capture).len(),
+        2,
+        "{phase} must spawn exactly one supervised child"
+    );
 }
 
 fn assert_ungranted_whatsapp_operational_replay_is_rejected(

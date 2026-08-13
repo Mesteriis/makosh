@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file makosh/common/v1/common.proto.
  */
 export const file_makosh_common_v1_common: GenFile = /*@__PURE__*/
-  fileDesc("Ch1oZXJtZXMvY29tbW9uL3YxL2NvbW1vbi5wcm90bxIQaGVybWVzLmNvbW1vbi52MSIsCgtQYWdlUmVxdWVzdBINCgVsaW1pdBgBIAEoDRIOCgZjdXJzb3IYAiABKAkiNQoMUGFnZVJlc3BvbnNlEhMKC25leHRfY3Vyc29yGAEgASgJEhAKCGhhc19tb3JlGAIgASgIYgZwcm90bzM");
+  fileDesc("Ch1tYWtvc2gvY29tbW9uL3YxL2NvbW1vbi5wcm90bxIQbWFrb3NoLmNvbW1vbi52MSIsCgtQYWdlUmVxdWVzdBINCgVsaW1pdBgBIAEoDRIOCgZjdXJzb3IYAiABKAkiNQoMUGFnZVJlc3BvbnNlEhMKC25leHRfY3Vyc29yGAEgASgJEhAKCGhhc19tb3JlGAIgASgIYgZwcm90bzM");
 
 /**
  * @generated from message makosh.common.v1.PageRequest

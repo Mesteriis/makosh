@@ -1,7 +1,7 @@
 use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
-pub const OLLAMA_AI_STORAGE_BUNDLE_REVISION_V1: u32 = 4;
+pub const OLLAMA_AI_STORAGE_BUNDLE_REVISION_V1: u32 = 5;
 pub const OLLAMA_AI_SCHEMA_V1: &[u8] = include_bytes!("../migrations/0001_ollama_ai_runs.sql");
 pub const OLLAMA_AI_SUMMARY_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0002_ollama_ai_summary_runs.sql");
@@ -9,6 +9,8 @@ pub const OLLAMA_AI_TRANSLATION_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0003_ollama_ai_translation_runs.sql");
 pub const OLLAMA_AI_EXPLANATION_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0004_ollama_ai_explanation_runs.sql");
+pub const OLLAMA_AI_OWNER_RLS_SCHEMA_V1: &[u8] =
+    include_bytes!("../migrations/0005_ollama_ai_owner_rls.sql");
 
 #[must_use]
 pub fn ollama_ai_storage_bundle_v1() -> StorageBundleV1 {
@@ -42,6 +44,12 @@ pub fn ollama_ai_storage_bundle_v1() -> StorageBundleV1 {
                 forward_sql_utf8: OLLAMA_AI_EXPLANATION_SCHEMA_V1.to_vec(),
                 sha256: Sha256::digest(OLLAMA_AI_EXPLANATION_SCHEMA_V1).to_vec(),
             },
+            StorageMigrationStepV1 {
+                revision: 5,
+                migration_id: "ollama_ai_owner_rls".to_owned(),
+                forward_sql_utf8: OLLAMA_AI_OWNER_RLS_SCHEMA_V1.to_vec(),
+                sha256: Sha256::digest(OLLAMA_AI_OWNER_RLS_SCHEMA_V1).to_vec(),
+            },
         ],
     }
 }
@@ -57,6 +65,8 @@ mod tests {
         let bundle = ollama_ai_storage_bundle_v1();
         validate_storage_bundle(&bundle).expect("storage bundle");
         assert_eq!(bundle.owner_id, "ollama");
+        assert_eq!(bundle.revision, 5);
+        assert_eq!(bundle.steps.len(), 5);
         let sql = std::str::from_utf8(OLLAMA_AI_SCHEMA_V1).expect("schema");
         let summary_sql = std::str::from_utf8(OLLAMA_AI_SUMMARY_SCHEMA_V1).expect("summary schema");
         let translation_sql =
@@ -97,5 +107,26 @@ mod tests {
             assert!(!translation_sql.contains(forbidden), "{forbidden}");
             assert!(!explanation_sql.contains(forbidden), "{forbidden}");
         }
+        let rls_sql = std::str::from_utf8(OLLAMA_AI_OWNER_RLS_SCHEMA_V1).expect("RLS UTF-8");
+        for table in [
+            "ollama_ai_runs",
+            "ollama_ai_summary_runs",
+            "ollama_ai_translation_runs",
+            "ollama_ai_explanation_runs",
+        ] {
+            assert!(rls_sql.contains(&format!(
+                "ALTER TABLE makosh_data.{table} ENABLE ROW LEVEL SECURITY"
+            )));
+            assert!(rls_sql.contains(&format!(
+                "ALTER TABLE makosh_data.{table} FORCE ROW LEVEL SECURITY"
+            )));
+        }
+        assert_eq!(rls_sql.matches("CREATE POLICY ").count(), 4);
+        assert_eq!(
+            rls_sql
+                .matches("current_setting('makosh.logical_owner_id', true)")
+                .count(),
+            8
+        );
     }
 }

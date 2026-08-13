@@ -5,6 +5,7 @@ mod delivery_intent;
 mod delivery_intent_lifecycle;
 mod delivery_intent_result_outbox;
 mod operational;
+mod owner_rls;
 mod schema;
 
 use makosh_events_protocol::delivery::OutboxRecordV1;
@@ -25,11 +26,15 @@ pub use delivery_intent_lifecycle::{
 };
 pub use delivery_intent_result_outbox::ZULIP_DELIVERY_INTENT_RESULT_OUTBOX_SCHEMA_V1;
 pub use operational::ZulipOperationalIngestV1;
+pub use owner_rls::{
+    ZULIP_OWNER_RLS_STORAGE_REVISION_V1, ZULIP_OWNER_RLS_TABLES_V1, zulip_owner_rls_sql_v1,
+    zulip_owner_rls_storage_migration_v1,
+};
 pub use schema::{
     ZULIP_SCHEMA_V2, ZULIP_SCHEMA_V3, ZULIP_STORAGE_BUNDLE_REVISION_V1,
     ZULIP_STORAGE_BUNDLE_REVISION_V2, ZULIP_STORAGE_BUNDLE_REVISION_V3,
     ZULIP_STORAGE_BUNDLE_REVISION_V4, ZULIP_STORAGE_BUNDLE_REVISION_V5,
-    ZULIP_STORAGE_BUNDLE_REVISION_V6, zulip_storage_bundle_v1,
+    ZULIP_STORAGE_BUNDLE_REVISION_V6, ZULIP_STORAGE_BUNDLE_REVISION_V7, zulip_storage_bundle_v1,
 };
 
 pub const PACKAGE: &str = "makosh-zulip-persistence";
@@ -98,6 +103,7 @@ pub enum ZulipDurablePersistenceError {
     ConflictingDeliveryRouteLocator,
     ConflictingDeliveryIntentInbox,
     InvalidDeliveryIntentTransition,
+    OwnerScopeConflict,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -165,6 +171,53 @@ impl ZulipDurablePersistence {
     #[must_use]
     pub fn delivery_intent_store(&self) -> ZulipDeliveryIntentStoreV1 {
         ZulipDeliveryIntentStoreV1::new(self.pool.clone())
+    }
+
+    /// Claims or verifies the one logical human owner before any Zulip state
+    /// access. The scope follows the stable fenced Storage-principal prefix
+    /// across role epochs and rejects every other registration.
+    pub async fn bind_owner_scope(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<(), ZulipDurablePersistenceError> {
+        if !valid_logical_owner_id(logical_owner_id) {
+            return Err(ZulipDurablePersistenceError::InvalidRow);
+        }
+        let mut transaction = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| ZulipDurablePersistenceError::Database)?;
+        sqlx::query(
+            "INSERT INTO makosh_data.zulip_owner_scope
+                (singleton, logical_owner_id, runtime_principal_prefix)
+             SELECT TRUE, $1, regexp_replace(current_user::text, '_[0-9]+$', '')
+             WHERE current_user::text ~ '^storage_[a-f0-9]{16}_[1-9][0-9]*$'
+             ON CONFLICT (singleton) DO NOTHING",
+        )
+        .bind(logical_owner_id)
+        .execute(&mut *transaction)
+        .await
+        .map_err(|_| ZulipDurablePersistenceError::Database)?;
+        let exact = sqlx::query(
+            "SELECT logical_owner_id
+             FROM makosh_data.zulip_owner_scope
+             WHERE singleton = TRUE
+               AND logical_owner_id = $1
+               AND runtime_principal_prefix =
+                   regexp_replace(current_user::text, '_[0-9]+$', '')",
+        )
+        .bind(logical_owner_id)
+        .fetch_optional(&mut *transaction)
+        .await
+        .map_err(|_| ZulipDurablePersistenceError::Database)?;
+        if exact.is_none() {
+            return Err(ZulipDurablePersistenceError::OwnerScopeConflict);
+        }
+        transaction
+            .commit()
+            .await
+            .map_err(|_| ZulipDurablePersistenceError::Database)
     }
 
     pub async fn initialize(&self) -> Result<(), ZulipDurablePersistenceError> {
@@ -636,6 +689,18 @@ impl ZulipDurablePersistence {
         .map(|result| result.rows_affected() == 1)
         .map_err(|_| ZulipDurablePersistenceError::Database)
     }
+}
+
+fn valid_logical_owner_id(value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= 128
+        && value.bytes().all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'_' || byte == b'-'
+        })
+        && value
+            .as_bytes()
+            .first()
+            .is_some_and(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
 }
 
 fn validate_cursor(cursor: &ZulipQueueCursorV1) -> Result<(), ZulipDurablePersistenceError> {

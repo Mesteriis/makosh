@@ -216,6 +216,10 @@ pub async fn open_admitted_runtime(
     )
     .await
     .map_err(TelegramBootstrapError::Persistence)?;
+    durable
+        .bind_owner_scope(&launch_admission.logical_human_owner_id)
+        .await
+        .map_err(TelegramBootstrapError::Persistence)?;
     let automation = TelegramAutomationPersistence::new(durable.shared_owner_pool());
     let calls = TelegramCallsPersistence::new(durable.shared_owner_pool());
     complete_calls_realtime_backfill_v1(&calls, &identity)

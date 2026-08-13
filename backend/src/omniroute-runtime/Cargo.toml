@@ -1,0 +1,23 @@
+[package]
+name = "makosh-omniroute-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[[bin]]
+name = "makosh-omniroute-runtime"
+path = "src/main.rs"
+[package.metadata.makosh]
+role = "integration"
+owner = "omniroute"
+surface = "runtime"
+[dependencies]
+makosh-ai-contracts = { path = "../ai-contracts" }
+makosh-omniroute-api = { path = "../omniroute-api" }
+makosh-omniroute-core = { path = "../omniroute-core" }
+makosh-omniroute-persistence = { path = "../omniroute-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+prost = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }

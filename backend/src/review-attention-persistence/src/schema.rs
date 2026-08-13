@@ -3,16 +3,19 @@ use sha2::{Digest, Sha256};
 
 pub const REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
 pub const REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2: u32 = 2;
+pub const REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3: u32 = 3;
 pub const REVIEW_ATTENTION_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0001_review_attention.sql");
 pub const REVIEW_ATTENTION_REALTIME_SCHEMA_V2: &[u8] =
     include_bytes!("../migrations/0002_review_attention_realtime.sql");
+pub const REVIEW_ATTENTION_OWNER_RLS_SCHEMA_V3: &[u8] =
+    include_bytes!("../migrations/0003_review_attention_owner_rls.sql");
 
 #[must_use]
 pub fn review_attention_storage_bundle_v1() -> StorageBundleV1 {
     StorageBundleV1 {
         major: 1,
-        revision: REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2,
+        revision: REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3,
         bundle_id: "review_attention_state".to_owned(),
         owner_id: "review".to_owned(),
         steps: vec![
@@ -27,6 +30,12 @@ pub fn review_attention_storage_bundle_v1() -> StorageBundleV1 {
                 migration_id: "review_attention_realtime".to_owned(),
                 forward_sql_utf8: REVIEW_ATTENTION_REALTIME_SCHEMA_V2.to_vec(),
                 sha256: Sha256::digest(REVIEW_ATTENTION_REALTIME_SCHEMA_V2).to_vec(),
+            },
+            StorageMigrationStepV1 {
+                revision: REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3,
+                migration_id: "review_attention_owner_rls".to_owned(),
+                forward_sql_utf8: REVIEW_ATTENTION_OWNER_RLS_SCHEMA_V3.to_vec(),
+                sha256: Sha256::digest(REVIEW_ATTENTION_OWNER_RLS_SCHEMA_V3).to_vec(),
             },
         ],
     }
@@ -43,7 +52,7 @@ mod tests {
         let bundle = review_attention_storage_bundle_v1();
         validate_storage_bundle(&bundle).expect("valid Review storage bundle");
         assert_eq!(bundle.owner_id, "review");
-        assert_eq!(bundle.revision, 2);
+        assert_eq!(bundle.revision, 3);
         let sql = bundle
             .steps
             .iter()
@@ -56,6 +65,7 @@ mod tests {
         assert!(sql.contains("expected_revision BIGINT"));
         assert!(sql.contains("review_attention_realtime"));
         assert!(sql.contains("realtime_sequence"));
+        assert!(sql.contains("FORCE ROW LEVEL SECURITY"));
         for forbidden in [
             "communications_",
             "mail_",

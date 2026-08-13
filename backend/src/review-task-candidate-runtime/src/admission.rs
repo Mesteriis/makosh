@@ -1,8 +1,8 @@
 use makosh_review_task_candidate_api::{
     REVIEW_TASK_CANDIDATE_BLOB_CAPABILITY_ID_V1, REVIEW_TASK_CANDIDATE_CLIENT_CAPABILITY_ID_V1,
-    REVIEW_TASK_CANDIDATE_COMMAND_CONNECT_PATH_V1, REVIEW_TASK_CANDIDATE_MODULE_ID_V1,
-    REVIEW_TASK_CANDIDATE_OWNER_V1, REVIEW_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1,
-    REVIEW_TASK_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1,
+    REVIEW_TASK_CANDIDATE_COMMAND_CONNECT_PATH_V1, REVIEW_TASK_CANDIDATE_LIST_CONNECT_PATH_V1,
+    REVIEW_TASK_CANDIDATE_MODULE_ID_V1, REVIEW_TASK_CANDIDATE_OWNER_V1,
+    REVIEW_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1, REVIEW_TASK_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1,
     review_task_candidate_approved_contract_reference_v1,
     review_task_candidate_approved_publish_request_v1,
     review_task_candidate_submission_rejected_contract_reference_v1,
@@ -26,7 +26,9 @@ use makosh_runtime_protocol::v1::{
 use prost::Message;
 use sha2::{Digest, Sha256};
 
-use crate::contracts::{command_contract_v1, query_contract_v1, realtime_contract_v1};
+use crate::contracts::{
+    command_contract_v1, list_contract_v1, query_contract_v1, realtime_contract_v1,
+};
 
 pub const REVIEW_TASK_CANDIDATE_STORAGE_CAPABILITY_ID_V1: &str = "review.task-candidate.storage.v1";
 const STORAGE_CONNECTION_BUDGET_V1: u32 = 4;
@@ -125,6 +127,10 @@ fn client_capability() -> CapabilityDescriptorV1 {
             client_surface(
                 query_contract_v1(),
                 REVIEW_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1,
+            ),
+            client_surface(
+                list_contract_v1(),
+                REVIEW_TASK_CANDIDATE_LIST_CONNECT_PATH_V1,
             ),
             ProvidedSurfaceV1 {
                 kind: ProvidedSurfaceKindV1::ClientRealtime as i32,

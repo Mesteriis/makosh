@@ -1,6 +1,6 @@
 use makosh_storage_protocol::StorageBindingV1;
 use sqlx::{
-    PgPool, Row,
+    PgPool, Postgres, Row, Transaction,
     postgres::{PgConnectOptions, PgPoolOptions, PgRow},
 };
 
@@ -16,6 +16,22 @@ pub struct WhisperSttPersistenceV1 {
 }
 
 impl WhisperSttPersistenceV1 {
+    async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<Transaction<'_, Postgres>, WhisperSttPersistenceErrorV1> {
+        if !valid_owner(logical_owner_id) {
+            return Err(WhisperSttPersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(storage_error)?;
+        Ok(transaction)
+    }
+
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,
@@ -63,6 +79,9 @@ impl WhisperSttPersistenceV1 {
     ) -> Result<WhisperSttPersistenceOutcomeV1, WhisperSttPersistenceErrorV1> {
         validate_accepted(&run)?;
         let identity = &run.identity;
+        let mut transaction = self
+            .begin_owner_transaction(&identity.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.whisper_stt_runs (
                logical_owner_id, request_id, request_digest, source_reference_id,
@@ -83,18 +102,22 @@ impl WhisperSttPersistenceV1 {
         .bind(i32::try_from(identity.provider_policy_revision).map_err(|_| invalid_input())?)
         .bind(signed(run.revision)?)
         .bind(state_code(run.state))
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected()
             == 1;
-        let persisted = self
-            .load_run(&identity.logical_owner_id, identity.request_id)
-            .await?
-            .ok_or(WhisperSttPersistenceErrorV1::InvalidRow)?;
+        let persisted = load_run_in_transaction(
+            &mut transaction,
+            &identity.logical_owner_id,
+            identity.request_id,
+        )
+        .await?
+        .ok_or(WhisperSttPersistenceErrorV1::InvalidRow)?;
         if persisted.identity != run.identity {
             return Err(WhisperSttPersistenceErrorV1::RequestConflict);
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(WhisperSttPersistenceOutcomeV1 {
             persisted,
             replayed: !inserted,
@@ -109,22 +132,21 @@ impl WhisperSttPersistenceV1 {
         if !valid_owner(logical_owner_id) || request_id == [0; 16] {
             return Err(WhisperSttPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RUN)
-            .bind(logical_owner_id)
-            .bind(request_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage_error)?
-            .map(|row| persisted_from_row(&row))
-            .transpose()
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted =
+            load_run_in_transaction(&mut transaction, logical_owner_id, request_id).await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn persist_transition(
         &self,
         transition: WhisperSttTransitionV1,
     ) -> Result<PersistedWhisperSttRunV1, WhisperSttPersistenceErrorV1> {
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
         let identity = &transition.next.identity;
+        let mut transaction = self
+            .begin_owner_transaction(&identity.logical_owner_id)
+            .await?;
         let current = sqlx::query(SELECT_RUN_FOR_UPDATE)
             .bind(&identity.logical_owner_id)
             .bind(identity.request_id.as_slice())
@@ -189,6 +211,21 @@ const SELECT_RUN_FOR_UPDATE: &str = "
  FROM makosh_data.whisper_stt_runs
  WHERE logical_owner_id=$1 AND request_id=$2
  FOR UPDATE";
+
+async fn load_run_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    request_id: [u8; 16],
+) -> Result<Option<PersistedWhisperSttRunV1>, WhisperSttPersistenceErrorV1> {
+    sqlx::query(SELECT_RUN)
+        .bind(logical_owner_id)
+        .bind(request_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .map(|row| persisted_from_row(&row))
+        .transpose()
+}
 
 fn persisted_from_row(
     row: &PgRow,

@@ -222,6 +222,7 @@ test('Telegram tgcalls native build is pinned, system-audio backed and secret-ne
   assert.match(buildScript, /45e9388abf21d1107e146ea366ad080eb93cb6a5f3a4a3b048f78de0bc3faffa/);
   assert.match(buildScript, /da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768/);
   assert.match(buildScript, /readonly XCODE_VERSION="26\.2"/);
+  assert.match(buildScript, /--audio-conformance/);
   assert.match(buildScript, /--development-audio-conformance/);
   assert.match(buildScript, /"release_eligible": \$\{release_eligible\}/);
   assert.doesNotMatch(buildScript, /submodule update --remote|--branch\s/);

@@ -19,4 +19,24 @@ fn main() {
         format!("pub const MAIL_ADDRESS_BOOK_SCHEMA_SHA256_V1: [u8; 32] = {digest:?};\n"),
     )
     .expect("Mail address-book schema digest must be written");
+
+    let person_source_descriptor = output.join("mail-person-source-v1.bin");
+    prost_build::Config::new()
+        .file_descriptor_set_path(&person_source_descriptor)
+        .compile_protos(
+            &["proto/makosh/mail/address_book/person_source/v1/person_source.proto"],
+            &["proto"],
+        )
+        .expect("Mail Person-source protocol must compile");
+    let person_source_digest: [u8; 32] = Sha256::digest(
+        std::fs::read(&person_source_descriptor).expect("Person-source descriptor must exist"),
+    )
+    .into();
+    std::fs::write(
+        output.join("mail_person_source_schema.rs"),
+        format!(
+            "pub const MAIL_PERSON_SOURCE_SCHEMA_SHA256_V1: [u8; 32] = {person_source_digest:?};\n"
+        ),
+    )
+    .expect("Mail Person-source schema digest must be written");
 }

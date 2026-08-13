@@ -1,0 +1,26 @@
+[package]
+name = "makosh-search-assembly"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-search-assembly"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "projection"
+owner = "search"
+surface = "assembly"
+
+[dependencies]
+makosh-search-persistence = { path = "../search-persistence" }
+makosh-search-runtime = { path = "../search-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+prost = "=0.14.4"
+serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
+serde_json = "=1.0.150"

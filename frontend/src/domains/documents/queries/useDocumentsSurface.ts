@@ -6,61 +6,60 @@ export function useDocumentsSurface() {
   return createDomainSurface({
     surfaceId: 'documents',
     labelKey: 'Documents',
-    status: 'facade',
+    status: 'active',
     ownerLayer: 'domain',
     surfacePath,
     capabilities: [
       {
         id: 'documents-library',
         labelKey: 'Document library',
-        descriptionKey: 'Document metadata, source references and processing state.',
+        descriptionKey: 'Canonical owner-local document metadata and lifecycle state.',
         icon: 'tabler:file-text',
         status: 'active',
         kind: 'query',
         contract: 'useDocumentsPageSurface.documents'
       },
       {
-        id: 'documents-processing',
-        labelKey: 'Processing jobs',
-        descriptionKey: 'Document ingestion, retry and review workflow state.',
-        icon: 'tabler:loader',
+        id: 'documents-custody',
+        labelKey: 'Blob custody',
+        descriptionKey: 'Sanitized Blob custody state without private references or proofs.',
+        icon: 'tabler:lock',
         status: 'active',
-        kind: 'automation',
-        contract: 'useDocumentsPageSurface.processingJobs'
+        kind: 'query',
+        contract: 'useDocumentsPageSurface.selectedDocument'
       },
       {
         id: 'documents-evidence',
         labelKey: 'Evidence',
-        descriptionKey: 'Document-backed evidence paths consumed by review and memory.',
+        descriptionKey: 'Public source provenance without source-private payloads.',
         icon: 'tabler:shield-check',
         status: 'active',
         kind: 'evidence',
-        contract: 'useDocumentsPageSurface.evidenceCards'
+        contract: 'useDocumentsPageSurface.sources'
       }
     ],
     childSurfaces: [
       {
         id: 'documents-library',
         labelKey: 'Library',
-        status: 'facade',
+        status: 'active',
         surfacePath,
         capabilityIds: ['documents-library']
       },
       {
-        id: 'documents-processing',
-        labelKey: 'Processing',
-        status: 'facade',
+        id: 'documents-custody',
+        labelKey: 'Custody',
+        status: 'active',
         surfacePath,
-        capabilityIds: ['documents-processing']
+        capabilityIds: ['documents-custody']
       },
       {
         id: 'documents-evidence',
         labelKey: 'Evidence',
-        status: 'facade',
+        status: 'active',
         surfacePath,
         capabilityIds: ['documents-evidence']
       }
     ]
   })
 }
-

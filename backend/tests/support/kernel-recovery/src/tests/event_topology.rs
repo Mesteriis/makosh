@@ -267,7 +267,7 @@ fn managed_runtime_event_request_is_fenced_and_returns_only_authority_ciphertext
     );
     let request = ManagedRuntimeEventCredentialRequestV1 {
         request_id: vec![8; 16],
-        credential_revision: 2,
+        credential_revision: 1,
         ttl_seconds: 60,
         recipient_public_key_x25519: vec![9; 32],
     };

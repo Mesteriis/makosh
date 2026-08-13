@@ -9,6 +9,30 @@ use crate::{CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryPersistenc
 pub struct DelayedDeliveryPersistenceConformanceV1;
 
 impl DelayedDeliveryPersistenceConformanceV1 {
+    pub async fn connect_url_as_nobypass_rls_role(
+        database_url: &str,
+    ) -> Result<CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryPersistenceErrorV1> {
+        if database_url.trim().is_empty() {
+            return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
+        }
+        let options = PgConnectOptions::from_str(database_url)
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::InvalidInput)?;
+        let pool = PgPoolOptions::new()
+            .max_connections(4)
+            .after_connect(|connection, _meta| {
+                Box::pin(async move {
+                    sqlx::query("SET ROLE makosh_delayed_delivery_rls_test")
+                        .execute(connection)
+                        .await?;
+                    Ok(())
+                })
+            })
+            .connect_with(options)
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(CommunicationDelayedDeliveryPersistenceV1 { pool })
+    }
+
     pub async fn connect_url(
         database_url: &str,
     ) -> Result<CommunicationDelayedDeliveryPersistenceV1, DelayedDeliveryPersistenceErrorV1> {

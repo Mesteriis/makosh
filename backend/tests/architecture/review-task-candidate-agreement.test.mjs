@@ -90,7 +90,7 @@ test('Review task-candidate is an exact domain capability, not an attention faca
     ]);
   const policy = JSON.parse(policySource);
 
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   for (const unit of [
     'makosh-review-task-candidate-api',
     'makosh-review-task-candidate-core',

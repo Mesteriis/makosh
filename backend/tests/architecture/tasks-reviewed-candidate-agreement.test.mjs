@@ -74,7 +74,7 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
   ]);
   const policy = JSON.parse(policySource);
 
-  assert.equal(policy.implementation.currentSlice, 'call_transcription_managed_conformance_v1');
+  assert.equal(policy.implementation.currentSlice, 'speech_to_text_whisper_admission_v1');
   for (const unit of [
     'makosh-tasks-command-api',
     'makosh-tasks-core',
@@ -119,7 +119,7 @@ test('Tasks reviewed-candidate command and core are distinct target-owned units'
   assert.match(repository, /complete_task/);
   assert.match(repository, /reject_task/);
   assert.match(repository, /load_recoverable_commands/);
-  assert.match(repository, /load_pending_outbox/);
+  assert.match(repository, /claim_next_pending_outbox/);
   assert.match(repository, /complete_blob_cleanup/);
   assert.match(schema, /tasks_storage_bundle_v1/);
   assert.match(migration, /tasks_reviewed_candidate_inbox/);

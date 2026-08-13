@@ -15,6 +15,7 @@ pub(super) struct ManagedZulipContour {
     pub(super) owner_signer: FileDeviceSigner,
     pub(super) seeded_credential: SeededZulipCredential,
     pub(super) zulip: StartedZulipRuntime,
+    pub(super) child_stdio_capture: PathBuf,
 }
 
 impl ManagedZulipContour {
@@ -24,6 +25,9 @@ impl ManagedZulipContour {
             Ok("1")
         );
         let root = private_directory(unique_target_root("makosh-managed-zulip-runtime"));
+        let configuration_stdio_capture =
+            private_directory(root.join("zulip-configuration-child-stdio"));
+        let child_stdio_capture = private_directory(root.join("zulip-child-stdio"));
         let fixture = ZulipHttpsFixture::start(&root);
         unsafe {
             std::env::set_var(
@@ -93,6 +97,7 @@ impl ManagedZulipContour {
             &root.join("runtime"),
             admitted_zulip,
             fixture.realm_url(),
+            Some(&configuration_stdio_capture),
         );
         assert_eq!(
             fixture.accepted_connections(),
@@ -108,6 +113,7 @@ impl ManagedZulipContour {
             &root.join("runtime"),
             &zulip,
             fixture.realm_url(),
+            Some(&child_stdio_capture),
         );
         Self {
             root,
@@ -120,6 +126,7 @@ impl ManagedZulipContour {
             owner_signer,
             seeded_credential,
             zulip,
+            child_stdio_capture,
         }
     }
 
@@ -143,8 +150,10 @@ impl ManagedZulipContour {
             owner_signer,
             seeded_credential: _,
             zulip,
+            child_stdio_capture,
         } = self;
         drop(zulip);
+        drop(child_stdio_capture);
         drop(owner_signer);
         drop(supervisor);
         drop(shutdown);

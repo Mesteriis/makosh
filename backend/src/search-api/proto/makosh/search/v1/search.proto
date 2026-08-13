@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package makosh.search.v1;
+
+message SearchQueryV1 {
+  string logical_owner_id = 1;
+  string query = 2;
+  bytes after_cursor = 3;
+  uint32 limit = 4;
+}
+
+message SearchCursorV1 {
+  string source_owner = 1;
+  string entity_kind = 2;
+  bytes entity_id = 3;
+}
+
+message SearchHitV1 {
+  string source_owner = 1;
+  string entity_kind = 2;
+  bytes entity_id = 3;
+  uint64 source_revision = 4;
+  string lifecycle_state = 5;
+  int64 occurred_at_unix_millis = 6;
+  uint32 matched_token_count = 7;
+}
+
+message SearchQueryResultV1 {
+  repeated SearchHitV1 hits = 1;
+  bytes next_cursor = 2;
+  uint64 projection_generation = 3;
+}
+
+message SearchProjectionStatusRequestV1 {
+  string logical_owner_id = 1;
+}
+
+message SearchProjectionStatusV1 {
+  uint64 active_generation = 1;
+  uint64 indexed_entities = 2;
+  uint64 source_events = 3;
+  int64 rebuilt_at_unix_millis = 4;
+}
+
+service SearchQueryService {
+  rpc Query(SearchQueryV1) returns (SearchQueryResultV1);
+  rpc GetStatus(SearchProjectionStatusRequestV1) returns (SearchProjectionStatusV1);
+}

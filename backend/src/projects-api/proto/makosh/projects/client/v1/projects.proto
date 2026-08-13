@@ -1,0 +1,218 @@
+syntax = "proto3";
+package makosh.projects.client.v1;
+
+message TimestampV1 { int64 unix_seconds = 1; int32 nanos = 2; }
+
+enum ProjectStateV1 {
+  PROJECT_STATE_UNSPECIFIED = 0;
+  PROJECT_STATE_PLANNING = 1;
+  PROJECT_STATE_ACTIVE = 2;
+  PROJECT_STATE_ON_HOLD = 3;
+  PROJECT_STATE_COMPLETED = 4;
+  PROJECT_STATE_ARCHIVED = 5;
+}
+
+enum ProjectOutcomeStateV1 {
+  PROJECT_OUTCOME_STATE_UNSPECIFIED = 0;
+  PROJECT_OUTCOME_STATE_PENDING = 1;
+  PROJECT_OUTCOME_STATE_ACHIEVED = 2;
+  PROJECT_OUTCOME_STATE_MISSED = 3;
+  PROJECT_OUTCOME_STATE_CANCELLED = 4;
+}
+
+enum ProjectReferenceKindV1 {
+  PROJECT_REFERENCE_KIND_UNSPECIFIED = 0;
+  PROJECT_REFERENCE_KIND_PERSON = 1;
+  PROJECT_REFERENCE_KIND_ORGANIZATION = 2;
+  PROJECT_REFERENCE_KIND_RELATIONSHIP = 3;
+  PROJECT_REFERENCE_KIND_TASK = 4;
+  PROJECT_REFERENCE_KIND_DOCUMENT = 5;
+  PROJECT_REFERENCE_KIND_CALENDAR_EVENT = 6;
+}
+
+enum ProjectReferenceStateV1 {
+  PROJECT_REFERENCE_STATE_UNSPECIFIED = 0;
+  PROJECT_REFERENCE_STATE_ACTIVE = 1;
+  PROJECT_REFERENCE_STATE_REMOVED = 2;
+}
+
+message ProjectV1 {
+  bytes project_id = 1;
+  string logical_owner_id = 2;
+  string name = 3;
+  string description = 4;
+  ProjectStateV1 state = 5;
+  optional TimestampV1 start_at = 6;
+  optional TimestampV1 target_at = 7;
+  uint64 project_revision = 8;
+  TimestampV1 created_at = 9;
+  TimestampV1 updated_at = 10;
+}
+
+message ProjectOutcomeV1 {
+  bytes outcome_id = 1;
+  bytes project_id = 2;
+  string title = 3;
+  string description = 4;
+  ProjectOutcomeStateV1 state = 5;
+  optional TimestampV1 target_at = 6;
+  uint64 outcome_revision = 7;
+  uint64 updated_at_project_revision = 8;
+  TimestampV1 created_at = 9;
+  TimestampV1 updated_at = 10;
+}
+
+message ProjectReferenceV1 {
+  bytes reference_id = 1;
+  ProjectReferenceKindV1 kind = 2;
+  bytes public_id = 3;
+  string label = 4;
+  ProjectReferenceStateV1 state = 5;
+  uint64 updated_at_project_revision = 6;
+}
+
+message CreateProjectRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  string name = 3;
+  string description = 4;
+  optional TimestampV1 start_at = 5;
+  optional TimestampV1 target_at = 6;
+  TimestampV1 created_at = 7;
+}
+
+message UpdateProjectRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  optional string name = 5;
+  optional string description = 6;
+  optional TimestampV1 start_at = 7;
+  optional TimestampV1 target_at = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message SetProjectStateRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  ProjectStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddProjectOutcomeRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  string title = 5;
+  string description = 6;
+  optional TimestampV1 target_at = 7;
+  TimestampV1 changed_at = 8;
+}
+
+message UpdateProjectOutcomeRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  bytes outcome_id = 5;
+  uint64 expected_outcome_revision = 6;
+  optional string title = 7;
+  optional string description = 8;
+  optional TimestampV1 target_at = 9;
+  TimestampV1 changed_at = 10;
+}
+
+message SetProjectOutcomeStateRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  bytes outcome_id = 5;
+  uint64 expected_outcome_revision = 6;
+  ProjectOutcomeStateV1 state = 7;
+  TimestampV1 changed_at = 8;
+}
+
+message RemoveProjectOutcomeRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  bytes outcome_id = 5;
+  uint64 expected_outcome_revision = 6;
+  TimestampV1 changed_at = 7;
+}
+
+message AddProjectReferenceRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  ProjectReferenceKindV1 kind = 5;
+  bytes public_id = 6;
+  string label = 7;
+  TimestampV1 changed_at = 8;
+}
+
+message RemoveProjectReferenceRequestV1 {
+  bytes operation_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_project_revision = 4;
+  bytes reference_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message ProjectMutationResultV1 { bytes operation_id = 1; ProjectV1 project = 2; }
+message GetProjectRequestV1 { string logical_owner_id = 1; bytes project_id = 2; }
+message ListProjectsRequestV1 { string logical_owner_id = 1; bytes after_project_id = 2; uint32 limit = 3; }
+message ListProjectsResultV1 { repeated ProjectV1 projects = 1; bytes next_after_project_id = 2; }
+message ListProjectOutcomesRequestV1 {
+  string logical_owner_id = 1;
+  bytes project_id = 2;
+  bytes after_outcome_id = 3;
+  uint32 limit = 4;
+}
+message ListProjectOutcomesResultV1 { repeated ProjectOutcomeV1 outcomes = 1; bytes next_after_outcome_id = 2; }
+message ListProjectReferencesRequestV1 {
+  string logical_owner_id = 1;
+  bytes project_id = 2;
+  bytes after_reference_id = 3;
+  uint32 limit = 4;
+}
+message ListProjectReferencesResultV1 { repeated ProjectReferenceV1 references = 1; bytes next_after_reference_id = 2; }
+
+// Public lifecycle event deliberately excludes project/outcome text and references.
+message ProjectChangedV1 {
+  bytes event_id = 1;
+  bytes project_id = 2;
+  string logical_owner_id = 3;
+  uint64 project_revision = 4;
+  ProjectStateV1 state = 5;
+  optional TimestampV1 start_at = 6;
+  optional TimestampV1 target_at = 7;
+  TimestampV1 occurred_at = 8;
+}
+
+service ProjectsCommandService {
+  rpc Create(CreateProjectRequestV1) returns (ProjectMutationResultV1);
+  rpc Update(UpdateProjectRequestV1) returns (ProjectMutationResultV1);
+  rpc SetState(SetProjectStateRequestV1) returns (ProjectMutationResultV1);
+  rpc AddOutcome(AddProjectOutcomeRequestV1) returns (ProjectMutationResultV1);
+  rpc UpdateOutcome(UpdateProjectOutcomeRequestV1) returns (ProjectMutationResultV1);
+  rpc SetOutcomeState(SetProjectOutcomeStateRequestV1) returns (ProjectMutationResultV1);
+  rpc RemoveOutcome(RemoveProjectOutcomeRequestV1) returns (ProjectMutationResultV1);
+  rpc AddReference(AddProjectReferenceRequestV1) returns (ProjectMutationResultV1);
+  rpc RemoveReference(RemoveProjectReferenceRequestV1) returns (ProjectMutationResultV1);
+}
+
+service ProjectsQueryService {
+  rpc Get(GetProjectRequestV1) returns (ProjectV1);
+  rpc List(ListProjectsRequestV1) returns (ListProjectsResultV1);
+  rpc ListOutcomes(ListProjectOutcomesRequestV1) returns (ListProjectOutcomesResultV1);
+  rpc ListReferences(ListProjectReferencesRequestV1) returns (ListProjectReferencesResultV1);
+}

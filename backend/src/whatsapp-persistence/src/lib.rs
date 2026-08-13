@@ -5,6 +5,7 @@ mod delivery_intent_result_outbox;
 mod delivery_intent_store;
 mod durable;
 mod operational;
+mod owner_rls;
 mod schema;
 
 pub use delivery_intent_store::{
@@ -19,6 +20,10 @@ pub use durable::{
     WhatsAppProviderCommandStateV1, WhatsAppProviderCommandStatusV1,
 };
 pub use operational::WhatsAppOperationalObservationV1;
+pub use owner_rls::{
+    WHATSAPP_OWNER_RLS_STORAGE_REVISION_V1, WHATSAPP_OWNER_RLS_TABLES_V1,
+    whatsapp_owner_rls_sql_v1, whatsapp_owner_rls_storage_migration_v1,
+};
 pub use schema::{
     WHATSAPP_SCHEMA_V1, WHATSAPP_SCHEMA_V2, WHATSAPP_STORAGE_BUNDLE_REVISION_V1,
     WHATSAPP_STORAGE_BUNDLE_REVISION_V2, WHATSAPP_STORAGE_BUNDLE_REVISION_V3,

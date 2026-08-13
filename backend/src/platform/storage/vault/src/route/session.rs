@@ -30,6 +30,12 @@ impl<T> StorageVaultLeaseAdapterV1<T> {
     pub fn into_route_port(self) -> T {
         self.route_port
     }
+
+    /// Exposes only the typed route port so a managed bootstrap can inspect
+    /// its inherited control transport without consuming protocol frames.
+    pub fn route_port_mut(&mut self) -> &mut T {
+        &mut self.route_port
+    }
 }
 
 impl<T> StorageVaultLeaseAdapterV1<T>

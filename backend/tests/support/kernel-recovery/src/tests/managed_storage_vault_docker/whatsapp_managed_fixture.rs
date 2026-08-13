@@ -12,6 +12,7 @@ pub(super) struct ManagedWhatsAppContour {
     pub(super) supervisor: ManagedRuntimeSupervisor,
     pub(super) owner_signer: FileDeviceSigner,
     pub(super) whatsapp: StartedWhatsAppRuntime,
+    pub(super) child_stdio_capture: PathBuf,
 }
 
 impl ManagedWhatsAppContour {
@@ -21,6 +22,7 @@ impl ManagedWhatsAppContour {
             Ok("1")
         );
         let root = private_directory(unique_target_root("makosh-managed-whatsapp-runtime"));
+        let child_stdio_capture = private_directory(root.join("whatsapp-child-stdio"));
         let data = private_directory(short_communications_kernel_data_directory());
         let vault_dir = private_directory(data.join("vault"));
         initialize_vault(&vault_dir, &credential_directory());
@@ -81,6 +83,7 @@ impl ManagedWhatsAppContour {
             &data,
             &data.join("runtime"),
             admitted_whatsapp,
+            Some(&child_stdio_capture),
         );
         Self {
             root,
@@ -90,6 +93,7 @@ impl ManagedWhatsAppContour {
             supervisor,
             owner_signer,
             whatsapp,
+            child_stdio_capture,
         }
     }
 
@@ -109,8 +113,10 @@ impl ManagedWhatsAppContour {
             supervisor,
             owner_signer,
             whatsapp,
+            child_stdio_capture,
         } = self;
         drop(whatsapp);
+        drop(child_stdio_capture);
         drop(owner_signer);
         drop(supervisor);
         drop(shutdown);

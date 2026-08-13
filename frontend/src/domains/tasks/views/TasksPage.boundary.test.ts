@@ -1,25 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 
-describe('TasksPage boundary', () => {
-  it('preserves task review orchestration after removing the TasksPage Vue layer', () => {
-    const surfaceSource = readFileSync(
-      new URL('../queries/useTasksPageSurface.ts', import.meta.url),
-      'utf8'
-    )
+describe('Tasks product boundary', () => {
+  it('renders only typed Tasks owner truth and has no legacy REST adapter', () => {
+    const store = readFileSync(new URL('../stores/tasks.ts', import.meta.url), 'utf8')
+    const view = readFileSync(new URL('./TasksWorkspaceView.vue', import.meta.url), 'utf8')
 
-    expect(existsSync(new URL('./TasksPage.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/TaskList.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/TasksDecisionObligationReview.vue', import.meta.url))).toBe(false)
-    expect(surfaceSource).toContain('useTaskCandidatesQuery')
-    expect(surfaceSource).toContain('useTasksQuery')
-    expect(surfaceSource).toContain('useTaskContextReviewQuery')
-    expect(surfaceSource).toContain('useReviewTaskCandidateMutation')
-    expect(surfaceSource).toContain('useReviewDecisionMutation')
-    expect(surfaceSource).toContain('useReviewObligationMutation')
-    expect(surfaceSource).toContain('reviewStats')
-    expect(surfaceSource).toContain('recentCandidateSignals')
-    expect(surfaceSource).toContain('setTaskCandidateReview')
-    expect(surfaceSource).not.toContain("from '../api/tasks'")
+    expect(existsSync(new URL('../api/tasks.ts', import.meta.url))).toBe(false)
+    expect(store).toContain('getTasksCommandClient')
+    expect(store).toContain('getTasksQueryClient')
+    expect(store).not.toContain('/api/v1/tasks')
+    expect(store).not.toContain('Obligation')
+    expect(store).not.toContain('Decision')
+    expect(view).toContain('surface.setTaskState')
+    expect(view).toContain('surface.setTaskPriority')
+    expect(view).toContain('surface.updateChecklistItem')
   })
 })

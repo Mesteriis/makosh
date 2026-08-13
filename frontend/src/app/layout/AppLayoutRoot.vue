@@ -13,6 +13,14 @@ import { hasClientModuleCapability } from '../client-surfaces/clientModuleCapabi
 import WhatsAppOperationalRoute from '../../integrations/whatsapp/views/WhatsAppOperationalRoute.vue'
 import MailOperationalRoute from '../../integrations/mail/views/MailOperationalRoute.vue'
 import ZulipOperationalRoute from '../../integrations/zulip/views/ZulipOperationalRoute.vue'
+import TasksWorkspaceView from '../../domains/tasks/views/TasksWorkspaceView.vue'
+import KnowledgeWorkspaceView from '../../domains/knowledge/views/KnowledgeWorkspaceView.vue'
+import CalendarWorkspaceView from '../../domains/calendar/views/CalendarWorkspaceView.vue'
+import OrganizationsWorkspaceView from '../../domains/organizations/views/OrganizationsWorkspaceView.vue'
+import ProjectsWorkspaceView from '../../domains/projects/views/ProjectsWorkspaceView.vue'
+import ObligationsWorkspaceView from '../../domains/obligations/views/ObligationsWorkspaceView.vue'
+import DecisionsWorkspaceView from '../../domains/decisions/views/DecisionsWorkspaceView.vue'
+import DocumentsWorkspaceView from '../../domains/documents/views/DocumentsWorkspaceView.vue'
 import CommunicationsEvidenceExportWorkflow from '../../workflows/communications-export/CommunicationsEvidenceExportWorkflow.vue'
 import AttachmentPreviewWorkflow from '../../workflows/attachment-preview/AttachmentPreviewWorkflow.vue'
 import CallTranscriptionWorkflow from '../../workflows/call-transcription/CallTranscriptionWorkflow.vue'
@@ -294,6 +302,14 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					:can-replay="zulipOperationalRealtimeAvailable"
 					:modules="bootstrap.modules"
 				/>
+				<TasksWorkspaceView v-else-if="selectedRouteId === 'tasks'" />
+				<KnowledgeWorkspaceView v-else-if="selectedRouteId === 'knowledge'" />
+				<CalendarWorkspaceView v-else-if="selectedRouteId === 'calendar'" />
+				<OrganizationsWorkspaceView v-else-if="selectedRouteId === 'organizations'" />
+				<ProjectsWorkspaceView v-else-if="selectedRouteId === 'projects'" />
+				<ObligationsWorkspaceView v-else-if="selectedRouteId === 'obligations'" />
+				<DecisionsWorkspaceView v-else-if="selectedRouteId === 'decisions'" />
+				<DocumentsWorkspaceView v-else-if="selectedRouteId === 'documents'" />
 				<AppSettingsPage
 					v-else-if="selectedTopLevelRouteId === 'settings'"
 					:bootstrap="bootstrap"

@@ -149,6 +149,7 @@ pub async fn open_admitted_runtime(
         || admission.logical_owner_id.trim().is_empty()
         || admission.logical_owner_id.len() > 128
         || !admission.logical_owner_id.is_ascii()
+        || admission.logical_human_owner_id.trim().is_empty()
         || admission.configuration_instance_id.trim().is_empty()
         || admission.runtime_instance_id.trim().is_empty()
         || account.account_id.trim().is_empty()
@@ -209,6 +210,10 @@ pub async fn open_admitted_runtime(
     )
     .await
     .map_err(|_| ZulipBootstrapErrorV1::PersistenceConnect)?;
+    durable
+        .bind_owner_scope(&admission.logical_human_owner_id)
+        .await
+        .map_err(|_| ZulipBootstrapErrorV1::PersistenceConnect)?;
 
     let http = match durable
         .credential_binding(&account.account_id)

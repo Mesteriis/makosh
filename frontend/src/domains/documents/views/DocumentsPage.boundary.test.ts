@@ -1,35 +1,24 @@
-import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
+import { describe, expect, it } from 'vitest'
 
 describe('DocumentsPage boundary', () => {
-  it('preserves documents orchestration after removing the DocumentsPage Vue layer', () => {
-    const surfaceSource = readFileSync(
-      new URL('../queries/useDocumentsPageSurface.ts', import.meta.url),
-      'utf8'
-    )
-    const storeSource = readFileSync(
-      new URL('../stores/documents.ts', import.meta.url),
-      'utf8'
-    )
+  it('renders only the typed owner Documents product boundary', () => {
+    const viewSource = readFileSync(new URL('./DocumentsWorkspaceView.vue', import.meta.url), 'utf8')
+    const surfaceSource = readFileSync(new URL('../queries/useDocumentsPageSurface.ts', import.meta.url), 'utf8')
+    const storeSource = readFileSync(new URL('../stores/documents.ts', import.meta.url), 'utf8')
 
-    expect(existsSync(new URL('./DocumentsPage.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/DocumentsInsights.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/DocumentsList.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/DocumentsNavigation.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/DocumentsProcessingJobs.vue', import.meta.url))).toBe(false)
-    expect(existsSync(new URL('../components/DocumentsSourceCards.vue', import.meta.url))).toBe(false)
-    expect(surfaceSource).toContain('useDocumentProcessingJobsQuery')
-    expect(surfaceSource).toContain('useRetryDocumentProcessingJobMutation')
-    expect(surfaceSource).toContain('handleRetry')
-    expect(surfaceSource).toContain('documentProcessingJobs')
-    expect(surfaceSource).toContain('documents')
-    expect(surfaceSource).not.toContain('../api/documents')
-    expect(surfaceSource).not.toContain('retryDocumentProcessingJob')
-    expect(surfaceSource).not.toContain('globalThis.fetch')
-    expect(surfaceSource).not.toContain('window.fetch')
-    expect(storeSource).toContain('setSearchQuery')
-    expect(storeSource).toContain('setActiveFilter')
-    expect(storeSource).toContain('setDocumentsError')
-    expect(storeSource).toContain('setRetryingJobId')
+    expect(existsSync(new URL('../api/documents.ts', import.meta.url))).toBe(false)
+    expect(existsSync(new URL('../queries/useDocumentsQuery.ts', import.meta.url))).toBe(false)
+    expect(viewSource).toContain('OWNER DOCUMENTS')
+    expect(viewSource).toContain('Public source provenance')
+    expect(viewSource).toContain('custodyLabel')
+    expect(surfaceSource).toContain('useDocumentsStore')
+    expect(surfaceSource).toContain('selectedDocument')
+    expect(surfaceSource).toContain('sources')
+    expect(storeSource).toContain('getDocumentsQueryClient')
+    expect(storeSource).toContain('getDocumentsCommandClient')
+    expect(storeSource).not.toContain('/api/v1/documents')
+    expect(storeSource).not.toContain('document-processing')
+    expect(storeSource).not.toContain('custodyTransferSourceProof')
   })
 })

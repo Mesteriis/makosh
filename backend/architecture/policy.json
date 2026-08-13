@@ -26,7 +26,7 @@
   "domains": {
     "registered": [
       "communications",
-      "contacts",
+      "persons",
       "organizations",
       "relationships",
       "projects",
@@ -41,24 +41,23 @@
     ],
     "developmentAllowlist": [
       "communications",
-      "contacts",
+      "persons",
       "organizations",
+      "relationships",
+      "projects",
       "tasks",
+      "obligations",
+      "decisions",
       "calendar",
       "documents",
       "knowledge",
       "review",
       "ai"
     ],
-    "blocked": [
-      "relationships",
-      "projects",
-      "obligations",
-      "decisions"
-    ]
+    "blocked": []
   },
   "implementation": {
-    "currentSlice": "call_transcription_managed_conformance_v1",
+    "currentSlice": "speech_to_text_whisper_admission_v1",
     "productionPackageMode": "exact_allowlist",
     "productionPackages": [
       {
@@ -782,6 +781,18 @@
         "surface": "persistence"
       },
       {
+        "name": "makosh-ai-inference-runtime",
+        "role": "engine",
+        "owner": "ai",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-ai-inference-assembly",
+        "role": "engine",
+        "owner": "ai",
+        "surface": "assembly"
+      },
+      {
         "name": "makosh-ollama-ai-api",
         "role": "integration",
         "owner": "ollama",
@@ -1062,42 +1073,6 @@
         "role": "domain",
         "owner": "tasks",
         "surface": "implementation"
-      },
-      {
-        "name": "makosh-contacts-command-api",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "contract"
-      },
-      {
-        "name": "makosh-contacts-mail-sync-source-api",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "contract"
-      },
-      {
-        "name": "makosh-contacts-core",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "implementation"
-      },
-      {
-        "name": "makosh-contacts-persistence",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "persistence"
-      },
-      {
-        "name": "makosh-contacts-runtime",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "runtime"
-      },
-      {
-        "name": "makosh-contacts-assembly",
-        "role": "domain",
-        "owner": "contacts",
-        "surface": "assembly"
       },
       {
         "name": "makosh-tasks-persistence",
@@ -1520,30 +1495,6 @@
         "surface": "persistence"
       },
       {
-        "name": "makosh-mail-contacts-sync-api",
-        "role": "workflow",
-        "owner": "mail_contacts_sync",
-        "surface": "contract"
-      },
-      {
-        "name": "makosh-mail-contacts-sync-core",
-        "role": "workflow",
-        "owner": "mail_contacts_sync",
-        "surface": "implementation"
-      },
-      {
-        "name": "makosh-mail-contacts-sync-persistence",
-        "role": "workflow",
-        "owner": "mail_contacts_sync",
-        "surface": "persistence"
-      },
-      {
-        "name": "makosh-mail-contacts-sync-runtime",
-        "role": "workflow",
-        "owner": "mail_contacts_sync",
-        "surface": "runtime"
-      },
-      {
         "name": "makosh-mail-google-people",
         "role": "integration",
         "owner": "mail",
@@ -1554,12 +1505,6 @@
         "role": "integration",
         "owner": "mail",
         "surface": "implementation"
-      },
-      {
-        "name": "makosh-mail-contacts-sync-assembly",
-        "role": "workflow",
-        "owner": "mail_contacts_sync",
-        "surface": "assembly"
       },
       {
         "name": "makosh-speech-to-text-api",
@@ -1578,6 +1523,54 @@
         "role": "engine",
         "owner": "speech_to_text",
         "surface": "persistence"
+      },
+      {
+        "name": "makosh-speech-to-text-runtime",
+        "role": "engine",
+        "owner": "speech_to_text",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-speech-to-text-assembly",
+        "role": "engine",
+        "owner": "speech_to_text",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-speech-transcript-artifact",
+        "role": "engine",
+        "owner": "speech_to_text",
+        "surface": "contract"
+      },
+      {
+        "name": "makosh-whisper-stt-core",
+        "role": "integration",
+        "owner": "whisper_stt",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-whisper-stt-assembly",
+        "role": "integration",
+        "owner": "whisper_stt",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-whisper-stt-persistence",
+        "role": "integration",
+        "owner": "whisper_stt",
+        "surface": "persistence"
+      },
+      {
+        "name": "makosh-whisper-stt-process",
+        "role": "integration",
+        "owner": "whisper_stt",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-whisper-stt-runtime",
+        "role": "integration",
+        "owner": "whisper_stt",
+        "surface": "runtime"
       },
       {
         "name": "makosh-desktop-call-recording-api",
@@ -1643,6 +1636,126 @@
         "name": "makosh-call-transcription-assembly",
         "role": "workflow",
         "owner": "call_transcription",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-persons-api",
+        "role": "domain",
+        "owner": "persons",
+        "surface": "contract"
+      },
+      {
+        "name": "makosh-persons-core",
+        "role": "domain",
+        "owner": "persons",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-persons-persistence",
+        "role": "domain",
+        "owner": "persons",
+        "surface": "persistence"
+      },
+      {
+        "name": "makosh-persons-runtime",
+        "role": "domain",
+        "owner": "persons",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-persons-assembly",
+        "role": "domain",
+        "owner": "persons",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-mail-persons-sync-api",
+        "role": "workflow",
+        "owner": "mail_persons_sync",
+        "surface": "contract"
+      },
+      {
+        "name": "makosh-mail-persons-sync-core",
+        "role": "workflow",
+        "owner": "mail_persons_sync",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-mail-persons-sync-persistence",
+        "role": "workflow",
+        "owner": "mail_persons_sync",
+        "surface": "persistence"
+      },
+      {
+        "name": "makosh-mail-persons-sync-runtime",
+        "role": "workflow",
+        "owner": "mail_persons_sync",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-mail-persons-sync-assembly",
+        "role": "workflow",
+        "owner": "mail_persons_sync",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-api",
+        "role": "domain",
+        "owner": "review",
+        "surface": "contract"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-core",
+        "role": "domain",
+        "owner": "review",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-persistence",
+        "role": "domain",
+        "owner": "review",
+        "surface": "persistence"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-runtime",
+        "role": "domain",
+        "owner": "review",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-assembly",
+        "role": "domain",
+        "owner": "review",
+        "surface": "assembly"
+      },
+      {
+        "name": "makosh-review-person-match-candidate-promotion-api",
+        "role": "domain",
+        "owner": "review",
+        "surface": "contract"
+      },
+      {
+        "name": "makosh-reviewed-person-match-candidate-promotion-core",
+        "role": "workflow",
+        "owner": "reviewed_person_match_candidate_promotion",
+        "surface": "implementation"
+      },
+      {
+        "name": "makosh-reviewed-person-match-candidate-promotion-persistence",
+        "role": "workflow",
+        "owner": "reviewed_person_match_candidate_promotion",
+        "surface": "persistence"
+      },
+      {
+        "name": "makosh-reviewed-person-match-candidate-promotion-runtime",
+        "role": "workflow",
+        "owner": "reviewed_person_match_candidate_promotion",
+        "surface": "runtime"
+      },
+      {
+        "name": "makosh-reviewed-person-match-candidate-promotion-assembly",
+        "role": "workflow",
+        "owner": "reviewed_person_match_candidate_promotion",
         "surface": "assembly"
       }
     ],
@@ -2463,97 +2576,6 @@
         }
       ],
       "makosh-tasks-core": [],
-      "makosh-contacts-command-api": [
-        {
-          "name": "makosh-events-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-runtime-protocol",
-          "kind": "normal"
-        }
-      ],
-      "makosh-contacts-mail-sync-source-api": [
-        {
-          "name": "makosh-events-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-runtime-protocol",
-          "kind": "normal"
-        }
-      ],
-      "makosh-contacts-core": [],
-      "makosh-contacts-persistence": [
-        {
-          "name": "makosh-contacts-core",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-storage-protocol",
-          "kind": "normal"
-        }
-      ],
-      "makosh-contacts-runtime": [
-        {
-          "name": "makosh-blob-client",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-command-api",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-core",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-mail-sync-source-api",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-persistence",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-events-jetstream",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-events-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-runtime-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-storage-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-storage-vault",
-          "kind": "normal"
-        }
-      ],
-      "makosh-contacts-assembly": [
-        {
-          "name": "makosh-contacts-persistence",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-runtime",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-runtime-protocol",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-storage-protocol",
-          "kind": "normal"
-        }
-      ],
       "makosh-mail-address-book-contract": [
         {
           "name": "makosh-events-protocol",
@@ -2578,16 +2600,37 @@
           "kind": "normal"
         }
       ],
-      "makosh-mail-contacts-sync-api": [
+      "makosh-mail-persons-sync-api": [
         {
           "name": "makosh-runtime-protocol",
           "kind": "normal"
         }
       ],
-      "makosh-mail-contacts-sync-core": [],
-      "makosh-mail-contacts-sync-persistence": [
+      "makosh-mail-persons-sync-core": [
         {
-          "name": "makosh-mail-contacts-sync-core",
+          "name": "makosh-mail-address-book-contract",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-mail-persons-sync-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        }
+      ],
+      "makosh-mail-persons-sync-persistence": [
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-mail-persons-sync-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-mail-persons-sync-core",
           "kind": "normal"
         },
         {
@@ -2595,15 +2638,7 @@
           "kind": "normal"
         }
       ],
-      "makosh-mail-contacts-sync-runtime": [
-        {
-          "name": "makosh-contacts-command-api",
-          "kind": "normal"
-        },
-        {
-          "name": "makosh-contacts-mail-sync-source-api",
-          "kind": "normal"
-        },
+      "makosh-mail-persons-sync-runtime": [
         {
           "name": "makosh-events-jetstream",
           "kind": "normal"
@@ -2617,15 +2652,19 @@
           "kind": "normal"
         },
         {
-          "name": "makosh-mail-contacts-sync-api",
+          "name": "makosh-mail-persons-sync-api",
           "kind": "normal"
         },
         {
-          "name": "makosh-mail-contacts-sync-core",
+          "name": "makosh-mail-persons-sync-core",
           "kind": "normal"
         },
         {
-          "name": "makosh-mail-contacts-sync-persistence",
+          "name": "makosh-mail-persons-sync-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-api",
           "kind": "normal"
         },
         {
@@ -2645,15 +2684,13 @@
           "kind": "normal"
         }
       ],
-      "makosh-mail-google-people": [],
-      "makosh-mail-carddav": [],
-      "makosh-mail-contacts-sync-assembly": [
+      "makosh-mail-persons-sync-assembly": [
         {
-          "name": "makosh-mail-contacts-sync-persistence",
+          "name": "makosh-mail-persons-sync-persistence",
           "kind": "normal"
         },
         {
-          "name": "makosh-mail-contacts-sync-runtime",
+          "name": "makosh-mail-persons-sync-runtime",
           "kind": "normal"
         },
         {
@@ -2665,6 +2702,8 @@
           "kind": "normal"
         }
       ],
+      "makosh-mail-google-people": [],
+      "makosh-mail-carddav": [],
       "makosh-tasks-persistence": [
         {
           "name": "makosh-storage-protocol",
@@ -3648,10 +3687,6 @@
           "kind": "normal"
         },
         {
-          "name": "makosh-contacts-mail-sync-source-api",
-          "kind": "normal"
-        },
-        {
           "name": "makosh-mail-delivery-intent-contract",
           "kind": "normal"
         },
@@ -4006,6 +4041,54 @@
         },
         {
           "name": "makosh-ai-inference-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-ai-inference-runtime": [
+        {
+          "name": "makosh-ai-contracts",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-ai-inference-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-ai-inference-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-blob-client",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        }
+      ],
+      "makosh-ai-inference-assembly": [
+        {
+          "name": "makosh-ai-inference-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-ai-inference-runtime",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
           "kind": "normal"
         },
         {
@@ -5277,8 +5360,7 @@
           "kind": "normal"
         }
       ],
-      "makosh-speech-to-text-core": [
-      ],
+      "makosh-speech-to-text-core": [],
       "makosh-speech-to-text-persistence": [
         {
           "name": "makosh-speech-to-text-core",
@@ -5286,6 +5368,133 @@
         },
         {
           "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-speech-to-text-runtime": [
+        {
+          "name": "makosh-blob-client",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        }
+      ],
+      "makosh-speech-to-text-assembly": [
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-runtime",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-speech-transcript-artifact": [],
+      "makosh-whisper-stt-core": [
+        {
+          "name": "makosh-speech-to-text-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-transcript-artifact",
+          "kind": "normal"
+        }
+      ],
+      "makosh-whisper-stt-assembly": [
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-runtime",
+          "kind": "normal"
+        }
+      ],
+      "makosh-whisper-stt-persistence": [
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-whisper-stt-process": [
+        {
+          "name": "makosh-speech-to-text-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-core",
+          "kind": "normal"
+        }
+      ],
+      "makosh-whisper-stt-runtime": [
+        {
+          "name": "makosh-blob-client",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-speech-to-text-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-whisper-stt-process",
           "kind": "normal"
         }
       ],
@@ -5460,6 +5669,251 @@
         },
         {
           "name": "makosh-call-transcription-runtime",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-persons-api": [
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-persons-core": [
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        }
+      ],
+      "makosh-persons-persistence": [
+        {
+          "name": "makosh-persons-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-persons-runtime": [
+        {
+          "name": "makosh-events-jetstream",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        }
+      ],
+      "makosh-persons-assembly": [
+        {
+          "name": "makosh-persons-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-runtime",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-review-person-match-candidate-api": [
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-review-person-match-candidate-core": [],
+      "makosh-review-person-match-candidate-persistence": [
+        {
+          "name": "makosh-review-person-match-candidate-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-review-person-match-candidate-runtime": [
+        {
+          "name": "makosh-events-jetstream",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-promotion-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        }
+      ],
+      "makosh-review-person-match-candidate-assembly": [
+        {
+          "name": "makosh-review-person-match-candidate-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-runtime",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-review-person-match-candidate-promotion-api": [
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-core": [
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-api",
+          "kind": "normal"
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-persistence": [
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-runtime": [
+        {
+          "name": "makosh-events-jetstream",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-events-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-persons-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-review-person-match-candidate-promotion-api",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-reviewed-person-match-candidate-promotion-core",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-reviewed-person-match-candidate-promotion-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-runtime-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-protocol",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-storage-vault",
+          "kind": "normal"
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-assembly": [
+        {
+          "name": "makosh-reviewed-person-match-candidate-promotion-persistence",
+          "kind": "normal"
+        },
+        {
+          "name": "makosh-reviewed-person-match-candidate-promotion-runtime",
           "kind": "normal"
         },
         {
@@ -7366,6 +7820,14 @@
       ],
       "makosh-runtime-protocol": [
         {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
           "name": "prost",
           "kind": "normal",
           "source": "crates_io",
@@ -9178,220 +9640,6 @@
           "features": []
         }
       ],
-      "makosh-contacts-command-api": [
-        {
-          "name": "prost",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "prost-types",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "sha2",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        },
-        {
-          "name": "prost-build",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "protoc-bin-vendored",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=3.2.0",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "sha2",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        }
-      ],
-      "makosh-contacts-mail-sync-source-api": [
-        {
-          "name": "prost",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "prost-types",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "sha2",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        },
-        {
-          "name": "prost-build",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "protoc-bin-vendored",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=3.2.0",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "sha2",
-          "kind": "build",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        }
-      ],
-      "makosh-contacts-core": [
-        {
-          "name": "sha2",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        }
-      ],
-      "makosh-contacts-persistence": [
-        {
-          "name": "sha2",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        },
-        {
-          "name": "sqlx",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.9.0",
-          "defaultFeatures": false,
-          "features": [
-            "postgres",
-            "runtime-tokio",
-            "tls-rustls-ring"
-          ]
-        }
-      ],
-      "makosh-contacts-runtime": [
-        {
-          "name": "libc",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.2.186",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "prost",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "prost-types",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "sha2",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.11.0",
-          "defaultFeatures": false,
-          "features": []
-        },
-        {
-          "name": "tokio",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.52.4",
-          "defaultFeatures": false,
-          "features": [
-            "rt-multi-thread",
-            "time"
-          ]
-        },
-        {
-          "name": "zeroize",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.9.0",
-          "defaultFeatures": true,
-          "features": []
-        }
-      ],
-      "makosh-contacts-assembly": [
-        {
-          "name": "prost",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "serde",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.0.228",
-          "defaultFeatures": false,
-          "features": [
-            "derive",
-            "std"
-          ]
-        },
-        {
-          "name": "serde_json",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.0.150",
-          "defaultFeatures": true,
-          "features": []
-        }
-      ],
       "makosh-mail-address-book-contract": [
         {
           "name": "prost",
@@ -9472,13 +9720,29 @@
           ]
         }
       ],
-      "makosh-mail-contacts-sync-api": [
+      "makosh-mail-persons-sync-api": [
         {
           "name": "prost",
           "kind": "normal",
           "source": "crates_io",
           "version": "=0.14.4",
           "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
           "features": []
         },
         {
@@ -9506,8 +9770,25 @@
           "features": []
         }
       ],
-      "makosh-mail-contacts-sync-core": [],
-      "makosh-mail-contacts-sync-persistence": [
+      "makosh-mail-persons-sync-core": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "dev",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-mail-persons-sync-persistence": [
         {
           "name": "sha2",
           "kind": "normal",
@@ -9529,7 +9810,7 @@
           ]
         }
       ],
-      "makosh-mail-contacts-sync-runtime": [
+      "makosh-mail-persons-sync-runtime": [
         {
           "name": "libc",
           "kind": "normal",
@@ -9578,6 +9859,35 @@
           "kind": "normal",
           "source": "crates_io",
           "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-mail-persons-sync-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
           "defaultFeatures": true,
           "features": []
         }
@@ -9665,35 +9975,6 @@
           "source": "crates_io",
           "version": "=0.41.0",
           "defaultFeatures": false,
-          "features": []
-        }
-      ],
-      "makosh-mail-contacts-sync-assembly": [
-        {
-          "name": "prost",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=0.14.4",
-          "defaultFeatures": true,
-          "features": []
-        },
-        {
-          "name": "serde",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.0.228",
-          "defaultFeatures": false,
-          "features": [
-            "derive",
-            "std"
-          ]
-        },
-        {
-          "name": "serde_json",
-          "kind": "normal",
-          "source": "crates_io",
-          "version": "=1.0.150",
-          "defaultFeatures": true,
           "features": []
         }
       ],
@@ -11811,6 +12092,80 @@
           ]
         }
       ],
+      "makosh-ai-inference-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-ai-inference-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
       "makosh-ollama-ai-api": [
         {
           "name": "prost",
@@ -13160,8 +13515,7 @@
           "features": []
         }
       ],
-      "makosh-speech-to-text-core": [
-      ],
+      "makosh-speech-to-text-core": [],
       "makosh-speech-to-text-persistence": [
         {
           "name": "sha2",
@@ -13182,6 +13536,240 @@
             "runtime-tokio",
             "tls-rustls-ring"
           ]
+        }
+      ],
+      "makosh-speech-to-text-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-speech-to-text-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-speech-transcript-artifact": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "prost-build",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "protoc-bin-vendored",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=3.2.0",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-whisper-stt-core": [],
+      "makosh-whisper-stt-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-whisper-stt-persistence": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "sqlx",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.9.0",
+          "defaultFeatures": false,
+          "features": [
+            "postgres",
+            "runtime-tokio",
+            "tls-rustls-ring"
+          ]
+        }
+      ],
+      "makosh-whisper-stt-process": [
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-whisper-stt-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
         }
       ],
       "makosh-desktop-call-recording-api": [
@@ -13537,6 +14125,498 @@
           "defaultFeatures": true,
           "features": []
         }
+      ],
+      "makosh-persons-api": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "prost-build",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "protoc-bin-vendored",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=3.2.0",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-persons-core": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-persons-persistence": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "sqlx",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.9.0",
+          "defaultFeatures": false,
+          "features": [
+            "postgres",
+            "runtime-tokio",
+            "tls-rustls-ring"
+          ]
+        }
+      ],
+      "makosh-persons-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-persons-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-review-person-match-candidate-api": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "prost-build",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "protoc-bin-vendored",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=3.2.0",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-review-person-match-candidate-core": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-review-person-match-candidate-persistence": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "sqlx",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.9.0",
+          "defaultFeatures": false,
+          "features": [
+            "postgres",
+            "runtime-tokio",
+            "tls-rustls-ring"
+          ]
+        }
+      ],
+      "makosh-review-person-match-candidate-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-review-person-match-candidate-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-review-person-match-candidate-promotion-api": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "prost-build",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "protoc-bin-vendored",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=3.2.0",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "build",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-core": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-persistence": [
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "sqlx",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.9.0",
+          "defaultFeatures": false,
+          "features": [
+            "postgres",
+            "runtime-tokio",
+            "tls-rustls-ring"
+          ]
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-runtime": [
+        {
+          "name": "libc",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.2.186",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "prost-types",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "sha2",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.11.0",
+          "defaultFeatures": false,
+          "features": []
+        },
+        {
+          "name": "tokio",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.52.4",
+          "defaultFeatures": false,
+          "features": [
+            "rt-multi-thread",
+            "time"
+          ]
+        },
+        {
+          "name": "zeroize",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.9.0",
+          "defaultFeatures": true,
+          "features": []
+        }
+      ],
+      "makosh-reviewed-person-match-candidate-promotion-assembly": [
+        {
+          "name": "prost",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "serde",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.228",
+          "defaultFeatures": false,
+          "features": [
+            "derive",
+            "std"
+          ]
+        },
+        {
+          "name": "serde_json",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=1.0.150",
+          "defaultFeatures": true,
+          "features": []
+        }
       ]
     },
     "forbiddenDependencies": [
@@ -13561,11 +14641,19 @@
     ],
     "cargoFeaturesEnabled": false,
     "cargoFeatureAllowlist": {
-      "makosh-contacts-persistence": {
+      "makosh-persons-persistence": {
         "default": [],
         "conformance-test-support": []
       },
-      "makosh-mail-contacts-sync-persistence": {
+      "makosh-review-person-match-candidate-persistence": {
+        "default": [],
+        "conformance-test-support": []
+      },
+      "makosh-reviewed-person-match-candidate-promotion-persistence": {
+        "default": [],
+        "conformance-test-support": []
+      },
+      "makosh-mail-persons-sync-persistence": {
         "default": [],
         "conformance-test-support": []
       },
@@ -14303,6 +15391,14 @@
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
+      "makosh-ai-inference-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-ai-inference-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
       "makosh-ollama-ai-api": {
         "primaryKind": "lib",
         "customBuildAllowed": false
@@ -14531,30 +15627,6 @@
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
-      "makosh-contacts-command-api": {
-        "primaryKind": "lib",
-        "customBuildAllowed": true
-      },
-      "makosh-contacts-mail-sync-source-api": {
-        "primaryKind": "lib",
-        "customBuildAllowed": true
-      },
-      "makosh-contacts-core": {
-        "primaryKind": "lib",
-        "customBuildAllowed": false
-      },
-      "makosh-contacts-persistence": {
-        "primaryKind": "lib",
-        "customBuildAllowed": false
-      },
-      "makosh-contacts-runtime": {
-        "primaryKind": "bin",
-        "customBuildAllowed": false
-      },
-      "makosh-contacts-assembly": {
-        "primaryKind": "bin",
-        "customBuildAllowed": false
-      },
       "makosh-mail-address-book-contract": {
         "primaryKind": "lib",
         "customBuildAllowed": true
@@ -14563,19 +15635,63 @@
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
-      "makosh-mail-contacts-sync-api": {
+      "makosh-mail-persons-sync-api": {
         "primaryKind": "lib",
         "customBuildAllowed": true
       },
-      "makosh-mail-contacts-sync-core": {
+      "makosh-mail-persons-sync-core": {
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
-      "makosh-mail-contacts-sync-persistence": {
+      "makosh-mail-persons-sync-persistence": {
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
-      "makosh-mail-contacts-sync-runtime": {
+      "makosh-mail-persons-sync-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-mail-persons-sync-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-review-person-match-candidate-api": {
+        "primaryKind": "lib",
+        "customBuildAllowed": true
+      },
+      "makosh-review-person-match-candidate-core": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-review-person-match-candidate-persistence": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-review-person-match-candidate-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-review-person-match-candidate-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-review-person-match-candidate-promotion-api": {
+        "primaryKind": "lib",
+        "customBuildAllowed": true
+      },
+      "makosh-reviewed-person-match-candidate-promotion-core": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-reviewed-person-match-candidate-promotion-persistence": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-reviewed-person-match-candidate-promotion-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-reviewed-person-match-candidate-promotion-assembly": {
         "primaryKind": "bin",
         "customBuildAllowed": false
       },
@@ -14585,10 +15701,6 @@
       },
       "makosh-mail-carddav": {
         "primaryKind": "lib",
-        "customBuildAllowed": false
-      },
-      "makosh-mail-contacts-sync-assembly": {
-        "primaryKind": "bin",
         "customBuildAllowed": false
       },
       "makosh-tasks-persistence": {
@@ -14643,6 +15755,38 @@
         "primaryKind": "lib",
         "customBuildAllowed": false
       },
+      "makosh-speech-to-text-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-speech-to-text-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-speech-transcript-artifact": {
+        "primaryKind": "lib",
+        "customBuildAllowed": true
+      },
+      "makosh-whisper-stt-core": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-whisper-stt-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-whisper-stt-persistence": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-whisper-stt-process": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-whisper-stt-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
       "makosh-desktop-call-recording-api": {
         "primaryKind": "lib",
         "customBuildAllowed": true
@@ -14686,6 +15830,26 @@
       "makosh-call-transcription-assembly": {
         "primaryKind": "bin",
         "customBuildAllowed": false
+      },
+      "makosh-persons-api": {
+        "primaryKind": "lib",
+        "customBuildAllowed": true
+      },
+      "makosh-persons-core": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-persons-persistence": {
+        "primaryKind": "lib",
+        "customBuildAllowed": false
+      },
+      "makosh-persons-runtime": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
+      },
+      "makosh-persons-assembly": {
+        "primaryKind": "bin",
+        "customBuildAllowed": false
       }
     },
     "developmentProfile": {
@@ -14723,14 +15887,16 @@
     "ownerInventory": {
       "domains": [
         "communications",
-        "contacts",
         "knowledge",
+        "persons",
         "review",
         "tasks"
       ],
       "integrations": [
         "desktop_call_recording",
-        "mail"
+        "mail",
+        "ollama",
+        "whisper_stt"
       ],
       "workflows": [
         "attachment_preview",
@@ -14738,7 +15904,9 @@
         "attachment_text_extraction",
         "attachment_translation",
         "call_transcription",
+        "communication_bulk_action",
         "communication_cross_channel_forward",
+        "communication_delayed_delivery",
         "communication_delivery_intent",
         "communication_explanation",
         "communication_note_candidate_extraction",
@@ -14748,8 +15916,9 @@
         "communication_task_candidate_extraction",
         "communication_translation",
         "communications_export",
-        "mail_contacts_sync",
+        "mail_persons_sync",
         "reviewed_note_candidate_promotion",
+        "reviewed_person_match_candidate_promotion",
         "reviewed_task_candidate_promotion"
       ],
       "engines": [
@@ -14761,8 +15930,14 @@
       "businessCapabilities": [
         "ai.attachment-translation.request.v1",
         "ai.explanation.request.v1",
+        "ai.inference.blob.v1",
+        "ai.inference.request.v1",
+        "ai.inference.storage.v1",
         "ai.provider.explain.v1",
+        "ai.provider.generate.v1",
+        "ai.provider.summarize.v1",
         "ai.provider.translate.v1",
+        "ai.summary.request.v1",
         "ai.translation.request.v1",
         "attachment-preview-evidence-replay.command.v1",
         "attachment.archive_inspection.v1",
@@ -14797,13 +15972,25 @@
         "call_transcription.storage.v1",
         "call_transcription.stt.v1",
         "call_transcription.v1",
+        "communication.bulk_action.v1",
         "communication.cross_channel_forward.v1",
+        "communication.delayed_delivery.blob.v1",
+        "communication.delayed_delivery.clock.v1",
+        "communication.delayed_delivery.delivery_intent.v1",
+        "communication.delayed_delivery.scheduler_due.v1",
+        "communication.delayed_delivery.scheduler_receipt.v1",
+        "communication.delayed_delivery.scheduler_schedule_command.v1",
+        "communication.delayed_delivery.scheduler_schedule_result.v1",
+        "communication.delayed_delivery.storage.v1",
+        "communication.delayed_delivery.v1",
         "communication.explanation.v1",
         "communication.note-candidate-extraction.v1",
         "communication.recipient-suggestion.v1",
         "communication.summary.v1",
         "communication.task-candidate-extraction.v1",
         "communication.translation.v1",
+        "communication_bulk_action.delivery_intent.v1",
+        "communication_bulk_action.storage.v1",
         "communication_cross_channel_forward.blob.v1",
         "communication_cross_channel_forward.delivery_rejected.v1",
         "communication_cross_channel_forward.delivery_submit.v1",
@@ -14887,24 +16074,17 @@
         "communications_export.blob.v1",
         "communications_export.events.v1",
         "communications_export.storage.v1",
-        "contacts.mail-identity.command.v1",
-        "contacts.mail-sync-source.blob-writer.v1",
-        "contacts.mail-sync-source.changed.v1",
-        "contacts.mail-sync-source.v1",
         "knowledge.reviewed-candidate.blob.v1",
         "knowledge.reviewed-candidate.command.v1",
         "knowledge.reviewed-candidate.created.publisher.v1",
         "knowledge.reviewed-candidate.rejected.publisher.v1",
         "knowledge.storage.v1",
-        "mail.address-book.contact-source.blob.v1",
-        "mail.address-book.provider.v1",
         "mail.attachment-anchor.consume.v1",
         "mail.attachment-blob-admission.publish.v1",
         "mail.attachment-safety-state.consume.v1",
         "mail.attachment.scan-candidate.publish.v1",
         "mail.blob.v1",
         "mail.communication-observed.publish.v1",
-        "mail.contacts-sync.v1",
         "mail.delivery.query.v1",
         "mail.delivery.v1",
         "mail.gmail.credentials.v1",
@@ -14915,26 +16095,36 @@
         "mail.oauth.query.v1",
         "mail.oauth.refresh.v1",
         "mail.oauth.start.v1",
+        "mail.person-source.provider.v1",
         "mail.smtp.credentials.v1",
         "mail.storage.v1",
         "mail.sync.v1",
-        "mail_contacts_sync.contacts.changed.v1",
-        "mail_contacts_sync.contacts.command.v1",
-        "mail_contacts_sync.contacts.rejected.v1",
-        "mail_contacts_sync.contacts.source-prepare.v1",
-        "mail_contacts_sync.contacts.source-prepared.v1",
-        "mail_contacts_sync.contacts.source-rejected.v1",
-        "mail_contacts_sync.contacts.upserted.v1",
-        "mail_contacts_sync.mail.entry-observed.v1",
-        "mail_contacts_sync.mail.entry-upsert-rejected.v1",
-        "mail_contacts_sync.mail.entry-upserted.v1",
-        "mail_contacts_sync.mail.fetch-page.v1",
-        "mail_contacts_sync.mail.page-completed.v1",
-        "mail_contacts_sync.mail.page-rejected.v1",
-        "mail_contacts_sync.mail.upsert-entry.v1",
-        "mail_contacts_sync.scheduler.receipt.v1",
-        "mail_contacts_sync.scheduler.v1",
-        "mail_contacts_sync.storage.v1",
+        "mail_persons_sync.mail.account-ready.v1",
+        "mail_persons_sync.mail.account-retired.v1",
+        "mail_persons_sync.mail.fetch-page.v1",
+        "mail_persons_sync.mail.page-completed.v1",
+        "mail_persons_sync.mail.page-rejected.v1",
+        "mail_persons_sync.mail.source-observed.v1",
+        "mail_persons_sync.mail.source-removed.v1",
+        "mail_persons_sync.mail.source-updated.v1",
+        "mail_persons_sync.page-receipt.v1",
+        "mail_persons_sync.persons.command-rejected.v1",
+        "mail_persons_sync.persons.command-succeeded.v1",
+        "mail_persons_sync.persons.command.v1",
+        "mail_persons_sync.run-result.v1",
+        "mail_persons_sync.scheduler.receipt.v1",
+        "mail_persons_sync.scheduler.v1",
+        "mail_persons_sync.scheduler_schedule_command.v1",
+        "mail_persons_sync.scheduler_schedule_result.v1",
+        "mail_persons_sync.storage.v1",
+        "ollama.ai.storage.v1",
+        "persons.client.v1",
+        "persons.command-rejected.v1",
+        "persons.command-succeeded.v1",
+        "persons.command.v1",
+        "persons.owner-event.v1",
+        "persons.review-candidate.v1",
+        "persons.storage.v1",
         "review.communication-attention.command.v1",
         "review.communication-attention.query.v1",
         "review.communication-attention.realtime.v1",
@@ -14946,6 +16136,14 @@
         "review.note-candidate.promotion.v1",
         "review.note-candidate.storage.v1",
         "review.note-candidate.submission.v1",
+        "review.person-match-candidate.approved.publisher.v1",
+        "review.person-match-candidate.client.v1",
+        "review.person-match-candidate.decision.consumer.v1",
+        "review.person-match-candidate.persons-candidate.consumer.v1",
+        "review.person-match-candidate.promotion-result.consumer.v1",
+        "review.person-match-candidate.storage.v1",
+        "review.person-match-candidate.submission-rejected.publisher.v1",
+        "review.person-match-candidate.submitted.publisher.v1",
         "review.task-candidate.blob.v1",
         "review.task-candidate.client.v1",
         "review.task-candidate.promotion-result.consumer.v1",
@@ -14954,6 +16152,12 @@
         "review.task-candidate.storage.v1",
         "review.task-candidate.submission.v1",
         "reviewed-note-candidate-promotion.source.blob.v1",
+        "reviewed-person-match-candidate-promotion.approval.consumer.v1",
+        "reviewed-person-match-candidate-promotion.persons-command.publisher.v1",
+        "reviewed-person-match-candidate-promotion.persons-rejected.consumer.v1",
+        "reviewed-person-match-candidate-promotion.persons-succeeded.consumer.v1",
+        "reviewed-person-match-candidate-promotion.result.publisher.v1",
+        "reviewed-person-match-candidate-promotion.storage.v1",
         "reviewed_note_candidate_promotion.knowledge-command.publish.v1",
         "reviewed_note_candidate_promotion.knowledge-created.consume.v1",
         "reviewed_note_candidate_promotion.knowledge-rejected.consume.v1",
@@ -14966,9 +16170,17 @@
         "reviewed_task_candidate_promotion.tasks-command.publish.v1",
         "reviewed_task_candidate_promotion.tasks-created.consume.v1",
         "reviewed_task_candidate_promotion.tasks-rejected.consume.v1",
+        "speech_to_text.blob.v1",
+        "speech_to_text.provider.v1",
+        "speech_to_text.storage.v1",
+        "speech_to_text.transcribe.v1",
         "tasks.reviewed-candidate.blob.v1",
         "tasks.reviewed-candidate.command.v1",
-        "tasks.storage.v1"
+        "tasks.storage.v1",
+        "whisper_stt.blob.v1",
+        "whisper_stt.native.v1",
+        "whisper_stt.provider.v1",
+        "whisper_stt.storage.v1"
       ]
     },
     "kernelProfile": {
@@ -15412,7 +16624,6 @@
       "makosh-speech-to-text-api"
     ],
     "integrationDomainContractPackages": [
-      "makosh-contacts-mail-sync-source-api",
       "makosh-communications-attachment-contract",
       "makosh-communications-call-evidence-ingress",
       "makosh-communications-ingress"

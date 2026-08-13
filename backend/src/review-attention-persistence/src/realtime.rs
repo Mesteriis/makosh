@@ -36,6 +36,7 @@ impl ReviewAttentionPersistenceV1 {
         {
             return Err(ReviewAttentionPersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let rows = sqlx::query(
             "SELECT realtime_sequence, attention_id, state_revision, disposition,
                     pinned, importance, snoozed_until_unix_seconds,
@@ -49,10 +50,18 @@ impl ReviewAttentionPersistenceV1 {
         .bind(logical_owner_id)
         .bind(after_sequence.map(signed).transpose()?)
         .bind(i64::from(limit))
-        .fetch_all(&self.pool)
+        .fetch_all(&mut *transaction)
         .await
         .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?;
-        rows.iter().map(transition_from_row).collect()
+        let transitions = rows
+            .iter()
+            .map(transition_from_row)
+            .collect::<Result<Vec<_>, _>>()?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| ReviewAttentionPersistenceErrorV1::StorageUnavailable)?;
+        Ok(transitions)
     }
 }
 

@@ -158,6 +158,40 @@ impl<S> ManagedControlChannelV2<S> {
     }
 }
 
+#[cfg(unix)]
+impl ManagedControlChannelV2<std::os::unix::net::UnixStream> {
+    /// Observes Unix control-peer closure without consuming a pending frame.
+    ///
+    /// Bootstrap operations use this while awaiting non-control resources. A
+    /// non-empty frame remains available to the correlated dispatcher.
+    pub fn peer_closed_preserving_frames(&self) -> Result<bool, std::io::Error> {
+        use std::os::fd::AsRawFd;
+
+        let mut byte = [0_u8; 1];
+        // SAFETY: `byte` is valid for one writable byte, the stream owns a live
+        // file descriptor for the duration of the call, and MSG_PEEK prevents
+        // this liveness probe from consuming control protocol bytes.
+        let result = unsafe {
+            libc::recv(
+                self.stream.as_raw_fd(),
+                byte.as_mut_ptr().cast(),
+                byte.len(),
+                libc::MSG_PEEK | libc::MSG_DONTWAIT,
+            )
+        };
+        if result == 0 {
+            Ok(true)
+        } else if result > 0 {
+            Ok(false)
+        } else {
+            match std::io::Error::last_os_error().kind() {
+                std::io::ErrorKind::WouldBlock | std::io::ErrorKind::Interrupted => Ok(false),
+                _ => Err(std::io::Error::last_os_error()),
+            }
+        }
+    }
+}
+
 impl<S: Read + Write> ManagedControlChannelV2<S> {
     pub fn describe_managed_runtime(
         &mut self,
@@ -477,8 +511,16 @@ fn buffered_frame_length(
 
 fn next_correlation_id() -> [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES] {
     let sequence = NEXT_CORRELATION_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+    correlation_id_for_process_sequence(std::process::id(), sequence)
+}
+
+fn correlation_id_for_process_sequence(
+    process_id: u32,
+    sequence: u64,
+) -> [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES] {
     let mut correlation_id = [0_u8; MANAGED_CONTROL_CORRELATION_ID_BYTES];
-    correlation_id[..8].copy_from_slice(b"HMC2REQ\0");
+    correlation_id[..4].copy_from_slice(b"HMC2");
+    correlation_id[4..8].copy_from_slice(&process_id.to_be_bytes());
     correlation_id[8..].copy_from_slice(&sequence.to_be_bytes());
     correlation_id
 }
@@ -749,6 +791,34 @@ mod tests {
     }
 
     #[test]
+    fn peer_close_probe_preserves_pending_control_frame() {
+        let (reader, writer) = UnixStream::pair().expect("control pair");
+        let mut writer_channel = ManagedControlChannelV2::new(writer);
+        writer_channel
+            .write_request([9; MANAGED_CONTROL_CORRELATION_ID_BYTES], ready_request())
+            .expect("write request");
+        let mut reader_channel = ManagedControlChannelV2::new(reader);
+
+        assert!(
+            !reader_channel
+                .peer_closed_preserving_frames()
+                .expect("probe live peer")
+        );
+        let (correlation_id, request) = reader_channel
+            .receive_request()
+            .expect("probe did not consume request");
+        assert_eq!(correlation_id, [9; MANAGED_CONTROL_CORRELATION_ID_BYTES]);
+        assert!(matches!(request.operation, Some(Operation::Ready(_))));
+
+        drop(writer_channel);
+        assert!(
+            reader_channel
+                .peer_closed_preserving_frames()
+                .expect("probe closed peer")
+        );
+    }
+
+    #[test]
     fn retains_a_partial_nonblocking_frame_until_the_full_request_arrives() {
         let (reader, mut writer) = UnixStream::pair().expect("control pair");
         reader.set_nonblocking(true).expect("nonblocking reader");
@@ -843,6 +913,14 @@ mod tests {
         assert_ne!(first, second);
         assert!(first.iter().any(|byte| *byte != 0));
         assert!(second.iter().any(|byte| *byte != 0));
+    }
+
+    #[test]
+    fn namespaces_control_correlation_ids_by_requesting_process() {
+        assert_ne!(
+            correlation_id_for_process_sequence(101, 1),
+            correlation_id_for_process_sequence(202, 1),
+        );
     }
 
     #[test]

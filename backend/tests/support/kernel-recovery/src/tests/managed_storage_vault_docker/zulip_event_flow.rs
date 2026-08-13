@@ -85,6 +85,7 @@ fn managed_zulip_runtime_delivers_live_command_and_event_only_communications_han
         &contour.root.join("runtime"),
         &contour.zulip,
         contour.fixture.realm_url(),
+        None,
     );
     assert_eq!(contour.zulip.runtime_generation, predecessor_generation + 1);
     assert_zulip_history_and_operational_query(&contour);
@@ -157,6 +158,151 @@ fn managed_zulip_runtime_delivers_live_command_and_event_only_communications_han
 
     contour.shutdown_processes();
     contour.finish();
+}
+
+#[test]
+#[ignore = "requires disposable Docker plus real managed Vault, Storage, NATS, Communications and Zulip binaries"]
+fn managed_zulip_private_surfaces_reject_malformed_provider_output() {
+    let contour = ManagedZulipContour::start(ZulipGrantProfileV1::CommandAndQuery);
+    let storage_credential = runtime_storage_credential_for_registration_v1(
+        &contour.supervisor,
+        &contour.store,
+        &contour.data,
+        &contour.zulip.registration_id,
+        makosh_zulip_runtime::admission::ZULIP_STORAGE_CAPABILITY_ID,
+    );
+    assert_eq!(contour.fixture.release_malformed_event(), 1);
+    let deadline = Instant::now() + Duration::from_secs(5);
+    while contour.fixture.served_malformed_events() < 1 {
+        assert!(
+            Instant::now() < deadline,
+            "managed Zulip runtime did not consume malformed provider output"
+        );
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    std::thread::sleep(Duration::from_millis(250));
+    assert!(
+        contour
+            .supervisor
+            .is_active(&contour.zulip.registration_id)
+            .expect("read Zulip privacy runtime state"),
+        "malformed provider output must not terminate the Zulip runtime"
+    );
+    assert_eq!(
+        contour
+            .supervisor
+            .relay_port()
+            .is_ready(&contour.zulip.registration_id),
+        Ok(true),
+        "malformed provider output must not revoke readiness"
+    );
+
+    let public_response = route_zulip_client(
+        &contour,
+        ZulipClientContractV1::OperationalQuery,
+        72,
+        &ZulipClientRequestV1::OperationalQuery(ZulipOperationalQueryV1::GetAccountStatus {
+            account_id: ZULIP_ACCOUNT_ID.to_owned(),
+        }),
+    );
+    let diagnostic = format!(
+        "{:?}",
+        contour
+            .supervisor
+            .last_failure(&contour.zulip.registration_id)
+            .expect("read Zulip supervisor diagnostic")
+    );
+    assert_zulip_private_values_absent_v1(
+        format!("{public_response:?}").as_bytes(),
+        storage_credential.as_slice(),
+        "typed Zulip client response",
+    );
+    assert_zulip_private_values_absent_v1(
+        diagnostic.as_bytes(),
+        storage_credential.as_slice(),
+        "Zulip supervisor diagnostic",
+    );
+    assert_zulip_public_durable_surfaces_are_private_v1(storage_credential.as_slice());
+    assert_supervised_zulip_child_output_is_private_v1(
+        &contour.child_stdio_capture,
+        storage_credential.as_slice(),
+    );
+
+    contour.shutdown_processes();
+    contour.finish();
+}
+
+fn assert_zulip_private_values_absent_v1(bytes: &[u8], storage_credential: &[u8], surface: &str) {
+    for private_value in [
+        PRIVATE_ZULIP_MESSAGE_MARKER.as_bytes(),
+        PRIVATE_ZULIP_RAW_PROVIDER_MARKER.as_bytes(),
+        PRIVATE_ZULIP_LOCATOR_MARKER.as_bytes(),
+        PRIVATE_ZULIP_QUEUE_MARKER.as_bytes(),
+        b"managed-zulip-api-key".as_slice(),
+        storage_credential,
+    ] {
+        assert!(!private_value.is_empty());
+        assert!(
+            !bytes
+                .windows(private_value.len())
+                .any(|window| window == private_value),
+            "{surface} exposed a private Zulip value"
+        );
+        let encoded = private_value
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>();
+        assert!(
+            !bytes
+                .windows(encoded.len())
+                .any(|window| window == encoded.as_bytes()),
+            "{surface} exposed a hex-encoded private Zulip value"
+        );
+    }
+}
+
+fn assert_zulip_public_durable_surfaces_are_private_v1(storage_credential: &[u8]) {
+    tokio::runtime::Runtime::new()
+        .expect("Zulip privacy database runtime")
+        .block_on(async {
+            let pool = authenticated_storage_admin_pool_v1().await;
+            for table in [
+                "zulip_communications_outbox",
+                "zulip_delivery_intent_result_outbox",
+            ] {
+                let rows: String = sqlx::query_scalar(sqlx::AssertSqlSafe(format!(
+                    "SELECT COALESCE(string_agg(row_to_json(source)::text, E'\\n'), '') \
+                     FROM makosh_data.{table} AS source"
+                )))
+                .fetch_one(&pool)
+                .await
+                .unwrap_or_else(|error| panic!("serialize public Zulip table {table}: {error}"));
+                assert_zulip_private_values_absent_v1(
+                    rows.as_bytes(),
+                    storage_credential,
+                    "durable public Zulip row",
+                );
+            }
+        });
+}
+
+fn assert_supervised_zulip_child_output_is_private_v1(directory: &Path, storage_credential: &[u8]) {
+    // The production supervisor keeps stdout/stderr null; this conformance-only
+    // sink reads the exact supervised files of the active Zulip successor.
+    let mut captures = std::fs::read_dir(directory)
+        .expect("read Zulip child capture directory")
+        .map(|entry| entry.expect("read Zulip child capture entry").path())
+        .collect::<Vec<_>>();
+    captures.sort();
+    assert_eq!(captures.len(), 2, "one supervised Zulip child attempt");
+    for capture in captures {
+        let bytes = std::fs::read(capture).expect("read supervised Zulip child output");
+        assert_zulip_private_values_absent_v1(
+            &bytes,
+            storage_credential,
+            "supervised Zulip stdout/stderr",
+        );
+    }
 }
 
 fn assert_zulip_history_and_operational_query(contour: &ManagedZulipContour) {

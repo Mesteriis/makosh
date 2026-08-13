@@ -23,11 +23,13 @@ use makosh_gateway_protocol::v1::{
     ClientRealtimeEventV1, ClientRealtimeFrameV1, client_realtime_frame_v1::Frame as RealtimeFrame,
 };
 use makosh_review_note_candidate_api::{
-    REVIEW_NOTE_CANDIDATE_COMMAND_CONNECT_PATH_V1, REVIEW_NOTE_CANDIDATE_QUERY_CONNECT_PATH_V1,
-    REVIEW_NOTE_CANDIDATE_REALTIME_CONTRACT_NAME_V1, REVIEW_NOTE_CANDIDATE_REALTIME_EVENT_KIND_V1,
+    REVIEW_NOTE_CANDIDATE_COMMAND_CONNECT_PATH_V1, REVIEW_NOTE_CANDIDATE_LIST_CONNECT_PATH_V1,
+    REVIEW_NOTE_CANDIDATE_QUERY_CONNECT_PATH_V1, REVIEW_NOTE_CANDIDATE_REALTIME_CONTRACT_NAME_V1,
+    REVIEW_NOTE_CANDIDATE_REALTIME_EVENT_KIND_V1,
     wire::{
         DecideReviewNoteCandidateRequestV1, DecideReviewNoteCandidateResponseV1,
         GetReviewNoteCandidateRequestV1, GetReviewNoteCandidateResponseV1,
+        ListReviewNoteCandidatesRequestV1, ListReviewNoteCandidatesResponseV1,
         ReviewNoteCandidateDecisionV1, ReviewNoteCandidateErrorCodeV1,
         ReviewNoteCandidatePromotionStatusV1, ReviewNoteCandidateStateV1,
         ReviewNoteCandidateStatusChangedV1,
@@ -278,6 +280,27 @@ pub(super) fn query_note_candidate_v1(
     )
 }
 
+pub(super) fn list_note_candidates_v1(
+    router: &NoteCandidateGateway,
+    runtime: &tokio::runtime::Runtime,
+    cookie: &str,
+    after_review_id: Vec<u8>,
+    limit: u32,
+) -> ListReviewNoteCandidatesResponseV1 {
+    post_proto(
+        router,
+        runtime,
+        cookie,
+        REVIEW_NOTE_CANDIDATE_LIST_CONNECT_PATH_V1,
+        ListReviewNoteCandidatesRequestV1 {
+            protocol_major: 1,
+            state: None,
+            after_review_id,
+            limit,
+        },
+    )
+}
+
 pub(super) fn wait_for_note_candidate_terminal_states_v1(
     router: &NoteCandidateGateway,
     runtime: &tokio::runtime::Runtime,
@@ -356,23 +379,16 @@ fn note_candidate_storage_diagnostics_v1(runtime: &tokio::runtime::Runtime) -> S
     })
 }
 
-pub(super) fn read_note_candidate_terminal_events_v1(
-    router: &NoteCandidateGateway,
+pub(super) fn read_note_candidate_terminal_events_v1<B>(
+    response: hyper::Response<B>,
     runtime: &tokio::runtime::Runtime,
-    cookie: &str,
     reviews: &NoteCandidateReviewsV1,
-) -> NoteCandidateTerminalEventsV1 {
+) -> NoteCandidateTerminalEventsV1
+where
+    B: hyper::body::Body<Data = Bytes> + Unpin,
+    B::Error: std::fmt::Debug,
+{
     let observed = Arc::new(std::sync::Mutex::new(Vec::new()));
-    let response = runtime.block_on(
-        router.route(
-            Request::builder()
-                .method("GET")
-                .uri("/api/realtime/v1/events")
-                .header("cookie", cookie)
-                .body(http_body_util::Full::new(Bytes::new()))
-                .expect("Note candidate Gateway SSE request"),
-        ),
-    );
     assert_eq!(response.status(), StatusCode::OK);
     runtime.block_on(async {
         match tokio::time::timeout(
@@ -390,22 +406,15 @@ pub(super) fn read_note_candidate_terminal_events_v1(
     })
 }
 
-pub(super) fn read_note_candidate_extraction_terminal_event_v1(
-    router: &NoteCandidateGateway,
+pub(super) fn read_note_candidate_extraction_terminal_event_v1<B>(
+    response: hyper::Response<B>,
     runtime: &tokio::runtime::Runtime,
-    cookie: &str,
     run_id: &[u8],
-) -> ClientRealtimeEventV1 {
-    let response = runtime.block_on(
-        router.route(
-            Request::builder()
-                .method("GET")
-                .uri("/api/realtime/v1/events")
-                .header("cookie", cookie)
-                .body(http_body_util::Full::new(Bytes::new()))
-                .expect("Note candidate extraction Gateway SSE request"),
-        ),
-    );
+) -> ClientRealtimeEventV1
+where
+    B: hyper::body::Body<Data = Bytes> + Unpin,
+    B::Error: std::fmt::Debug,
+{
     assert_eq!(response.status(), StatusCode::OK);
     runtime.block_on(async {
         tokio::time::timeout(

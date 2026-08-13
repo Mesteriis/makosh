@@ -1,79 +1,28 @@
-export type ProjectStatus = 'planning' | 'active' | 'on_hold' | 'completed' | 'archived'
+import type {
+  ProjectOutcomeStateV1,
+  ProjectReferenceKindV1,
+  ProjectStateV1,
+  TimestampV1
+} from '../../../gen/makosh/projects/client/v1/projects_pb'
 
-export interface ProjectRecord {
-  project_id: string
+export interface ProjectDraft {
   name: string
-  kind: string
-  status: ProjectStatus
   description: string
-  owner_display_name: string
-  progress_percent: number
-  start_date: string | null
-  target_date: string | null
-  created_at: string
-  updated_at: string
+  startAt?: TimestampV1
+  targetAt?: TimestampV1
 }
 
-export interface ProjectStats {
-  message_count: number
-  document_count: number
-  persona_count: number
-  /** @deprecated Use persona_count. */
-  people_count: number
-  graph_connection_count: number
-  latest_activity_at: string | null
-}
-
-export interface ProjectSummary {
-  project: ProjectRecord
-  stats: ProjectStats
-  graph_node_id: string
-}
-
-export interface ProjectTimelineItem {
-  item_kind: string
-  item_id: string
+export interface ProjectOutcomeDraft {
   title: string
-  subtitle: string
-  occurred_at: string
+  description: string
+  targetAt?: TimestampV1
 }
 
-export interface ProjectPersonaSummary {
-  display_name: string
-  email_address: string
-  interaction_count: number
-  last_interaction_at: string | null
+export interface ProjectReferenceDraft {
+  kind: ProjectReferenceKindV1
+  publicId: Uint8Array
+  label: string
 }
 
-/** @deprecated Use ProjectPersonaSummary. */
-export type ProjectPersonSummary = ProjectPersonaSummary
-
-export interface ProjectMessageSummary {
-  message_id: string
-  subject: string
-  sender: string
-  occurred_at: string
-}
-
-export interface ProjectDocumentSummary {
-  document_id: string
-  document_kind: string
-  title: string
-  imported_at: string
-}
-
-export interface ProjectDetail {
-  project: ProjectRecord
-  stats: ProjectStats
-  graph_node_id: string
-  timeline: ProjectTimelineItem[]
-  key_personas: ProjectPersonaSummary[]
-  /** @deprecated Use key_personas. */
-  key_people: ProjectPersonaSummary[]
-  recent_messages: ProjectMessageSummary[]
-  documents: ProjectDocumentSummary[]
-}
-
-export interface ProjectListResponse {
-  items: ProjectSummary[]
-}
+export type ProjectLifecycleState = ProjectStateV1
+export type ProjectExpectedOutcomeState = ProjectOutcomeStateV1

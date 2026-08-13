@@ -1,0 +1,35 @@
+[package]
+name = "makosh-reviewed-person-match-candidate-promotion-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-reviewed-person-match-candidate-promotion-runtime"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "workflow"
+owner = "reviewed_person_match_candidate_promotion"
+surface = "runtime"
+
+[dependencies]
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-persons-api = { path = "../persons-api" }
+makosh-review-person-match-candidate-api = { path = "../review-person-match-candidate-api" }
+makosh-review-person-match-candidate-promotion-api = { path = "../review-person-match-candidate-promotion-api" }
+makosh-reviewed-person-match-candidate-promotion-core = { path = "../reviewed-person-match-candidate-promotion-core" }
+makosh-reviewed-person-match-candidate-promotion-persistence = { path = "../reviewed-person-match-candidate-promotion-persistence" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+libc = "=0.2.186"
+prost = "=0.14.4"
+prost-types = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+tokio = { version = "=1.52.4", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "=1.9.0"

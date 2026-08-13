@@ -146,6 +146,10 @@ policy через ссылки из новых документов.
 - [ADR-0370: Verified Knowledge note owner admission](ADR-0370-verified-knowledge-note-owner-admission.md)
 - [ADR-0371: Bounded attachment text extraction workflow](ADR-0371-bounded-attachment-text-extraction-workflow.md)
 - [ADR-0372: Kernel-staged runtime resources for managed workflows](ADR-0372-kernel-staged-runtime-resources-for-managed-workflows.md)
+- [ADR-0402: Persons как канонический владелец человека и граница Contacts cutover](ADR-0402-persons-canonical-owner-and-contacts-cutover-boundary.md)
+- [ADR-0403: Mail person-source и Review promotion boundary](ADR-0403-mail-person-source-and-review-promotion-boundary.md)
+- [ADR-0404: Confirmed Relationships owner и Personas boundary](ADR-0404-confirmed-relationships-owner-and-personas-boundary.md)
+- [ADR-0405: Projects owner, expected outcomes и product boundary](ADR-0405-projects-owner-expected-outcomes-and-product-boundary.md)
 
 Эти ADR фиксируют runtime, communication, storage, infrastructure lifecycle и
 границу между provider-specific experience и provider-neutral context, а также
@@ -157,9 +161,11 @@ engines пока имеют пустой фактический inventory. Лю�
 открытия соответствующего phase gate через ADR, policy и executable evidence.
 Канонический реестр фиксирует тринадцать начальных business domains и отделяет
 их от integrations, workflows и projections.
-Текущий implementation allowlist разрешает только Communications, Contacts,
-Organizations, Tasks, Calendar, Documents и AI; остальные домены и все
-product projections заблокированы.
+Текущий development allowlist разрешает Communications, Persons,
+Organizations, Relationships, Projects, Tasks, Calendar, Documents, Knowledge,
+Review и AI. Obligations, Decisions и все product projections заблокированы.
+До atomic cutover ADR-0402 допускает только уже объявленный exact
+Contacts production inventory; новая разработка Contacts запрещена.
 Event Hub является Kernel control plane над NATS catalog/subscriptions, а
 Telemetry Hub обеспечивает независимые от PostgreSQL/NATS локальные logs,
 metrics, traces и crash diagnostics через отдельный supervised Collector.
@@ -796,3 +802,26 @@ ADR-0394 фиксирует первый desktop call recording producer как 
 integration с owner-local consent receipt и Blob custody. Tauri остаётся
 visible OS-capture adapter за fenced host bridge, Kernel не интерпретирует
 аудио/consent, а transcription получает только target-owned durable event.
+
+ADR-0402 заменяет центральный Contacts owner на Persons в canonical registry и
+фиксирует provider source links, Review-only identity decisions и атомарный
+cutover без alias, dual-read или legacy schema import.
+
+ADR-0403 разделяет successor Mail-to-Person path на Mail public-source contract,
+`mail_persons_sync`, Review-owned person-match queue и
+`reviewed_person_match_candidate_promotion`; provider-private data остаются в
+Mail, а новые packages не admitted и не запускаются рядом со старым
+`mail_contacts_sync` до атомарного Task 6 cutover.
+
+ADR-0404 снимает только development freeze с canonical Relationships owner:
+подтверждённые typed Person/Organization relationships, temporal validity и
+bounded evidence принадлежат отдельному domain, а Graph остаётся rebuildable
+projection и не получает canonical truth.
+
+ADR-0405 снимает только development freeze с Projects owner: project
+lifecycle, expected outcomes и typed public owner references принадлежат
+Projects, тогда как Graph, Timeline и Search остаются projections.
+
+ADR-0406 снимает только development freeze с Obligations owner и разделяет
+confirmed obligation truth, Review-owned candidate state и отдельный reviewed
+promotion workflow; Decisions остаётся заблокированным.

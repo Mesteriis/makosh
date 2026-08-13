@@ -32,16 +32,21 @@ const STAGED_OLLAMA_PACKAGES = [
   'makosh-ollama-ai-runtime',
 ];
 
+const WHISPER_STT_PACKAGES = [
+  'makosh-whisper-stt-core',
+  'makosh-whisper-stt-assembly',
+  'makosh-whisper-stt-persistence',
+  'makosh-whisper-stt-process',
+  'makosh-whisper-stt-runtime',
+];
+
 const MAIL_CAPABILITIES = [
-  'mail.address-book.contact-source.blob.v1',
-  'mail.address-book.provider.v1',
   'mail.attachment-anchor.consume.v1',
   'mail.attachment-blob-admission.publish.v1',
   'mail.attachment-safety-state.consume.v1',
   'mail.attachment.scan-candidate.publish.v1',
   'mail.blob.v1',
   'mail.communication-observed.publish.v1',
-  'mail.contacts-sync.v1',
   'mail.delivery.query.v1',
   'mail.delivery.v1',
   'mail.gmail.credentials.v1',
@@ -52,17 +57,26 @@ const MAIL_CAPABILITIES = [
   'mail.oauth.query.v1',
   'mail.oauth.refresh.v1',
   'mail.oauth.start.v1',
+  'mail.person-source.provider.v1',
   'mail.smtp.credentials.v1',
   'mail.storage.v1',
   'mail.sync.v1',
 ];
 
 const MAIL_CARGO_FEATURES = {
-  'makosh-contacts-persistence': {
+  'makosh-persons-persistence': {
     default: [],
     'conformance-test-support': [],
   },
-  'makosh-mail-contacts-sync-persistence': {
+  'makosh-review-person-match-candidate-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+  'makosh-reviewed-person-match-candidate-promotion-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+  'makosh-mail-persons-sync-persistence': {
     default: [],
     'conformance-test-support': [],
   },
@@ -132,23 +146,30 @@ test('Mail outbound attachments keep provider delivery contracts as separate int
 
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert.deepEqual(inventory.domains, [
     'communications',
-    'contacts',
     'knowledge',
+    'persons',
     'review',
     'tasks',
   ]);
-  assert.deepEqual(inventory.integrations, ['desktop_call_recording', 'mail']);
+  assert.deepEqual(inventory.integrations, [
+    'desktop_call_recording',
+    'mail',
+    'ollama',
+    'whisper_stt',
+  ]);
   assert.deepEqual(inventory.workflows, [
     'attachment_preview',
     'attachment_preview_evidence_replay',
     'attachment_text_extraction',
     'attachment_translation',
     'call_transcription',
+    'communication_bulk_action',
     'communication_cross_channel_forward',
+    'communication_delayed_delivery',
     'communication_delivery_intent',
     'communication_explanation',
     'communication_note_candidate_extraction',
@@ -158,8 +179,9 @@ test('Mail outbound attachments keep provider delivery contracts as separate int
     'communication_task_candidate_extraction',
     'communication_translation',
     'communications_export',
-    'mail_contacts_sync',
+    'mail_persons_sync',
     'reviewed_note_candidate_promotion',
+    'reviewed_person_match_candidate_promotion',
     'reviewed_task_candidate_promotion',
   ]);
   assert.deepEqual(inventory.engines, [
@@ -182,6 +204,7 @@ test('Mail outbound attachments keep provider delivery contracts as separate int
       'makosh-mail-address-book-persistence',
       'makosh-mail-google-people',
       'makosh-mail-carddav',
+      ...WHISPER_STT_PACKAGES,
       'makosh-desktop-call-recording-api',
       'makosh-desktop-call-recording-core',
       'makosh-desktop-call-recording-persistence',

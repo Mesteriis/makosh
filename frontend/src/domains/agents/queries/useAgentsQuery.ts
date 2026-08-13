@@ -1,18 +1,17 @@
 import { useQuery } from '@tanstack/vue-query'
-import { fetchAiAgents, fetchAiRuns, fetchAiStatus, fetchOwnerPersona } from '../api/agents'
+import { fetchAiAgents, fetchAiRuns, fetchAiStatus } from '../api/agents'
 
 export function useAiWorkspaceQuery() {
 	return useQuery({
 		queryKey: ['ai-workspace'],
 		queryFn: async () => {
-			const [agentResponse, runResponse, ownerResponse] = await Promise.all([
+			const [agentResponse, runResponse] = await Promise.all([
 				fetchAiAgents(),
-				fetchAiRuns(25),
-				fetchOwnerPersona()
+				fetchAiRuns(25)
 			])
 			const agents = agentResponse.items
 			const runs = runResponse.items
-			const ownerPersona = ownerResponse.owner_persona
+			const ownerPersona = null
 			let aiStatus: Awaited<ReturnType<typeof fetchAiStatus>> | null = null
 			let error = ''
 			try {

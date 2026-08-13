@@ -1,8 +1,9 @@
 //! Exact descriptor/grant/distribution intersection for managed runtime resources.
 
 use makosh_runtime_protocol::v1::{
-    DistributionArtifactKindV1, DistributionManifestArtifactV1, DistributionManifestV1,
-    ModuleDescriptorV1, ModuleKindV1, RuntimeArtifactUseV1, capability_request_v1,
+    CapabilityCriticalityV1, DistributionArtifactKindV1, DistributionManifestArtifactV1,
+    DistributionManifestV1, ModuleDescriptorV1, ModuleKindV1, RuntimeArtifactUseV1,
+    capability_request_v1,
 };
 
 pub struct RuntimeArtifactRequirementV1 {
@@ -67,6 +68,14 @@ pub fn select(
         {
             return Err("managed runtime grant is absent from exact descriptor".to_owned());
         }
+    }
+    if descriptor.capabilities.iter().any(|capability| {
+        capability.criticality == CapabilityCriticalityV1::Required as i32
+            && granted_capability_ids
+                .binary_search_by(|candidate| candidate.as_str().cmp(&capability.capability_id))
+                .is_err()
+    }) {
+        return Err("managed runtime required capability is not granted".to_owned());
     }
 
     let mut runtime_artifacts = Vec::new();
@@ -172,9 +181,7 @@ mod tests {
         let descriptor = descriptor();
         let manifest = manifest("makosh-telegram-runtime");
 
-        let none = select(&descriptor, &[], &manifest).expect("no grants");
-        assert!(none.runtime_artifacts().is_empty());
-        assert_eq!(none.state_layout_revision(), None);
+        assert!(select(&descriptor, &[], &manifest).is_err());
 
         let requirements = select(&descriptor, &["telegram.runtime.v1".to_owned()], &manifest)
             .expect("granted runtime");

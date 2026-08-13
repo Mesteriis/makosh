@@ -1,0 +1,24 @@
+[package]
+name = "makosh-reviewed-obligation-candidate-promotion-persistence"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[features]
+default = []
+conformance-test-support = []
+
+[package.metadata.makosh]
+role = "workflow"
+owner = "reviewed_obligation_candidate_promotion"
+surface = "persistence"
+
+[dependencies]
+makosh-events-protocol = { path = "../platform/events" }
+makosh-reviewed-obligation-candidate-promotion-core = { path = "../reviewed-obligation-candidate-promotion-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+sha2 = { version = "=0.11.0", default-features = false }
+sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

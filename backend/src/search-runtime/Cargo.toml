@@ -1,0 +1,46 @@
+[package]
+name = "makosh-search-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-search-runtime"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "projection"
+owner = "search"
+surface = "runtime"
+
+[dependencies]
+makosh-calendar-api = { path = "../calendar-api" }
+makosh-decisions-api = { path = "../decisions-api" }
+makosh-documents-api = { path = "../documents-api" }
+makosh-events-jetstream = { path = "../platform/events/jetstream" }
+makosh-events-protocol = { path = "../platform/events" }
+makosh-knowledge-command-api = { path = "../knowledge-command-api" }
+makosh-managed-vault-client = { path = "../platform/vault/managed_client" }
+makosh-obligations-api = { path = "../obligations-api" }
+makosh-organizations-api = { path = "../organizations-api" }
+makosh-persons-api = { path = "../persons-api" }
+makosh-projects-api = { path = "../projects-api" }
+makosh-relationships-api = { path = "../relationships-api" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-search-api = { path = "../search-api" }
+makosh-search-core = { path = "../search-core" }
+makosh-search-persistence = { path = "../search-persistence" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+makosh-storage-vault = { path = "../platform/storage/vault" }
+makosh-tasks-command-api = { path = "../tasks-command-api" }
+libc = "=0.2.186"
+prost = "=0.14.4"
+sha2 = { version = "=0.11.0", default-features = false }
+tokio = { version = "=1.52.4", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "=1.9.0"
+
+[dev-dependencies]
+makosh-organizations-runtime = { path = "../organizations-runtime" }

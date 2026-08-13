@@ -3,7 +3,7 @@
 use std::time::Duration;
 
 use async_nats::connection::State;
-use async_nats::jetstream::consumer::{AckPolicy, PullConsumer};
+use async_nats::jetstream::consumer::PullConsumer;
 use makosh_events_protocol::delivery::{
     ExactOutboxPublisherPortV1, OutboxPublishReceiptV1, OutboxRecordV1, OutboxRelayErrorV1,
 };
@@ -11,6 +11,7 @@ use makosh_events_protocol::validation::envelope::{decode_envelope_v1, validate_
 
 use crate::subjects::DurableSubjectV1;
 
+use super::event_hub::{canonical_consumer_config, canonical_consumer_matches};
 use super::{RuntimeNatsIdentity, RuntimePublishPermitV1, RuntimeSubscribePermitV1};
 
 const PUBLISH_TIMEOUT: Duration = Duration::from_secs(2);
@@ -96,26 +97,13 @@ impl RuntimeJetStreamConnection {
             .get_consumer(specification.durable_name())
             .await
             .map_err(|_| "JetStream durable consumer is unavailable".to_owned())?;
-        consumer_matches_permit(&consumer, specification)
+        let expected = canonical_consumer_config(specification);
+        canonical_consumer_matches(&consumer.cached_info().config, &expected)
             .then_some(consumer)
             .ok_or_else(|| {
                 "JetStream durable consumer conflicts with the runtime subscribe permit".to_owned()
             })
     }
-}
-
-fn consumer_matches_permit(
-    consumer: &PullConsumer,
-    specification: &crate::topology::ConsumerSpecV1,
-) -> bool {
-    let actual = &consumer.cached_info().config;
-    let budget = specification.budget();
-    actual.durable_name.as_deref() == Some(specification.durable_name())
-        && actual.filter_subject == specification.filter_subject()
-        && actual.ack_policy == AckPolicy::Explicit
-        && actual.ack_wait == budget.ack_wait()
-        && actual.max_deliver == budget.max_deliver()
-        && actual.max_ack_pending == budget.max_ack_pending()
 }
 
 /// Binds an owner-local outbox relay to one exact runtime publish permit.

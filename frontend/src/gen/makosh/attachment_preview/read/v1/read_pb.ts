@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file makosh/attachment_preview/read/v1/read.proto.
  */
 export const file_makosh_attachment_preview_read_v1_read: GenFile = /*@__PURE__*/
-  fileDesc("CixoZXJtZXMvYXR0YWNobWVudF9wcmV2aWV3L3JlYWQvdjEvcmVhZC5wcm90bxIhaGVybWVzLmF0dGFjaG1lbnRfcHJldmlldy5yZWFkLnYxIlQKHlJlYWRBdHRhY2htZW50UHJldmlld1JlcXVlc3RWMRIWCg5wcm90b2NvbF9tYWpvchgBIAEoDRIaChJvcGFxdWVfcmVhZF90aWNrZXQYAiABKAxiBnByb3RvMw");
+  fileDesc("CixtYWtvc2gvYXR0YWNobWVudF9wcmV2aWV3L3JlYWQvdjEvcmVhZC5wcm90bxIhbWFrb3NoLmF0dGFjaG1lbnRfcHJldmlldy5yZWFkLnYxIlQKHlJlYWRBdHRhY2htZW50UHJldmlld1JlcXVlc3RWMRIWCg5wcm90b2NvbF9tYWpvchgBIAEoDRIaChJvcGFxdWVfcmVhZF90aWNrZXQYAiABKAxiBnByb3RvMw");
 
 /**
  * Body for the exact descriptor-declared client_blob route. Success returns

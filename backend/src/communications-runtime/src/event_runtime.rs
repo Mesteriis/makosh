@@ -857,20 +857,19 @@ impl CommunicationsEventRuntimeV1 {
             )
             .await
             .map(|_| ()),
-            CommunicationsConsumerV1::CallEvidence => {
-                let outcome = consume_next_call_evidence_observation_v1(
-                    &self.call_evidence_persistence,
-                    &self.connection,
-                    &self.permits.call_evidence,
-                    &self.logical_human_owner_id,
-                    canonical_event_context.recorded_at_unix_seconds,
-                )
-                .await?;
+            CommunicationsConsumerV1::CallEvidence => consume_next_call_evidence_observation_v1(
+                &self.call_evidence_persistence,
+                &self.connection,
+                &self.permits.call_evidence,
+                &self.logical_human_owner_id,
+                canonical_event_context.recorded_at_unix_seconds,
+            )
+            .await
+            .map(|outcome| {
                 if matches!(outcome, CallEvidenceConsumeOutcomeV1::Applied { .. }) {
                     self.call_evidence_realtime_pending = true;
                 }
-                Ok(())
-            }
+            }),
             CommunicationsConsumerV1::AttachmentBlobAdmission => {
                 consume_next_attachment_blob_admission_observation_v1(
                     &self.persistence,

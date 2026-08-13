@@ -1,11 +1,14 @@
-use makosh_tasks_core::{ReviewedCandidateTaskDraftV1, TaskV1, task_creation_fingerprint_v1};
+use makosh_tasks_core::{
+    ManualTaskDraftV1, ReviewedCandidateTaskDraftV1, TaskLifecycleStateV1, TaskPriorityV1,
+    TaskRecordV1, TaskTimestampV1, TaskV1, task_creation_fingerprint_v1,
+};
 use sha2::{Digest, Sha256};
 
 pub const TASKS_RECOVERY_LIMIT_V1: u16 = 128;
-pub const TASKS_OUTBOX_LIMIT_V1: u16 = 128;
 pub const TASKS_MAX_EVENT_BYTES_V1: usize = 64 * 1024;
 pub const TASKS_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
 pub const TASKS_MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
+pub const TASKS_MAX_CLIENT_MESSAGE_BYTES_V1: usize = 64 * 1024;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TasksBlobReceiptV1 {
@@ -134,6 +137,138 @@ pub enum TasksPersistenceErrorV1 {
     InboxConflict,
     TaskConflict,
     NotFound,
+    OperationConflict,
+    RevisionConflict,
+    DependencyCycle,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TasksLifecycleMutationV1 {
+    Create(ManualTaskDraftV1),
+    Update {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        title: Option<String>,
+        description: Option<Option<String>>,
+        due_at: Option<Option<TaskTimestampV1>>,
+        changed_at: TaskTimestampV1,
+    },
+    SetState {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        state: TaskLifecycleStateV1,
+        changed_at: TaskTimestampV1,
+    },
+    SetPriority {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        priority: TaskPriorityV1,
+        changed_at: TaskTimestampV1,
+    },
+    AddDependency {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        dependency_id: [u8; 16],
+        depends_on_task_id: [u8; 16],
+        changed_at: TaskTimestampV1,
+    },
+    RemoveDependency {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        dependency_id: [u8; 16],
+        changed_at: TaskTimestampV1,
+    },
+    AddChecklistItem {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        checklist_item_id: [u8; 16],
+        label: String,
+        position: u32,
+        changed_at: TaskTimestampV1,
+    },
+    UpdateChecklistItem {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        checklist_item_id: [u8; 16],
+        label: Option<String>,
+        completed: Option<bool>,
+        position: Option<u32>,
+        changed_at: TaskTimestampV1,
+    },
+    RemoveChecklistItem {
+        operation_id: [u8; 16],
+        task_id: [u8; 16],
+        expected_revision: u64,
+        checklist_item_id: [u8; 16],
+        changed_at: TaskTimestampV1,
+    },
+}
+
+impl TasksLifecycleMutationV1 {
+    #[must_use]
+    pub fn operation_kind(&self) -> i16 {
+        match self {
+            Self::Create(_) => 1,
+            Self::Update { .. } => 2,
+            Self::SetState { .. } => 3,
+            Self::SetPriority { .. } => 4,
+            Self::AddDependency { .. } => 5,
+            Self::RemoveDependency { .. } => 6,
+            Self::AddChecklistItem { .. } => 7,
+            Self::UpdateChecklistItem { .. } => 8,
+            Self::RemoveChecklistItem { .. } => 9,
+        }
+    }
+
+    #[must_use]
+    pub fn operation_id(&self) -> [u8; 16] {
+        match self {
+            Self::Create(value) => value.operation_id,
+            Self::Update { operation_id, .. }
+            | Self::SetState { operation_id, .. }
+            | Self::SetPriority { operation_id, .. }
+            | Self::AddDependency { operation_id, .. }
+            | Self::RemoveDependency { operation_id, .. }
+            | Self::AddChecklistItem { operation_id, .. }
+            | Self::UpdateChecklistItem { operation_id, .. }
+            | Self::RemoveChecklistItem { operation_id, .. } => *operation_id,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TasksLifecycleOperationV1 {
+    pub logical_owner_id: String,
+    pub operation_id: [u8; 16],
+    pub request_sha256: [u8; 32],
+    pub request_bytes: Vec<u8>,
+    pub received_at_unix_millis: i64,
+    pub mutation: TasksLifecycleMutationV1,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TasksLifecycleCommitV1 {
+    pub response_sha256: [u8; 32],
+    pub response_bytes: Vec<u8>,
+    pub lifecycle_event: TasksOutboxRecordV1,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TasksLifecycleOperationOutcomeV1 {
+    Applied {
+        task: Box<TaskRecordV1>,
+        response_bytes: Vec<u8>,
+    },
+    Replayed {
+        response_bytes: Vec<u8>,
+    },
 }
 
 pub(crate) fn valid_reservation(value: &ReserveReviewedCandidateCommandV1) -> bool {
@@ -192,6 +327,25 @@ pub(crate) fn valid_task(value: &TaskV1) -> bool {
     makosh_tasks_core::validate_task_v1(value).is_ok()
 }
 
+pub(crate) fn valid_lifecycle_operation(value: &TasksLifecycleOperationV1) -> bool {
+    valid_identity(&value.logical_owner_id)
+        && nonzero(&value.operation_id)
+        && nonzero(&value.request_sha256)
+        && !value.request_bytes.is_empty()
+        && value.request_bytes.len() <= TASKS_MAX_CLIENT_MESSAGE_BYTES_V1
+        && Sha256::digest(&value.request_bytes).as_slice() == value.request_sha256
+        && value.received_at_unix_millis > 0
+        && value.mutation.operation_id() == value.operation_id
+}
+
+pub(crate) fn valid_lifecycle_commit(value: &TasksLifecycleCommitV1) -> bool {
+    nonzero(&value.response_sha256)
+        && !value.response_bytes.is_empty()
+        && value.response_bytes.len() <= TASKS_MAX_CLIENT_MESSAGE_BYTES_V1
+        && Sha256::digest(&value.response_bytes).as_slice() == value.response_sha256
+        && valid_outbox(&value.lifecycle_event)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -219,6 +373,32 @@ mod tests {
         let mut invalid = record;
         invalid.envelope_sha256 = [9; 32];
         assert!(!valid_outbox(&invalid));
+    }
+
+    #[test]
+    fn lifecycle_operation_binds_exact_request_bytes() {
+        let request_bytes = vec![7; 32];
+        let operation = TasksLifecycleOperationV1 {
+            logical_owner_id: "owner-1".to_owned(),
+            operation_id: [4; 16],
+            request_sha256: Sha256::digest(&request_bytes).into(),
+            request_bytes,
+            received_at_unix_millis: 1_800_000_000_000,
+            mutation: TasksLifecycleMutationV1::SetPriority {
+                operation_id: [4; 16],
+                task_id: [5; 16],
+                expected_revision: 2,
+                priority: makosh_tasks_core::TaskPriorityV1::High,
+                changed_at: makosh_tasks_core::TaskTimestampV1 {
+                    unix_seconds: 1_800_000_000,
+                    nanos: 0,
+                },
+            },
+        };
+        assert!(valid_lifecycle_operation(&operation));
+        let mut changed = operation;
+        changed.request_bytes.push(8);
+        assert!(!valid_lifecycle_operation(&changed));
     }
 
     fn reservation() -> ReserveReviewedCandidateCommandV1 {

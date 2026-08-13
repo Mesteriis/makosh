@@ -1,6 +1,7 @@
 use makosh_review_task_candidate_core::{
     ReviewTaskCandidateDecisionV1, ReviewTaskCandidateDraftV1,
-    ReviewTaskCandidatePromotionResultV1, ReviewTaskCandidateTimestampV1, ReviewTaskCandidateV1,
+    ReviewTaskCandidatePromotionResultV1, ReviewTaskCandidateStateV1,
+    ReviewTaskCandidateTimestampV1, ReviewTaskCandidateV1,
 };
 use sha2::{Digest, Sha256};
 
@@ -10,6 +11,20 @@ pub const REVIEW_TASK_CANDIDATE_OUTBOX_LIMIT_V1: u16 = 128;
 pub const REVIEW_TASK_CANDIDATE_MAX_EVENT_BYTES_V1: usize = 64 * 1024;
 pub const REVIEW_TASK_CANDIDATE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
 pub const REVIEW_TASK_CANDIDATE_MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
+pub const REVIEW_TASK_CANDIDATE_MAX_PAGE_SIZE_V1: u16 = 200;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ListReviewTaskCandidatesV1 {
+    pub after_review_id: Option<[u8; 16]>,
+    pub state: Option<ReviewTaskCandidateStateV1>,
+    pub limit: u16,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ReviewTaskCandidatePageV1 {
+    pub reviews: Vec<ReviewTaskCandidateV1>,
+    pub next_after_review_id: Option<[u8; 16]>,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ReviewTaskCandidateBlobReceiptV1 {

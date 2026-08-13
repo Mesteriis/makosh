@@ -1,0 +1,19 @@
+[package]
+name = "makosh-review-obligation-candidate-persistence"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "review"
+surface = "persistence"
+
+[dependencies]
+makosh-review-obligation-candidate-core = { path = "../review-obligation-candidate-core" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+sha2 = { version = "=0.11.0", default-features = false }
+sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

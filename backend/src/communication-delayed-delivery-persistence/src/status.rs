@@ -14,6 +14,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         if !valid_owner(logical_owner_id) || !valid_id16(delayed_operation_id) {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let row = sqlx::query(
             "SELECT delayed_operation_id, delivery_operation_id, state, state_revision,
                     deliver_at_unix_millis, scheduler_schedule_revision, error_code,
@@ -23,11 +24,16 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         )
         .bind(logical_owner_id)
         .bind(delayed_operation_id.as_slice())
-        .fetch_optional(&self.pool)
+        .fetch_optional(&mut *transaction)
         .await
         .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?
         .ok_or(DelayedDeliveryPersistenceErrorV1::NotFound)?;
-        status_from_row(&row)
+        let status = status_from_row(&row)?;
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(status)
     }
 }
 

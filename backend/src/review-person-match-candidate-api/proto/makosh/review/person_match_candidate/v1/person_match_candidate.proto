@@ -1,0 +1,187 @@
+syntax = "proto3";
+
+package makosh.review.person_match_candidate.v1;
+
+message PublicPersonSourceIdentityV1 {
+  bytes integration_public_id = 1;
+  bytes account_public_id = 2;
+  bytes provider_source_contact_public_id = 3;
+}
+
+message PersonMatchCandidateEvidenceV1 {
+  bytes evidence_event_id = 1;
+  bytes candidate_id = 2;
+  string logical_owner_id = 3;
+  bytes first_person_id = 4;
+  bytes second_person_id = 5;
+  PublicPersonSourceIdentityV1 first_source = 6;
+  PublicPersonSourceIdentityV1 second_source = 7;
+  PersonMatchKindV1 match_kind = 8;
+  int64 observed_at_unix_millis = 9;
+  uint64 resulting_owner_revision = 10;
+  bytes candidate_digest = 11;
+}
+
+message SubmitPersonMatchCandidateForReviewCommandV1 {
+  bytes submission_id = 1;
+  PersonMatchCandidateEvidenceV1 evidence = 2;
+}
+
+message PersonMatchCandidateReviewSubmittedV1 {
+  bytes submission_id = 1;
+  bytes review_id = 2;
+  bytes candidate_id = 3;
+  bytes candidate_digest = 4;
+  uint64 review_revision = 5;
+  string logical_owner_id = 6;
+}
+
+message PersonMatchCandidateReviewSubmissionRejectedV1 {
+  bytes submission_id = 1;
+  bytes candidate_id = 2;
+  PersonMatchCandidateSubmissionRejectCodeV1 code = 3;
+  string logical_owner_id = 4;
+}
+
+message AttachPersonSourceReviewActionV1 {
+  bytes from_person_id = 1;
+  uint64 expected_from_person_revision = 2;
+  bytes to_person_id = 3;
+  uint64 expected_to_person_revision = 4;
+  PublicPersonSourceIdentityV1 source = 5;
+  uint64 expected_source_revision = 6;
+}
+
+message MergePersonsReviewActionV1 {
+  bytes source_person_id = 1;
+  uint64 expected_source_person_revision = 2;
+  bytes target_person_id = 3;
+  uint64 expected_target_person_revision = 4;
+}
+
+message SplitPersonSourceSelectionV1 {
+  PublicPersonSourceIdentityV1 source = 1;
+  uint64 expected_source_revision = 2;
+}
+
+message SplitPersonReviewActionV1 {
+  bytes merged_person_id = 1;
+  uint64 expected_merged_person_revision = 2;
+  bytes target_person_id = 3;
+  uint64 expected_target_person_revision = 4;
+  repeated SplitPersonSourceSelectionV1 source_selection = 5;
+  repeated SplitProfileFactKindV1 profile_fact_selection = 6;
+}
+
+message PersonMatchCandidateApprovedActionV1 {
+  oneof action {
+    AttachPersonSourceReviewActionV1 attach = 1;
+    MergePersonsReviewActionV1 merge = 2;
+    SplitPersonReviewActionV1 split = 3;
+  }
+}
+
+message DecidePersonMatchCandidateRequestV1 {
+  uint32 protocol_major = 1;
+  bytes operation_id = 2;
+  bytes review_id = 3;
+  uint64 expected_review_revision = 4;
+  PersonMatchCandidateDecisionV1 decision = 5;
+  PersonMatchCandidateApprovedActionV1 approved_action = 6;
+  bytes approved_action_digest = 7;
+  bytes decided_by_owner_device_id = 8;
+  int64 decided_at_unix_millis = 9;
+}
+
+message PersonMatchCandidateApprovedForPromotionV1 {
+  bytes review_id = 1;
+  bytes candidate_id = 2;
+  bytes candidate_digest = 3;
+  bytes decision_id = 4;
+  uint64 decision_revision = 5;
+  bytes decided_by_owner_device_id = 6;
+  int64 decided_at_unix_millis = 7;
+  PersonMatchCandidateApprovedActionV1 approved_action = 8;
+  bytes approved_action_digest = 9;
+  string logical_owner_id = 10;
+}
+
+message PersonMatchCandidateSummaryV1 {
+  bytes review_id = 1;
+  PersonMatchCandidateEvidenceV1 evidence = 2;
+  PersonMatchCandidateStateV1 state = 3;
+  PersonMatchCandidatePromotionStatusV1 promotion_status = 4;
+  uint64 review_revision = 5;
+  optional bytes decision_id = 6;
+  optional bytes decided_by_owner_device_id = 7;
+  optional int64 decided_at_unix_millis = 8;
+  optional bytes approved_action_digest = 9;
+}
+
+message GetPersonMatchCandidateRequestV1 {
+  string logical_owner_id = 1;
+  bytes review_id = 2;
+}
+
+message ListPersonMatchCandidatesRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_review_id = 2;
+  uint32 limit = 3;
+}
+
+message ListPersonMatchCandidatesResultV1 {
+  repeated PersonMatchCandidateSummaryV1 candidates = 1;
+  bytes next_after_review_id = 2;
+}
+
+enum PersonMatchKindV1 {
+  PERSON_MATCH_KIND_UNSPECIFIED = 0;
+  PERSON_MATCH_KIND_NORMALIZED_EMAIL = 1;
+  PERSON_MATCH_KIND_NORMALIZED_PHONE = 2;
+}
+
+enum PersonMatchCandidateDecisionV1 {
+  PERSON_MATCH_CANDIDATE_DECISION_UNSPECIFIED = 0;
+  PERSON_MATCH_CANDIDATE_DECISION_APPROVE = 1;
+  PERSON_MATCH_CANDIDATE_DECISION_REJECT = 2;
+}
+
+enum PersonMatchCandidateStateV1 {
+  PERSON_MATCH_CANDIDATE_STATE_UNSPECIFIED = 0;
+  PERSON_MATCH_CANDIDATE_STATE_PENDING = 1;
+  PERSON_MATCH_CANDIDATE_STATE_APPROVED = 2;
+  PERSON_MATCH_CANDIDATE_STATE_REJECTED = 3;
+}
+
+enum PersonMatchCandidatePromotionStatusV1 {
+  PERSON_MATCH_CANDIDATE_PROMOTION_STATUS_UNSPECIFIED = 0;
+  PERSON_MATCH_CANDIDATE_PROMOTION_STATUS_NOT_REQUESTED = 1;
+  PERSON_MATCH_CANDIDATE_PROMOTION_STATUS_PENDING = 2;
+  PERSON_MATCH_CANDIDATE_PROMOTION_STATUS_SUCCEEDED = 3;
+  PERSON_MATCH_CANDIDATE_PROMOTION_STATUS_FAILED = 4;
+}
+
+enum SplitProfileFactKindV1 {
+  SPLIT_PROFILE_FACT_KIND_UNSPECIFIED = 0;
+  SPLIT_PROFILE_FACT_KIND_DISPLAY_NAME = 1;
+  SPLIT_PROFILE_FACT_KIND_GIVEN_NAME = 2;
+  SPLIT_PROFILE_FACT_KIND_FAMILY_NAME = 3;
+  SPLIT_PROFILE_FACT_KIND_EMAILS = 4;
+  SPLIT_PROFILE_FACT_KIND_PHONES = 5;
+}
+
+enum PersonMatchCandidateSubmissionRejectCodeV1 {
+  PERSON_MATCH_CANDIDATE_SUBMISSION_REJECT_CODE_UNSPECIFIED = 0;
+  PERSON_MATCH_CANDIDATE_SUBMISSION_REJECT_CODE_INVALID_REQUEST = 1;
+  PERSON_MATCH_CANDIDATE_SUBMISSION_REJECT_CODE_CONFLICT = 2;
+  PERSON_MATCH_CANDIDATE_SUBMISSION_REJECT_CODE_POLICY = 3;
+}
+
+service ReviewPersonMatchCandidateCommandService {
+  rpc Decide(DecidePersonMatchCandidateRequestV1) returns (PersonMatchCandidateSummaryV1);
+}
+
+service ReviewPersonMatchCandidateQueryService {
+  rpc Get(GetPersonMatchCandidateRequestV1) returns (PersonMatchCandidateSummaryV1);
+  rpc List(ListPersonMatchCandidatesRequestV1) returns (ListPersonMatchCandidatesResultV1);
+}

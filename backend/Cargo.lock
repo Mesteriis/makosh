@@ -3046,6 +3046,70 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-calendar-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-calendar-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-calendar-persistence",
+ "makosh-calendar-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-calendar-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-calendar-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-calendar-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-calendar-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-calendar-api",
+ "makosh-calendar-core",
+ "makosh-calendar-persistence",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-call-transcription-api"
 version = "0.1.0"
 dependencies = [
@@ -4260,11 +4324,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "makosh-contacts-assembly"
+name = "makosh-consistency-api"
 version = "0.1.0"
 dependencies = [
- "makosh-contacts-persistence",
- "makosh-contacts-runtime",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-consistency-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-consistency-persistence",
+ "makosh-consistency-runtime",
  "makosh-runtime-protocol",
  "makosh-storage-protocol",
  "prost 0.14.4",
@@ -4273,78 +4348,99 @@ dependencies = [
 ]
 
 [[package]]
-name = "makosh-contacts-command-api"
+name = "makosh-consistency-core"
 version = "0.1.0"
-dependencies = [
- "makosh-events-protocol",
- "makosh-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
 
 [[package]]
-name = "makosh-contacts-core"
+name = "makosh-consistency-persistence"
 version = "0.1.0"
 dependencies = [
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "makosh-contacts-mail-sync-source-api"
-version = "0.1.0"
-dependencies = [
- "makosh-events-protocol",
- "makosh-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "prost-types 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "makosh-contacts-persistence"
-version = "0.1.0"
-dependencies = [
- "makosh-contacts-core",
+ "makosh-consistency-core",
  "makosh-storage-protocol",
  "sha2 0.11.0",
  "sqlx",
 ]
 
 [[package]]
-name = "makosh-contacts-runtime"
+name = "makosh-consistency-runtime"
 version = "0.1.0"
 dependencies = [
  "libc",
- "makosh-blob-client",
- "makosh-contacts-command-api",
- "makosh-contacts-core",
- "makosh-contacts-mail-sync-source-api",
- "makosh-contacts-persistence",
+ "makosh-consistency-api",
+ "makosh-consistency-core",
+ "makosh-consistency-persistence",
  "makosh-events-jetstream",
  "makosh-events-protocol",
+ "makosh-persons-api",
+ "makosh-relationships-api",
  "makosh-runtime-protocol",
  "makosh-storage-protocol",
  "makosh-storage-vault",
  "prost 0.14.4",
- "prost-types 0.14.4",
  "sha2 0.11.0",
  "tokio",
  "zeroize",
 ]
 
 [[package]]
-name = "makosh-contacts-testkit"
+name = "makosh-decisions-api"
 version = "0.1.0"
 dependencies = [
- "makosh-contacts-core",
- "makosh-contacts-persistence",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-decisions-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-decisions-persistence",
+ "makosh-decisions-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-decisions-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-decisions-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-decisions-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-decisions-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-decisions-api",
+ "makosh-decisions-core",
+ "makosh-decisions-persistence",
+ "makosh-events-jetstream",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
  "sha2 0.11.0",
  "tokio",
+ "zeroize",
 ]
 
 [[package]]
@@ -4439,6 +4535,68 @@ dependencies = [
  "rcgen",
  "rustls",
  "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-documents-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-documents-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-documents-persistence",
+ "makosh-documents-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-documents-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "makosh-documents-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-documents-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-documents-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-documents-api",
+ "makosh-documents-core",
+ "makosh-documents-persistence",
+ "makosh-events-jetstream",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
 ]
 
 [[package]]
@@ -4577,6 +4735,130 @@ name = "makosh-gateway-session-contract"
 version = "0.1.0"
 
 [[package]]
+name = "makosh-graph-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-graph-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-graph-persistence",
+ "makosh-graph-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-graph-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-graph-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-graph-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-graph-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-graph-api",
+ "makosh-graph-core",
+ "makosh-graph-persistence",
+ "makosh-persons-api",
+ "makosh-relationships-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-identity-resolution-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-identity-resolution-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-identity-resolution-persistence",
+ "makosh-identity-resolution-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-identity-resolution-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-identity-resolution-api",
+ "makosh-persons-api",
+]
+
+[[package]]
+name = "makosh-identity-resolution-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-identity-resolution-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-identity-resolution-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-identity-resolution-api",
+ "makosh-identity-resolution-core",
+ "makosh-identity-resolution-persistence",
+ "makosh-persons-api",
+ "makosh-persons-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-kernel"
 version = "0.1.0"
 dependencies = [
@@ -4664,6 +4946,9 @@ dependencies = [
  "makosh-attachment-translation-persistence",
  "makosh-attachment-translation-runtime",
  "makosh-blob-client",
+ "makosh-calendar-api",
+ "makosh-calendar-persistence",
+ "makosh-calendar-runtime",
  "makosh-call-transcription-api",
  "makosh-call-transcription-ingress",
  "makosh-call-transcription-persistence",
@@ -4721,19 +5006,30 @@ dependencies = [
  "makosh-communications-saved-query-api",
  "makosh-communications-sender-insights-api",
  "makosh-communications-task-source-api",
- "makosh-contacts-command-api",
- "makosh-contacts-mail-sync-source-api",
- "makosh-contacts-persistence",
- "makosh-contacts-runtime",
+ "makosh-consistency-api",
+ "makosh-consistency-persistence",
+ "makosh-consistency-runtime",
+ "makosh-decisions-api",
+ "makosh-decisions-persistence",
+ "makosh-decisions-runtime",
  "makosh-desktop-call-recording-api",
  "makosh-desktop-call-recording-persistence",
  "makosh-desktop-call-recording-runtime",
+ "makosh-documents-api",
+ "makosh-documents-persistence",
+ "makosh-documents-runtime",
  "makosh-events-jetstream",
  "makosh-events-protocol",
  "makosh-gateway-protocol",
  "makosh-gateway-runtime",
  "makosh-gateway-session",
  "makosh-gateway-session-contract",
+ "makosh-graph-api",
+ "makosh-graph-persistence",
+ "makosh-graph-runtime",
+ "makosh-identity-resolution-api",
+ "makosh-identity-resolution-persistence",
+ "makosh-identity-resolution-runtime",
  "makosh-kernel-control-store",
  "makosh-kernel-control-store-sqlite",
  "makosh-knowledge-command-api",
@@ -4741,16 +5037,34 @@ dependencies = [
  "makosh-knowledge-runtime",
  "makosh-mail-address-book-contract",
  "makosh-mail-api",
- "makosh-mail-contacts-sync-api",
- "makosh-mail-contacts-sync-persistence",
- "makosh-mail-contacts-sync-runtime",
  "makosh-mail-core",
  "makosh-mail-gmail",
  "makosh-mail-persistence",
+ "makosh-mail-persons-sync-api",
+ "makosh-mail-persons-sync-persistence",
+ "makosh-mail-persons-sync-runtime",
  "makosh-mail-runtime",
+ "makosh-memory-api",
+ "makosh-memory-persistence",
+ "makosh-memory-runtime",
+ "makosh-obligations-api",
+ "makosh-obligations-persistence",
+ "makosh-obligations-runtime",
  "makosh-ollama-ai-api",
  "makosh-ollama-ai-persistence",
  "makosh-ollama-ai-runtime",
+ "makosh-organizations-api",
+ "makosh-organizations-persistence",
+ "makosh-organizations-runtime",
+ "makosh-persons-api",
+ "makosh-persons-persistence",
+ "makosh-persons-runtime",
+ "makosh-projects-api",
+ "makosh-projects-persistence",
+ "makosh-projects-runtime",
+ "makosh-relationships-api",
+ "makosh-relationships-persistence",
+ "makosh-relationships-runtime",
  "makosh-review-attention-api",
  "makosh-review-attention-persistence",
  "makosh-review-attention-runtime",
@@ -4759,6 +5073,15 @@ dependencies = [
  "makosh-review-note-candidate-persistence",
  "makosh-review-note-candidate-promotion-api",
  "makosh-review-note-candidate-runtime",
+ "makosh-review-obligation-candidate-api",
+ "makosh-review-obligation-candidate-core",
+ "makosh-review-obligation-candidate-persistence",
+ "makosh-review-obligation-candidate-promotion-api",
+ "makosh-review-obligation-candidate-runtime",
+ "makosh-review-person-match-candidate-api",
+ "makosh-review-person-match-candidate-persistence",
+ "makosh-review-person-match-candidate-promotion-api",
+ "makosh-review-person-match-candidate-runtime",
  "makosh-review-task-candidate-api",
  "makosh-review-task-candidate-core",
  "makosh-review-task-candidate-persistence",
@@ -4767,12 +5090,23 @@ dependencies = [
  "makosh-reviewed-note-candidate-promotion-core",
  "makosh-reviewed-note-candidate-promotion-persistence",
  "makosh-reviewed-note-candidate-promotion-runtime",
+ "makosh-reviewed-obligation-candidate-promotion-core",
+ "makosh-reviewed-obligation-candidate-promotion-persistence",
+ "makosh-reviewed-obligation-candidate-promotion-runtime",
+ "makosh-reviewed-person-match-candidate-promotion-persistence",
+ "makosh-reviewed-person-match-candidate-promotion-runtime",
  "makosh-reviewed-task-candidate-promotion-core",
  "makosh-reviewed-task-candidate-promotion-persistence",
  "makosh-reviewed-task-candidate-promotion-runtime",
+ "makosh-risk-api",
+ "makosh-risk-persistence",
+ "makosh-risk-runtime",
  "makosh-runtime-protocol",
  "makosh-scheduler-persistence",
  "makosh-scheduler-protocol",
+ "makosh-search-api",
+ "makosh-search-persistence",
+ "makosh-search-runtime",
  "makosh-secure-file",
  "makosh-speech-to-text-api",
  "makosh-speech-to-text-persistence",
@@ -4793,17 +5127,24 @@ dependencies = [
  "makosh-telegram-persistence",
  "makosh-telegram-runtime",
  "makosh-telegram-tdlib",
+ "makosh-timeline-api",
+ "makosh-timeline-persistence",
+ "makosh-timeline-runtime",
  "makosh-vault-key-provider",
  "makosh-vault-key-provider-file",
  "makosh-vault-protocol",
  "makosh-vault-store-sqlcipher",
  "makosh-whatsapp-api",
+ "makosh-whatsapp-assembly",
+ "makosh-whatsapp-delivery-intent-contract",
  "makosh-whatsapp-persistence",
  "makosh-whatsapp-runtime",
  "makosh-whisper-stt-persistence",
  "makosh-whisper-stt-runtime",
  "makosh-zulip-api",
+ "makosh-zulip-assembly",
  "makosh-zulip-core",
+ "makosh-zulip-delivery-intent-contract",
  "makosh-zulip-persistence",
  "makosh-zulip-runtime",
  "nats-jwt",
@@ -4962,81 +5303,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "makosh-mail-contacts-sync-api"
-version = "0.1.0"
-dependencies = [
- "makosh-runtime-protocol",
- "prost 0.14.4",
- "prost-build 0.14.4",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "makosh-mail-contacts-sync-assembly"
-version = "0.1.0"
-dependencies = [
- "makosh-mail-contacts-sync-persistence",
- "makosh-mail-contacts-sync-runtime",
- "makosh-runtime-protocol",
- "makosh-storage-protocol",
- "prost 0.14.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "makosh-mail-contacts-sync-core"
-version = "0.1.0"
-
-[[package]]
-name = "makosh-mail-contacts-sync-persistence"
-version = "0.1.0"
-dependencies = [
- "makosh-mail-contacts-sync-core",
- "makosh-storage-protocol",
- "sha2 0.11.0",
- "sqlx",
-]
-
-[[package]]
-name = "makosh-mail-contacts-sync-runtime"
-version = "0.1.0"
-dependencies = [
- "libc",
- "makosh-contacts-command-api",
- "makosh-contacts-mail-sync-source-api",
- "makosh-events-jetstream",
- "makosh-events-protocol",
- "makosh-mail-address-book-contract",
- "makosh-mail-contacts-sync-api",
- "makosh-mail-contacts-sync-core",
- "makosh-mail-contacts-sync-persistence",
- "makosh-runtime-protocol",
- "makosh-scheduler-protocol",
- "makosh-storage-protocol",
- "makosh-storage-vault",
- "prost 0.14.4",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
- "zeroize",
-]
-
-[[package]]
-name = "makosh-mail-contacts-sync-testkit"
-version = "0.1.0"
-dependencies = [
- "makosh-mail-address-book-contract",
- "makosh-mail-address-book-persistence",
- "makosh-mail-contacts-sync-core",
- "makosh-mail-contacts-sync-persistence",
- "prost-types 0.14.4",
- "sha2 0.11.0",
- "tokio",
-]
-
-[[package]]
 name = "makosh-mail-core"
 version = "0.1.0"
 dependencies = [
@@ -5107,6 +5373,129 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-mail-persons-sync-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-persons-sync-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-persons-sync-persistence",
+ "makosh-mail-persons-sync-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-mail-persons-sync-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-mail-address-book-contract",
+ "makosh-mail-persons-sync-api",
+ "makosh-persons-api",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-mail-persons-sync-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-mail-persons-sync-api",
+ "makosh-mail-persons-sync-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-mail-persons-sync-persistence-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-consistency-core",
+ "makosh-consistency-persistence",
+ "makosh-events-protocol",
+ "makosh-graph-core",
+ "makosh-graph-persistence",
+ "makosh-identity-resolution-core",
+ "makosh-identity-resolution-persistence",
+ "makosh-mail-address-book-contract",
+ "makosh-mail-address-book-persistence",
+ "makosh-mail-persons-sync-api",
+ "makosh-mail-persons-sync-assembly",
+ "makosh-mail-persons-sync-core",
+ "makosh-mail-persons-sync-persistence",
+ "makosh-mail-persons-sync-runtime",
+ "makosh-mail-runtime",
+ "makosh-memory-core",
+ "makosh-memory-persistence",
+ "makosh-omniroute-core",
+ "makosh-omniroute-persistence",
+ "makosh-persons-api",
+ "makosh-persons-runtime",
+ "makosh-review-person-match-candidate-api",
+ "makosh-review-person-match-candidate-core",
+ "makosh-review-person-match-candidate-persistence",
+ "makosh-review-person-match-candidate-promotion-api",
+ "makosh-review-person-match-candidate-runtime",
+ "makosh-reviewed-person-match-candidate-promotion-persistence",
+ "makosh-reviewed-person-match-candidate-promotion-runtime",
+ "makosh-risk-core",
+ "makosh-risk-persistence",
+ "makosh-runtime-protocol",
+ "makosh-search-core",
+ "makosh-search-persistence",
+ "makosh-storage-protocol",
+ "makosh-telemost-core",
+ "makosh-telemost-persistence",
+ "makosh-timeline-core",
+ "makosh-timeline-persistence",
+ "makosh-zoom-core",
+ "makosh-zoom-persistence",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "serde_json",
+ "sha2 0.11.0",
+ "sqlx",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-mail-persons-sync-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-mail-address-book-contract",
+ "makosh-mail-persons-sync-api",
+ "makosh-mail-persons-sync-core",
+ "makosh-mail-persons-sync-persistence",
+ "makosh-persons-api",
+ "makosh-runtime-protocol",
+ "makosh-scheduler-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-mail-retained-evidence-replay-contract"
 version = "0.1.0"
 dependencies = [
@@ -5143,7 +5532,6 @@ dependencies = [
  "makosh-blob-client",
  "makosh-communications-attachment-contract",
  "makosh-communications-ingress",
- "makosh-contacts-mail-sync-source-api",
  "makosh-events-jetstream",
  "makosh-events-protocol",
  "makosh-mail-address-book-contract",
@@ -5188,6 +5576,128 @@ dependencies = [
  "makosh-runtime-protocol",
  "makosh-vault-protocol",
  "prost 0.14.4",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-memory-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-memory-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-memory-persistence",
+ "makosh-memory-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-memory-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-memory-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-memory-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-memory-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-decisions-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-knowledge-command-api",
+ "makosh-memory-api",
+ "makosh-memory-core",
+ "makosh-memory-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-obligations-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-obligations-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-obligations-persistence",
+ "makosh-obligations-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-obligations-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-obligations-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-obligations-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-obligations-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-obligations-api",
+ "makosh-obligations-core",
+ "makosh-obligations-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
  "zeroize",
 ]
 
@@ -5257,6 +5767,314 @@ dependencies = [
  "makosh-ollama-ai-core",
  "makosh-ollama-ai-http",
  "makosh-ollama-ai-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-omniroute-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+]
+
+[[package]]
+name = "makosh-omniroute-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-omniroute-api",
+ "makosh-omniroute-persistence",
+ "makosh-omniroute-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-omniroute-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-omniroute-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-omniroute-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-omniroute-runtime"
+version = "0.1.0"
+dependencies = [
+ "makosh-ai-contracts",
+ "makosh-omniroute-api",
+ "makosh-omniroute-core",
+ "makosh-omniroute-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-organizations-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-organizations-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-organizations-persistence",
+ "makosh-organizations-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-organizations-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-organizations-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-organizations-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-organizations-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-organizations-api",
+ "makosh-organizations-core",
+ "makosh-organizations-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-persons-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-persons-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-persons-persistence",
+ "makosh-persons-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-persons-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-persons-api",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-persons-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-persons-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-persons-persistence-testkit"
+version = "0.1.0"
+dependencies = [
+ "makosh-persons-core",
+ "makosh-persons-persistence",
+ "sha2 0.11.0",
+ "tokio",
+]
+
+[[package]]
+name = "makosh-persons-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-persons-api",
+ "makosh-persons-core",
+ "makosh-persons-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-projects-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-projects-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-projects-persistence",
+ "makosh-projects-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-projects-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-projects-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-projects-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-projects-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-projects-api",
+ "makosh-projects-core",
+ "makosh-projects-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-relationships-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-relationships-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-relationships-persistence",
+ "makosh-relationships-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-relationships-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-relationships-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-relationships-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-relationships-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-relationships-api",
+ "makosh-relationships-core",
+ "makosh-relationships-persistence",
  "makosh-runtime-protocol",
  "makosh-storage-protocol",
  "makosh-storage-vault",
@@ -5411,6 +6229,162 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-review-obligation-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-obligation-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-obligation-candidate-persistence",
+ "makosh-review-obligation-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-review-obligation-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-obligation-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-obligation-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-review-obligation-candidate-promotion-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-obligation-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-blob-client",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-review-obligation-candidate-api",
+ "makosh-review-obligation-candidate-core",
+ "makosh-review-obligation-candidate-persistence",
+ "makosh-review-obligation-candidate-promotion-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-person-match-candidate-persistence",
+ "makosh-review-person-match-candidate-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-review-person-match-candidate-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-promotion-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "prost-types 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-review-person-match-candidate-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-identity-resolution-api",
+ "makosh-persons-api",
+ "makosh-review-person-match-candidate-api",
+ "makosh-review-person-match-candidate-core",
+ "makosh-review-person-match-candidate-persistence",
+ "makosh-review-person-match-candidate-promotion-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-review-task-candidate-api"
 version = "0.1.0"
 dependencies = [
@@ -5541,6 +6515,113 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-reviewed-obligation-candidate-promotion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-reviewed-obligation-candidate-promotion-persistence",
+ "makosh-reviewed-obligation-candidate-promotion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-reviewed-obligation-candidate-promotion-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-reviewed-obligation-candidate-promotion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-reviewed-obligation-candidate-promotion-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-reviewed-obligation-candidate-promotion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-obligations-api",
+ "makosh-review-obligation-candidate-api",
+ "makosh-review-obligation-candidate-promotion-api",
+ "makosh-reviewed-obligation-candidate-promotion-core",
+ "makosh-reviewed-obligation-candidate-promotion-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-reviewed-person-match-candidate-promotion-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-reviewed-person-match-candidate-promotion-persistence",
+ "makosh-reviewed-person-match-candidate-promotion-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-reviewed-person-match-candidate-promotion-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-persons-api",
+ "makosh-review-person-match-candidate-api",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-reviewed-person-match-candidate-promotion-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-events-protocol",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-reviewed-person-match-candidate-promotion-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-persons-api",
+ "makosh-review-person-match-candidate-api",
+ "makosh-review-person-match-candidate-promotion-api",
+ "makosh-reviewed-person-match-candidate-promotion-core",
+ "makosh-reviewed-person-match-candidate-promotion-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "prost 0.14.4",
+ "prost-types 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-reviewed-task-candidate-promotion-assembly"
 version = "0.1.0"
 dependencies = [
@@ -5593,10 +6674,70 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-risk-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-risk-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-risk-persistence",
+ "makosh-risk-runtime",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-risk-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-risk-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-risk-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-risk-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-obligations-api",
+ "makosh-risk-api",
+ "makosh-risk-core",
+ "makosh-risk-persistence",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-tasks-command-api",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-runtime-protocol"
 version = "0.1.0"
 dependencies = [
  "getrandom 0.4.3",
+ "libc",
  "prost 0.14.4",
  "prost-build 0.14.4",
  "prost-types 0.14.4",
@@ -5698,6 +6839,78 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-search-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-search-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-search-persistence",
+ "makosh-search-runtime",
+ "makosh-storage-protocol",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-search-core"
+version = "0.1.0"
+dependencies = [
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-search-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-search-core",
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-search-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-calendar-api",
+ "makosh-decisions-api",
+ "makosh-documents-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-knowledge-command-api",
+ "makosh-managed-vault-client",
+ "makosh-obligations-api",
+ "makosh-organizations-api",
+ "makosh-organizations-runtime",
+ "makosh-persons-api",
+ "makosh-projects-api",
+ "makosh-relationships-api",
+ "makosh-runtime-protocol",
+ "makosh-search-api",
+ "makosh-search-core",
+ "makosh-search-persistence",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-tasks-command-api",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-secure-file"
 version = "0.1.0"
 dependencies = [
@@ -5785,6 +6998,7 @@ dependencies = [
  "makosh-storage-control",
  "makosh-storage-protocol",
  "pg_query",
+ "sha2 0.11.0",
 ]
 
 [[package]]
@@ -6170,6 +7384,130 @@ dependencies = [
 ]
 
 [[package]]
+name = "makosh-telemost-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-telemost-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-telemost-api",
+ "makosh-telemost-persistence",
+ "makosh-telemost-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-telemost-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+]
+
+[[package]]
+name = "makosh-telemost-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-telemost-runtime"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-telemost-api",
+ "makosh-telemost-core",
+ "makosh-telemost-persistence",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-timeline-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-timeline-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-timeline-persistence",
+ "makosh-timeline-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-timeline-core"
+version = "0.1.0"
+
+[[package]]
+name = "makosh-timeline-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "makosh-timeline-core",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-timeline-runtime"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "makosh-calendar-api",
+ "makosh-decisions-api",
+ "makosh-documents-api",
+ "makosh-events-jetstream",
+ "makosh-events-protocol",
+ "makosh-knowledge-command-api",
+ "makosh-obligations-api",
+ "makosh-organizations-api",
+ "makosh-organizations-runtime",
+ "makosh-persons-api",
+ "makosh-projects-api",
+ "makosh-relationships-api",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-storage-vault",
+ "makosh-tasks-command-api",
+ "makosh-timeline-api",
+ "makosh-timeline-core",
+ "makosh-timeline-persistence",
+ "prost 0.14.4",
+ "sha2 0.11.0",
+ "tokio",
+ "zeroize",
+]
+
+[[package]]
 name = "makosh-vault-key-provider"
 version = "0.1.0"
 
@@ -6380,6 +7718,62 @@ dependencies = [
  "sha2 0.11.0",
  "tokio",
  "zeroize",
+]
+
+[[package]]
+name = "makosh-zoom-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost 0.14.4",
+ "prost-build 0.14.4",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-zoom-assembly"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-zoom-api",
+ "makosh-zoom-persistence",
+ "makosh-zoom-runtime",
+ "prost 0.14.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "makosh-zoom-core"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+]
+
+[[package]]
+name = "makosh-zoom-persistence"
+version = "0.1.0"
+dependencies = [
+ "makosh-storage-protocol",
+ "sha2 0.11.0",
+ "sqlx",
+]
+
+[[package]]
+name = "makosh-zoom-runtime"
+version = "0.1.0"
+dependencies = [
+ "makosh-communications-call-evidence-ingress",
+ "makosh-events-protocol",
+ "makosh-runtime-protocol",
+ "makosh-storage-protocol",
+ "makosh-zoom-api",
+ "makosh-zoom-core",
+ "makosh-zoom-persistence",
+ "prost 0.14.4",
+ "sha2 0.11.0",
 ]
 
 [[package]]

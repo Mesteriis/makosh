@@ -6,6 +6,7 @@ use makosh_review_note_candidate_api::{
     wire::{
         DecideReviewNoteCandidateRequestV1, DecideReviewNoteCandidateResponseV1,
         GetReviewNoteCandidateRequestV1, GetReviewNoteCandidateResponseV1,
+        ListReviewNoteCandidatesRequestV1, ListReviewNoteCandidatesResponseV1,
         NoteCandidateApprovedForPromotionV1, ReviewNoteCandidateDecisionV1 as WireDecision,
         ReviewNoteCandidateErrorCodeV1 as WireError,
         ReviewNoteCandidatePromotionStatusV1 as WirePromotionStatus,
@@ -20,9 +21,9 @@ use makosh_review_note_candidate_core::{
 };
 use makosh_review_note_candidate_persistence::{
     CheckReviewNoteCandidateDecisionReplayV1, DecideReviewNoteCandidateOperationV1,
-    ReviewNoteCandidateDecisionOutcomeV1, ReviewNoteCandidateOutboxRecordV1,
-    ReviewNoteCandidatePersistenceErrorV1, ReviewNoteCandidatePersistenceV1,
-    ReviewNoteCandidateRealtimeTransitionV1,
+    ListReviewNoteCandidatesV1, ReviewNoteCandidateDecisionOutcomeV1,
+    ReviewNoteCandidateOutboxRecordV1, ReviewNoteCandidatePersistenceErrorV1,
+    ReviewNoteCandidatePersistenceV1, ReviewNoteCandidateRealtimeTransitionV1,
 };
 use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlRequestDispatcherV2,
@@ -158,6 +159,62 @@ pub(crate) async fn get_payload_v1(
     }
 }
 
+pub(crate) async fn list_payload_v1(
+    persistence: &ReviewNoteCandidatePersistenceV1,
+    logical_owner_id: &str,
+    payload: &[u8],
+) -> Vec<u8> {
+    let Ok(request) = ListReviewNoteCandidatesRequestV1::decode(payload) else {
+        return list_error(WireError::ReviewNoteCandidateErrorCodeInvalidRequest);
+    };
+    let after_review_id = if request.after_review_id.is_empty() {
+        None
+    } else {
+        let Some(review_id) = id16(&request.after_review_id) else {
+            return list_error(WireError::ReviewNoteCandidateErrorCodeInvalidRequest);
+        };
+        Some(review_id)
+    };
+    let state = match request.state {
+        None => None,
+        Some(value) => {
+            let Some(value) = review_state(value) else {
+                return list_error(WireError::ReviewNoteCandidateErrorCodeInvalidRequest);
+            };
+            Some(value)
+        }
+    };
+    let Ok(limit) = u16::try_from(request.limit) else {
+        return list_error(WireError::ReviewNoteCandidateErrorCodeInvalidRequest);
+    };
+    if request.protocol_major != REVIEW_NOTE_CANDIDATE_CONTRACT_MAJOR_V1
+        || logical_owner_id.is_empty()
+    {
+        return list_error(WireError::ReviewNoteCandidateErrorCodeInvalidRequest);
+    }
+    match persistence
+        .list_reviews(
+            logical_owner_id,
+            ListReviewNoteCandidatesV1 {
+                after_review_id,
+                state,
+                limit,
+            },
+        )
+        .await
+    {
+        Ok(page) => ListReviewNoteCandidatesResponseV1 {
+            reviews: page.reviews.iter().map(summary).collect(),
+            next_after_review_id: page
+                .next_after_review_id
+                .map_or_else(Vec::new, |review_id| review_id.to_vec()),
+            error: WireError::ReviewNoteCandidateErrorCodeUnspecified as i32,
+        }
+        .encode_to_vec(),
+        Err(error) => list_error(persistence_error(error)),
+    }
+}
+
 pub(crate) fn realtime_payload_v1(transition: &ReviewNoteCandidateRealtimeTransitionV1) -> Vec<u8> {
     ReviewNoteCandidateStatusChangedV1 {
         review_id: transition.review_id.to_vec(),
@@ -285,6 +342,15 @@ fn get_error(error: WireError) -> Vec<u8> {
     .encode_to_vec()
 }
 
+fn list_error(error: WireError) -> Vec<u8> {
+    ListReviewNoteCandidatesResponseV1 {
+        reviews: Vec::new(),
+        next_after_review_id: Vec::new(),
+        error: error as i32,
+    }
+    .encode_to_vec()
+}
+
 fn persistence_error(error: ReviewNoteCandidatePersistenceErrorV1) -> WireError {
     match error {
         ReviewNoteCandidatePersistenceErrorV1::NotFound => {
@@ -320,6 +386,15 @@ fn decision(value: i32) -> Option<ReviewNoteCandidateDecisionV1> {
             Some(ReviewNoteCandidateDecisionV1::Reject)
         }
         WireDecision::ReviewNoteCandidateDecisionUnspecified => None,
+    }
+}
+
+fn review_state(value: i32) -> Option<ReviewNoteCandidateStateV1> {
+    match WireState::try_from(value).ok()? {
+        WireState::ReviewNoteCandidateStatePending => Some(ReviewNoteCandidateStateV1::Pending),
+        WireState::ReviewNoteCandidateStateApproved => Some(ReviewNoteCandidateStateV1::Approved),
+        WireState::ReviewNoteCandidateStateRejected => Some(ReviewNoteCandidateStateV1::Rejected),
+        WireState::ReviewNoteCandidateStateUnspecified => None,
     }
 }
 

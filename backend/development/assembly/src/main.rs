@@ -55,15 +55,100 @@ const ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_STORAGE_CAPABILITY: &str =
 const ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT: &str = "attachment_translation.runtime.v1";
 const ATTACHMENT_TRANSLATION_STORAGE_ARTIFACT: &str = "attachment_translation.storage.v1";
 const ATTACHMENT_TRANSLATION_STORAGE_CAPABILITY: &str = "attachment_translation.storage.v1";
+const AI_INFERENCE_RUNTIME_ARTIFACT: &str = "ai_inference.runtime.v1";
+const AI_INFERENCE_STORAGE_ARTIFACT: &str = "ai_inference.storage.v1";
+const AI_INFERENCE_STORAGE_CAPABILITY: &str = "ai.inference.storage.v1";
+const OLLAMA_AI_RUNTIME_ARTIFACT: &str = "ollama_ai.runtime.v1";
+const OLLAMA_AI_STORAGE_ARTIFACT: &str = "ollama_ai.storage.v1";
+const OLLAMA_AI_STORAGE_CAPABILITY: &str = "ollama.ai.storage.v1";
+const SPEECH_TO_TEXT_RUNTIME_ARTIFACT: &str = "speech_to_text.runtime.v1";
+const SPEECH_TO_TEXT_STORAGE_ARTIFACT: &str = "speech_to_text.storage.v1";
+const SPEECH_TO_TEXT_STORAGE_CAPABILITY: &str = "speech_to_text.storage.v1";
+const WHISPER_STT_RUNTIME_ARTIFACT: &str = "whisper_stt.runtime.v1";
+const WHISPER_STT_STORAGE_ARTIFACT: &str = "whisper_stt.storage.v1";
+const WHISPER_STT_STORAGE_CAPABILITY: &str = "whisper_stt.storage.v1";
+const CALENDAR_RUNTIME_ARTIFACT: &str = "calendar.runtime.v1";
+const CALENDAR_STORAGE_ARTIFACT: &str = "calendar.storage.v1";
+const CALENDAR_STORAGE_CAPABILITY: &str = "calendar.storage.v1";
+const ORGANIZATIONS_RUNTIME_ARTIFACT: &str = "organizations.runtime.v1";
+const ORGANIZATIONS_STORAGE_ARTIFACT: &str = "organizations.storage.v1";
+const ORGANIZATIONS_STORAGE_CAPABILITY: &str = "organizations.storage.v1";
+const DOCUMENTS_RUNTIME_ARTIFACT: &str = "documents.runtime.v1";
+const DOCUMENTS_STORAGE_ARTIFACT: &str = "documents.storage.v1";
+const DOCUMENTS_STORAGE_CAPABILITY: &str = "documents.storage.v1";
+const RELATIONSHIPS_RUNTIME_ARTIFACT: &str = "relationships.runtime.v1";
+const RELATIONSHIPS_STORAGE_ARTIFACT: &str = "relationships.storage.v1";
+const RELATIONSHIPS_STORAGE_CAPABILITY: &str = "relationships.storage.v1";
+const PROJECTS_RUNTIME_ARTIFACT: &str = "projects.runtime.v1";
+const PROJECTS_STORAGE_ARTIFACT: &str = "projects.storage.v1";
+const PROJECTS_STORAGE_CAPABILITY: &str = "projects.storage.v1";
+const DECISIONS_RUNTIME_ARTIFACT: &str = "decisions.runtime.v1";
+const DECISIONS_STORAGE_ARTIFACT: &str = "decisions.storage.v1";
+const DECISIONS_STORAGE_CAPABILITY: &str = "decisions.storage.v1";
+const REVIEW_OBLIGATION_CANDIDATE_RUNTIME_ARTIFACT: &str = "review.obligation-candidate.runtime.v1";
+const REVIEW_OBLIGATION_CANDIDATE_STORAGE_ARTIFACT: &str = "review.obligation-candidate.storage.v1";
+const REVIEW_OBLIGATION_CANDIDATE_STORAGE_CAPABILITY: &str =
+    "review.obligation-candidate.storage.v1";
+const OBLIGATIONS_RUNTIME_ARTIFACT: &str = "obligations.runtime.v1";
+const OBLIGATIONS_STORAGE_ARTIFACT: &str = "obligations.storage.v1";
+const OBLIGATIONS_STORAGE_CAPABILITY: &str = "obligations.storage.v1";
+const REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT: &str =
+    "reviewed_obligation_candidate_promotion.runtime.v1";
+const REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_STORAGE_ARTIFACT: &str =
+    "reviewed_obligation_candidate_promotion.storage.v1";
+const REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_STORAGE_CAPABILITY: &str =
+    "reviewed_obligation_candidate_promotion.storage.v1";
 const MAIL_RUNTIME_ARTIFACT: &str = "mail.runtime.v1";
 const MAIL_STORAGE_ARTIFACT: &str = "mail.storage.v1";
 const MAIL_STORAGE_CAPABILITY: &str = "mail.storage.v1";
-const CONTACTS_RUNTIME_ARTIFACT: &str = "contacts.runtime.v1";
-const CONTACTS_STORAGE_ARTIFACT: &str = "contacts.storage.v1";
-const CONTACTS_STORAGE_CAPABILITY: &str = "contacts.storage.v1";
-const MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT: &str = "mail_contacts_sync.runtime.v1";
-const MAIL_CONTACTS_SYNC_STORAGE_ARTIFACT: &str = "mail_contacts_sync.storage.v1";
-const MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY: &str = "mail_contacts_sync.storage.v1";
+const PERSONS_RUNTIME_ARTIFACT: &str = "persons.runtime.v1";
+const PERSONS_STORAGE_ARTIFACT: &str = "persons.storage.v1";
+const PERSONS_STORAGE_CAPABILITY: &str = "persons.storage.v1";
+const IDENTITY_RESOLUTION_RUNTIME_ARTIFACT: &str = "identity_resolution.runtime.v1";
+const IDENTITY_RESOLUTION_STORAGE_ARTIFACT: &str = "identity_resolution.storage.v1";
+const IDENTITY_RESOLUTION_STORAGE_CAPABILITY: &str = "identity_resolution.storage.v1";
+const SEARCH_RUNTIME_ARTIFACT: &str = "search.runtime.v1";
+const SEARCH_STORAGE_ARTIFACT: &str = "search.storage.v1";
+const SEARCH_STORAGE_CAPABILITY: &str = "search.storage.v1";
+const TIMELINE_RUNTIME_ARTIFACT: &str = "timeline.runtime.v1";
+const TIMELINE_STORAGE_ARTIFACT: &str = "timeline.storage.v1";
+const TIMELINE_STORAGE_CAPABILITY: &str = "timeline.storage.v1";
+const GRAPH_RUNTIME_ARTIFACT: &str = "graph.runtime.v1";
+const GRAPH_STORAGE_ARTIFACT: &str = "graph.storage.v1";
+const GRAPH_STORAGE_CAPABILITY: &str = "graph.storage.v1";
+const MEMORY_RUNTIME_ARTIFACT: &str = "memory.runtime.v1";
+const MEMORY_STORAGE_ARTIFACT: &str = "memory.storage.v1";
+const MEMORY_STORAGE_CAPABILITY: &str = "memory.storage.v1";
+const CONSISTENCY_RUNTIME_ARTIFACT: &str = "consistency.runtime.v1";
+const CONSISTENCY_STORAGE_ARTIFACT: &str = "consistency.storage.v1";
+const CONSISTENCY_STORAGE_CAPABILITY: &str = "consistency.storage.v1";
+const RISK_RUNTIME_ARTIFACT: &str = "risk.runtime.v1";
+const RISK_STORAGE_ARTIFACT: &str = "risk.storage.v1";
+const RISK_STORAGE_CAPABILITY: &str = "risk.storage.v1";
+const ZOOM_RUNTIME_ARTIFACT: &str = "zoom.runtime.v1";
+const ZOOM_STORAGE_ARTIFACT: &str = "zoom.storage.v1";
+const ZOOM_STORAGE_CAPABILITY: &str = "zoom.storage.v1";
+const TELEMOST_RUNTIME_ARTIFACT: &str = "telemost.runtime.v1";
+const TELEMOST_STORAGE_ARTIFACT: &str = "telemost.storage.v1";
+const TELEMOST_STORAGE_CAPABILITY: &str = "telemost.storage.v1";
+const OMNIROUTE_RUNTIME_ARTIFACT: &str = "omniroute.runtime.v1";
+const OMNIROUTE_STORAGE_ARTIFACT: &str = "omniroute.storage.v1";
+const OMNIROUTE_STORAGE_CAPABILITY: &str = "omniroute.ai.storage.v1";
+const MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT: &str = "mail_persons_sync.runtime.v1";
+const MAIL_PERSONS_SYNC_STORAGE_ARTIFACT: &str = "mail_persons_sync.storage.v1";
+const MAIL_PERSONS_SYNC_STORAGE_CAPABILITY: &str = "mail_persons_sync.storage.v1";
+const REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT: &str =
+    "review.person-match-candidate.runtime.v1";
+const REVIEW_PERSON_MATCH_CANDIDATE_STORAGE_ARTIFACT: &str =
+    "review.person-match-candidate.storage.v1";
+const REVIEW_PERSON_MATCH_CANDIDATE_STORAGE_CAPABILITY: &str =
+    "review.person-match-candidate.storage.v1";
+const REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT: &str =
+    "reviewed-person-match-candidate-promotion.runtime.v1";
+const REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_STORAGE_ARTIFACT: &str =
+    "reviewed-person-match-candidate-promotion.storage.v1";
+const REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_STORAGE_CAPABILITY: &str =
+    "reviewed-person-match-candidate-promotion.storage.v1";
 const TELEGRAM_RUNTIME_ARTIFACT: &str = "telegram.runtime.v1";
 const TELEGRAM_STORAGE_ARTIFACT: &str = "telegram.storage.v1";
 const TELEGRAM_STORAGE_CAPABILITY: &str = "telegram.storage.v1";
@@ -117,7 +202,7 @@ struct ModulePlanV1 {
     request_host_bridge: bool,
 }
 
-const MODULE_PLAN: [ModulePlanV1; 16] = [
+const MODULE_PLAN: [ModulePlanV1; 41] = [
     ModulePlanV1 {
         runtime_artifact_id: COMMUNICATIONS_RUNTIME_ARTIFACT,
         storage_artifact_id: COMMUNICATIONS_STORAGE_ARTIFACT,
@@ -217,19 +302,395 @@ const MODULE_PLAN: [ModulePlanV1; 16] = [
         request_host_bridge: false,
     },
     ModulePlanV1 {
-        runtime_artifact_id: CONTACTS_RUNTIME_ARTIFACT,
-        storage_artifact_id: CONTACTS_STORAGE_ARTIFACT,
-        storage_capability_id: CONTACTS_STORAGE_CAPABILITY,
+        runtime_artifact_id: PERSONS_RUNTIME_ARTIFACT,
+        storage_artifact_id: PERSONS_STORAGE_ARTIFACT,
+        storage_capability_id: PERSONS_STORAGE_CAPABILITY,
         runtime_kind: ModuleRuntimeKindV1::Domain,
         request_host_bridge: false,
     },
     ModulePlanV1 {
-        runtime_artifact_id: MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT,
-        storage_artifact_id: MAIL_CONTACTS_SYNC_STORAGE_ARTIFACT,
-        storage_capability_id: MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY,
+        runtime_artifact_id: MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+        storage_artifact_id: MAIL_PERSONS_SYNC_STORAGE_ARTIFACT,
+        storage_capability_id: MAIL_PERSONS_SYNC_STORAGE_CAPABILITY,
         runtime_kind: ModuleRuntimeKindV1::Workflow,
         request_host_bridge: false,
     },
+    ModulePlanV1 {
+        runtime_artifact_id: REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+        storage_artifact_id: REVIEW_PERSON_MATCH_CANDIDATE_STORAGE_ARTIFACT,
+        storage_capability_id: REVIEW_PERSON_MATCH_CANDIDATE_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+        storage_artifact_id: REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_STORAGE_ARTIFACT,
+        storage_capability_id: REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Workflow,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: AI_INFERENCE_RUNTIME_ARTIFACT,
+        storage_artifact_id: AI_INFERENCE_STORAGE_ARTIFACT,
+        storage_capability_id: AI_INFERENCE_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: OLLAMA_AI_RUNTIME_ARTIFACT,
+        storage_artifact_id: OLLAMA_AI_STORAGE_ARTIFACT,
+        storage_capability_id: OLLAMA_AI_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Integration,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+        storage_artifact_id: SPEECH_TO_TEXT_STORAGE_ARTIFACT,
+        storage_capability_id: SPEECH_TO_TEXT_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: WHISPER_STT_RUNTIME_ARTIFACT,
+        storage_artifact_id: WHISPER_STT_STORAGE_ARTIFACT,
+        storage_capability_id: WHISPER_STT_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Integration,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: CALENDAR_RUNTIME_ARTIFACT,
+        storage_artifact_id: CALENDAR_STORAGE_ARTIFACT,
+        storage_capability_id: CALENDAR_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: ORGANIZATIONS_RUNTIME_ARTIFACT,
+        storage_artifact_id: ORGANIZATIONS_STORAGE_ARTIFACT,
+        storage_capability_id: ORGANIZATIONS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: DOCUMENTS_RUNTIME_ARTIFACT,
+        storage_artifact_id: DOCUMENTS_STORAGE_ARTIFACT,
+        storage_capability_id: DOCUMENTS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: RELATIONSHIPS_RUNTIME_ARTIFACT,
+        storage_artifact_id: RELATIONSHIPS_STORAGE_ARTIFACT,
+        storage_capability_id: RELATIONSHIPS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: PROJECTS_RUNTIME_ARTIFACT,
+        storage_artifact_id: PROJECTS_STORAGE_ARTIFACT,
+        storage_capability_id: PROJECTS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: REVIEW_OBLIGATION_CANDIDATE_RUNTIME_ARTIFACT,
+        storage_artifact_id: REVIEW_OBLIGATION_CANDIDATE_STORAGE_ARTIFACT,
+        storage_capability_id: REVIEW_OBLIGATION_CANDIDATE_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: OBLIGATIONS_RUNTIME_ARTIFACT,
+        storage_artifact_id: OBLIGATIONS_STORAGE_ARTIFACT,
+        storage_capability_id: OBLIGATIONS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+        storage_artifact_id: REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_STORAGE_ARTIFACT,
+        storage_capability_id: REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Workflow,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: DECISIONS_RUNTIME_ARTIFACT,
+        storage_artifact_id: DECISIONS_STORAGE_ARTIFACT,
+        storage_capability_id: DECISIONS_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Domain,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: IDENTITY_RESOLUTION_RUNTIME_ARTIFACT,
+        storage_artifact_id: IDENTITY_RESOLUTION_STORAGE_ARTIFACT,
+        storage_capability_id: IDENTITY_RESOLUTION_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: SEARCH_RUNTIME_ARTIFACT,
+        storage_artifact_id: SEARCH_STORAGE_ARTIFACT,
+        storage_capability_id: SEARCH_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: TIMELINE_RUNTIME_ARTIFACT,
+        storage_artifact_id: TIMELINE_STORAGE_ARTIFACT,
+        storage_capability_id: TIMELINE_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: GRAPH_RUNTIME_ARTIFACT,
+        storage_artifact_id: GRAPH_STORAGE_ARTIFACT,
+        storage_capability_id: GRAPH_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: MEMORY_RUNTIME_ARTIFACT,
+        storage_artifact_id: MEMORY_STORAGE_ARTIFACT,
+        storage_capability_id: MEMORY_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: CONSISTENCY_RUNTIME_ARTIFACT,
+        storage_artifact_id: CONSISTENCY_STORAGE_ARTIFACT,
+        storage_capability_id: CONSISTENCY_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: RISK_RUNTIME_ARTIFACT,
+        storage_artifact_id: RISK_STORAGE_ARTIFACT,
+        storage_capability_id: RISK_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Engine,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: ZOOM_RUNTIME_ARTIFACT,
+        storage_artifact_id: ZOOM_STORAGE_ARTIFACT,
+        storage_capability_id: ZOOM_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Integration,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: TELEMOST_RUNTIME_ARTIFACT,
+        storage_artifact_id: TELEMOST_STORAGE_ARTIFACT,
+        storage_capability_id: TELEMOST_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Integration,
+        request_host_bridge: false,
+    },
+    ModulePlanV1 {
+        runtime_artifact_id: OMNIROUTE_RUNTIME_ARTIFACT,
+        storage_artifact_id: OMNIROUTE_STORAGE_ARTIFACT,
+        storage_capability_id: OMNIROUTE_STORAGE_CAPABILITY,
+        runtime_kind: ModuleRuntimeKindV1::Integration,
+        request_host_bridge: false,
+    },
+];
+const PRE_OBLIGATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 27] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+    CALENDAR_RUNTIME_ARTIFACT,
+    ORGANIZATIONS_RUNTIME_ARTIFACT,
+    DOCUMENTS_RUNTIME_ARTIFACT,
+    RELATIONSHIPS_RUNTIME_ARTIFACT,
+    PROJECTS_RUNTIME_ARTIFACT,
+];
+const PRE_PROJECTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 26] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+    CALENDAR_RUNTIME_ARTIFACT,
+    ORGANIZATIONS_RUNTIME_ARTIFACT,
+    DOCUMENTS_RUNTIME_ARTIFACT,
+    RELATIONSHIPS_RUNTIME_ARTIFACT,
+];
+const PRE_RELATIONSHIPS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 25] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+    CALENDAR_RUNTIME_ARTIFACT,
+    ORGANIZATIONS_RUNTIME_ARTIFACT,
+    DOCUMENTS_RUNTIME_ARTIFACT,
+];
+const PRE_DOCUMENTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 24] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+    CALENDAR_RUNTIME_ARTIFACT,
+    ORGANIZATIONS_RUNTIME_ARTIFACT,
+];
+const PRE_ORGANIZATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 23] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+    CALENDAR_RUNTIME_ARTIFACT,
+];
+const PRE_CALENDAR_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 22] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+    SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+    WHISPER_STT_RUNTIME_ARTIFACT,
+];
+const PRE_SPEECH_TO_TEXT_WHISPER_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 20] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+    AI_INFERENCE_RUNTIME_ARTIFACT,
+    OLLAMA_AI_RUNTIME_ARTIFACT,
+];
+const PRE_AI_OLLAMA_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 18] = [
+    COMMUNICATIONS_RUNTIME_ARTIFACT,
+    COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+    COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+    COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+    ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+    ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+    ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+    MAIL_RUNTIME_ARTIFACT,
+    TELEGRAM_RUNTIME_ARTIFACT,
+    WHATSAPP_RUNTIME_ARTIFACT,
+    ZULIP_RUNTIME_ARTIFACT,
+    PERSONS_RUNTIME_ARTIFACT,
+    MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+    REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+    REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
 ];
 const PRE_EXPORT_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 6] = [
     COMMUNICATIONS_RUNTIME_ARTIFACT,
@@ -1020,6 +1481,11 @@ fn validate_state_plan(state: &DevelopmentAssemblyStateV1) -> Result<(), String>
 
 fn validate_refreshable_state_plan(state: &DevelopmentAssemblyStateV1) -> Result<(), String> {
     if validate_state_plan(state).is_ok()
+        || state_matches_pre_zoom_telemost_omniroute_plan(state)
+        || state_matches_pre_memory_consistency_risk_plan(state)
+        || state_matches_pre_search_timeline_graph_plan(state)
+        || state_matches_pre_identity_resolution_plan(state)
+        || state_matches_pre_decisions_plan(state)
         || state_matches_runtime_artifact_plan(state, &PRE_EXPORT_MODULE_PLAN_RUNTIME_ARTIFACTS_V3)
         || state_matches_runtime_artifact_plan(
             state,
@@ -1053,10 +1519,82 @@ fn validate_refreshable_state_plan(state: &DevelopmentAssemblyStateV1) -> Result
             state,
             &PRE_CONTACTS_SYNC_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
         )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_AI_OLLAMA_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_SPEECH_TO_TEXT_WHISPER_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_CALENDAR_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_ORGANIZATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_DOCUMENTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_RELATIONSHIPS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_PROJECTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
+        || state_matches_runtime_artifact_plan(
+            state,
+            &PRE_OBLIGATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3,
+        )
     {
         return Ok(());
     }
     Err("development assembly module state does not match a refreshable plan".to_owned())
+}
+
+fn state_matches_pre_zoom_telemost_omniroute_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..38]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
+}
+
+fn state_matches_pre_memory_consistency_risk_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..35]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
+}
+
+fn state_matches_pre_decisions_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..30]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
+}
+
+fn state_matches_pre_identity_resolution_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..31]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
+}
+
+fn state_matches_pre_search_timeline_graph_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..32]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
 }
 
 fn state_matches_runtime_artifact_plan(
@@ -1468,6 +2006,13 @@ fn read_state(path: &Path) -> Result<DevelopmentAssemblyStateV1, String> {
         .map_err(|_| "development assembly state is invalid".to_owned())?;
     if ![
         MODULE_PLAN.len(),
+        MODULE_PLAN.len() - 1,
+        MODULE_PLAN.len() - 2,
+        MODULE_PLAN.len() - 3,
+        35,
+        32,
+        31,
+        30,
         PRE_EXPORT_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_DELIVERY_INTENT_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_BULK_ACTION_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
@@ -1477,6 +2022,14 @@ fn read_state(path: &Path) -> Result<DevelopmentAssemblyStateV1, String> {
         PRE_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_ATTACHMENT_TRANSLATION_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_CONTACTS_SYNC_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_AI_OLLAMA_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_SPEECH_TO_TEXT_WHISPER_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_CALENDAR_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_ORGANIZATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_DOCUMENTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_RELATIONSHIPS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_PROJECTS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        PRE_OBLIGATIONS_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
     ]
     .contains(&module_count)
         || fields.len() != 4 + module_count * fields_per_module
@@ -1627,6 +2180,158 @@ mod tests {
         }
     }
 
+    fn fixture_state_before_zoom_telemost_omniroute(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != ZOOM_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != TELEMOST_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != OMNIROUTE_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_ai_ollama(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_calendar(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != AI_INFERENCE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != OLLAMA_AI_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != SPEECH_TO_TEXT_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != WHISPER_STT_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_speech_to_text_whisper(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_calendar(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != SPEECH_TO_TEXT_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != WHISPER_STT_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_decisions(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_zoom_telemost_omniroute(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != DECISIONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != IDENTITY_RESOLUTION_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != SEARCH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != TIMELINE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != GRAPH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MEMORY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != CONSISTENCY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != RISK_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_identity_resolution(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_zoom_telemost_omniroute(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != IDENTITY_RESOLUTION_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != SEARCH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != TIMELINE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != GRAPH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MEMORY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != CONSISTENCY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != RISK_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_search_timeline_graph(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_zoom_telemost_omniroute(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != SEARCH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != TIMELINE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != GRAPH_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MEMORY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != CONSISTENCY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != RISK_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_memory_consistency_risk(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_zoom_telemost_omniroute(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != MEMORY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != CONSISTENCY_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != RISK_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_calendar(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_relationships(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != CALENDAR_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != ORGANIZATIONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != DOCUMENTS_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_organizations(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_relationships(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != ORGANIZATIONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != DOCUMENTS_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
+    fn fixture_state_before_documents(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_relationships(distribution_generation);
+        state
+            .modules
+            .retain(|module| module.runtime_artifact_id != DOCUMENTS_RUNTIME_ARTIFACT);
+        state
+    }
+
+    fn fixture_state_before_relationships(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_projects(distribution_generation);
+        state
+            .modules
+            .retain(|module| module.runtime_artifact_id != RELATIONSHIPS_RUNTIME_ARTIFACT);
+        state
+    }
+
+    fn fixture_state_before_projects(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_obligations(distribution_generation);
+        state
+            .modules
+            .retain(|module| module.runtime_artifact_id != PROJECTS_RUNTIME_ARTIFACT);
+        state
+    }
+
+    fn fixture_state_before_obligations(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state_before_decisions(distribution_generation);
+        state.modules.retain(|module| {
+            module.runtime_artifact_id != REVIEW_OBLIGATION_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != OBLIGATIONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
+        });
+        state
+    }
+
     fn write_test_state(path: &Path, bytes: &[u8]) {
         let mut file = OpenOptions::new()
             .write(true)
@@ -1661,7 +2366,7 @@ mod tests {
 
     #[test]
     fn development_plan_keeps_domains_workflows_engines_and_integrations_as_distinct_artifacts() {
-        assert_eq!(MODULE_PLAN.len(), 16);
+        assert_eq!(MODULE_PLAN.len(), 41);
         assert_eq!(
             MODULE_PLAN
                 .iter()
@@ -1682,8 +2387,33 @@ mod tests {
                 TELEGRAM_RUNTIME_ARTIFACT,
                 WHATSAPP_RUNTIME_ARTIFACT,
                 ZULIP_RUNTIME_ARTIFACT,
-                CONTACTS_RUNTIME_ARTIFACT,
-                MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT,
+                PERSONS_RUNTIME_ARTIFACT,
+                MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+                REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT,
+                REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+                AI_INFERENCE_RUNTIME_ARTIFACT,
+                OLLAMA_AI_RUNTIME_ARTIFACT,
+                SPEECH_TO_TEXT_RUNTIME_ARTIFACT,
+                WHISPER_STT_RUNTIME_ARTIFACT,
+                CALENDAR_RUNTIME_ARTIFACT,
+                ORGANIZATIONS_RUNTIME_ARTIFACT,
+                DOCUMENTS_RUNTIME_ARTIFACT,
+                RELATIONSHIPS_RUNTIME_ARTIFACT,
+                PROJECTS_RUNTIME_ARTIFACT,
+                REVIEW_OBLIGATION_CANDIDATE_RUNTIME_ARTIFACT,
+                OBLIGATIONS_RUNTIME_ARTIFACT,
+                REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT,
+                DECISIONS_RUNTIME_ARTIFACT,
+                IDENTITY_RESOLUTION_RUNTIME_ARTIFACT,
+                SEARCH_RUNTIME_ARTIFACT,
+                TIMELINE_RUNTIME_ARTIFACT,
+                GRAPH_RUNTIME_ARTIFACT,
+                MEMORY_RUNTIME_ARTIFACT,
+                CONSISTENCY_RUNTIME_ARTIFACT,
+                RISK_RUNTIME_ARTIFACT,
+                ZOOM_RUNTIME_ARTIFACT,
+                TELEMOST_RUNTIME_ARTIFACT,
+                OMNIROUTE_RUNTIME_ARTIFACT,
             ],
         );
         assert!(matches!(
@@ -1750,15 +2480,75 @@ mod tests {
             MODULE_PLAN[14].runtime_kind,
             ModuleRuntimeKindV1::Domain
         ));
-        assert_eq!(MODULE_PLAN[14].runtime_artifact_id, "contacts.runtime.v1");
+        assert_eq!(MODULE_PLAN[14].runtime_artifact_id, "persons.runtime.v1");
         assert!(matches!(
             MODULE_PLAN[15].runtime_kind,
             ModuleRuntimeKindV1::Workflow
         ));
         assert_eq!(
             MODULE_PLAN[15].runtime_artifact_id,
-            "mail_contacts_sync.runtime.v1",
+            "mail_persons_sync.runtime.v1",
         );
+        assert!(matches!(
+            MODULE_PLAN[16].runtime_kind,
+            ModuleRuntimeKindV1::Domain
+        ));
+        assert_eq!(
+            MODULE_PLAN[16].runtime_artifact_id,
+            "review.person-match-candidate.runtime.v1",
+        );
+        assert!(matches!(
+            MODULE_PLAN[17].runtime_kind,
+            ModuleRuntimeKindV1::Workflow
+        ));
+        assert!(matches!(
+            MODULE_PLAN[18].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
+        assert!(matches!(
+            MODULE_PLAN[19].runtime_kind,
+            ModuleRuntimeKindV1::Integration
+        ));
+        assert!(matches!(
+            MODULE_PLAN[20].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
+        assert!(matches!(
+            MODULE_PLAN[21].runtime_kind,
+            ModuleRuntimeKindV1::Integration
+        ));
+        assert!(matches!(
+            MODULE_PLAN[22].runtime_kind,
+            ModuleRuntimeKindV1::Domain
+        ));
+        assert!(matches!(
+            MODULE_PLAN[23].runtime_kind,
+            ModuleRuntimeKindV1::Domain
+        ));
+        assert!(matches!(
+            MODULE_PLAN[25].runtime_kind,
+            ModuleRuntimeKindV1::Domain
+        ));
+        assert!(matches!(
+            MODULE_PLAN[30].runtime_kind,
+            ModuleRuntimeKindV1::Domain
+        ));
+        assert!(matches!(
+            MODULE_PLAN[31].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
+        assert!(matches!(
+            MODULE_PLAN[32].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
+        assert!(matches!(
+            MODULE_PLAN[33].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
+        assert!(matches!(
+            MODULE_PLAN[34].runtime_kind,
+            ModuleRuntimeKindV1::Engine
+        ));
     }
 
     #[test]
@@ -1825,7 +2615,7 @@ mod tests {
     #[test]
     fn pre_export_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-export-v3");
-        let mut legacy = fixture_state(25);
+        let mut legacy = fixture_state_before_ai_ollama(25);
         legacy.modules.retain(|module| {
             module.runtime_artifact_id != COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT
@@ -1835,8 +2625,11 @@ mod tests {
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&legacy));
 
@@ -1850,7 +2643,7 @@ mod tests {
     #[test]
     fn pre_delivery_intent_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-delivery-intent-v3");
-        let mut state = fixture_state(26);
+        let mut state = fixture_state_before_ai_ollama(26);
         state.modules.retain(|module| {
             module.runtime_artifact_id != COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT
@@ -1859,8 +2652,11 @@ mod tests {
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1874,7 +2670,7 @@ mod tests {
     #[test]
     fn pre_bulk_action_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-bulk-action-v3");
-        let mut state = fixture_state(27);
+        let mut state = fixture_state_before_ai_ollama(27);
         state.modules.retain(|module| {
             module.runtime_artifact_id != COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT
@@ -1882,8 +2678,11 @@ mod tests {
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1897,15 +2696,18 @@ mod tests {
     #[test]
     fn pre_delayed_delivery_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-delayed-delivery-v3");
-        let mut state = fixture_state(28);
+        let mut state = fixture_state_before_ai_ollama(28);
         state.modules.retain(|module| {
             module.runtime_artifact_id != COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1919,14 +2721,17 @@ mod tests {
     #[test]
     fn pre_text_extraction_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-text-extraction-v3");
-        let mut state = fixture_state(29);
+        let mut state = fixture_state_before_ai_ollama(29);
         state.modules.retain(|module| {
             module.runtime_artifact_id != ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1940,13 +2745,16 @@ mod tests {
     #[test]
     fn pre_attachment_preview_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-attachment-preview-v3");
-        let mut state = fixture_state(30);
+        let mut state = fixture_state_before_ai_ollama(30);
         state.modules.retain(|module| {
             module.runtime_artifact_id != ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1960,12 +2768,15 @@ mod tests {
     #[test]
     fn pre_attachment_preview_evidence_replay_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-attachment-preview-evidence-replay-v3");
-        let mut state = fixture_state(31);
+        let mut state = fixture_state_before_ai_ollama(31);
         state.modules.retain(|module| {
             module.runtime_artifact_id != ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT
                 && module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1979,11 +2790,14 @@ mod tests {
     #[test]
     fn pre_attachment_translation_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-attachment-translation-v3");
-        let mut state = fixture_state(32);
+        let mut state = fixture_state_before_ai_ollama(32);
         state.modules.retain(|module| {
             module.runtime_artifact_id != ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
         write_test_state(&path, &encode_state_v3(&state));
 
@@ -1997,11 +2811,196 @@ mod tests {
     #[test]
     fn pre_contacts_sync_state_v3_is_refreshable_but_not_current() {
         let path = temporary_state_path("pre-contacts-sync-v3");
-        let mut state = fixture_state(33);
+        let mut state = fixture_state_before_ai_ollama(33);
         state.modules.retain(|module| {
-            module.runtime_artifact_id != CONTACTS_RUNTIME_ARTIFACT
-                && module.runtime_artifact_id != MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT
+            module.runtime_artifact_id != PERSONS_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id != REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT
+                && module.runtime_artifact_id
+                    != REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_ARTIFACT
         });
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_ai_ollama_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-ai-ollama-v3");
+        let state = fixture_state_before_ai_ollama(34);
+        assert_eq!(state.modules.len(), 18);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_speech_to_text_whisper_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-speech-to-text-whisper-v3");
+        let state = fixture_state_before_speech_to_text_whisper(35);
+        assert_eq!(state.modules.len(), 20);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_calendar_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-calendar-v3");
+        let state = fixture_state_before_calendar(36);
+        assert_eq!(state.modules.len(), 22);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_organizations_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-organizations-v3");
+        let state = fixture_state_before_organizations(37);
+        assert_eq!(state.modules.len(), 23);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_decisions_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-decisions-v3");
+        let state = fixture_state_before_decisions(42);
+        assert_eq!(state.modules.len(), 30);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_identity_resolution_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-identity-resolution-v3");
+        let state = fixture_state_before_identity_resolution(43);
+        assert_eq!(state.modules.len(), 31);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_search_timeline_graph_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-search-timeline-graph-v3");
+        let state = fixture_state_before_search_timeline_graph(44);
+        assert_eq!(state.modules.len(), 32);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_memory_consistency_risk_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-memory-consistency-risk-v3");
+        let state = fixture_state_before_memory_consistency_risk(45);
+        assert_eq!(state.modules.len(), 35);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_zoom_telemost_omniroute_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-zoom-telemost-omniroute-v3");
+        let state = fixture_state_before_zoom_telemost_omniroute(46);
+        assert_eq!(state.modules.len(), 38);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_documents_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-documents-v3");
+        let state = fixture_state_before_documents(38);
+        assert_eq!(state.modules.len(), 24);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_relationships_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-relationships-v3");
+        let state = fixture_state_before_relationships(39);
+        assert_eq!(state.modules.len(), 25);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_projects_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-projects-v3");
+        let state = fixture_state_before_projects(40);
+        assert_eq!(state.modules.len(), 26);
+        write_test_state(&path, &encode_state_v3(&state));
+
+        let restored = read_state(&path).unwrap();
+        assert_eq!(restored, state);
+        assert!(validate_refreshable_state_plan(&restored).is_ok());
+        assert!(validate_state_plan(&restored).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn pre_obligations_state_v3_is_refreshable_but_not_current() {
+        let path = temporary_state_path("pre-obligations-v3");
+        let state = fixture_state_before_obligations(41);
+        assert_eq!(state.modules.len(), 27);
         write_test_state(&path, &encode_state_v3(&state));
 
         let restored = read_state(&path).unwrap();

@@ -1,0 +1,58 @@
+[package]
+name = "makosh-mail-persons-sync-persistence-testkit"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[package.metadata.makosh]
+role = "test"
+owner = "test"
+surface = "test_support"
+
+[dev-dependencies]
+makosh-events-protocol = { path = "../../../src/platform/events" }
+makosh-identity-resolution-core = { path = "../../../src/identity-resolution-core" }
+makosh-identity-resolution-persistence = { path = "../../../src/identity-resolution-persistence", features = ["conformance-test-support"] }
+makosh-mail-address-book-persistence = { path = "../../../src/mail-address-book-persistence", features = ["conformance-test-support"] }
+makosh-mail-address-book-contract = { path = "../../../src/mail-address-book-contract" }
+makosh-mail-persons-sync-api = { path = "../../../src/mail-persons-sync-api" }
+makosh-mail-persons-sync-core = { path = "../../../src/mail-persons-sync-core" }
+makosh-mail-persons-sync-persistence = { path = "../../../src/mail-persons-sync-persistence", features = ["conformance-test-support"] }
+makosh-storage-protocol = { path = "../../../src/platform/storage/protocol" }
+makosh-mail-runtime = { path = "../../../src/mail-runtime" }
+makosh-mail-persons-sync-runtime = { path = "../../../src/mail-persons-sync-runtime" }
+makosh-mail-persons-sync-assembly = { path = "../../../src/mail-persons-sync-assembly" }
+makosh-persons-api = { path = "../../../src/persons-api" }
+makosh-persons-runtime = { path = "../../../src/persons-runtime" }
+makosh-search-core = { path = "../../../src/search-core" }
+makosh-search-persistence = { path = "../../../src/search-persistence" }
+makosh-timeline-core = { path = "../../../src/timeline-core" }
+makosh-timeline-persistence = { path = "../../../src/timeline-persistence" }
+makosh-graph-core = { path = "../../../src/graph-core" }
+makosh-graph-persistence = { path = "../../../src/graph-persistence" }
+makosh-memory-core = { path = "../../../src/memory-core" }
+makosh-memory-persistence = { path = "../../../src/memory-persistence" }
+makosh-consistency-core = { path = "../../../src/consistency-core" }
+makosh-consistency-persistence = { path = "../../../src/consistency-persistence" }
+makosh-risk-core = { path = "../../../src/risk-core" }
+makosh-risk-persistence = { path = "../../../src/risk-persistence" }
+makosh-zoom-core = { path = "../../../src/zoom-core" }
+makosh-zoom-persistence = { path = "../../../src/zoom-persistence" }
+makosh-telemost-core = { path = "../../../src/telemost-core" }
+makosh-telemost-persistence = { path = "../../../src/telemost-persistence" }
+makosh-omniroute-core = { path = "../../../src/omniroute-core" }
+makosh-omniroute-persistence = { path = "../../../src/omniroute-persistence" }
+makosh-runtime-protocol = { path = "../../../src/platform/runtime_protocol" }
+makosh-review-person-match-candidate-core = { path = "../../../src/review-person-match-candidate-core" }
+makosh-review-person-match-candidate-api = { path = "../../../src/review-person-match-candidate-api" }
+makosh-review-person-match-candidate-persistence = { path = "../../../src/review-person-match-candidate-persistence", features = ["conformance-test-support"] }
+makosh-review-person-match-candidate-runtime = { path = "../../../src/review-person-match-candidate-runtime" }
+makosh-review-person-match-candidate-promotion-api = { path = "../../../src/review-person-match-candidate-promotion-api" }
+makosh-reviewed-person-match-candidate-promotion-persistence = { path = "../../../src/reviewed-person-match-candidate-promotion-persistence", features = ["conformance-test-support"] }
+makosh-reviewed-person-match-candidate-promotion-runtime = { path = "../../../src/reviewed-person-match-candidate-promotion-runtime" }
+prost-types = "=0.14.4"
+prost = "=0.14.4"
+serde_json = "=1.0.150"
+sha2 = { version = "=0.11.0", default-features = false }
+sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }
+tokio = { version = "=1.52.4", default-features = false, features = ["macros", "rt-multi-thread"] }

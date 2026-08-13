@@ -1,7 +1,8 @@
 //! Exact Mail storage successor composed by the managed runtime.
 
 use makosh_mail_address_book_persistence::{
-    MailAddressBookSchemaErrorV1, append_mail_address_book_storage_v1,
+    MailAddressBookSchemaErrorV1, append_mail_address_book_person_source_admitted_storage_v1,
+    append_mail_address_book_storage_v1,
 };
 use makosh_mail_persistence::{
     MailIcloudCardDavCredentialSchemaErrorV1, MailSyncDeadlineFailureSchemaErrorV1,
@@ -39,8 +40,10 @@ pub fn mail_runtime_storage_bundle_v1() -> Result<StorageBundleV1, MailRuntimeSt
         .map_err(MailRuntimeStorageBundleErrorV1::AddressBook)?;
     let bundle = append_mail_icloud_carddav_credential_storage_v1(bundle)
         .map_err(MailRuntimeStorageBundleErrorV1::IcloudCardDavCredential)?;
-    append_mail_sync_deadline_failure_storage_v1(bundle)
-        .map_err(MailRuntimeStorageBundleErrorV1::SyncDeadlineFailure)
+    let bundle = append_mail_sync_deadline_failure_storage_v1(bundle)
+        .map_err(MailRuntimeStorageBundleErrorV1::SyncDeadlineFailure)?;
+    append_mail_address_book_person_source_admitted_storage_v1(bundle)
+        .map_err(MailRuntimeStorageBundleErrorV1::AddressBook)
 }
 
 #[cfg(test)]
@@ -50,7 +53,11 @@ mod tests {
     #[test]
     fn storage_bundle_has_exact_successor_lineage() {
         let bundle = mail_runtime_storage_bundle_v1().expect("Mail storage bundle");
-        assert_eq!(bundle.revision, 31);
-        assert_eq!(bundle.steps.last().map(|step| step.revision), Some(31));
+        assert_eq!(bundle.revision, 32);
+        assert_eq!(bundle.steps.last().map(|step| step.revision), Some(32));
+        assert_eq!(
+            bundle.steps.last().map(|step| step.migration_id.as_str()),
+            Some("mail_address_book_person_source_admitted")
+        );
     }
 }

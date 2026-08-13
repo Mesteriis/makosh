@@ -1,10 +1,19 @@
 #![forbid(unsafe_code)]
 
 mod creation;
+mod lifecycle;
 mod model;
 
 pub use creation::{
     KnowledgeNoteCreationErrorV1, create_verified_knowledge_note_from_reviewed_candidate_v1,
+};
+pub use lifecycle::{
+    KnowledgeLifecycleErrorV1, KnowledgeLifecycleStateV1, KnowledgeNoteOriginV1,
+    KnowledgeNoteRecordV1, KnowledgeSourceStateV1, KnowledgeSourceV1, MAX_KNOWLEDGE_BODY_CHARS_V1,
+    ManualKnowledgeNoteDraftV1, add_knowledge_source_v1, create_manual_knowledge_note_v1,
+    derive_knowledge_source_id_v1, derive_manual_knowledge_note_id_v1, remove_knowledge_source_v1,
+    set_knowledge_note_state_v1, update_knowledge_note_content_v1,
+    validate_knowledge_note_record_v1,
 };
 pub use model::{
     KnowledgeNoteProvenanceV1, KnowledgeNoteSourceBasisV1, KnowledgeNoteTimestampV1,

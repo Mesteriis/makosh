@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package makosh.mail_persons_sync.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message MailPersonsSyncPageIdentityV1 {
+  string logical_owner_id = 1;
+  bytes account_public_id = 2;
+  bytes run_id = 3;
+  uint64 page_sequence = 4;
+}
+
+message MailPersonsSyncPageReceiptV1 {
+  bytes receipt_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  uint64 page_sequence = 4;
+  uint32 observed_sources = 5;
+  uint32 updated_sources = 6;
+  uint32 removed_sources = 7;
+  uint32 persons_commands = 8;
+  bytes page_digest = 9;
+  google.protobuf.Timestamp completed_at = 10;
+  bytes account_public_id = 11;
+}
+
+message MailPersonsSyncRunResultV1 {
+  bytes result_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  MailPersonsSyncRunOutcomeV1 outcome = 4;
+  uint64 processed_pages = 5;
+  uint64 processed_sources = 6;
+  MailPersonsSyncRejectCodeV1 code = 7;
+  google.protobuf.Timestamp completed_at = 8;
+  bytes account_public_id = 9;
+}
+
+enum MailPersonsSyncRunOutcomeV1 {
+  MAIL_PERSONS_SYNC_RUN_OUTCOME_UNSPECIFIED = 0;
+  MAIL_PERSONS_SYNC_RUN_OUTCOME_SUCCEEDED = 1;
+  MAIL_PERSONS_SYNC_RUN_OUTCOME_REJECTED = 2;
+}
+
+enum MailPersonsSyncRejectCodeV1 {
+  MAIL_PERSONS_SYNC_REJECT_CODE_UNSPECIFIED = 0;
+  MAIL_PERSONS_SYNC_REJECT_CODE_INVALID_REQUEST = 1;
+  MAIL_PERSONS_SYNC_REJECT_CODE_CONFLICT = 2;
+  MAIL_PERSONS_SYNC_REJECT_CODE_SOURCE_UNAVAILABLE = 3;
+  MAIL_PERSONS_SYNC_REJECT_CODE_POLICY = 4;
+}

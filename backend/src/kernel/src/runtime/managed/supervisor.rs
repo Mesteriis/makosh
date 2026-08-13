@@ -11,6 +11,7 @@ use crate::runtime::managed::execution::{
     self as bounded_managed_child_execution, ManagedChildExecutionPolicy,
     ManagedChildExecutionResult,
 };
+use std::net::Shutdown;
 use std::process::{Child, ExitStatus};
 use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender};
@@ -37,7 +38,10 @@ pub fn run(
         arguments,
         expectation,
         policy,
-        |child, _| bounded_managed_child_execution::wait(child, policy.max_runtime()),
+        |child, _| {
+            bounded_managed_child_execution::wait(child, policy.max_runtime())
+                .map(ManagedChildAttemptOutcomeV1::Exited)
+        },
     )
 }
 
@@ -84,7 +88,10 @@ fn run_with_wait<F>(
     mut wait: F,
 ) -> Result<ManagedChildExecutionResult, String>
 where
-    F: FnMut(&mut Child, &mut std::os::unix::net::UnixStream) -> Result<ExitStatus, String>,
+    F: FnMut(
+        &mut Child,
+        &mut std::os::unix::net::UnixStream,
+    ) -> Result<ManagedChildAttemptOutcomeV1, String>,
 {
     for attempt in 1..=policy.max_attempts() {
         let (kernel_end, child_stdin) = managed_runtime_control::create_inherited_channel()?;
@@ -101,12 +108,25 @@ where
                     continue;
                 }
             };
-        let status = wait(&mut child, &mut control_channel)?;
-        if status.success() {
-            return Ok(ManagedChildExecutionResult::succeeded(
-                attempt,
-                status.code().unwrap_or(0),
-            ));
+        match wait(&mut child, &mut control_channel)? {
+            ManagedChildAttemptOutcomeV1::RequestedStop(status) => {
+                return Ok(ManagedChildExecutionResult::succeeded(
+                    attempt,
+                    status.code().unwrap_or(0),
+                ));
+            }
+            ManagedChildAttemptOutcomeV1::ControlFault(error) => {
+                if attempt == policy.max_attempts() {
+                    return Err(error);
+                }
+            }
+            ManagedChildAttemptOutcomeV1::Exited(status) if status.success() => {
+                return Ok(ManagedChildExecutionResult::succeeded(
+                    attempt,
+                    status.code().unwrap_or(0),
+                ));
+            }
+            ManagedChildAttemptOutcomeV1::Exited(_) => {}
         }
     }
     Err("managed child exhausted its bounded restart attempts".to_owned())
@@ -123,7 +143,7 @@ where
     F: FnMut(
         &mut Child,
         &mut ManagedControlChannelV2<std::os::unix::net::UnixStream>,
-    ) -> Result<ExitStatus, String>,
+    ) -> Result<ManagedChildAttemptOutcomeV1, String>,
 {
     for attempt in 1..=policy.max_attempts() {
         let (kernel_end, child_stdin) = managed_runtime_control::create_inherited_channel()?;
@@ -140,12 +160,25 @@ where
                     continue;
                 }
             };
-        let status = wait(&mut child, &mut control_channel)?;
-        if status.success() {
-            return Ok(ManagedChildExecutionResult::succeeded(
-                attempt,
-                status.code().unwrap_or(0),
-            ));
+        match wait(&mut child, &mut control_channel)? {
+            ManagedChildAttemptOutcomeV1::RequestedStop(status) => {
+                return Ok(ManagedChildExecutionResult::succeeded(
+                    attempt,
+                    status.code().unwrap_or(0),
+                ));
+            }
+            ManagedChildAttemptOutcomeV1::ControlFault(error) => {
+                if attempt == policy.max_attempts() {
+                    return Err(error);
+                }
+            }
+            ManagedChildAttemptOutcomeV1::Exited(status) if status.success() => {
+                return Ok(ManagedChildExecutionResult::succeeded(
+                    attempt,
+                    status.code().unwrap_or(0),
+                ));
+            }
+            ManagedChildAttemptOutcomeV1::Exited(_) => {}
         }
     }
     Err("managed child exhausted its bounded restart attempts".to_owned())
@@ -155,11 +188,8 @@ fn wait_until_shutdown_with_relay(
     child: &mut Child,
     channel: &mut std::os::unix::net::UnixStream,
     input: &ManagedChildRunInput<'_>,
-) -> Result<ExitStatus, String> {
+) -> Result<ManagedChildAttemptOutcomeV1, String> {
     loop {
-        if let Some(status) = child.try_wait().map_err(|error| error.to_string())? {
-            return Ok(status);
-        }
         if input
             .shutdown_requested
             .load(std::sync::atomic::Ordering::Acquire)
@@ -167,10 +197,26 @@ fn wait_until_shutdown_with_relay(
                 .stop_requested
                 .load(std::sync::atomic::Ordering::Acquire)
         {
-            bounded_managed_child_execution::terminate(child)?;
-            return Err("managed child stopped by Kernel shutdown".to_owned());
+            channel
+                .shutdown(Shutdown::Both)
+                .map_err(|error| error.to_string())?;
+            return terminal_status_after_control_close(child)
+                .map(ManagedChildAttemptOutcomeV1::RequestedStop);
         }
-        if let Some(ready) = managed_runtime_control::inbound::try_receive_ready(channel)? {
+        if child
+            .try_wait()
+            .map_err(|error| error.to_string())?
+            .is_some()
+        {
+            return Ok(ManagedChildAttemptOutcomeV1::ControlFault(
+                "managed runtime exited without a Kernel stop request".to_owned(),
+            ));
+        }
+        let ready = match managed_runtime_control::inbound::try_receive_ready(channel) {
+            Ok(ready) => ready,
+            Err(error) => return unexpected_control_fault(child, error),
+        };
+        if let Some(ready) = ready {
             if !input.expectation.matches_ready(&ready) {
                 let _ = input
                     .ready_sender
@@ -186,7 +232,9 @@ fn wait_until_shutdown_with_relay(
         match process_typed_requests(channel, input.expectation, input.control_handlers) {
             Ok(true) => continue,
             Ok(false) => {}
-            Err(_) => return terminal_status_after_control_close(child),
+            Err(error) => {
+                return unexpected_control_fault(child, error);
+            }
         }
         match input.relay_requests.recv_timeout(Duration::from_millis(25)) {
             Ok(request) => request.dispatch(channel, input.expectation, input.control_handlers),
@@ -203,15 +251,12 @@ fn wait_until_shutdown_with_correlated_relay(
     child: &mut Child,
     channel: &mut ManagedControlChannelV2<std::os::unix::net::UnixStream>,
     input: &ManagedChildRunInput<'_>,
-) -> Result<ExitStatus, String> {
+) -> Result<ManagedChildAttemptOutcomeV1, String> {
     channel
         .inner_mut()
         .set_nonblocking(true)
         .map_err(|error| error.to_string())?;
     loop {
-        if let Some(status) = child.try_wait().map_err(|error| error.to_string())? {
-            return Ok(status);
-        }
         if input
             .shutdown_requested
             .load(std::sync::atomic::Ordering::Acquire)
@@ -219,8 +264,21 @@ fn wait_until_shutdown_with_correlated_relay(
                 .stop_requested
                 .load(std::sync::atomic::Ordering::Acquire)
         {
-            bounded_managed_child_execution::terminate(child)?;
-            return Err("managed child stopped by Kernel shutdown".to_owned());
+            channel
+                .inner_mut()
+                .shutdown(Shutdown::Both)
+                .map_err(|error| error.to_string())?;
+            return terminal_status_after_control_close(child)
+                .map(ManagedChildAttemptOutcomeV1::RequestedStop);
+        }
+        if child
+            .try_wait()
+            .map_err(|error| error.to_string())?
+            .is_some()
+        {
+            return Ok(ManagedChildAttemptOutcomeV1::ControlFault(
+                "managed runtime exited without a Kernel stop request".to_owned(),
+            ));
         }
         match channel.try_receive_request() {
             Ok(Some((correlation_id, request))) => {
@@ -228,7 +286,12 @@ fn wait_until_shutdown_with_correlated_relay(
                 continue;
             }
             Ok(None) => {}
-            Err(_) => return terminal_status_after_control_close(child),
+            Err(_) => {
+                return unexpected_control_fault(
+                    child,
+                    "managed runtime correlated control channel failed".to_owned(),
+                );
+            }
         }
         match input.relay_requests.recv_timeout(Duration::from_millis(25)) {
             Ok(request) => dispatch_correlated_relay(channel, request, input),
@@ -489,5 +552,248 @@ fn terminal_status_after_control_close(child: &mut Child) -> Result<ExitStatus, 
             return child.wait().map_err(|failure| failure.to_string());
         }
         std::thread::sleep(Duration::from_millis(25));
+    }
+}
+
+fn unexpected_control_fault(
+    child: &mut Child,
+    error: String,
+) -> Result<ManagedChildAttemptOutcomeV1, String> {
+    bounded_managed_child_execution::terminate(child)?;
+    Ok(ManagedChildAttemptOutcomeV1::ControlFault(error))
+}
+
+enum ManagedChildAttemptOutcomeV1 {
+    Exited(ExitStatus),
+    RequestedStop(ExitStatus),
+    ControlFault(String),
+}
+
+#[cfg(test)]
+mod tests {
+    use std::io::Read;
+    use std::os::unix::fs::PermissionsExt;
+    use std::sync::{atomic::AtomicBool, mpsc};
+
+    use makosh_runtime_protocol::v1::{
+        DescribeManagedRuntimeRequestV1, ManagedRuntimeControlRequestV1, ModuleDescriptorV1,
+        ModuleKindV1, managed_runtime_control_request_v1::Operation,
+    };
+    use prost::Message;
+    use sha2::{Digest, Sha256};
+
+    use super::*;
+
+    #[test]
+    fn requested_stop_kills_unresponsive_child_once_without_replacement() {
+        let root = std::env::temp_dir().join(format!(
+            "makosh-managed-stop-no-restart-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .expect("clock")
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&root).expect("fixture root");
+        let launches = root.join("launches");
+        let (descriptor_bytes, framed_describe) = describe_fixture();
+        let source = root.join("child.sh");
+        std::fs::write(
+            &source,
+            format!(
+                "#!/bin/sh\nprintf x >> \"$1\"\nprintf '{}' >&0\nwhile :; do sleep 1; done\n",
+                shell_octal(&framed_describe)
+            ),
+        )
+        .expect("child fixture");
+        std::fs::set_permissions(&source, std::fs::Permissions::from_mode(0o500))
+            .expect("fixture executable");
+        let digest: [u8; 32] = Sha256::digest(std::fs::read(&source).expect("child bytes")).into();
+        let staged = crate::distribution::staged_artifact::stage(
+            &source,
+            &root.join("staged"),
+            "managed-child",
+            &digest,
+        )
+        .expect("staged fixture");
+        let expectation = ManagedRuntimeExpectation::new(
+            "registration",
+            "runtime",
+            "persons",
+            1,
+            1,
+            Sha256::digest(&descriptor_bytes).into(),
+            None,
+        );
+        let policy = ManagedChildExecutionPolicy::new(3, Duration::from_secs(5)).expect("policy");
+        let shutdown = AtomicBool::new(false);
+        let stop = AtomicBool::new(true);
+        let (_relay_sender, relay_receiver) = mpsc::sync_channel(1);
+        let (ready_sender, _ready_receiver) = mpsc::sync_channel(1);
+        let ready_state = AtomicBool::new(false);
+        let started = Instant::now();
+        let result = run_until_shutdown(ManagedChildRunInput {
+            staged_executable: &staged,
+            arguments: &[launches.display().to_string()],
+            expectation: &expectation,
+            policy: &policy,
+            control_transport: ManagedControlTransportMajorV1::LegacyV1,
+            shutdown_requested: &shutdown,
+            stop_requested: &stop,
+            relay_requests: &relay_receiver,
+            control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers::default(),
+            ready_sender: &ready_sender,
+            ready_state: &ready_state,
+        })
+        .expect("requested stop is terminal");
+        assert_eq!(result.attempts(), 1);
+        assert!(started.elapsed() < Duration::from_secs(2));
+        assert_eq!(
+            std::fs::read(&launches).expect("launch counter"),
+            b"x",
+            "killed child must not be replaced"
+        );
+        std::fs::remove_dir_all(root).expect("remove fixture");
+    }
+
+    #[test]
+    fn malformed_correlated_control_frame_is_not_a_successful_requested_stop() {
+        assert_unexpected_correlated_control_failure("printf '\\001\\377' >&0");
+    }
+
+    #[test]
+    fn unexpected_correlated_peer_close_is_not_a_successful_requested_stop() {
+        assert_unexpected_correlated_control_failure("exec 0>&-");
+    }
+
+    #[test]
+    fn malformed_correlated_control_frame_then_exit_zero_is_still_a_fault() {
+        assert_unexpected_correlated_control_failure("printf '\\001\\377' >&0; exit 0");
+    }
+
+    #[test]
+    fn unexpected_correlated_peer_close_then_exit_zero_is_still_a_fault() {
+        assert_unexpected_correlated_control_failure("exec 0>&-; exit 0");
+    }
+
+    fn assert_unexpected_correlated_control_failure(action: &str) {
+        let root = std::env::temp_dir().join(format!(
+            "makosh-managed-control-failure-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .expect("clock")
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&root).expect("fixture root");
+        let launches = root.join("launches");
+        let (descriptor_bytes, framed_describe) = correlated_describe_fixture();
+        let source = root.join("child.sh");
+        std::fs::write(
+            &source,
+            format!(
+                "#!/bin/sh\nprintf x >> \"$1\"\nprintf '{}' >&0\nsleep 1\n{action}\nwhile :; do sleep 1; done\n",
+                shell_octal(&framed_describe)
+            ),
+        )
+        .expect("child fixture");
+        std::fs::set_permissions(&source, std::fs::Permissions::from_mode(0o500))
+            .expect("fixture executable");
+        let digest: [u8; 32] = Sha256::digest(std::fs::read(&source).expect("child bytes")).into();
+        let staged = crate::distribution::staged_artifact::stage(
+            &source,
+            &root.join("staged"),
+            "managed-control-failure-child",
+            &digest,
+        )
+        .expect("staged fixture");
+        let expectation = ManagedRuntimeExpectation::new(
+            "registration",
+            "runtime",
+            "persons",
+            1,
+            1,
+            Sha256::digest(&descriptor_bytes).into(),
+            None,
+        );
+        let policy = ManagedChildExecutionPolicy::new(2, Duration::from_secs(5)).expect("policy");
+        let shutdown = AtomicBool::new(false);
+        let stop = AtomicBool::new(false);
+        let (_relay_sender, relay_receiver) = mpsc::sync_channel(1);
+        let (ready_sender, _ready_receiver) = mpsc::sync_channel(1);
+        let ready_state = AtomicBool::new(false);
+        let result = run_until_shutdown(ManagedChildRunInput {
+            staged_executable: &staged,
+            arguments: &[launches.display().to_string()],
+            expectation: &expectation,
+            policy: &policy,
+            control_transport: ManagedControlTransportMajorV1::CorrelatedV2,
+            shutdown_requested: &shutdown,
+            stop_requested: &stop,
+            relay_requests: &relay_receiver,
+            control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers::default(),
+            ready_sender: &ready_sender,
+            ready_state: &ready_state,
+        });
+        assert!(
+            result.is_err(),
+            "unexpected control failure must not succeed"
+        );
+        assert_eq!(
+            std::fs::read(&launches).expect("launch counter"),
+            b"xx",
+            "unexpected control failure follows bounded retry policy"
+        );
+        std::fs::remove_dir_all(root).expect("remove fixture");
+    }
+
+    fn describe_fixture() -> (Vec<u8>, Vec<u8>) {
+        let descriptor_bytes = ModuleDescriptorV1 {
+            descriptor_major: 1,
+            descriptor_revision: 1,
+            module_kind: ModuleKindV1::Domain as i32,
+            module_id: "persons".to_owned(),
+            owner_id: "persons".to_owned(),
+            module_version: "1".to_owned(),
+            build_id: "test".to_owned(),
+            ..Default::default()
+        }
+        .encode_to_vec();
+        let request = ManagedRuntimeControlRequestV1 {
+            operation: Some(Operation::Describe(DescribeManagedRuntimeRequestV1 {
+                descriptor_bytes: descriptor_bytes.clone(),
+                settings_schema_bytes: Vec::new(),
+            })),
+        }
+        .encode_to_vec();
+        assert!(request.len() < 128);
+        let mut framed = vec![request.len() as u8];
+        framed.extend_from_slice(&request);
+        (descriptor_bytes, framed)
+    }
+
+    fn correlated_describe_fixture() -> (Vec<u8>, Vec<u8>) {
+        let (descriptor_bytes, _) = describe_fixture();
+        let request = ManagedRuntimeControlRequestV1 {
+            operation: Some(Operation::Describe(DescribeManagedRuntimeRequestV1 {
+                descriptor_bytes: descriptor_bytes.clone(),
+                settings_schema_bytes: Vec::new(),
+            })),
+        };
+        let (writer, mut reader) = std::os::unix::net::UnixStream::pair().expect("control pair");
+        let mut channel = ManagedControlChannelV2::new(writer);
+        channel
+            .write_request([1; MANAGED_CONTROL_CORRELATION_ID_BYTES], request)
+            .expect("correlated describe");
+        drop(channel);
+        let mut framed = Vec::new();
+        reader
+            .read_to_end(&mut framed)
+            .expect("read correlated describe frame");
+        (descriptor_bytes, framed)
+    }
+
+    fn shell_octal(bytes: &[u8]) -> String {
+        bytes.iter().map(|byte| format!("\\{byte:03o}")).collect()
     }
 }

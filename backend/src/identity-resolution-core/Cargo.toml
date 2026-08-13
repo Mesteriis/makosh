@@ -1,0 +1,17 @@
+[package]
+name = "makosh-identity-resolution-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[package.metadata.makosh]
+role = "engine"
+owner = "identity_resolution"
+surface = "implementation"
+
+[dependencies]
+makosh-identity-resolution-api = { path = "../identity-resolution-api" }
+makosh-persons-api = { path = "../persons-api" }

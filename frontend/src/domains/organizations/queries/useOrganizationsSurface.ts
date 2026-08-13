@@ -6,59 +6,59 @@ export function useOrganizationsSurface() {
   return createDomainSurface({
     surfaceId: 'organizations',
     labelKey: 'Organizations',
-    status: 'facade',
+    status: 'active',
     ownerLayer: 'domain',
     surfacePath,
     capabilities: [
       {
         id: 'organizations-directory',
         labelKey: 'Organization directory',
-        descriptionKey: 'Canonical organizations and linked provider identities.',
+        descriptionKey: 'Canonical owner-local organizations and public source provenance.',
         icon: 'tabler:building',
         status: 'active',
         kind: 'query',
         contract: 'useOrganizationsPageSurface.organizations'
       },
       {
-        id: 'organizations-relationships',
-        labelKey: 'Organization relationships',
-        descriptionKey: 'Personas, projects and evidence linked to an organization.',
-        icon: 'tabler:building-community',
+        id: 'organizations-lifecycle',
+        labelKey: 'Organization lifecycle',
+        descriptionKey: 'Typed owner organization creation, profile updates and lifecycle state.',
+        icon: 'tabler:building-plus',
         status: 'active',
-        kind: 'graph',
-        contract: 'useOrganizationsPageSurface.selectedOrganization'
+        kind: 'command',
+        contract: 'OrganizationsCommandService.Create/Update/SetState'
       },
       {
-        id: 'organizations-review',
-        labelKey: 'Organization review',
-        descriptionKey: 'Candidate organization records promoted from observed communications.',
-        icon: 'tabler:clipboard-check',
+        id: 'organizations-provenance',
+        labelKey: 'Public source provenance',
+        descriptionKey: 'Bounded public source evidence attached to an exact Organization revision.',
+        icon: 'tabler:link',
         status: 'active',
-        kind: 'review',
-        contract: 'useOrganizationsPageSurface.reviewItems'
+        kind: 'command',
+        contract: 'OrganizationsCommandService.AddSource/RemoveSource'
       }
     ],
     childSurfaces: [
       {
         id: 'organizations-directory',
         labelKey: 'Directory',
-        status: 'facade',
+        status: 'active',
         surfacePath,
         capabilityIds: ['organizations-directory']
       },
       {
-        id: 'organizations-context',
-        labelKey: 'Context',
-        status: 'facade',
+        id: 'organizations-lifecycle',
+        labelKey: 'Lifecycle',
+        status: 'active',
         surfacePath,
-        capabilityIds: ['organizations-relationships']
+        capabilityIds: ['organizations-lifecycle']
       },
       {
-        id: 'organizations-review',
-        labelKey: 'Review',
-        status: 'facade',
+        id: 'organizations-provenance',
+        labelKey: 'Sources',
+        status: 'active',
         surfacePath,
-        capabilityIds: ['organizations-review']
+        capabilityIds: ['organizations-provenance']
       }
     ]
   })

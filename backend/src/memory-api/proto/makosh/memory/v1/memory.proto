@@ -1,0 +1,42 @@
+syntax = "proto3";
+package makosh.memory.v1;
+
+message MemoryCursorV1 {
+  int64 occurred_at_unix_millis = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  bytes event_id = 6;
+}
+message ListMemoryRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_cursor = 2;
+  uint32 limit = 3;
+}
+message MemoryEntryV1 {
+  bytes event_id = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  string memory_kind = 6;
+  int64 occurred_at_unix_millis = 7;
+  bool tombstone = 8;
+}
+message ListMemoryResultV1 {
+  repeated MemoryEntryV1 entries = 1;
+  bytes next_cursor = 2;
+  uint64 projection_generation = 3;
+}
+message MemoryStatusRequestV1 { string logical_owner_id = 1; }
+message MemoryStatusV1 {
+  uint64 active_generation = 1;
+  uint64 memory_entries = 2;
+  uint64 source_events = 3;
+  int64 rebuilt_at_unix_millis = 4;
+}
+service MemoryQueryService {
+  rpc List(ListMemoryRequestV1) returns (ListMemoryResultV1);
+  rpc GetStatus(MemoryStatusRequestV1) returns (MemoryStatusV1);
+}

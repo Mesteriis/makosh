@@ -58,9 +58,89 @@ test('Communications remains isolated after Knowledge owner admission', async ()
 
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
-  assert.deepEqual(policy.implementation.ownerInventory, {
+  const task6Capability = (capability) => (
+    capability === 'mail.person-source.provider.v1'
+    || capability.startsWith('mail_persons_sync.')
+    || capability.startsWith('persons.')
+    || capability.startsWith('review.person-match-candidate.')
+    || capability.startsWith('reviewed-person-match-candidate-promotion.')
+  );
+  const task7Capability = (capability) => (
+    capability === 'communication.bulk_action.v1'
+    || capability.startsWith('communication.delayed_delivery.')
+    || capability.startsWith('communication_bulk_action.')
+  );
+  const task8Capability = (capability) => (
+    capability === 'ai.inference.blob.v1'
+    || capability === 'ai.inference.request.v1'
+    || capability === 'ai.inference.storage.v1'
+    || capability === 'ai.provider.generate.v1'
+    || capability === 'ai.provider.summarize.v1'
+    || capability === 'ai.summary.request.v1'
+    || capability === 'ollama.ai.storage.v1'
+  );
+  const task9Capability = (capability) => (
+    capability === 'speech_to_text.blob.v1'
+    || capability === 'speech_to_text.provider.v1'
+    || capability === 'speech_to_text.storage.v1'
+    || capability === 'speech_to_text.transcribe.v1'
+    || capability === 'whisper_stt.blob.v1'
+    || capability === 'whisper_stt.native.v1'
+    || capability === 'whisper_stt.provider.v1'
+    || capability === 'whisper_stt.storage.v1'
+  );
+  const normalizedPreCutoverInventory = {
+    ...policy.implementation.ownerInventory,
+    domains: policy.implementation.ownerInventory.domains
+      .map((owner) => owner === 'persons' ? 'contacts' : owner)
+      .sort(),
+    integrations: policy.implementation.ownerInventory.integrations
+      .filter((owner) => owner !== 'ollama' && owner !== 'whisper_stt'),
+    workflows: policy.implementation.ownerInventory.workflows
+      .filter((owner) => (
+        owner !== 'reviewed_person_match_candidate_promotion'
+        && owner !== 'communication_bulk_action'
+        && owner !== 'communication_delayed_delivery'
+      ))
+      .map((owner) => owner === 'mail_persons_sync' ? 'mail_contacts_sync' : owner),
+    businessCapabilities: policy.implementation.ownerInventory.businessCapabilities
+      .filter((capability) => (
+        !task6Capability(capability)
+        && !task7Capability(capability)
+        && !task8Capability(capability)
+        && !task9Capability(capability)
+      ))
+      .concat([
+        'contacts.mail-identity.command.v1',
+        'contacts.mail-sync-source.blob-writer.v1',
+        'contacts.mail-sync-source.changed.v1',
+        'contacts.mail-sync-source.v1',
+        'mail.address-book.contact-source.blob.v1',
+        'mail.address-book.provider.v1',
+        'mail.contacts-sync.v1',
+        'mail_contacts_sync.contacts.changed.v1',
+        'mail_contacts_sync.contacts.command.v1',
+        'mail_contacts_sync.contacts.rejected.v1',
+        'mail_contacts_sync.contacts.source-prepare.v1',
+        'mail_contacts_sync.contacts.source-prepared.v1',
+        'mail_contacts_sync.contacts.source-rejected.v1',
+        'mail_contacts_sync.contacts.upserted.v1',
+        'mail_contacts_sync.mail.entry-observed.v1',
+        'mail_contacts_sync.mail.entry-upsert-rejected.v1',
+        'mail_contacts_sync.mail.entry-upserted.v1',
+        'mail_contacts_sync.mail.fetch-page.v1',
+        'mail_contacts_sync.mail.page-completed.v1',
+        'mail_contacts_sync.mail.page-rejected.v1',
+        'mail_contacts_sync.mail.upsert-entry.v1',
+        'mail_contacts_sync.scheduler.receipt.v1',
+        'mail_contacts_sync.scheduler.v1',
+        'mail_contacts_sync.storage.v1',
+      ])
+      .sort(),
+  };
+  assert.deepEqual(normalizedPreCutoverInventory, {
     domains: ['communications', 'contacts', 'knowledge', 'review', 'tasks'],
     integrations: ['desktop_call_recording', 'mail'],
     workflows: [
@@ -326,6 +406,11 @@ test('Communications remains isolated after Knowledge owner admission', async ()
       'makosh-mail-address-book-persistence',
       'makosh-mail-google-people',
       'makosh-mail-carddav',
+      'makosh-whisper-stt-core',
+      'makosh-whisper-stt-assembly',
+      'makosh-whisper-stt-persistence',
+      'makosh-whisper-stt-process',
+      'makosh-whisper-stt-runtime',
       'makosh-desktop-call-recording-api',
       'makosh-desktop-call-recording-core',
       'makosh-desktop-call-recording-persistence',

@@ -6,7 +6,6 @@ import type { DomainSurface } from './domainSurface'
 import { useEventTracingSurface } from './event-tracing/queries/useEventTracingSurface'
 import { useHomeSurface } from './home/queries/useHomeSurface'
 import { useKnowledgeSurface } from './knowledge/queries/useKnowledgeSurface'
-import { useNotesSurface } from './notes/queries/useNotesSurface'
 import { useOrganizationsSurface } from './organizations/queries/useOrganizationsSurface'
 import { usePersonasSurface } from './personas/queries/usePersonasSurface'
 import { useProjectsSurface } from './projects/queries/useProjectsSurface'
@@ -21,7 +20,6 @@ const plannedDomainSurfaceIds = [
   'event-tracing',
   'home',
   'knowledge',
-  'notes',
   'organizations',
   'personas',
   'projects',
@@ -38,7 +36,6 @@ function domainSurfaces(): DomainSurface[] {
     useEventTracingSurface(),
     useHomeSurface(),
     useKnowledgeSurface(),
-    useNotesSurface(),
     useOrganizationsSurface(),
     usePersonasSurface(),
     useProjectsSurface(),

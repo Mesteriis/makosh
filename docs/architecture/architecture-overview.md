@@ -330,7 +330,7 @@ Product projection runtime является зарезервированной �
 Канонические business domains первой clean-room реализации:
 
 - Communications;
-- Contacts;
+- Persons;
 - Organizations;
 - Relationships;
 - Projects;
@@ -343,17 +343,26 @@ Product projection runtime является зарезервированной �
 - Review;
 - AI.
 
-Organizations является отдельным domain и не входит в Contacts. Mail,
+Persons владеет каноническим человеком, подтверждёнными внешними identities,
+source links, ручным profile и merge/split lineage. Organizations является
+отдельным domain и не входит в Persons. Provider contact books остаются у Mail,
 Telegram, WhatsApp и Zulip являются integrations. Graph, Timeline, Search и
 Context являются derived projections или engine capabilities. Полные ownership
-правила зафиксированы в ADR-0207.
+правила зафиксированы в ADR-0207 и superseding ADR-0402.
 
 ### Development Allowlist and Current Production Inventory
 
 Product development allowlist разрешает проектирование Communications,
-Contacts, Organizations, Tasks, Calendar, Documents и AI. Relationships,
-Projects, Obligations, Decisions, Knowledge и Review остаются
-зарегистрированными, но заблокированными.
+Persons, Organizations, Tasks, Calendar, Documents, Knowledge, Review и AI.
+Relationships, Projects, Obligations и Decisions остаются зарегистрированными,
+но заблокированными.
+
+Registry не является production admission. До отдельного atomic cutover exact
+production inventory сохраняет уже admitted Contacts и `mail_contacts_sync`
+packages без переименования. Cargo policy разрешает только эти exact declared
+packages; новый Contacts package или alias запрещён. Новая разработка ведётся
+только для Persons, а cutover не допускает legacy schema import, dual-read или
+REST compatibility façade.
 
 Этот allowlist не является фактическим package inventory. Текущий exact
 `attachment_security_engine_v1` inventory содержит домен `communications` и

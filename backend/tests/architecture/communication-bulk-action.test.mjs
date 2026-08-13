@@ -21,6 +21,7 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
     persistence,
     migration,
     realtimeMigration,
+    ownerRlsMigration,
     runtimeWorker,
     runtimeClient,
     managedRuntime,
@@ -109,6 +110,13 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
       readFile(
         new URL(
           'src/communication-bulk-action-persistence/migrations/0002_client_realtime_replay.sql',
+          BACKEND_ROOT,
+        ),
+        'utf8',
+      ),
+      readFile(
+        new URL(
+          'src/communication-bulk-action-persistence/migrations/0003_owner_rls.sql',
           BACKEND_ROOT,
         ),
         'utf8',
@@ -220,7 +228,7 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
   assert.match(adr, /Принятый ADR сам по себе gate не открывает/);
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert.deepEqual(
     policy.implementation.productionPackages
@@ -260,6 +268,15 @@ test('bulk delivery managed runtime uses request RPC and safe replay without dom
   assert.match(migration, /target_count BETWEEN 1 AND 100/);
   assert.match(realtimeMigration, /communication_bulk_action_realtime/);
   assert.match(realtimeMigration, /realtime_sequence/);
+  for (const table of [
+    'communication_bulk_action_batches',
+    'communication_bulk_action_targets',
+    'communication_bulk_action_realtime',
+  ]) {
+    assert.match(ownerRlsMigration, new RegExp(`ALTER TABLE makosh_data\\.${table} ENABLE ROW LEVEL SECURITY`));
+    assert.match(ownerRlsMigration, new RegExp(`ALTER TABLE makosh_data\\.${table} FORCE ROW LEVEL SECURITY`));
+  }
+  assert.equal(ownerRlsMigration.match(/CREATE POLICY /g)?.length, 3);
   assert.doesNotMatch(
     `${persistence}\n${migration}`,
     /communications_(?:messages|conversations)|mail_|telegram_|provider_/,

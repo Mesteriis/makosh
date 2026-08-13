@@ -1,0 +1,11 @@
+[package]
+name = "makosh-risk-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[package.metadata.makosh]
+role = "engine"
+owner = "risk"
+surface = "core"

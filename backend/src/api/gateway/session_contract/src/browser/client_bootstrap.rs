@@ -132,6 +132,10 @@ pub enum ClientSurfaceIdV1 {
     Settings,
     WhatsApp,
     Zulip,
+    Organizations,
+    Projects,
+    Obligations,
+    Decisions,
 }
 
 impl ClientSurfaceIdV1 {
@@ -147,13 +151,17 @@ impl ClientSurfaceIdV1 {
             Self::Telegram => Some("telegram.query.v1"),
             Self::Review => Some("client.surface.review.v1"),
             Self::Personas => Some("client.surface.personas.v1"),
-            Self::Knowledge => Some("client.surface.knowledge.v1"),
-            Self::Tasks => Some("client.surface.tasks.v1"),
-            Self::Calendar => Some("client.surface.calendar.v1"),
-            Self::Documents => Some("client.surface.documents.v1"),
+            Self::Knowledge => Some("knowledge.client.v1"),
+            Self::Tasks => Some("tasks.client.v1"),
+            Self::Calendar => Some("calendar.client.v1"),
+            Self::Documents => Some("documents.client.v1"),
             Self::Settings => None,
             Self::WhatsApp => Some("whatsapp.query.v1"),
             Self::Zulip => Some("zulip.query.v1"),
+            Self::Organizations => Some("organizations.client.v1"),
+            Self::Projects => Some("projects.client.v1"),
+            Self::Obligations => Some("obligations.client.v1"),
+            Self::Decisions => Some("decisions.client.v1"),
         }
     }
 }
@@ -474,6 +482,22 @@ mod tests {
         assert_eq!(
             ClientSurfaceIdV1::Zulip.admission_capability_id(),
             Some("zulip.query.v1")
+        );
+        assert_eq!(
+            ClientSurfaceIdV1::Tasks.admission_capability_id(),
+            Some("tasks.client.v1")
+        );
+        assert_eq!(
+            ClientSurfaceIdV1::Organizations.admission_capability_id(),
+            Some("organizations.client.v1")
+        );
+        assert_eq!(
+            ClientSurfaceIdV1::Documents.admission_capability_id(),
+            Some("documents.client.v1")
+        );
+        assert_eq!(
+            ClientSurfaceIdV1::Projects.admission_capability_id(),
+            Some("projects.client.v1")
         );
     }
 }

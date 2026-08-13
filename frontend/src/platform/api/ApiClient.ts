@@ -18,7 +18,7 @@ export class ApiClient {
 		const url = `${this.baseUrl}${path}`
 		const headers: Record<string, string> = {
 			'Content-Type': 'application/json',
-			'X-Макошь-Secret': this.secret
+			'x-makosh-secret': this.secret
 		}
 
 		const res = await fetch(url, {
@@ -58,7 +58,7 @@ export class ApiClient {
 		const res = await fetch(`${this.baseUrl}${path}`, {
 			method: 'GET',
 			headers: {
-				'X-Макошь-Secret': this.secret
+				'x-makosh-secret': this.secret
 			}
 		})
 		if (!res.ok) {
@@ -112,7 +112,7 @@ export class ApiClient {
 
 	static init(baseUrl: string, secret: string): ApiClient {
 		if (secret.trim().length === 0) {
-			throw new Error('X-Макошь-Secret cannot be empty')
+			throw new Error('x-makosh-secret cannot be empty')
 		}
 
 		ApiClient._instance = new ApiClient(baseUrl, secret)

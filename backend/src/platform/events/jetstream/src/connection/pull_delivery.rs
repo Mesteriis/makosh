@@ -27,6 +27,19 @@ impl RuntimePullDeliveryV1 {
             .await
             .map_err(|_| RuntimePullDeliveryErrorV1::Unavailable)
     }
+
+    /// Leaves the delivery uncommitted and asks JetStream to redeliver it after
+    /// a bounded delay. This is distinct from a successful acknowledgement and
+    /// is used for normal cross-stream dependency reordering.
+    pub async fn retry_after(self, delay: Duration) -> Result<(), RuntimePullDeliveryErrorV1> {
+        if delay.is_zero() || delay > Duration::from_secs(5) {
+            return Err(RuntimePullDeliveryErrorV1::Unavailable);
+        }
+        self.message
+            .ack_with(async_nats::jetstream::AckKind::Nak(Some(delay)))
+            .await
+            .map_err(|_| RuntimePullDeliveryErrorV1::Unavailable)
+    }
 }
 
 /// Receives one deadline-bounded delivery from exactly the Event Hub consumer

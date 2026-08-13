@@ -31,6 +31,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
         {
             return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let rows = if let Some(after_sequence) = after_sequence {
             let after_sequence = i64::try_from(after_sequence)
                 .map_err(|_| DelayedDeliveryPersistenceErrorV1::InvalidInput)?;
@@ -45,7 +46,7 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             .bind(logical_owner_id)
             .bind(after_sequence)
             .bind(i64::from(limit))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
         } else {
             sqlx::query(
@@ -63,11 +64,16 @@ impl CommunicationDelayedDeliveryPersistenceV1 {
             )
             .bind(logical_owner_id)
             .bind(i64::from(limit))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
         }
         .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
-        rows.into_iter().map(transition_from_row).collect()
+        let transitions = rows.into_iter().map(transition_from_row).collect();
+        transaction
+            .commit()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        transitions
     }
 }
 

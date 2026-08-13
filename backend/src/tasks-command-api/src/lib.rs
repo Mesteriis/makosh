@@ -5,6 +5,7 @@ mod envelope;
 pub use envelope::{
     TasksCommandEnvelopeBuildErrorV1, TasksCommandEnvelopeContextV1,
     build_create_task_from_reviewed_candidate_outbox_record_v1,
+    build_task_changed_outbox_record_v1,
     build_task_created_from_reviewed_candidate_outbox_record_v1,
     build_task_creation_from_reviewed_candidate_rejected_outbox_record_v1,
 };
@@ -31,15 +32,190 @@ pub const TASKS_COMMAND_CONTRACT_REVISION_V1: u32 = 1;
 pub const TASKS_REVIEWED_CANDIDATE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
 pub const TASKS_REVIEWED_CANDIDATE_MAX_PROOF_BYTES_V1: usize = 2_048;
 pub const TASKS_REVIEWED_CANDIDATE_MAX_IN_FLIGHT_V1: u32 = 32;
+pub const TASKS_CLIENT_CAPABILITY_ID_V1: &str = "tasks.client.v1";
+pub const TASKS_LIFECYCLE_EVENT_CAPABILITY_ID_V1: &str = "tasks.lifecycle.event.v1";
+pub const TASKS_LIFECYCLE_EVENT_CONTRACT_NAME_V1: &str = "tasks_lifecycle_changed";
+pub const TASKS_CLIENT_CONTRACT_MAJOR_V1: u32 = 1;
+pub const TASKS_CLIENT_CONTRACT_REVISION_V1: u32 = 1;
+
+pub const TASKS_CREATE_CONNECT_PATH_V1: &str = "/makosh.tasks.client.v1.TasksCommandService/Create";
+pub const TASKS_UPDATE_CONNECT_PATH_V1: &str = "/makosh.tasks.client.v1.TasksCommandService/Update";
+pub const TASKS_SET_STATE_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/SetState";
+pub const TASKS_SET_PRIORITY_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/SetPriority";
+pub const TASKS_ADD_DEPENDENCY_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/AddDependency";
+pub const TASKS_REMOVE_DEPENDENCY_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/RemoveDependency";
+pub const TASKS_ADD_CHECKLIST_ITEM_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/AddChecklistItem";
+pub const TASKS_UPDATE_CHECKLIST_ITEM_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/UpdateChecklistItem";
+pub const TASKS_REMOVE_CHECKLIST_ITEM_CONNECT_PATH_V1: &str =
+    "/makosh.tasks.client.v1.TasksCommandService/RemoveChecklistItem";
+pub const TASKS_GET_CONNECT_PATH_V1: &str = "/makosh.tasks.client.v1.TasksQueryService/Get";
+pub const TASKS_LIST_CONNECT_PATH_V1: &str = "/makosh.tasks.client.v1.TasksQueryService/List";
+
+pub const TASKS_CLIENT_CREATE_CONTRACT_NAME_V1: &str = "tasks_client_create";
+pub const TASKS_CLIENT_UPDATE_CONTRACT_NAME_V1: &str = "tasks_client_update";
+pub const TASKS_CLIENT_SET_STATE_CONTRACT_NAME_V1: &str = "tasks_client_set_state";
+pub const TASKS_CLIENT_SET_PRIORITY_CONTRACT_NAME_V1: &str = "tasks_client_set_priority";
+pub const TASKS_CLIENT_ADD_DEPENDENCY_CONTRACT_NAME_V1: &str = "tasks_client_add_dependency";
+pub const TASKS_CLIENT_REMOVE_DEPENDENCY_CONTRACT_NAME_V1: &str = "tasks_client_remove_dependency";
+pub const TASKS_CLIENT_ADD_CHECKLIST_ITEM_CONTRACT_NAME_V1: &str =
+    "tasks_client_add_checklist_item";
+pub const TASKS_CLIENT_UPDATE_CHECKLIST_ITEM_CONTRACT_NAME_V1: &str =
+    "tasks_client_update_checklist_item";
+pub const TASKS_CLIENT_REMOVE_CHECKLIST_ITEM_CONTRACT_NAME_V1: &str =
+    "tasks_client_remove_checklist_item";
+pub const TASKS_CLIENT_GET_CONTRACT_NAME_V1: &str = "tasks_client_get";
+pub const TASKS_CLIENT_LIST_CONTRACT_NAME_V1: &str = "tasks_client_list";
 
 pub mod wire {
     include!(concat!(env!("OUT_DIR"), "/makosh.tasks.command.v1.rs"));
 }
 
+pub mod client_wire {
+    include!(concat!(env!("OUT_DIR"), "/makosh.tasks.client.v1.rs"));
+}
+
 include!(concat!(env!("OUT_DIR"), "/tasks_command_schema.rs"));
+include!(concat!(env!("OUT_DIR"), "/tasks_client_schema.rs"));
 
 pub const TASKS_COMMAND_DESCRIPTOR_SET_V1: &[u8] =
     include_bytes!(concat!(env!("OUT_DIR"), "/tasks-command-v1.bin"));
+pub const TASKS_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
+    include_bytes!(concat!(env!("OUT_DIR"), "/tasks-client-v1.bin"));
+
+fn client_contract_reference(name: &str) -> ContractReferenceV1 {
+    ContractReferenceV1 {
+        owner: TASKS_OWNER_ID_V1.to_owned(),
+        name: name.to_owned(),
+        major: TASKS_CLIENT_CONTRACT_MAJOR_V1,
+        revision: TASKS_CLIENT_CONTRACT_REVISION_V1,
+        schema_sha256: TASKS_CLIENT_SCHEMA_SHA256_V1.to_vec(),
+    }
+}
+
+macro_rules! client_contract {
+    ($function:ident, $name:ident) => {
+        #[must_use]
+        pub fn $function() -> ContractReferenceV1 {
+            client_contract_reference($name)
+        }
+    };
+}
+
+client_contract!(
+    tasks_client_create_contract_reference_v1,
+    TASKS_CLIENT_CREATE_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_update_contract_reference_v1,
+    TASKS_CLIENT_UPDATE_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_set_state_contract_reference_v1,
+    TASKS_CLIENT_SET_STATE_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_set_priority_contract_reference_v1,
+    TASKS_CLIENT_SET_PRIORITY_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_add_dependency_contract_reference_v1,
+    TASKS_CLIENT_ADD_DEPENDENCY_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_remove_dependency_contract_reference_v1,
+    TASKS_CLIENT_REMOVE_DEPENDENCY_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_add_checklist_item_contract_reference_v1,
+    TASKS_CLIENT_ADD_CHECKLIST_ITEM_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_update_checklist_item_contract_reference_v1,
+    TASKS_CLIENT_UPDATE_CHECKLIST_ITEM_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_remove_checklist_item_contract_reference_v1,
+    TASKS_CLIENT_REMOVE_CHECKLIST_ITEM_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_get_contract_reference_v1,
+    TASKS_CLIENT_GET_CONTRACT_NAME_V1
+);
+client_contract!(
+    tasks_client_list_contract_reference_v1,
+    TASKS_CLIENT_LIST_CONTRACT_NAME_V1
+);
+
+#[must_use]
+pub fn tasks_lifecycle_event_contract_reference_v1() -> ContractReferenceV1 {
+    client_contract_reference(TASKS_LIFECYCLE_EVENT_CONTRACT_NAME_V1)
+}
+
+#[must_use]
+pub fn tasks_client_routes_v1() -> [(ContractReferenceV1, &'static str); 11] {
+    [
+        (
+            tasks_client_create_contract_reference_v1(),
+            TASKS_CREATE_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_update_contract_reference_v1(),
+            TASKS_UPDATE_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_set_state_contract_reference_v1(),
+            TASKS_SET_STATE_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_set_priority_contract_reference_v1(),
+            TASKS_SET_PRIORITY_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_add_dependency_contract_reference_v1(),
+            TASKS_ADD_DEPENDENCY_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_remove_dependency_contract_reference_v1(),
+            TASKS_REMOVE_DEPENDENCY_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_add_checklist_item_contract_reference_v1(),
+            TASKS_ADD_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_update_checklist_item_contract_reference_v1(),
+            TASKS_UPDATE_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_remove_checklist_item_contract_reference_v1(),
+            TASKS_REMOVE_CHECKLIST_ITEM_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_get_contract_reference_v1(),
+            TASKS_GET_CONNECT_PATH_V1,
+        ),
+        (
+            tasks_client_list_contract_reference_v1(),
+            TASKS_LIST_CONNECT_PATH_V1,
+        ),
+    ]
+}
+
+#[must_use]
+pub fn tasks_lifecycle_event_publish_request_v1() -> CapabilityRequestV1 {
+    event_route(
+        DurableEnvelopeKindV1::Event,
+        tasks_lifecycle_event_contract_reference_v1(),
+        EventRouteDirectionV1::Publish,
+        EventSubscriptionRequirementV1::Unspecified,
+    )
+}
 
 #[must_use]
 pub fn create_task_from_reviewed_candidate_contract_reference_v1() -> ContractReferenceV1 {
@@ -184,5 +360,39 @@ mod tests {
         assert!(!source.contains("provider_id"));
         assert!(!source.contains("project_id"));
         assert!(!source.contains("calendar"));
+    }
+
+    #[test]
+    fn lifecycle_client_and_public_event_contracts_are_exact() {
+        assert_eq!(TASKS_CLIENT_CAPABILITY_ID_V1, "tasks.client.v1");
+        assert_eq!(
+            TASKS_LIFECYCLE_EVENT_CAPABILITY_ID_V1,
+            "tasks.lifecycle.event.v1"
+        );
+        assert_eq!(tasks_client_routes_v1().len(), 11);
+        assert_eq!(
+            tasks_client_routes_v1()
+                .iter()
+                .map(|(_, path)| *path)
+                .collect::<Vec<_>>(),
+            vec![
+                "/makosh.tasks.client.v1.TasksCommandService/Create",
+                "/makosh.tasks.client.v1.TasksCommandService/Update",
+                "/makosh.tasks.client.v1.TasksCommandService/SetState",
+                "/makosh.tasks.client.v1.TasksCommandService/SetPriority",
+                "/makosh.tasks.client.v1.TasksCommandService/AddDependency",
+                "/makosh.tasks.client.v1.TasksCommandService/RemoveDependency",
+                "/makosh.tasks.client.v1.TasksCommandService/AddChecklistItem",
+                "/makosh.tasks.client.v1.TasksCommandService/UpdateChecklistItem",
+                "/makosh.tasks.client.v1.TasksCommandService/RemoveChecklistItem",
+                "/makosh.tasks.client.v1.TasksQueryService/Get",
+                "/makosh.tasks.client.v1.TasksQueryService/List",
+            ]
+        );
+        assert_ne!(TASKS_CLIENT_SCHEMA_SHA256_V1, [0; 32]);
+        assert_eq!(
+            tasks_lifecycle_event_contract_reference_v1().owner,
+            TASKS_OWNER_ID_V1
+        );
     }
 }

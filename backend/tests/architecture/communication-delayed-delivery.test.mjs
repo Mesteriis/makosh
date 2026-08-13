@@ -29,6 +29,7 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
     schedulerReceiptMigration,
     clientRealtimeMigration,
     bodyCleanupMigration,
+    ownerRlsMigration,
     executionManifest,
     executionSource,
     executionPorts,
@@ -200,6 +201,13 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
     readFile(
       new URL(
         'src/communication-delayed-delivery-persistence/migrations/0004_body_cleanup_queue.sql',
+        BACKEND_ROOT,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        'src/communication-delayed-delivery-persistence/migrations/0005_owner_rls.sql',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -409,7 +417,7 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
   assert.equal(
     JSON.parse(await readFile(new URL('architecture/policy.json', BACKEND_ROOT), 'utf8'))
       .implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert.match(adr, /Состояние реализации: реализовано/);
   assert.match(
@@ -466,6 +474,18 @@ test('delayed delivery admits exact due commands and durable Blob cleanup as an 
   assert.match(clientRealtimeMigration, /realtime_sequence/);
   assert.match(bodyCleanupMigration, /communication_delayed_delivery_body_cleanup/);
   assert.match(bodyCleanupMigration, /completed_at_unix_millis IS NULL/);
+  for (const table of [
+    'communication_delayed_delivery_operations',
+    'communication_delayed_delivery_scheduler_inbox',
+    'communication_delayed_delivery_outbox',
+    'communication_delayed_delivery_scheduler_receipt_outbox',
+    'communication_delayed_delivery_realtime',
+    'communication_delayed_delivery_body_cleanup',
+  ]) {
+    assert.match(ownerRlsMigration, new RegExp(`ALTER TABLE makosh_data\\.${table} ENABLE ROW LEVEL SECURITY`));
+    assert.match(ownerRlsMigration, new RegExp(`ALTER TABLE makosh_data\\.${table} FORCE ROW LEVEL SECURITY`));
+  }
+  assert.equal(ownerRlsMigration.match(/CREATE POLICY /g)?.length, 6);
   assert.doesNotMatch(bodyCleanupMigration, /body_utf8|provider_id|account_id/);
   assert.doesNotMatch(clientRealtimeMigration, /body_utf8|provider_id|account_id/);
   assert.doesNotMatch(schedulerReceiptMigration, /body_utf8|provider_id|account_id/);

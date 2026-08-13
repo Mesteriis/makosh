@@ -53,11 +53,7 @@ impl CommunicationBulkActionPersistenceV1 {
         let lease_expires_at = now_unix_seconds
             .checked_add(TARGET_LEASE_SECONDS_V1)
             .ok_or(BulkDeliveryPersistenceErrorV1::InvalidInput)?;
-        let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
 
         let exhausted_batches = sqlx::query(
             "WITH exhausted AS (
@@ -275,10 +271,8 @@ impl CommunicationBulkActionPersistenceV1 {
         let claim_epoch = i64::try_from(claim.claim_epoch)
             .map_err(|_| BulkDeliveryPersistenceErrorV1::InvalidInput)?;
         let mut transaction = self
-            .pool
-            .begin()
-            .await
-            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+            .begin_owner_transaction(&claim.logical_owner_id)
+            .await?;
         let changed = sqlx::query(
             "UPDATE makosh_data.communication_bulk_action_targets
              SET state = $1, delivery_intent_id = $2, error_code = $3,

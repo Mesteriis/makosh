@@ -5,7 +5,7 @@ use super::*;
 use makosh_kernel_control_store::PlatformStorageBindingStateV1;
 use makosh_review_attention_api::{REVIEW_ATTENTION_MODULE_ID_V1, REVIEW_ATTENTION_OWNER_V1};
 use makosh_review_attention_persistence::schema::{
-    REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2, review_attention_storage_bundle_v1,
+    REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3, review_attention_storage_bundle_v1,
 };
 use makosh_review_attention_runtime::{
     REVIEW_ATTENTION_STORAGE_CAPABILITY_ID_V1, review_attention_module_descriptor_v1,
@@ -95,7 +95,7 @@ pub(super) fn admit_review_attention_runtime_v1(
         .record_platform_storage_bundle(
             &PlatformStorageBundleV1::new(
                 REVIEW_ATTENTION_OWNER_V1,
-                u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2),
+                u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3),
                 Sha256::digest(&bundle).into(),
                 bundle,
             )
@@ -118,7 +118,7 @@ pub(super) fn prepare_review_attention_runtime_v1(
     let bundle = store
         .platform_storage_bundle(
             REVIEW_ATTENTION_OWNER_V1,
-            u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2),
+            u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3),
         )
         .expect("read Review attention Storage bundle")
         .expect("Review attention Storage bundle");
@@ -131,7 +131,7 @@ pub(super) fn prepare_review_attention_runtime_v1(
         StorageBindingIssueV1::new(
             1,
             1,
-            u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V2),
+            u64::from(REVIEW_ATTENTION_STORAGE_BUNDLE_REVISION_V3),
             *bundle.digest(),
         )
         .expect("Review attention Storage binding issue"),

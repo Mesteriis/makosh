@@ -75,6 +75,31 @@ pub struct CommunicationDelayedDeliveryPersistenceV1 {
 }
 
 impl CommunicationDelayedDeliveryPersistenceV1 {
+    pub(crate) async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<sqlx::Transaction<'_, sqlx::Postgres>, DelayedDeliveryPersistenceErrorV1> {
+        if logical_owner_id.is_empty()
+            || logical_owner_id.len() > 128
+            || !logical_owner_id
+                .bytes()
+                .all(|byte| byte.is_ascii_alphanumeric() || b"._:-".contains(&byte))
+        {
+            return Err(DelayedDeliveryPersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(|_| DelayedDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(transaction)
+    }
+
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,

@@ -153,6 +153,7 @@ const FIXTURE_SOURCE_REGISTRATION: &str = "fixture-source-integration";
 const FIXTURE_SOURCE_CAPABILITY_ID: &str = "fixture-source.blob.v1";
 const FIXTURE_SOURCE_RUNTIME_INSTANCE_ID: &str = "03030303030303030303030303030303";
 const FIXTURE_SOURCE_RUNTIME_INSTANCE_ID_V2: &str = "04040404040404040404040404040404";
+const EVENT_HUB_MAX_PULL_WAITING_V1: i64 = 512;
 
 pub(super) fn configured_communications_store(root: &Path, kernel: &Path) -> SqliteControlStore {
     let store = configured_store(root, kernel);
@@ -242,6 +243,12 @@ pub(super) fn configure_communications_jetstream(store: &SqliteControlStore) {
     configure_communications_jetstream_with_limits(store, None);
 }
 
+pub(super) fn record_communications_event_hub_topology_v1(store: &SqliteControlStore) {
+    store
+        .record_platform_event_hub_topology(&communications_event_hub_topology())
+        .expect("record Event Hub topology");
+}
+
 pub(super) fn configure_communications_jetstream_for_retained_replay_test(
     store: &SqliteControlStore,
 ) {
@@ -287,17 +294,35 @@ fn configure_communications_jetstream_with_limits(
             for consumer in plan.consumers() {
                 let subject = consumer.subject().as_str();
                 let stream_name = communications_stream_for_subject(&subject);
+                let ack_wait =
+                    Duration::from_millis(consumer.delivery_policy().ack_wait_millis().into());
+                let max_deliver = i64::from(consumer.delivery_policy().max_deliver());
+                let max_ack_pending = i64::from(consumer.max_in_flight());
                 context
                     .create_consumer_on_stream(
                         async_nats::jetstream::consumer::pull::Config {
                             durable_name: Some(consumer.durable_name().to_owned()),
+                            name: Some(consumer.durable_name().to_owned()),
+                            deliver_policy: async_nats::jetstream::consumer::DeliverPolicy::All,
                             filter_subject: subject,
                             ack_policy: async_nats::jetstream::consumer::AckPolicy::Explicit,
-                            ack_wait: Duration::from_millis(
-                                consumer.delivery_policy().ack_wait_millis().into(),
-                            ),
-                            max_deliver: i64::from(consumer.delivery_policy().max_deliver()),
-                            max_ack_pending: i64::from(consumer.max_in_flight()),
+                            ack_wait,
+                            max_deliver,
+                            max_waiting: EVENT_HUB_MAX_PULL_WAITING_V1,
+                            max_ack_pending,
+                            max_batch: max_ack_pending,
+                            max_expires: ack_wait,
+                            inactive_threshold: Duration::ZERO,
+                            num_replicas: 1,
+                            memory_storage: false,
+                            replay_policy: async_nats::jetstream::consumer::ReplayPolicy::Instant,
+                            backoff: (0..max_deliver)
+                                .scan(ack_wait, |delay, _| {
+                                    let current = *delay;
+                                    *delay = delay.saturating_mul(2).min(Duration::from_secs(600));
+                                    Some(current)
+                                })
+                                .collect(),
                             ..Default::default()
                         },
                         stream_name,

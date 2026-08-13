@@ -64,7 +64,10 @@ where
         if expectation.grant_epoch() != registration.grant_epoch() {
             return Err("managed runtime Events credential fence is stale".to_owned());
         }
-        let topology = current_topology(&self.store)?;
+        let (topology, credential_revision) = current_topology(&self.store)?;
+        if request.credential_revision != credential_revision {
+            return Err("managed runtime Events credential fence is stale".to_owned());
+        }
         let authority_request = derive_credential_request(EventCredentialRequestInputV1 {
             registration: &registration,
             runtime_instance_id: expectation.runtime_instance_id(),
@@ -123,14 +126,18 @@ fn current_registration(
         .ok_or_else(|| "managed runtime Events credential registration is unavailable".to_owned())
 }
 
-fn current_topology(store: &SqliteControlStore) -> Result<topology::EventTopologyPlanV1, String> {
+fn current_topology(
+    store: &SqliteControlStore,
+) -> Result<(topology::EventTopologyPlanV1, u64), String> {
     let contracts = catalog::resolve_contracts(store)
         .map_err(|_| "managed runtime Events credential topology is unavailable".to_owned())?;
     let configuration = store
         .platform_event_hub_topology()
         .map_err(|_| "managed runtime Events credential topology is unavailable".to_owned())?
         .ok_or_else(|| "managed runtime Events credential topology is unavailable".to_owned())?;
+    let credential_revision = configuration.credential_revision();
     topology::plan(&contracts, &configuration)
+        .map(|plan| (plan, credential_revision))
         .map_err(|_| "managed runtime Events credential topology is unavailable".to_owned())
 }
 

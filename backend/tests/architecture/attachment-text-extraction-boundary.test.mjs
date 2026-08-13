@@ -35,7 +35,7 @@ test('text extraction is an implemented workflow and not a Communications facade
   });
   assert.equal(
     policy.implementation.currentSlice,
-    'call_transcription_managed_conformance_v1',
+    'speech_to_text_whisper_admission_v1',
   );
   assert(policy.implementation.ownerInventory.workflows.includes(
     'attachment_text_extraction',

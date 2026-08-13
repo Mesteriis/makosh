@@ -112,14 +112,12 @@ export interface Relationship {
   source_entity_kind: string
   target_entity_id: string
   target_entity_kind: string
-  relationship_type: string
-  trust_score: number
-  strength_score: number
-  confidence: number
-  review_state: string
+  relationship_type: 'family' | 'friend' | 'colleague' | 'reports_to' | 'member_of' | 'partner'
+  state: 'confirmed' | 'ended'
+  valid_from: string
+  valid_until: string | null
+  relationship_revision: number
 }
-
-export type RelationshipReviewState = 'suggested' | 'system_accepted' | 'user_confirmed' | 'user_rejected'
 
 export interface PersonaItem {
   persona_id: string

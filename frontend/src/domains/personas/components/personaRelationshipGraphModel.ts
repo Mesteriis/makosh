@@ -16,7 +16,9 @@ export type RelationshipEdgeData = {
   relationshipId: string
   type: string
   state: string
-  confidence: number
+  revision: number
+  validFrom: string
+  validUntil: string | null
   sourceTitle: string
   targetTitle: string
   icon: string
@@ -37,7 +39,9 @@ export function relationshipGraphEdgeData(value: unknown): RelationshipEdgeData 
     typeof data.relationshipId !== 'string' ||
     typeof data.type !== 'string' ||
     typeof data.state !== 'string' ||
-    typeof data.confidence !== 'number' ||
+    typeof data.revision !== 'number' ||
+    typeof data.validFrom !== 'string' ||
+    !(typeof data.validUntil === 'string' || data.validUntil === null) ||
     typeof data.sourceTitle !== 'string' ||
     typeof data.targetTitle !== 'string' ||
     typeof data.icon !== 'string' ||
@@ -48,7 +52,9 @@ export function relationshipGraphEdgeData(value: unknown): RelationshipEdgeData 
     relationshipId: data.relationshipId,
     type: data.type,
     state: data.state,
-    confidence: data.confidence,
+    revision: data.revision,
+    validFrom: data.validFrom,
+    validUntil: data.validUntil,
     sourceTitle: data.sourceTitle,
     targetTitle: data.targetTitle,
     icon: data.icon,
@@ -132,9 +138,9 @@ export function buildRelationshipGraphEdges(params: {
         source: relationship.source_entity_id,
         target: relationship.target_entity_id,
         type: 'relationship',
-        animated: relationship.review_state === 'suggested',
+        animated: false,
         markerEnd: MarkerType.ArrowClosed,
-        class: ['personas-relationship-flow-edge', `is-${relationship.review_state}`],
+        class: ['personas-relationship-flow-edge', `is-${relationship.state}`],
         interactionWidth: 18,
         deletable: false,
         focusable: true,
@@ -142,8 +148,10 @@ export function buildRelationshipGraphEdges(params: {
         data: {
           relationshipId: relationship.relationship_id,
           type: relationship.relationship_type,
-          state: relationship.review_state,
-          confidence: relationship.confidence,
+          state: relationship.state,
+          revision: relationship.relationship_revision,
+          validFrom: relationship.valid_from,
+          validUntil: relationship.valid_until,
           sourceTitle,
           targetTitle,
           icon: relationshipIcon(relationship),
@@ -178,8 +186,10 @@ export function relationshipGraphEdgeDetail(
     description: `${data.sourceTitle} -> ${data.targetTitle}`,
     rows: [
       { label: t('Relationship type'), value: relationshipTypeLabel(data.type) },
-      { label: t('Review state'), value: relationshipReviewStateLabel(data.state, t) },
-      { label: t('Confidence'), value: identityPercent(data.confidence) },
+      { label: t('State'), value: relationshipStateLabel(data.state, t) },
+      { label: t('Revision'), value: String(data.revision) },
+      { label: t('Valid from'), value: data.validFrom },
+      { label: t('Valid until'), value: data.validUntil ?? t('Open ended') },
       { label: t('Source'), value: data.sourceTitle },
       { label: t('Target'), value: data.targetTitle }
     ]
@@ -320,16 +330,10 @@ function entityKindLabel(kind: string, t: TranslationFunction): string {
   return labels[kind] ?? kind
 }
 
-function identityPercent(value: number): string {
-  return `${Math.round(value * 100)}%`
-}
-
-function relationshipReviewStateLabel(state: string, t: TranslationFunction): string {
+function relationshipStateLabel(state: string, t: TranslationFunction): string {
   const labels: Record<string, string> = {
-    suggested: t('Suggested'),
-    system_accepted: t('System accepted'),
-    user_confirmed: t('User confirmed'),
-    user_rejected: t('User rejected')
+    confirmed: t('Confirmed'),
+    ended: t('Ended')
   }
   return labels[state] ?? relationshipTypeLabel(state)
 }

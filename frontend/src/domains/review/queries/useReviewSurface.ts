@@ -11,56 +11,87 @@ export function useReviewSurface() {
     surfacePath,
     capabilities: [
       {
-        id: 'review-inbox',
-        labelKey: 'Review inbox',
-        descriptionKey: 'Observed candidates waiting for owner review.',
+        id: 'review-attention',
+        labelKey: 'Attention',
+        descriptionKey: 'Review-owned attention requiring an owner decision.',
         icon: 'tabler:clipboard-check',
         status: 'active',
         kind: 'review',
-        contract: 'useReviewPageSurface.canonicalReviewItems'
+        contract: 'useReviewPageSurface.attention'
       },
       {
-        id: 'review-promotion',
-        labelKey: 'Promotion',
-        descriptionKey: 'Evidence-backed promotion into durable domain entities.',
-        icon: 'tabler:arrow-up-right',
+        id: 'review-person-match',
+        labelKey: 'Person matches',
+        descriptionKey: 'Typed person-match candidates owned by Review.',
+        icon: 'tabler:users',
         status: 'active',
-        kind: 'command',
-        contract: 'useReviewPageSurface.handlePromote'
+        kind: 'review',
+        contract: 'useReviewPageSurface.personMatchCandidates'
       },
       {
-        id: 'review-attention',
-        labelKey: 'Attention cards',
-        descriptionKey: 'Cross-domain review pressure and unresolved candidate groups.',
-        icon: 'tabler:alert-triangle',
+        id: 'review-task-candidates',
+        labelKey: 'Task candidates',
+        descriptionKey: 'Typed task candidates owned by Review.',
+        icon: 'tabler:checkbox',
         status: 'active',
-        kind: 'projection',
-        contract: 'useReviewPageSurface.attentionCards'
+        kind: 'review',
+        contract: 'useReviewPageSurface.taskCandidates'
+      },
+      {
+        id: 'review-note-candidates',
+        labelKey: 'Note candidates',
+        descriptionKey: 'Typed note candidates owned by Review.',
+        icon: 'tabler:note',
+        status: 'active',
+        kind: 'review',
+        contract: 'useReviewPageSurface.noteCandidates'
+      },
+      {
+        id: 'review-obligation-candidates',
+        labelKey: 'Obligation candidates',
+        descriptionKey: 'Evidence-backed obligation candidates owned by Review.',
+        icon: 'tabler:contract',
+        status: 'active',
+        kind: 'review',
+        contract: 'useReviewPageSurface.obligationCandidates'
       }
     ],
     childSurfaces: [
-      {
-        id: 'review-inbox',
-        labelKey: 'Inbox',
-        status: 'facade',
-        surfacePath,
-        capabilityIds: ['review-inbox']
-      },
-      {
-        id: 'review-promotion',
-        labelKey: 'Promotion',
-        status: 'facade',
-        surfacePath,
-        capabilityIds: ['review-promotion']
-      },
       {
         id: 'review-attention',
         labelKey: 'Attention',
         status: 'facade',
         surfacePath,
         capabilityIds: ['review-attention']
+      },
+      {
+        id: 'review-person-match',
+        labelKey: 'Person matches',
+        status: 'facade',
+        surfacePath,
+        capabilityIds: ['review-person-match']
+      },
+      {
+        id: 'review-task-candidates',
+        labelKey: 'Task candidates',
+        status: 'facade',
+        surfacePath,
+        capabilityIds: ['review-task-candidates']
+      },
+      {
+        id: 'review-note-candidates',
+        labelKey: 'Note candidates',
+        status: 'facade',
+        surfacePath,
+        capabilityIds: ['review-note-candidates']
+      },
+      {
+        id: 'review-obligation-candidates',
+        labelKey: 'Obligation candidates',
+        status: 'facade',
+        surfacePath,
+        capabilityIds: ['review-obligation-candidates']
       }
     ]
   })
 }
-

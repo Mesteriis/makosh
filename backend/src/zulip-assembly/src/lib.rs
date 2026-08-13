@@ -11,8 +11,11 @@ use std::path::{Path, PathBuf};
 use makosh_runtime_protocol::validation::descriptor::{
     validate_descriptor_v1, validate_settings_schema_v1,
 };
-use makosh_storage_protocol::validation::validate_storage_bundle;
-use makosh_zulip_persistence::zulip_storage_bundle_v1;
+use makosh_storage_protocol::{v1::StorageBundleV1, validation::validate_storage_bundle};
+use makosh_zulip_persistence::{
+    ZULIP_OWNER_RLS_STORAGE_REVISION_V1, zulip_owner_rls_storage_migration_v1,
+    zulip_storage_bundle_v1,
+};
 use makosh_zulip_runtime::admission::zulip_module_descriptor_v1;
 use makosh_zulip_runtime::settings::zulip_settings_schema_v3;
 use prost::Message;
@@ -23,6 +26,7 @@ pub const ZULIP_ASSEMBLY_OWNER_ID: &str = makosh_zulip_runtime::admission::ZULIP
 pub const ZULIP_ASSEMBLY_MODULE_ID: &str = makosh_zulip_runtime::admission::ZULIP_MODULE_ID;
 pub const ZULIP_RUNTIME_ARTIFACT_ID: &str = "zulip.runtime.v1";
 pub const ZULIP_STORAGE_ARTIFACT_ID: &str = "zulip.storage.v1";
+pub const ZULIP_STORAGE_BUNDLE_REVISION_V7: u32 = ZULIP_OWNER_RLS_STORAGE_REVISION_V1;
 pub const ZULIP_DESCRIPTOR_FILE: &str = "zulip.runtime.descriptor.pb";
 pub const ZULIP_SETTINGS_FILE: &str = "zulip.runtime.settings.pb";
 pub const ZULIP_STORAGE_BUNDLE_FILE: &str = "zulip.storage.bundle.pb";
@@ -105,6 +109,14 @@ pub enum ZulipReleaseAssemblyErrorV1 {
     FragmentEncodingFailed,
 }
 
+#[must_use]
+pub fn zulip_storage_bundle_with_owner_rls_v7() -> StorageBundleV1 {
+    let mut bundle = zulip_storage_bundle_v1();
+    bundle.revision = ZULIP_STORAGE_BUNDLE_REVISION_V7;
+    bundle.steps.push(zulip_owner_rls_storage_migration_v1());
+    bundle
+}
+
 /// Materializes one unsigned, exact Zulip release artifact set.
 ///
 /// The output directory must be an absolute path that does not exist. The
@@ -119,7 +131,7 @@ pub fn materialize_zulip_release_assembly_v1(
 
     let descriptor = zulip_module_descriptor_v1(build_id);
     let settings_schema = zulip_settings_schema_v3();
-    let storage_bundle = zulip_storage_bundle_v1();
+    let storage_bundle = zulip_storage_bundle_with_owner_rls_v7();
     if validate_descriptor_v1(&descriptor).is_err()
         || validate_settings_schema_v1(&settings_schema).is_err()
         || validate_storage_bundle(&storage_bundle).is_err()
@@ -290,7 +302,11 @@ mod tests {
             zulip_module_descriptor_v1("build-1").encode_to_vec()
         );
         assert_eq!(settings_bytes, zulip_settings_schema_v3().encode_to_vec());
-        assert_eq!(storage_bytes, zulip_storage_bundle_v1().encode_to_vec());
+        assert_eq!(
+            storage_bytes,
+            zulip_storage_bundle_with_owner_rls_v7().encode_to_vec()
+        );
+        assert_eq!(storage.revision, ZULIP_STORAGE_BUNDLE_REVISION_V7);
         assert_eq!(descriptor.module_id, ZULIP_ASSEMBLY_MODULE_ID);
         assert_eq!(
             settings.major,

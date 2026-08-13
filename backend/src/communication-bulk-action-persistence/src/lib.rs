@@ -40,6 +40,26 @@ pub struct CommunicationBulkActionPersistenceV1 {
 }
 
 impl CommunicationBulkActionPersistenceV1 {
+    pub(crate) async fn begin_owner_transaction(
+        &self,
+        logical_owner_id: &str,
+    ) -> Result<sqlx::Transaction<'_, sqlx::Postgres>, BulkDeliveryPersistenceErrorV1> {
+        if !valid_bounded_identity(logical_owner_id) {
+            return Err(BulkDeliveryPersistenceErrorV1::InvalidInput);
+        }
+        let mut transaction = self
+            .pool
+            .begin()
+            .await
+            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        sqlx::query("SELECT set_config('makosh.logical_owner_id', $1, true)")
+            .bind(logical_owner_id)
+            .execute(&mut *transaction)
+            .await
+            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(transaction)
+    }
+
     pub async fn connect_runtime(
         binding: &StorageBindingV1,
         database_id: &str,

@@ -15,11 +15,12 @@ readonly ARTIFACT_NAME="libmakosh_tgcalls_bridge.dylib"
 readonly AUDIO_CONFORMANCE_NAME="makosh_tgcalls_audio_device_conformance"
 
 usage() {
-  echo "usage: $0 --output-dir <new-absolute-directory> [--development-audio-conformance]" >&2
+  echo "usage: $0 --output-dir <new-absolute-directory> [--audio-conformance|--development-audio-conformance]" >&2
 }
 
 output_directory=""
 build_profile="release"
+build_audio_conformance=false
 while (($# > 0)); do
   case "$1" in
     --output-dir)
@@ -30,12 +31,21 @@ while (($# > 0)); do
       output_directory="$2"
       shift 2
       ;;
+    --audio-conformance)
+      if [[ "$build_audio_conformance" == "true" || "$build_profile" != "release" ]]; then
+        usage
+        exit 2
+      fi
+      build_audio_conformance=true
+      shift
+      ;;
     --development-audio-conformance)
-      if [[ "$build_profile" != "release" ]]; then
+      if [[ "$build_audio_conformance" == "true" || "$build_profile" != "release" ]]; then
         usage
         exit 2
       fi
       build_profile="development-audio-conformance"
+      build_audio_conformance=true
       shift
       ;;
     *)
@@ -158,7 +168,7 @@ git -C "$checkout_directory" apply "$patch_path"
   build_targets=(
     //makosh-tgcalls-bridge:libmakosh_tgcalls_bridge.dylib
   )
-  if [[ "$build_profile" == "development-audio-conformance" ]]; then
+  if [[ "$build_audio_conformance" == "true" ]]; then
     build_targets+=(
       //makosh-tgcalls-bridge:makosh_tgcalls_audio_device_conformance
     )
@@ -178,12 +188,14 @@ install -m 0444 \
   "${release_directory}/LICENSE.tgcalls-LGPL-3.0"
 release_eligible=true
 audio_conformance_artifact=null
-if [[ "$build_profile" == "development-audio-conformance" ]]; then
+if [[ "$build_audio_conformance" == "true" ]]; then
   install -m 0555 \
     "${checkout_directory}/bazel-bin/makosh-tgcalls-bridge/${AUDIO_CONFORMANCE_NAME}" \
     "${release_directory}/${AUDIO_CONFORMANCE_NAME}"
-  release_eligible=false
   audio_conformance_artifact="\"${AUDIO_CONFORMANCE_NAME}\""
+fi
+if [[ "$build_profile" == "development-audio-conformance" ]]; then
+  release_eligible=false
 fi
 
 artifact_sha="$(shasum -a 256 "${release_directory}/${ARTIFACT_NAME}" | awk '{print $1}')"

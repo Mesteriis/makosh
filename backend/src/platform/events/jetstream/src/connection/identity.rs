@@ -134,6 +134,16 @@ impl RuntimePublishPermitV1 {
     pub fn permits_subject(&self, subject: &DurableSubjectV1) -> bool {
         self.subjects.contains(&subject.as_str())
     }
+
+    /// Returns whether this permit contains exactly the supplied non-wildcard subjects.
+    #[must_use]
+    pub fn permits_exact_subjects(&self, subjects: &[DurableSubjectV1]) -> bool {
+        let expected = subjects
+            .iter()
+            .map(DurableSubjectV1::as_str)
+            .collect::<BTreeSet<_>>();
+        self.subjects == expected
+    }
 }
 
 impl RuntimeSubscribePermitV1 {
@@ -333,5 +343,26 @@ mod tests {
             )
             .is_err()
         );
+    }
+
+    #[test]
+    fn publish_permit_exact_subject_check_rejects_missing_and_extra_authority() {
+        let first = DurableSubjectV1::new(StreamKindV1::Result, "persons", "succeeded", 1)
+            .expect("first subject");
+        let second = DurableSubjectV1::new(StreamKindV1::Event, "persons", "changed", 1)
+            .expect("second subject");
+        let permit = RuntimePublishPermitV1::new(
+            "registration",
+            "runtime",
+            1,
+            1,
+            vec![first.clone(), second.clone()],
+        )
+        .expect("permit");
+        assert!(permit.permits_exact_subjects(&[first.clone(), second.clone()]));
+        assert!(!permit.permits_exact_subjects(std::slice::from_ref(&first)));
+        let extra = DurableSubjectV1::new(StreamKindV1::Event, "persons", "extra", 1)
+            .expect("extra subject");
+        assert!(!permit.permits_exact_subjects(&[first, second, extra]));
     }
 }

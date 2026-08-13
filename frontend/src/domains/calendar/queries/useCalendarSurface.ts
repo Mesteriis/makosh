@@ -6,61 +6,60 @@ export function useCalendarSurface() {
   return createDomainSurface({
     surfaceId: 'calendar',
     labelKey: 'Calendar',
-    status: 'facade',
+    status: 'active',
     ownerLayer: 'domain',
     surfacePath,
     capabilities: [
       {
         id: 'calendar-agenda',
         labelKey: 'Agenda',
-        descriptionKey: 'Calendar events, selected date state and schedule context.',
+        descriptionKey: 'Owner-local Calendar lifecycle and bounded event queries.',
         icon: 'tabler:calendar-event',
         status: 'active',
         kind: 'query',
-        contract: 'useCalendarPageSurface.calendarEvents'
+        contract: 'CalendarQueryService.List/Search/Get'
       },
       {
         id: 'calendar-create-event',
         labelKey: 'Create event',
-        descriptionKey: 'Event creation flow with provider-backed account boundaries.',
+        descriptionKey: 'Typed owner event creation and lifecycle mutation.',
         icon: 'tabler:calendar-plus',
         status: 'active',
         kind: 'command',
-        contract: 'useCalendarPageSurface.createEvent'
+        contract: 'CalendarCommandService.Create/Update/SetState'
       },
       {
-        id: 'calendar-brief',
-        labelKey: 'Calendar brief',
-        descriptionKey: 'Daily and weekly planning context for owner review.',
-        icon: 'tabler:calendar-stats',
+        id: 'calendar-reminders',
+        labelKey: 'Reminders',
+        descriptionKey: 'Durable Scheduler-backed reminders and immutable outcomes.',
+        icon: 'tabler:bell',
         status: 'active',
-        kind: 'projection',
-        contract: 'useCalendarPageSurface.weeklyBrief'
+        kind: 'command',
+        contract: 'CalendarCommandService.AddReminder/RemoveReminder/RecordOutcome'
       }
     ],
     childSurfaces: [
       {
         id: 'calendar-agenda',
         labelKey: 'Agenda',
-        status: 'facade',
+        status: 'active',
         surfacePath,
         capabilityIds: ['calendar-agenda']
       },
       {
         id: 'calendar-create',
         labelKey: 'Create',
-        status: 'facade',
+        status: 'active',
         surfacePath,
         capabilityIds: ['calendar-create-event']
       },
       {
-        id: 'calendar-brief',
-        labelKey: 'Brief',
-        status: 'facade',
+        id: 'calendar-reminders',
+        labelKey: 'Reminders',
+        status: 'active',
         surfacePath,
-        capabilityIds: ['calendar-brief']
+        capabilityIds: ['calendar-reminders']
       }
     ]
   })
 }
-

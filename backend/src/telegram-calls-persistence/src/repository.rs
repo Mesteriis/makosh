@@ -250,7 +250,7 @@ impl TelegramCallsPersistence {
                     runtime_instance_id,
                 )
                 .map_err(|_| TelegramCallsPersistenceError::InvalidRequest("call_evidence"))?;
-                crate::call_evidence_outbox::insert_call_evidence_outbox(
+                crate::call_evidence_outbox::ensure_call_evidence_outbox_replay(
                     &mut transaction,
                     &record,
                     projected.session.updated_at_unix_seconds,

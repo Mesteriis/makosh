@@ -3,7 +3,7 @@ use makosh_ai_contracts::wire::{
     AttachmentTranslationInferenceRequestV1, AttachmentTranslationInferenceResultV1,
 };
 use makosh_ai_inference_core::{AiAttachmentTranslationRunV1, AiInferenceRunStateV1};
-use sqlx::{Row, postgres::PgRow};
+use sqlx::{Postgres, Row, Transaction, postgres::PgRow};
 
 use crate::{
     AI_INFERENCE_RECOVERY_LIMIT_V1, AiAttachmentTranslationPersistenceOutcomeV1,
@@ -24,6 +24,9 @@ impl AiInferencePersistenceV1 {
         let request = &run.request;
         let context = request.context.as_ref().ok_or(invalid_input())?;
         let source = request.source.as_ref().ok_or(invalid_input())?;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.ai_attachment_translation_runs (
                logical_owner_id, run_id, request_digest, context_id, source_evidence_id,
@@ -55,15 +58,18 @@ impl AiInferencePersistenceV1 {
         .bind(i32::try_from(request.egress_policy_revision).map_err(|_| invalid_input())?)
         .bind(signed(run.revision)?)
         .bind(run_state_code(run.state))
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected()
             == 1;
-        let mut persisted = self
-            .load_attachment_translation_run(&request.logical_owner_id, id16(&request.run_id)?)
-            .await?
-            .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
+        let mut persisted = load_attachment_translation_run_in_transaction(
+            &mut transaction,
+            &request.logical_owner_id,
+            id16(&request.run_id)?,
+        )
+        .await?
+        .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
         if !inserted && persisted.run.request != run.request {
             if !same_semantic_request(&persisted.run.request, &run.request) {
                 return Err(AiInferencePersistenceErrorV1::RequestConflict);
@@ -80,22 +86,23 @@ impl AiInferencePersistenceV1 {
                 .bind(&request.logical_owner_id)
                 .bind(&request.run_id)
                 .bind(&context.request_digest)
-                .execute(&self.pool)
+                .execute(&mut *transaction)
                 .await
                 .map_err(storage_error)?
                 .rows_affected();
                 if updated != 1 {
                     return Err(AiInferencePersistenceErrorV1::RevisionConflict);
                 }
-                persisted = self
-                    .load_attachment_translation_run(
-                        &request.logical_owner_id,
-                        id16(&request.run_id)?,
-                    )
-                    .await?
-                    .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
+                persisted = load_attachment_translation_run_in_transaction(
+                    &mut transaction,
+                    &request.logical_owner_id,
+                    id16(&request.run_id)?,
+                )
+                .await?
+                .ok_or(AiInferencePersistenceErrorV1::InvalidRow)?;
             }
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(AiAttachmentTranslationPersistenceOutcomeV1 {
             persisted,
             replayed: !inserted,
@@ -110,14 +117,15 @@ impl AiInferencePersistenceV1 {
         if !valid_owner(logical_owner_id) || run_id == [0; 16] {
             return Err(invalid_input());
         }
-        sqlx::query(SELECT_TRANSLATION_RUN)
-            .bind(logical_owner_id)
-            .bind(run_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage_error)?
-            .map(|row| persisted_from_row(&row))
-            .transpose()
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted = load_attachment_translation_run_in_transaction(
+            &mut transaction,
+            logical_owner_id,
+            run_id,
+        )
+        .await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn load_recoverable_attachment_translation_runs(
@@ -129,15 +137,16 @@ impl AiInferencePersistenceV1 {
         {
             return Err(invalid_input());
         }
-        sqlx::query(SELECT_RECOVERABLE_TRANSLATION_RUNS)
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let rows = sqlx::query(SELECT_RECOVERABLE_TRANSLATION_RUNS)
             .bind(logical_owner_id)
             .bind(i64::from(limit))
-            .fetch_all(&self.pool)
+            .fetch_all(&mut *transaction)
             .await
-            .map_err(storage_error)?
-            .iter()
-            .map(persisted_from_row)
-            .collect()
+            .map_err(storage_error)?;
+        let persisted = rows.iter().map(persisted_from_row).collect();
+        transaction.commit().await.map_err(storage_error)?;
+        persisted
     }
 
     pub async fn persist_attachment_translation_transition(
@@ -146,7 +155,9 @@ impl AiInferencePersistenceV1 {
     ) -> Result<PersistedAiAttachmentTranslationRunV1, AiInferencePersistenceErrorV1> {
         validate_attachment_translation_run(&transition.next_run)?;
         let request = &transition.next_run.request;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&request.logical_owner_id)
+            .await?;
         let current_row = sqlx::query(SELECT_TRANSLATION_RUN_FOR_UPDATE)
             .bind(&request.logical_owner_id)
             .bind(&request.run_id)
@@ -200,6 +211,21 @@ impl AiInferencePersistenceV1 {
             selected_provider_settings_revision: selected,
         })
     }
+}
+
+async fn load_attachment_translation_run_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    run_id: [u8; 16],
+) -> Result<Option<PersistedAiAttachmentTranslationRunV1>, AiInferencePersistenceErrorV1> {
+    sqlx::query(SELECT_TRANSLATION_RUN)
+        .bind(logical_owner_id)
+        .bind(run_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .map(|row| persisted_from_row(&row))
+        .transpose()
 }
 
 const SELECT_TRANSLATION_RUN: &str = "SELECT logical_owner_id, run_id, request_digest, context_id,

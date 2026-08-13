@@ -130,6 +130,10 @@ fn surface_id(value: ProjectionSurfaceId) -> WireSurfaceId {
         ProjectionSurfaceId::Settings => WireSurfaceId::Settings,
         ProjectionSurfaceId::WhatsApp => WireSurfaceId::Whatsapp,
         ProjectionSurfaceId::Zulip => WireSurfaceId::Zulip,
+        ProjectionSurfaceId::Organizations => WireSurfaceId::Organizations,
+        ProjectionSurfaceId::Projects => WireSurfaceId::Projects,
+        ProjectionSurfaceId::Obligations => WireSurfaceId::Obligations,
+        ProjectionSurfaceId::Decisions => WireSurfaceId::Decisions,
     }
 }
 

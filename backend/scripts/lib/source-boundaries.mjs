@@ -95,7 +95,41 @@ export function validateSourceEntries(policy, entries) {
     for (const identifier of sqlReferencedIdentifiers(entry.content)) {
       const identifierTokens = pathTokens(identifier);
       const blocked = identifierTokens.find((token) => blockedSql.has(token));
-      if (blocked) emit('blocked_sql_owner', entry.path, `SQL owns blocked identifier ${identifier}`);
+      const exactPersonsDecisionEvidence = entry.path === 'src/persons-persistence/migrations/0002_persons_durable.sql'
+        && [
+          'makosh_data.persons_decision_receipts',
+          'makosh_data.persons_decision_outcomes',
+        ].includes(identifier.toLowerCase());
+      const exactRebuildableProjection = new Map([
+        ['src/search-persistence/migrations/0001_search.sql', new Set([
+          'makosh_data.search_projection_control',
+          'makosh_data.search_projection_documents',
+          'makosh_data.search_projection_tokens',
+          'makosh_data.search_projection_inbox',
+          'makosh_data.search_projection_rebuilds',
+          'search_projection_token_lookup_idx',
+          'search_projection_document_order_idx',
+        ])],
+        ['src/timeline-persistence/migrations/0001_timeline.sql', new Set([
+          'makosh_data.timeline_projection_control',
+          'makosh_data.timeline_projection_entries',
+          'makosh_data.timeline_projection_inbox',
+          'makosh_data.timeline_projection_rebuilds',
+          'timeline_projection_order_idx',
+        ])],
+        ['src/graph-persistence/migrations/0001_graph.sql', new Set([
+          'makosh_data.graph_projection_control',
+          'makosh_data.graph_projection_nodes',
+          'makosh_data.graph_projection_edges',
+          'makosh_data.graph_projection_inbox',
+          'makosh_data.graph_projection_rebuilds',
+          'graph_projection_source_idx',
+          'graph_projection_target_idx',
+        ])],
+      ]).get(entry.path)?.has(identifier.toLowerCase()) === true;
+      if (blocked && !exactPersonsDecisionEvidence && !exactRebuildableProjection) {
+        emit('blocked_sql_owner', entry.path, `SQL owns blocked identifier ${identifier}`);
+      }
     }
   }
 

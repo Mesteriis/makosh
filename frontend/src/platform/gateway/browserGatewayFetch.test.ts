@@ -15,7 +15,7 @@ describe('BrowserGatewayFetch', () => {
 			mode: 'same-origin',
 			redirect: 'error',
 		}))
-		expect(new Headers(fetchImpl.mock.calls[0]?.[1]?.headers).has('X-Макошь-Secret')).toBe(false)
+		expect(new Headers(fetchImpl.mock.calls[0]?.[1]?.headers).has('x-makosh-secret')).toBe(false)
 	})
 
 	it('rejects cross-origin paths and legacy client credentials before fetch', () => {
@@ -24,13 +24,13 @@ describe('BrowserGatewayFetch', () => {
 
 		expect(() => client.fetch('https://other.local/gateway/v1/status')).toThrow('same-origin')
 		expect(() => client.fetch('/gateway/v1/status', {
-			headers: { 'X-Макошь-Secret': 'legacy-secret' },
+			headers: { 'x-makosh-secret': 'legacy-secret' },
 		})).toThrow('legacy credential')
 		expect(() => client.fetch('/gateway/v1/status', {
 			headers: { Authorization: 'Bearer legacy-token' },
 		})).toThrow('legacy credential')
 		expect(() => client.fetch(new Request('https://hub.local/gateway/v1/status', {
-			headers: { 'X-Макошь-Secret': 'legacy-secret' },
+			headers: { 'x-makosh-secret': 'legacy-secret' },
 		}))).toThrow('legacy credential')
 		expect(fetchImpl).not.toHaveBeenCalled()
 	})

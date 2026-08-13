@@ -7,7 +7,7 @@ import type {
   PersonaIdentityReviewState,
   Relationship
 } from '../types/persona'
-import { reviewIdentityCandidate, assignIdentityTrace, reviewRelationship } from '../api/personas'
+import { reviewIdentityCandidate, assignIdentityTrace } from '../api/personas'
 
 export function formatIdentityTraceKind(kind: string): string {
   const labels: Record<string, string> = {
@@ -75,9 +75,7 @@ export const usePersonasStore = defineStore('personas', () => {
   const isPersonaDossierLoading = ref(false)
   const identityCandidatesError = ref('')
   const identityTracesError = ref('')
-  const relationshipsError = ref('')
   const assigningIdentityTraceId = ref<string | null>(null)
-  const reviewingRelationshipId = ref<string | null>(null)
 
   const identityCandidates = ref<PersonaIdentityCandidate[]>([])
   const identityTraces = ref<PersonaIdentity[]>([])
@@ -141,16 +139,6 @@ function isReviewableIdentityCandidateState(
     assigningIdentityTraceId.value = null
   }
 
-  async function reviewRelation(relationship: Relationship, reviewState: string) {
-    reviewingRelationshipId.value = relationship.relationship_id
-    try {
-      await reviewRelationship(relationship.relationship_id, reviewState)
-    } catch (e: any) {
-      relationshipsError.value = e.message || 'Review failed'
-    }
-    reviewingRelationshipId.value = null
-  }
-
   return {
     selectedPersonaIndex,
     personaDossier,
@@ -158,9 +146,7 @@ function isReviewableIdentityCandidateState(
     isPersonaDossierLoading,
     identityCandidatesError,
     identityTracesError,
-    relationshipsError,
     assigningIdentityTraceId,
-    reviewingRelationshipId,
     suggestedIdentityCandidates,
     identityCandidates,
     identityTraces,
@@ -174,7 +160,6 @@ function isReviewableIdentityCandidateState(
     setPersonaDossierLoading,
     setLoadedDossierPersonaId,
     reviewCandidate,
-    assignTraceToPersona,
-    reviewRelation
+    assignTraceToPersona
   }
 })

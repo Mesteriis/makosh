@@ -20,9 +20,17 @@ const deliveryIntentPostgresTest =
 const crossChannelForwardPostgresTest =
   process.env.MAKOSH_COMMUNICATION_CROSS_CHANNEL_FORWARD_POSTGRES_TEST_FILTER?.trim();
 const telegramCallsTest = process.env.MAKOSH_TELEGRAM_CALLS_POSTGRES_TEST_FILTER?.trim();
-const contactsPostgresTest = process.env.MAKOSH_CONTACTS_POSTGRES_TEST_FILTER?.trim();
-const mailContactsSyncPostgresTest =
-  process.env.MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_TEST_FILTER?.trim();
+const personsPostgresTest = process.env.MAKOSH_PERSONS_POSTGRES_TEST_FILTER?.trim();
+const mailPersonsSyncPostgresTest =
+  process.env.MAKOSH_MAIL_PERSONS_SYNC_POSTGRES_TEST_FILTER?.trim();
+const reviewPersonMatchCandidatePostgresTest =
+  process.env.MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_POSTGRES_TEST_FILTER?.trim();
+const identityResolutionPostgresTest =
+  process.env.MAKOSH_IDENTITY_RESOLUTION_POSTGRES_TEST_FILTER?.trim();
+const projectionPostgresTest =
+  process.env.MAKOSH_PROJECTION_POSTGRES_TEST_FILTER?.trim();
+const reviewedPersonMatchPromotionPostgresTest =
+  process.env.MAKOSH_REVIEWED_PERSON_MATCH_PROMOTION_POSTGRES_TEST_FILTER?.trim();
 const keepContour = process.env.MAKOSH_STORAGE_KEEP_CONTOUR === '1';
 const authenticatedTests = [
   'authenticated_revoke_fences_the_real_pool_and_postgres_role',
@@ -191,6 +199,36 @@ async function stop_contour(secrets) {
 
 async function run_conformance(secrets) {
   try {
+    if (projectionPostgresTest) {
+      await run_projection_postgres_conformance(secrets, projectionPostgresTest);
+      return;
+    }
+    if (identityResolutionPostgresTest) {
+      await run_identity_resolution_postgres_conformance(secrets, identityResolutionPostgresTest);
+      return;
+    }
+    if (reviewedPersonMatchPromotionPostgresTest) {
+      await run_reviewed_person_match_promotion_postgres_conformance(
+        secrets,
+        reviewedPersonMatchPromotionPostgresTest,
+      );
+      return;
+    }
+    if (reviewPersonMatchCandidatePostgresTest) {
+      await run_review_person_match_candidate_postgres_conformance(
+        secrets,
+        reviewPersonMatchCandidatePostgresTest,
+      );
+      return;
+    }
+    if (mailPersonsSyncPostgresTest) {
+      await run_mail_persons_sync_postgres_conformance(secrets, mailPersonsSyncPostgresTest);
+      return;
+    }
+    if (personsPostgresTest) {
+      await run_persons_postgres_conformance(secrets, personsPostgresTest);
+      return;
+    }
     if (schedulerPostgresTest) {
       await run_scheduler_postgres_conformance(secrets, schedulerPostgresTest);
       return;
@@ -218,14 +256,6 @@ async function run_conformance(secrets) {
     }
     if (telegramCallsTest) {
       await run_telegram_calls_conformance(secrets, telegramCallsTest);
-      return;
-    }
-    if (contactsPostgresTest) {
-      await run_contacts_postgres_conformance(secrets, contactsPostgresTest);
-      return;
-    }
-    if (mailContactsSyncPostgresTest) {
-      await run_mail_contacts_sync_postgres_conformance(secrets, mailContactsSyncPostgresTest);
       return;
     }
     for (const test of focusedTest ? [focusedTest] : managedTest ? [] : authenticatedTests) {
@@ -269,6 +299,251 @@ async function run_conformance(secrets) {
   } catch (error) {
     print_test_diagnostics(error);
     throw error;
+  }
+}
+
+async function run_projection_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_projection_conf_${process.pid}_${randomBytes(6).toString('hex')}`;
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    const args = [
+      `+${toolchain}`, '--config', 'build.rustc-wrapper=""', 'test', '--locked',
+      '-p', 'makosh-mail-persons-sync-persistence-testkit', '--test',
+      'search_timeline_graph_postgres_live', '--', '--ignored',
+    ];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, {
+      env: {
+        ...process.env,
+        MAKOSH_PROJECTION_POSTGRES_URL: await postgres_database_url(secrets, database),
+      },
+    });
+  } finally {
+    if (created) {
+      await postgres_admin_sql(
+        secrets,
+        'makosh_storage_authenticated',
+        `DROP DATABASE ${database} WITH (FORCE)`,
+      ).catch(() => undefined);
+    }
+    await stop_contour(secrets);
+  }
+}
+
+async function run_identity_resolution_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_identity_res_conformance_${process.pid}_${randomBytes(8).toString('hex')}`;
+  const sentinel = randomBytes(32).toString('hex');
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    await postgres_admin_sql(
+      secrets,
+      database,
+      `CREATE TABLE public.makosh_identity_resolution_disposable_sentinel (sentinel_id SMALLINT PRIMARY KEY CHECK (sentinel_id = 1), token TEXT NOT NULL); INSERT INTO public.makosh_identity_resolution_disposable_sentinel VALUES (1, '${sentinel}')`,
+    );
+    const args = [
+      `+${toolchain}`, '--config', 'build.rustc-wrapper=""', 'test', '--locked',
+      '-p', 'makosh-mail-persons-sync-persistence-testkit', '--test',
+      'identity_resolution_postgres_live', '--', '--ignored',
+    ];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, {
+      env: {
+        ...process.env,
+        MAKOSH_IDENTITY_RESOLUTION_POSTGRES_URL: await postgres_database_url(secrets, database),
+        MAKOSH_IDENTITY_RESOLUTION_DISPOSABLE_DATABASE: database,
+        MAKOSH_IDENTITY_RESOLUTION_DISPOSABLE_SENTINEL: sentinel,
+      },
+    });
+  } finally {
+    if (created) {
+      await postgres_admin_sql(
+        secrets,
+        'makosh_storage_authenticated',
+        `DROP DATABASE ${database} WITH (FORCE)`,
+      ).catch(() => undefined);
+    }
+    await stop_contour(secrets);
+  }
+}
+
+async function run_reviewed_person_match_promotion_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_reviewed_pm_conf_${process.pid}_${randomBytes(8).toString('hex')}`;
+  const sentinel = randomBytes(32).toString('hex');
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    await postgres_admin_sql(secrets, database, `CREATE TABLE public.makosh_reviewed_person_match_promotion_disposable_sentinel (sentinel_id SMALLINT PRIMARY KEY CHECK (sentinel_id = 1), token TEXT NOT NULL); INSERT INTO public.makosh_reviewed_person_match_promotion_disposable_sentinel VALUES (1, '${sentinel}')`);
+    const args = [`+${toolchain}`, '--config', 'build.rustc-wrapper=""', 'test', '--locked', '-p', 'makosh-mail-persons-sync-persistence-testkit', '--test', 'reviewed_person_match_promotion_postgres_live', '--', '--ignored'];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, { env: { ...process.env, MAKOSH_REVIEWED_PERSON_MATCH_PROMOTION_POSTGRES_URL: await postgres_database_url(secrets, database), MAKOSH_REVIEWED_PERSON_MATCH_PROMOTION_DISPOSABLE_DATABASE: database, MAKOSH_REVIEWED_PERSON_MATCH_PROMOTION_DISPOSABLE_SENTINEL: sentinel } });
+  } finally {
+    if (created) await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `DROP DATABASE ${database} WITH (FORCE)`).catch(() => undefined);
+    await stop_contour(secrets);
+  }
+}
+
+async function postgres_admin_sql(secrets, database, sql) {
+  if (!/^[a-z0-9_]+$/u.test(database)) throw new Error('invalid disposable database identity');
+  await run('docker', [
+    'exec', secrets.postgresContainer, 'sh', '-ceu',
+    'export PGPASSWORD="$(cat /run/secrets/storage_postgres_admin_password)"; exec psql --username=makosh_postgres_admin --dbname="$1" --set=ON_ERROR_STOP=1 --command="$2"',
+    '--', database, sql,
+  ]);
+}
+
+async function run_persons_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_persons_conformance_${process.pid}_${randomBytes(8).toString('hex')}`;
+  const sentinel = randomBytes(32).toString('hex');
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    await postgres_admin_sql(
+      secrets,
+      database,
+      `CREATE TABLE public.makosh_persons_disposable_sentinel (sentinel_id SMALLINT PRIMARY KEY CHECK (sentinel_id = 1), token TEXT NOT NULL); INSERT INTO public.makosh_persons_disposable_sentinel VALUES (1, '${sentinel}')`,
+    );
+    const args = [
+      `+${toolchain}`,
+      '--config',
+      'build.rustc-wrapper=""',
+      'test',
+      '--locked',
+      '-p',
+      'makosh-persons-persistence-testkit',
+      '--test',
+      'postgres_live',
+      '--',
+      '--ignored',
+    ];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, {
+      env: {
+        ...process.env,
+        MAKOSH_PERSONS_POSTGRES_URL: await postgres_database_url(secrets, database),
+        MAKOSH_PERSONS_DISPOSABLE_DATABASE: database,
+        MAKOSH_PERSONS_DISPOSABLE_SENTINEL: sentinel,
+      },
+    });
+  } finally {
+    if (created) {
+      await postgres_admin_sql(
+        secrets,
+        'makosh_storage_authenticated',
+        `DROP DATABASE ${database} WITH (FORCE)`,
+      ).catch(() => undefined);
+    }
+    await stop_contour(secrets);
+  }
+}
+
+async function run_mail_persons_sync_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_mail_persons_sync_conformance_${process.pid}_${randomBytes(8).toString('hex')}`;
+  const sentinel = randomBytes(32).toString('hex');
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    await postgres_admin_sql(
+      secrets,
+      database,
+      `CREATE TABLE public.makosh_mail_persons_sync_disposable_sentinel (sentinel_id SMALLINT PRIMARY KEY CHECK (sentinel_id = 1), token TEXT NOT NULL); INSERT INTO public.makosh_mail_persons_sync_disposable_sentinel VALUES (1, '${sentinel}')`,
+    );
+    const args = [
+      `+${toolchain}`,
+      '--config',
+      'build.rustc-wrapper=""',
+      'test',
+      '--locked',
+      '-p',
+      'makosh-mail-persons-sync-persistence-testkit',
+      '--test',
+      'postgres_live',
+      '--',
+      '--ignored',
+    ];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, {
+      env: {
+        ...process.env,
+        MAKOSH_MAIL_PERSONS_SYNC_POSTGRES_URL: await postgres_database_url(secrets, database),
+        MAKOSH_MAIL_PERSONS_SYNC_DISPOSABLE_DATABASE: database,
+        MAKOSH_MAIL_PERSONS_SYNC_DISPOSABLE_SENTINEL: sentinel,
+      },
+    });
+  } finally {
+    if (created) {
+      await postgres_admin_sql(
+        secrets,
+        'makosh_storage_authenticated',
+        `DROP DATABASE ${database} WITH (FORCE)`,
+      ).catch(() => undefined);
+    }
+    await stop_contour(secrets);
+  }
+}
+
+async function run_review_person_match_candidate_postgres_conformance(secrets, test) {
+  await start_contour(secrets);
+  const database = `makosh_review_pm_conformance_${process.pid}_${randomBytes(8).toString('hex')}`;
+  const sentinel = randomBytes(32).toString('hex');
+  let created = false;
+  try {
+    await postgres_admin_sql(secrets, 'makosh_storage_authenticated', `CREATE DATABASE ${database}`);
+    created = true;
+    await postgres_admin_sql(
+      secrets,
+      database,
+      `CREATE TABLE public.makosh_review_person_match_candidate_disposable_sentinel (sentinel_id SMALLINT PRIMARY KEY CHECK (sentinel_id = 1), token TEXT NOT NULL); INSERT INTO public.makosh_review_person_match_candidate_disposable_sentinel VALUES (1, '${sentinel}')`,
+    );
+    const args = [
+      `+${toolchain}`,
+      '--config',
+      'build.rustc-wrapper=""',
+      'test',
+      '--locked',
+      '-p',
+      'makosh-mail-persons-sync-persistence-testkit',
+      '--test',
+      'review_person_match_candidate_postgres_live',
+      '--',
+      '--ignored',
+    ];
+    if (test !== 'all') args.push(test);
+    args.push('--test-threads=1');
+    await run('cargo', args, {
+      env: {
+        ...process.env,
+        MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_POSTGRES_URL:
+          await postgres_database_url(secrets, database),
+        MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_DISPOSABLE_DATABASE: database,
+        MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_DISPOSABLE_SENTINEL: sentinel,
+      },
+    });
+  } finally {
+    if (created) {
+      await postgres_admin_sql(
+        secrets,
+        'makosh_storage_authenticated',
+        `DROP DATABASE ${database} WITH (FORCE)`,
+      ).catch(() => undefined);
+    }
+    await stop_contour(secrets);
   }
 }
 
@@ -415,66 +690,15 @@ async function run_telegram_calls_conformance(secrets, test) {
   }
 }
 
-async function run_contacts_postgres_conformance(secrets, test) {
-  await start_contour(secrets);
-  try {
-    await run('cargo', [
-      `+${toolchain}`,
-      '--config',
-      'build.rustc-wrapper=""',
-      'test',
-      '--locked',
-      '-p',
-      'makosh-contacts-testkit',
-      '--test',
-      'postgres_live',
-      '--',
-      '--ignored',
-      test,
-      '--test-threads=1',
-    ], {
-      env: {
-        ...process.env,
-        MAKOSH_CONTACTS_POSTGRES_URL: await postgres_test_database_url(secrets),
-      },
-    });
-  } finally {
-    await stop_contour(secrets);
-  }
-}
-
-async function run_mail_contacts_sync_postgres_conformance(secrets, test) {
-  await start_contour(secrets);
-  try {
-    await run('cargo', [
-      `+${toolchain}`,
-      '--config',
-      'build.rustc-wrapper=""',
-      'test',
-      '--locked',
-      '-p',
-      'makosh-mail-contacts-sync-testkit',
-      '--test',
-      'postgres_live',
-      '--',
-      '--ignored',
-      test,
-      '--test-threads=1',
-    ], {
-      env: {
-        ...process.env,
-        MAKOSH_MAIL_CONTACTS_SYNC_POSTGRES_URL: await postgres_test_database_url(secrets),
-      },
-    });
-  } finally {
-    await stop_contour(secrets);
-  }
-}
-
 async function postgres_test_database_url(secrets) {
+  return postgres_database_url(secrets, 'makosh_storage_authenticated');
+}
+
+async function postgres_database_url(secrets, database) {
+  if (!/^[a-z0-9_]+$/u.test(database)) throw new Error('invalid PostgreSQL database identity');
   const password = (await readFile(secrets.postgresPath, 'utf8')).trim();
   const databaseUrl = new URL(
-    'postgres://makosh_postgres_admin@127.0.0.1/makosh_storage_authenticated',
+    `postgres://makosh_postgres_admin@127.0.0.1/${database}`,
   );
   databaseUrl.password = password;
   databaseUrl.port = String(secrets.postgresPort);
@@ -483,11 +707,174 @@ async function postgres_test_database_url(secrets) {
 }
 
 async function run_managed_process_conformance(secrets) {
-  const tdjsonFixture = await compile_tdjson_fixture(secrets);
-  const tgcallsFixture = await compile_tgcalls_fixture(secrets);
-  const textExtractionOcr = await prepare_attachment_text_extraction_ocr();
-  const whisperStt = await prepare_whisper_stt(secrets);
-  await run('cargo', [
+  const focusedPersonMatchCandidate = managedTest?.startsWith(
+    'managed_review_person_match_candidate_',
+  ) ?? false;
+  const focusedCalendar = managedTest === 'managed_calendar_lifecycle_reminder_replays_and_restarts_with_owner_rls';
+  const focusedOrganizations = managedTest === 'managed_organizations_lifecycle_replays_and_restarts_with_owner_rls';
+  const focusedRelationships = managedTest === 'managed_relationships_lifecycle_replays_and_restarts_with_owner_rls';
+  const focusedProjects = managedTest === 'managed_projects_lifecycle_replays_and_restarts_with_owner_rls';
+  const focusedDecisions = managedTest === 'managed_decisions_lifecycle_replays_and_restarts_with_owner_rls';
+  const focusedDocuments = managedTest === 'managed_documents_lifecycle_custody_replays_and_restarts_with_owner_rls';
+  const focusedObligationCandidate = managedTest === 'managed_obligation_candidate_promotes_to_actual_obligation_and_replays';
+  const focusedProjection = [
+    'managed_search_timeline_graph_project_query_replay_and_restart',
+    'managed_memory_consistency_risk_project_query_replay_and_restart',
+  ].includes(managedTest);
+  const focusedManaged = focusedPersonMatchCandidate || focusedCalendar || focusedOrganizations || focusedRelationships || focusedProjects || focusedDecisions || focusedDocuments || focusedObligationCandidate || focusedProjection;
+  const tdjsonFixture = focusedManaged ? '' : await compile_tdjson_fixture(secrets);
+  const tgcallsFixture = focusedManaged ? '' : await compile_tgcalls_fixture(secrets);
+  const textExtractionOcr = focusedManaged
+    ? { runner: '', english: '', russian: '' }
+    : await prepare_attachment_text_extraction_ocr();
+  const whisperStt = focusedManaged
+    ? { runner: '', model: '', testWav: '' }
+    : await prepare_whisper_stt(secrets);
+  const focusedBuild = focusedProjection ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-search-runtime',
+    '-p',
+    'makosh-timeline-runtime',
+    '-p',
+    'makosh-graph-runtime',
+    '-p',
+    'makosh-memory-runtime',
+    '-p',
+    'makosh-consistency-runtime',
+    '-p',
+    'makosh-risk-runtime',
+  ] : focusedObligationCandidate ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-blob-service',
+    '-p',
+    'makosh-communications-runtime',
+    '-p',
+    'makosh-communications-export-runtime',
+    '-p',
+    'makosh-review-obligation-candidate-runtime',
+    '-p',
+    'makosh-reviewed-obligation-candidate-promotion-runtime',
+    '-p',
+    'makosh-obligations-runtime',
+  ] : focusedCalendar ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-scheduler-runtime',
+    '-p',
+    'makosh-calendar-runtime',
+  ] : focusedDocuments ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-blob-service',
+    '-p',
+    'makosh-documents-runtime',
+  ] : focusedProjects ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-projects-runtime',
+  ] : focusedDecisions ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-decisions-runtime',
+  ] : focusedRelationships ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-relationships-runtime',
+  ] : focusedOrganizations ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-organizations-runtime',
+  ] : focusedPersonMatchCandidate ? [
+    `+${toolchain}`,
+    '--config',
+    'build.rustc-wrapper=""',
+    'build',
+    '--locked',
+    '-p',
+    'makosh-vault-runtime',
+    '-p',
+    'makosh-storage-runtime',
+    '-p',
+    'makosh-communications-runtime',
+    '-p',
+    'makosh-communications-export-runtime',
+    '-p',
+    'makosh-blob-service',
+    '-p',
+    'makosh-persons-runtime',
+    '-p',
+    'makosh-identity-resolution-runtime',
+    '-p',
+    'makosh-review-person-match-candidate-runtime',
+    '-p',
+    'makosh-reviewed-person-match-candidate-promotion-runtime',
+  ] : [
     `+${toolchain}`,
     '--config',
     'build.rustc-wrapper=""',
@@ -546,9 +933,15 @@ async function run_managed_process_conformance(secrets) {
     '-p',
     'makosh-tasks-runtime',
     '-p',
-    'makosh-contacts-runtime',
+    'makosh-persons-runtime',
     '-p',
-    'makosh-mail-contacts-sync-runtime',
+    'makosh-review-person-match-candidate-runtime',
+    '-p',
+    'makosh-reviewed-person-match-candidate-promotion-runtime',
+    '-p',
+    'makosh-mail-persons-sync-runtime',
+    '-p',
+    'makosh-mail-persons-sync-assembly',
     '-p',
     'makosh-review-note-candidate-runtime',
     '-p',
@@ -579,7 +972,8 @@ async function run_managed_process_conformance(secrets) {
     'makosh-blob-service',
     '--features',
     'makosh-mail-runtime/conformance-test-support,makosh-zulip-runtime/conformance-test-support',
-  ]);
+  ];
+  await run('cargo', focusedBuild);
   for (const test of managedTest ? [managedTest] : [
     'managed_storage_binary_bootstraps_through_live_vault',
     'managed_scheduler_crash_uses_storage_control_successor_provisioning',
@@ -598,9 +992,21 @@ async function run_managed_process_conformance(secrets) {
     'managed_attachment_preview_evidence_replay_restores_expired_sources_to_browser_preview',
     'managed_review_attention_reaches_gateway_sse_and_replays_after_restart',
     'managed_task_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart',
-    'managed_contacts_command_is_atomic_replayable_and_restart_safe',
-    'managed_mail_contacts_sync_reaches_contacts_through_events',
+    'managed_tasks_lifecycle_replays_and_restarts_with_owner_rls',
+    'managed_persons_bootstrap_is_control_responsive_and_requires_exact_consumer',
+    'managed_persons_command_is_atomic_replayable_restart_and_control_close_safe',
+    'managed_mail_persons_sync_actual_binary_bootstraps_exact_private_contour',
+    'empty_start_provider_resync_without_contacts_import',
     'managed_note_candidate_approve_reject_reaches_gateway_sse_and_replays_after_restart',
+    'managed_knowledge_lifecycle_search_replays_and_restarts_with_owner_rls',
+    'managed_calendar_lifecycle_reminder_replays_and_restarts_with_owner_rls',
+    'managed_organizations_lifecycle_replays_and_restarts_with_owner_rls',
+    'managed_relationships_lifecycle_replays_and_restarts_with_owner_rls',
+    'managed_projects_lifecycle_replays_and_restarts_with_owner_rls',
+    'managed_decisions_lifecycle_replays_and_restarts_with_owner_rls',
+    'managed_documents_lifecycle_custody_replays_and_restarts_with_owner_rls',
+    'managed_search_timeline_graph_project_query_replay_and_restart',
+    'managed_obligation_candidate_promotes_to_actual_obligation_and_replays',
     'managed_communications_ai_source_is_event_only_and_revision_fenced',
     'managed_reply_suggestion_reaches_ai_and_replays_through_gateway_sse',
     'managed_communication_summary_reaches_ai_and_replays_through_gateway_sse',
@@ -610,6 +1016,8 @@ async function run_managed_process_conformance(secrets) {
     'managed_ai_inference_routes_to_ollama_and_replays_after_restart',
     'managed_ollama_ai_runtime_replays_provider_unavailable_without_second_http_attempt',
     'managed_speech_to_text_routes_whisper_private_blob_and_replays_after_restart',
+    'managed_speech_to_text_whisper_bootstrap_fails_closed_and_stops_promptly',
+    'managed_speech_to_text_whisper_private_surfaces_reject_malformed_provider_output',
     'managed_desktop_recording_reaches_blob_event_gateway_sse_and_restart',
     'managed_call_transcription_reaches_recording_stt_gateway_blob_and_restarts',
     'managed_mail_runtime_uses_kernel_leases_and_route_specific_admission',
@@ -619,11 +1027,23 @@ async function run_managed_process_conformance(secrets) {
     'managed_mail_gmail_oauth_rotates_credentials_once_and_fails_closed',
     'managed_mail_gmail_oauth_route_is_fenced_by_owner_revoke',
     'managed_zulip_runtime_uses_kernel_leases_and_route_specific_admission',
+    'managed_zulip_account_rotation_and_retirement_use_settings_successors',
     'managed_zulip_runtime_delivers_live_command_and_event_only_communications_handoff',
+    'managed_zulip_runtime_bootstrap_fails_closed_and_stops_promptly',
+    'managed_zulip_private_surfaces_reject_malformed_provider_output',
     'managed_whatsapp_runtime_uses_signed_kernel_admission_and_host_route_fencing',
     'managed_whatsapp_runtime_delivers_live_command_and_event_only_communications_handoff',
+    'managed_whatsapp_runtime_bootstrap_fails_closed_and_stops_promptly',
+    'managed_whatsapp_private_surfaces_reject_malformed_host_output',
+    'managed_telegram_runtime_uses_kernel_leases_and_event_only_communications_handoff',
+    'managed_telegram_core_operational_projection_is_restart_safe',
+    'managed_telegram_folder_reassignment_converges_after_partial_provider_failure',
     'managed_telegram_automation_route_is_durable_and_provider_side_effect_free',
     'managed_telegram_call_history_route_is_durable_and_replayable',
+    'managed_telegram_runtime_bootstrap_fails_closed_and_stops_promptly',
+    'managed_telegram_private_surfaces_reject_malformed_provider_output',
+    'managed_telegram_real_tdlib_reaches_qr_authorization',
+    'managed_telegram_real_tgcalls_audio_device_conformance',
     'managed_call_evidence_survives_nats_outage_and_replays_through_gateway_sse',
   ]) {
     await start_contour(secrets);
@@ -673,11 +1093,30 @@ async function run_managed_process_conformance(secrets) {
       MAKOSH_REVIEW_TASK_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-task-candidate-runtime`,
       MAKOSH_REVIEWED_TASK_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-task-candidate-promotion-runtime`,
       MAKOSH_TASKS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-tasks-runtime`,
-      MAKOSH_CONTACTS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-contacts-runtime`,
-      MAKOSH_MAIL_CONTACTS_SYNC_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-mail-contacts-sync-runtime`,
+      MAKOSH_REVIEW_OBLIGATION_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-obligation-candidate-runtime`,
+      MAKOSH_REVIEWED_OBLIGATION_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-obligation-candidate-promotion-runtime`,
+      MAKOSH_OBLIGATIONS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-obligations-runtime`,
+      MAKOSH_PERSONS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-persons-runtime`,
+      MAKOSH_IDENTITY_RESOLUTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-identity-resolution-runtime`,
+      MAKOSH_SEARCH_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-search-runtime`,
+      MAKOSH_TIMELINE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-timeline-runtime`,
+      MAKOSH_GRAPH_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-graph-runtime`,
+      MAKOSH_MEMORY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-memory-runtime`,
+      MAKOSH_CONSISTENCY_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-consistency-runtime`,
+      MAKOSH_RISK_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-risk-runtime`,
+      MAKOSH_REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-person-match-candidate-runtime`,
+      MAKOSH_REVIEWED_PERSON_MATCH_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-person-match-candidate-promotion-runtime`,
+      MAKOSH_MAIL_PERSONS_SYNC_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-mail-persons-sync-runtime`,
+      MAKOSH_MAIL_PERSONS_SYNC_ASSEMBLY_BIN: `${process.cwd()}/target/debug/makosh-mail-persons-sync-assembly`,
       MAKOSH_REVIEW_NOTE_CANDIDATE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-review-note-candidate-runtime`,
       MAKOSH_REVIEWED_NOTE_CANDIDATE_PROMOTION_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-reviewed-note-candidate-promotion-runtime`,
       MAKOSH_KNOWLEDGE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-knowledge-runtime`,
+      MAKOSH_CALENDAR_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-calendar-runtime`,
+      MAKOSH_ORGANIZATIONS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-organizations-runtime`,
+      MAKOSH_RELATIONSHIPS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-relationships-runtime`,
+      MAKOSH_PROJECTS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-projects-runtime`,
+      MAKOSH_DECISIONS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-decisions-runtime`,
+      MAKOSH_DOCUMENTS_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-documents-runtime`,
       MAKOSH_AI_INFERENCE_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-ai-inference-runtime`,
       MAKOSH_OLLAMA_AI_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-ollama-ai-runtime`,
       MAKOSH_SPEECH_TO_TEXT_RUNTIME_BIN: `${process.cwd()}/target/debug/makosh-speech-to-text-runtime`,

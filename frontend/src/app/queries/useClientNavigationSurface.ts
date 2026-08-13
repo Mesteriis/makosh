@@ -310,6 +310,8 @@ export function buildClientRouteTree(bootstrap: ClientBootstrapSnapshot): readon
 		toNavigationNode('knowledge', bootstrap),
 		toNavigationNode('tasks', bootstrap),
 		toNavigationNode('calendar', bootstrap),
+		toNavigationNode('organizations', bootstrap),
+		toNavigationNode('projects', bootstrap),
 		toNavigationNode('documents', bootstrap),
 		toNavigationNode('settings', bootstrap),
 	]

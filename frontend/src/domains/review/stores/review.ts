@@ -1,251 +1,284 @@
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type {
-	AttentionCard,
-	Relationship,
-	Decision,
-	Obligation,
-	ContradictionObservation,
-	ReviewItem,
-	ReviewWorkspaceItemAction
-} from '../types/review'
 import {
-	fetchRelationships,
-	reviewRelationship,
-	fetchDecisionReviewItems,
-	reviewDecision,
-	fetchObligationReviewItems,
-	reviewObligation,
-	fetchContradictions,
-	reviewContradiction
-} from '../api/workspace'
+  ReviewDispositionV1,
+  type ReviewAttentionSummaryV1
+} from '../../../gen/makosh/review/attention/client/v1/client_pb'
 import {
-	fetchReviewAttentionCards,
-	fetchReviewItems,
-	approveReviewItem,
-	dismissReviewItem,
-	archiveReviewItem,
-	promoteReviewItem,
-	takeReviewItem
-} from '../api/items'
+  PersonMatchCandidateDecisionV1,
+  PersonMatchCandidateStateV1,
+  type PersonMatchCandidateSummaryV1
+} from '../../../gen/makosh/review/person_match_candidate/v1/person_match_candidate_pb'
+import {
+  ReviewTaskCandidateDecisionV1,
+  ReviewTaskCandidateErrorCodeV1,
+  ReviewTaskCandidateStateV1,
+  type ReviewTaskCandidateSummaryV1
+} from '../../../gen/makosh/review/task_candidate/v1/task_candidate_pb'
+import {
+  ReviewNoteCandidateDecisionV1,
+  ReviewNoteCandidateErrorCodeV1,
+  ReviewNoteCandidateStateV1,
+  type ReviewNoteCandidateSummaryV1
+} from '../../../gen/makosh/review/note_candidate/v1/note_candidate_pb'
+import {
+  ReviewObligationCandidateDecisionV1,
+  ReviewObligationCandidateErrorCodeV1,
+  ReviewObligationCandidateStateV1,
+  type ReviewObligationCandidateSummaryV1
+} from '../../../gen/makosh/review/obligation_candidate/v1/obligation_candidate_pb'
+import {
+  getReviewAttentionCommandClient,
+  getReviewAttentionQueryClient
+} from '../../../platform/connect/reviewAttentionClient'
+import {
+  getReviewPersonMatchCandidateCommandClient,
+  getReviewPersonMatchCandidateQueryClient
+} from '../../../platform/connect/reviewPersonMatchCandidateClient'
+import {
+  getReviewTaskCandidateCommandClient,
+  getReviewTaskCandidateQueryClient
+} from '../../../platform/connect/reviewTaskCandidateClient'
+import {
+  getReviewNoteCandidateCommandClient,
+  getReviewNoteCandidateQueryClient
+} from '../../../platform/connect/reviewNoteCandidateClient'
+import {
+  getReviewObligationCandidateCommandClient,
+  getReviewObligationCandidateQueryClient
+} from '../../../platform/connect/reviewObligationCandidateClient'
+import type { PersonMatchApprovalV1 } from '../types/review'
+
+const PAGE_LIMIT = 50
 
 export const useReviewStore = defineStore('review', () => {
-	const relationships = ref<Relationship[]>([])
-	const decisions = ref<Decision[]>([])
-	const obligations = ref<Obligation[]>([])
-	const contradictions = ref<ContradictionObservation[]>([])
-	const reviewItems = ref<ReviewItem[]>([])
-	const attentionCards = ref<AttentionCard[]>([])
-	const error = ref('')
-	const reviewingItemKey = ref<string | null>(null)
+  const attention = ref<ReviewAttentionSummaryV1[]>([])
+  const personMatchCandidates = ref<PersonMatchCandidateSummaryV1[]>([])
+  const taskCandidates = ref<ReviewTaskCandidateSummaryV1[]>([])
+  const noteCandidates = ref<ReviewNoteCandidateSummaryV1[]>([])
+  const obligationCandidates = ref<ReviewObligationCandidateSummaryV1[]>([])
+  const error = ref('')
+  const reviewingItemKey = ref<string | null>(null)
 
-	const relationsSuggestedCount = computed(() =>
-		relationships.value.filter((r) => r.review_state === 'suggested').length
-	)
+  const totalPendingCount = computed(() =>
+    attention.value.filter((item) => item.disposition === ReviewDispositionV1.REVIEW_DISPOSITION_PENDING).length
+    + personMatchCandidates.value.filter((item) => item.state === PersonMatchCandidateStateV1.PERSON_MATCH_CANDIDATE_STATE_PENDING).length
+    + taskCandidates.value.filter((item) => item.state === ReviewTaskCandidateStateV1.REVIEW_TASK_CANDIDATE_STATE_PENDING).length
+    + noteCandidates.value.filter((item) => item.state === ReviewNoteCandidateStateV1.REVIEW_NOTE_CANDIDATE_STATE_PENDING).length
+    + obligationCandidates.value.filter((item) => item.state === ReviewObligationCandidateStateV1.REVIEW_OBLIGATION_CANDIDATE_STATE_PENDING).length
+  )
 
-	const decisionsSuggestedCount = computed(() =>
-		decisions.value.filter((d) => d.review_state === 'suggested').length
-	)
+  async function loadAll(): Promise<void> {
+    error.value = ''
+    try {
+      const [attentionResult, personResult, taskResult, noteResult, obligationResult] = await Promise.all([
+        getReviewAttentionQueryClient().query({
+          protocolMajor: 1,
+          operation: { case: 'list', value: { limit: PAGE_LIMIT, cursor: new Uint8Array() } }
+        }),
+        getReviewPersonMatchCandidateQueryClient().list({
+          logicalOwnerId: '',
+          limit: PAGE_LIMIT
+        }),
+        getReviewTaskCandidateQueryClient().list({
+          protocolMajor: 1,
+          state: ReviewTaskCandidateStateV1.REVIEW_TASK_CANDIDATE_STATE_PENDING,
+          afterReviewId: new Uint8Array(),
+          limit: PAGE_LIMIT
+        }),
+        getReviewNoteCandidateQueryClient().list({
+          protocolMajor: 1,
+          state: ReviewNoteCandidateStateV1.REVIEW_NOTE_CANDIDATE_STATE_PENDING,
+          afterReviewId: new Uint8Array(),
+          limit: PAGE_LIMIT
+        }),
+        getReviewObligationCandidateQueryClient().list({
+          protocolMajor: 1,
+          state: ReviewObligationCandidateStateV1.REVIEW_OBLIGATION_CANDIDATE_STATE_PENDING,
+          afterReviewId: new Uint8Array(),
+          limit: PAGE_LIMIT
+        })
+      ])
+      if (attentionResult.errorCode || attentionResult.result.case !== 'page') {
+        throw new Error(attentionResult.errorCode || 'review_attention_invalid_response')
+      }
+      assertTaskResult(taskResult.error)
+      assertNoteResult(noteResult.error)
+      assertObligationResult(obligationResult.error)
+      attention.value = attentionResult.result.value.attention
+      personMatchCandidates.value = personResult.candidates
+      taskCandidates.value = taskResult.reviews
+      noteCandidates.value = noteResult.reviews
+      obligationCandidates.value = obligationResult.reviews
+    } catch (cause) {
+      error.value = message(cause)
+    }
+  }
 
-	const obligationsSuggestedCount = computed(() =>
-		obligations.value.filter((o) => o.review_state === 'suggested').length
-	)
+  async function resolveAttention(
+    item: ReviewAttentionSummaryV1,
+    resolution: 'reviewed' | 'dismissed'
+  ): Promise<void> {
+    await run(`attention:${hex(item.attentionId)}`, async () => {
+      const response = await getReviewAttentionCommandClient().execute({
+        protocolMajor: 1,
+        operationId: randomId16(),
+        sourceEvidenceId: item.sourceEvidenceId,
+        expectedRevision: item.revision,
+        operation: resolution === 'reviewed'
+          ? { case: 'markReviewed', value: {} }
+          : { case: 'dismiss', value: {} }
+      })
+      if (response.errorCode || !response.attention) {
+        throw new Error(response.errorCode || 'review_attention_invalid_response')
+      }
+      replace(attention.value, response.attention, (value) => value.attentionId)
+    })
+  }
 
-	const contradictionsSuggestedCount = computed(() =>
-		contradictions.value.filter((c) => c.review_state === 'suggested').length
-	)
-	const reviewItemsCount = computed(() => reviewItems.value.filter((r) => r.status === 'new' || r.status === 'in_review').length)
-	const attentionCardsCount = computed(() => attentionCards.value.length)
+  async function decideTaskCandidate(
+    item: ReviewTaskCandidateSummaryV1,
+    decision: ReviewTaskCandidateDecisionV1
+  ): Promise<void> {
+    await run(`task:${hex(item.reviewId)}`, async () => {
+      const response = await getReviewTaskCandidateCommandClient().decide({
+        protocolMajor: 1,
+        operationId: randomId16(),
+        reviewId: item.reviewId,
+        expectedReviewRevision: item.reviewRevision,
+        decision
+      })
+      assertTaskResult(response.error)
+      if (!response.review) throw new Error('review_task_invalid_response')
+      replace(taskCandidates.value, response.review, (value) => value.reviewId)
+    })
+  }
 
-	const totalSuggestedCount = computed(() =>
-		relationsSuggestedCount.value +
-		decisionsSuggestedCount.value +
-		obligationsSuggestedCount.value +
-		contradictionsSuggestedCount.value +
-		reviewItemsCount.value
-	)
+  async function decideNoteCandidate(
+    item: ReviewNoteCandidateSummaryV1,
+    decision: ReviewNoteCandidateDecisionV1
+  ): Promise<void> {
+    await run(`note:${hex(item.reviewId)}`, async () => {
+      const response = await getReviewNoteCandidateCommandClient().decide({
+        protocolMajor: 1,
+        operationId: randomId16(),
+        reviewId: item.reviewId,
+        expectedReviewRevision: item.reviewRevision,
+        decision
+      })
+      assertNoteResult(response.error)
+      if (!response.review) throw new Error('review_note_invalid_response')
+      replace(noteCandidates.value, response.review, (value) => value.reviewId)
+    })
+  }
 
-	async function loadAll() {
-		error.value = ''
-		const errors: string[] = []
+  async function decideObligationCandidate(
+    item: ReviewObligationCandidateSummaryV1,
+    decision: ReviewObligationCandidateDecisionV1
+  ): Promise<void> {
+    await run(`obligation:${hex(item.reviewId)}`, async () => {
+      const response = await getReviewObligationCandidateCommandClient().decide({
+        protocolMajor: 1,
+        operationId: randomId16(),
+        reviewId: item.reviewId,
+        expectedReviewRevision: item.reviewRevision,
+        decision
+      })
+      assertObligationResult(response.error)
+      if (!response.review) throw new Error('review_obligation_invalid_response')
+      replace(obligationCandidates.value, response.review, (value) => value.reviewId)
+    })
+  }
 
-		try {
-			const relRes = await fetchRelationships(50)
-			relationships.value = relRes.relationships || []
-		} catch (e) {
-			errors.push(`Relationships: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
+  async function decidePersonMatchCandidate(
+    item: PersonMatchCandidateSummaryV1,
+    decision: PersonMatchCandidateDecisionV1,
+    approval?: PersonMatchApprovalV1
+  ): Promise<void> {
+    await run(`person-match:${hex(item.reviewId)}`, async () => {
+      if (decision === PersonMatchCandidateDecisionV1.PERSON_MATCH_CANDIDATE_DECISION_APPROVE && !approval) {
+        throw new Error('review_person_match_approval_required')
+      }
+      const response = await getReviewPersonMatchCandidateCommandClient().decide({
+        protocolMajor: 1,
+        operationId: randomId16(),
+        reviewId: item.reviewId,
+        expectedReviewRevision: item.reviewRevision,
+        decision,
+        approvedAction: approval?.approvedAction,
+        approvedActionDigest: approval?.approvedActionDigest ?? new Uint8Array()
+      })
+      replace(personMatchCandidates.value, response, (value) => value.reviewId)
+    })
+  }
 
-		try {
-			const decRes = await fetchDecisionReviewItems({ reviewState: 'suggested', limit: 50 })
-			decisions.value = decRes.items || []
-		} catch (e) {
-			errors.push(`Decisions: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
+  async function run(key: string, operation: () => Promise<void>): Promise<void> {
+    reviewingItemKey.value = key
+    error.value = ''
+    try {
+      await operation()
+    } catch (cause) {
+      error.value = message(cause)
+      throw cause
+    } finally {
+      reviewingItemKey.value = null
+    }
+  }
 
-		try {
-			const oblRes = await fetchObligationReviewItems({ reviewState: 'suggested', limit: 50 })
-			obligations.value = oblRes.items || []
-		} catch (e) {
-			errors.push(`Obligations: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
-
-		try {
-			const conRes = await fetchContradictions(50)
-			contradictions.value = conRes.items || []
-		} catch (e) {
-			errors.push(`Contradictions: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
-		try {
-			const reviewRes = await fetchReviewItems({ status: 'active', limit: 50 })
-			reviewItems.value = reviewRes.items || []
-		} catch (e) {
-			errors.push(`Review inbox: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
-		try {
-			await refreshAttentionCards()
-		} catch (e) {
-			errors.push(`Attention: ${e instanceof Error ? e.message : 'Unknown error'}`)
-		}
-
-		if (errors.length > 0) {
-			error.value = errors.join(' · ')
-		}
-	}
-
-	async function refreshAttentionCards() {
-		const attentionRes = await fetchReviewAttentionCards({ status: 'active', limit: 50 })
-		attentionCards.value = attentionRes.cards || []
-	}
-
-	async function reviewItem(action: ReviewWorkspaceItemAction): Promise<string> {
-		const itemKey = reviewItemKey(action)
-		reviewingItemKey.value = itemKey
-
-		try {
-			switch (action.kind) {
-				case 'relationship': {
-					await reviewRelationship(action.item.relationship_id, action.reviewState)
-					const idx = relationships.value.findIndex(
-						(r: Relationship) => r.relationship_id === action.item.relationship_id
-					)
-					if (idx !== -1) {
-						relationships.value[idx] = { ...relationships.value[idx], review_state: action.reviewState }
-					}
-					break
-				}
-				case 'decision': {
-					await reviewDecision(action.item.decision_id, { review_state: action.reviewState })
-					const idx = decisions.value.findIndex(
-						(d: Decision) => d.decision_id === action.item.decision_id
-					)
-					if (idx !== -1) {
-						decisions.value[idx] = { ...decisions.value[idx], review_state: action.reviewState }
-					}
-					break
-				}
-				case 'obligation': {
-					await reviewObligation(action.item.obligation_id, { review_state: action.reviewState })
-					const idx = obligations.value.findIndex(
-						(o: Obligation) => o.obligation_id === action.item.obligation_id
-					)
-					if (idx !== -1) {
-						obligations.value[idx] = { ...obligations.value[idx], review_state: action.reviewState }
-					}
-					break
-				}
-				case 'contradiction': {
-					await reviewContradiction(action.item.observation_id, { review_state: action.reviewState })
-					const idx = contradictions.value.findIndex(
-						(c: ContradictionObservation) => c.observation_id === action.item.observation_id
-					)
-					if (idx !== -1) {
-						contradictions.value[idx] = { ...contradictions.value[idx], review_state: action.reviewState }
-					}
-					break
-				}
-				case 'review_item': {
-					if (action.action === 'approve') {
-						const updated = await approveReviewItem(action.item.review_item_id)
-						updateReviewItem(updated)
-					} else {
-						const updated = await dismissReviewItem(action.item.review_item_id)
-						updateReviewItem(updated)
-					}
-					await refreshAttentionCards()
-					break
-				}
-				case 'review_item_archive': {
-					const updated = await archiveReviewItem(action.item.review_item_id)
-					updateReviewItem(updated)
-					await refreshAttentionCards()
-					break
-				}
-				case 'review_item_take': {
-					const updated = await takeReviewItem(action.item.review_item_id)
-					updateReviewItem(updated)
-					await refreshAttentionCards()
-					break
-				}
-				case 'review_item_promote': {
-					const updated = await promoteReviewItem(action.item.review_item_id, action.promotion)
-					updateReviewItem(updated)
-					await refreshAttentionCards()
-					break
-				}
-			}
-			return ''
-		} catch (e) {
-			return e instanceof Error ? e.message : 'Unknown review action error'
-		} finally {
-			reviewingItemKey.value = null
-		}
-	}
-
-	function updateReviewItem(updated: ReviewItem) {
-		const idx = reviewItems.value.findIndex((item) => item.review_item_id === updated.review_item_id)
-		if (idx === -1) return
-		reviewItems.value[idx] = updated
-	}
-
-	return {
-		relationships,
-		decisions,
-		obligations,
-		contradictions,
-		reviewItems,
-		attentionCards,
-		reviewItemsCount,
-		attentionCardsCount,
-		error,
-		reviewingItemKey,
-		relationsSuggestedCount,
-		decisionsSuggestedCount,
-		obligationsSuggestedCount,
-		contradictionsSuggestedCount,
-		totalSuggestedCount,
-		loadAll,
-		reviewItem
-	}
+  return {
+    attention,
+    personMatchCandidates,
+    taskCandidates,
+    noteCandidates,
+    obligationCandidates,
+    error,
+    reviewingItemKey,
+    totalPendingCount,
+    loadAll,
+    resolveAttention,
+    decidePersonMatchCandidate,
+    decideTaskCandidate,
+    decideNoteCandidate,
+    decideObligationCandidate
+  }
 })
 
-function reviewItemKey(action: ReviewWorkspaceItemAction): string {
-	switch (action.kind) {
-		case 'relationship':
-			return `relationship:${action.item.relationship_id}`
-		case 'decision':
-			return `decision:${action.item.decision_id}`
-		case 'obligation':
-			return `obligation:${action.item.obligation_id}`
-		case 'contradiction':
-			return `contradiction:${action.item.observation_id}`
-		case 'review_item':
-			return `review_item:${action.item.review_item_id}`
-		case 'review_item_archive':
-			return `review_item_archive:${action.item.review_item_id}`
-		case 'review_item_take':
-			return `review_item_take:${action.item.review_item_id}`
-		case 'review_item_promote':
-			return `review_item_promote:${action.item.review_item_id}`
-	}
+function assertTaskResult(error: ReviewTaskCandidateErrorCodeV1): void {
+  if (error !== ReviewTaskCandidateErrorCodeV1.REVIEW_TASK_CANDIDATE_ERROR_CODE_UNSPECIFIED) {
+    throw new Error(`review_task_error_${error}`)
+  }
+}
+
+function assertNoteResult(error: ReviewNoteCandidateErrorCodeV1): void {
+  if (error !== ReviewNoteCandidateErrorCodeV1.REVIEW_NOTE_CANDIDATE_ERROR_CODE_UNSPECIFIED) {
+    throw new Error(`review_note_error_${error}`)
+  }
+}
+
+function assertObligationResult(error: ReviewObligationCandidateErrorCodeV1): void {
+  if (error !== ReviewObligationCandidateErrorCodeV1.REVIEW_OBLIGATION_CANDIDATE_ERROR_CODE_UNSPECIFIED) {
+    throw new Error(`review_obligation_error_${error}`)
+  }
+}
+
+function replace<T>(items: T[], updated: T, id: (value: T) => Uint8Array): void {
+  const index = items.findIndex((item) => sameBytes(id(item), id(updated)))
+  if (index === -1) items.push(updated)
+  else items[index] = updated
+}
+
+function sameBytes(left: Uint8Array, right: Uint8Array): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index])
+}
+
+function randomId16(): Uint8Array {
+  return globalThis.crypto.getRandomValues(new Uint8Array(16))
+}
+
+function hex(value: Uint8Array): string {
+  return Array.from(value, (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
+function message(cause: unknown): string {
+  return cause instanceof Error ? cause.message : 'review_unavailable'
 }

@@ -45,7 +45,7 @@ export class SseClient {
 	constructor(options: SseClientOptions) {
 		this.url = options.url
 		this.secret = options.secret.trim()
-		if (!this.secret) throw new Error('X-Макошь-Secret cannot be empty')
+		if (!this.secret) throw new Error('x-makosh-secret cannot be empty')
 		this.lastEventId = options.lastEventId?.trim() ?? ''
 		this.onMessage = options.onMessage
 		this.onError = options.onError
@@ -140,7 +140,7 @@ export class SseClient {
 	}
 
 	private headers(): Record<string, string> {
-		const headers: Record<string, string> = { Accept: 'text/event-stream', 'X-Макошь-Secret': this.secret }
+		const headers: Record<string, string> = { Accept: 'text/event-stream', 'x-makosh-secret': this.secret }
 		if (this.lastEventId) headers['Last-Event-ID'] = this.lastEventId
 		return headers
 	}

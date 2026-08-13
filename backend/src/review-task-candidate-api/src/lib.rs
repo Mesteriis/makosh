@@ -44,6 +44,7 @@ pub const REVIEW_TASK_CANDIDATE_REALTIME_CONTRACT_NAME_V1: &str =
     "review.task-candidate.status_changed";
 pub const REVIEW_TASK_CANDIDATE_COMMAND_CONTRACT_NAME_V1: &str = "review.task-candidate.command";
 pub const REVIEW_TASK_CANDIDATE_QUERY_CONTRACT_NAME_V1: &str = "review.task-candidate.query";
+pub const REVIEW_TASK_CANDIDATE_LIST_CONTRACT_NAME_V1: &str = "review.task-candidate.list";
 pub const REVIEW_TASK_CANDIDATE_REALTIME_EVENT_KIND_V1: &str =
     "review.task-candidate.status_changed";
 
@@ -51,6 +52,8 @@ pub const REVIEW_TASK_CANDIDATE_COMMAND_CONNECT_PATH_V1: &str =
     "/makosh.review.task_candidate.v1.ReviewTaskCandidateCommandService/Decide";
 pub const REVIEW_TASK_CANDIDATE_QUERY_CONNECT_PATH_V1: &str =
     "/makosh.review.task_candidate.v1.ReviewTaskCandidateQueryService/Get";
+pub const REVIEW_TASK_CANDIDATE_LIST_CONNECT_PATH_V1: &str =
+    "/makosh.review.task_candidate.v1.ReviewTaskCandidateQueryService/List";
 pub const REVIEW_TASK_CANDIDATE_CONTRACT_MAJOR_V1: u32 = 1;
 pub const REVIEW_TASK_CANDIDATE_CONTRACT_REVISION_V1: u32 = 1;
 pub const REVIEW_TASK_CANDIDATE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;

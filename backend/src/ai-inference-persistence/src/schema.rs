@@ -1,7 +1,7 @@
 use makosh_storage_protocol::v1::{StorageBundleV1, StorageMigrationStepV1};
 use sha2::{Digest, Sha256};
 
-pub const AI_INFERENCE_STORAGE_BUNDLE_REVISION_V1: u32 = 5;
+pub const AI_INFERENCE_STORAGE_BUNDLE_REVISION_V1: u32 = 6;
 pub const AI_INFERENCE_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0001_ai_inference_runs.sql");
 pub const AI_SUMMARY_SCHEMA_V1: &[u8] = include_bytes!("../migrations/0002_ai_summary_runs.sql");
@@ -11,6 +11,8 @@ pub const AI_EXPLANATION_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0004_ai_explanation_runs.sql");
 pub const AI_ATTACHMENT_TRANSLATION_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0005_ai_attachment_translation_runs.sql");
+pub const AI_INFERENCE_OWNER_RLS_SCHEMA_V1: &[u8] =
+    include_bytes!("../migrations/0006_ai_inference_owner_rls.sql");
 
 #[must_use]
 pub fn ai_inference_storage_bundle_v1() -> StorageBundleV1 {
@@ -50,6 +52,12 @@ pub fn ai_inference_storage_bundle_v1() -> StorageBundleV1 {
                 forward_sql_utf8: AI_ATTACHMENT_TRANSLATION_SCHEMA_V1.to_vec(),
                 sha256: Sha256::digest(AI_ATTACHMENT_TRANSLATION_SCHEMA_V1).to_vec(),
             },
+            StorageMigrationStepV1 {
+                revision: 6,
+                migration_id: "ai_inference_owner_rls".to_owned(),
+                forward_sql_utf8: AI_INFERENCE_OWNER_RLS_SCHEMA_V1.to_vec(),
+                sha256: Sha256::digest(AI_INFERENCE_OWNER_RLS_SCHEMA_V1).to_vec(),
+            },
         ],
     }
 }
@@ -65,6 +73,8 @@ mod tests {
         let bundle = ai_inference_storage_bundle_v1();
         validate_storage_bundle(&bundle).expect("valid AI storage bundle");
         assert_eq!(bundle.owner_id, "ai");
+        assert_eq!(bundle.revision, 6);
+        assert_eq!(bundle.steps.len(), 6);
         let sql = std::str::from_utf8(AI_INFERENCE_SCHEMA_V1).expect("utf8");
         let summary_sql = std::str::from_utf8(AI_SUMMARY_SCHEMA_V1).expect("utf8");
         let translation_sql = std::str::from_utf8(AI_TRANSLATION_SCHEMA_V1).expect("utf8");
@@ -128,5 +138,27 @@ mod tests {
                 "{forbidden}"
             );
         }
+        let rls_sql = std::str::from_utf8(AI_INFERENCE_OWNER_RLS_SCHEMA_V1).expect("RLS UTF-8");
+        for table in [
+            "ai_inference_runs",
+            "ai_summary_runs",
+            "ai_translation_runs",
+            "ai_explanation_runs",
+            "ai_attachment_translation_runs",
+        ] {
+            assert!(rls_sql.contains(&format!(
+                "ALTER TABLE makosh_data.{table} ENABLE ROW LEVEL SECURITY"
+            )));
+            assert!(rls_sql.contains(&format!(
+                "ALTER TABLE makosh_data.{table} FORCE ROW LEVEL SECURITY"
+            )));
+        }
+        assert_eq!(rls_sql.matches("CREATE POLICY ").count(), 5);
+        assert_eq!(
+            rls_sql
+                .matches("current_setting('makosh.logical_owner_id', true)")
+                .count(),
+            10
+        );
     }
 }

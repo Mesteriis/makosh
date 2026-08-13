@@ -71,13 +71,6 @@ use crate::MailRuntimeAdmission;
 use crate::account_lifecycle::{
     MailAccountLifecycleCoordinatorV1, MailAccountLifecycleRuntimeErrorV1,
 };
-use crate::address_book_consumer::{
-    MailAddressBookConsumeErrorV1, consume_next_mail_address_book_fetch_v1,
-    consume_next_mail_address_book_upsert_v1,
-};
-use crate::address_book_outbox::{
-    MailAddressBookOutboxRelayErrorV1, relay_mail_address_book_outbox_once_v1,
-};
 use crate::admission::{
     MAIL_BLOB_CAPABILITY_ID, MAIL_CREDENTIAL_LEASE_TTL_SECONDS, MAIL_MODULE_ID,
 };
@@ -99,6 +92,14 @@ use crate::delivery_intent_consumer::{
 };
 use crate::delivery_intent_outbox::{
     MailDeliveryIntentOutboxRelayErrorV1, relay_mail_delivery_intent_outbox_once_v1,
+};
+use crate::person_source_fetch_worker::{
+    MailPersonSourceFetchWorkerErrorV1, consume_and_process_person_source_fetch_v1,
+    relay_person_source_fetch_outbox_once_v1,
+};
+use crate::person_source_producer::{
+    MailPersonSourceProducerErrorV1, ensure_public_account_ready_v1,
+    record_public_account_retired_v1, relay_public_account_lifecycle_once_v1,
 };
 use makosh_communications_ingress::{
     AttachmentDispositionV1, BodyAdmissionFailureV1, BodyAvailabilityV1, BodyBlobReceiptV1,
@@ -225,13 +226,12 @@ pub struct MailAdmittedRuntime {
     smtp_password: Option<Zeroizing<Vec<u8>>>,
     carddav_password: Option<Zeroizing<Vec<u8>>>,
     account_lifecycle: MailAccountLifecycleCoordinatorV1,
-    event_connection: RuntimeJetStreamConnection,
-    event_publish_permit: RuntimePublishPermitV1,
+    pub(crate) event_connection: RuntimeJetStreamConnection,
+    pub(crate) event_publish_permit: RuntimePublishPermitV1,
     attachment_anchor_subscribe_permit: Option<RuntimeSubscribePermitV1>,
     attachment_safety_subscribe_permit: Option<RuntimeSubscribePermitV1>,
     delivery_intent_subscribe_permit: RuntimeSubscribePermitV1,
-    address_book_fetch_subscribe_permit: RuntimeSubscribePermitV1,
-    address_book_upsert_subscribe_permit: RuntimeSubscribePermitV1,
+    pub(crate) person_source_fetch_subscribe_permit: RuntimeSubscribePermitV1,
     pub(crate) address_book_persistence:
         makosh_mail_address_book_persistence::MailAddressBookPersistenceV1,
     replay_command_subscribe_permit: RuntimeSubscribePermitV1,
@@ -250,7 +250,7 @@ pub struct MailAdmittedRuntime {
     pub(crate) runtime_instance_id: String,
     pub(crate) runtime_generation: u64,
     logical_owner_id: String,
-    logical_human_owner_id: String,
+    pub(crate) logical_human_owner_id: String,
     module_registration_id: String,
     grant_epoch: u64,
 }
@@ -696,6 +696,47 @@ pub async fn open_admitted_runtime_catalog(
         .verify_storage_ready()
         .await
         .map_err(|_| MailBootstrapError::Persistence)?;
+    let person_source_now_seconds = current_unix_seconds()?;
+    let person_source_context =
+        makosh_mail_address_book_contract::MailAddressBookEnvelopeContextV1 {
+            module_id: makosh_mail_address_book_contract::MAIL_RUNTIME_MODULE_ID_V1.to_owned(),
+            runtime_instance_id: admission.runtime_instance_id.clone(),
+            runtime_generation: admission.runtime_generation,
+            recorded_at_unix_seconds: person_source_now_seconds,
+            recorded_at_nanos: 0,
+        };
+    let completed_lifecycle = durable
+        .latest_account_lifecycle(&active_slot.account.connection_id)
+        .await
+        .map_err(|_| MailBootstrapError::Persistence)?;
+    if completed_lifecycle
+        .as_ref()
+        .is_some_and(requires_person_source_retired_reconciliation_v1)
+    {
+        record_public_account_retired_v1(
+            &address_book_persistence,
+            &admission.logical_human_owner_id,
+            &active_slot.account.connection_id,
+            &person_source_context,
+            person_source_now_seconds
+                .checked_mul(1_000)
+                .ok_or(MailBootstrapError::Persistence)?,
+        )
+        .await
+        .map_err(|_| MailBootstrapError::Persistence)?;
+    } else {
+        ensure_public_account_ready_v1(
+            &address_book_persistence,
+            &admission.logical_human_owner_id,
+            &active_slot.account.connection_id,
+            &person_source_context,
+            person_source_now_seconds
+                .checked_mul(1_000)
+                .ok_or(MailBootstrapError::Persistence)?,
+        )
+        .await
+        .map_err(|_| MailBootstrapError::Persistence)?;
+    }
     control_channel
         .signal_ready(ManagedRuntimeReadyRequestV1 {
             registration_id,
@@ -735,8 +776,7 @@ pub async fn open_admitted_runtime_catalog(
         attachment_anchor_subscribe_permit: subscribe_permits.anchor,
         attachment_safety_subscribe_permit: subscribe_permits.safety,
         delivery_intent_subscribe_permit: subscribe_permits.delivery_intent,
-        address_book_fetch_subscribe_permit: subscribe_permits.address_book_fetch,
-        address_book_upsert_subscribe_permit: subscribe_permits.address_book_upsert,
+        person_source_fetch_subscribe_permit: subscribe_permits.person_source_fetch,
         address_book_persistence,
         replay_command_subscribe_permit: subscribe_permits.replay_command,
         replay_persistence,
@@ -926,7 +966,8 @@ impl MailAdmittedRuntime {
         self.imap_password = None;
         self.smtp_password = None;
         self.gmail_oauth_operation_in_flight = None;
-        self.account_lifecycle
+        let receipt = self
+            .account_lifecycle
             .begin(
                 &mut self.control_channel,
                 &self.provider_credential_context,
@@ -937,7 +978,10 @@ impl MailAdmittedRuntime {
                 requested_at_unix_seconds,
             )
             .await
-            .map_err(map_account_lifecycle_error)
+            .map_err(map_account_lifecycle_error)?;
+        self.record_retired_account_if_completed(&receipt, requested_at_unix_seconds)
+            .await?;
+        Ok(receipt)
     }
 
     pub async fn retry_account_lifecycle(
@@ -951,7 +995,8 @@ impl MailAdmittedRuntime {
         self.imap_password = None;
         self.smtp_password = None;
         self.gmail_oauth_operation_in_flight = None;
-        self.account_lifecycle
+        let receipt = self
+            .account_lifecycle
             .retry(
                 &mut self.control_channel,
                 &self.provider_credential_context,
@@ -961,7 +1006,38 @@ impl MailAdmittedRuntime {
                 requested_at_unix_seconds,
             )
             .await
-            .map_err(map_account_lifecycle_error)
+            .map_err(map_account_lifecycle_error)?;
+        self.record_retired_account_if_completed(&receipt, requested_at_unix_seconds)
+            .await?;
+        Ok(receipt)
+    }
+
+    async fn record_retired_account_if_completed(
+        &self,
+        receipt: &MailAccountLifecycleReceiptV1,
+        occurred_at_unix_seconds: i64,
+    ) -> Result<(), MailBootstrapError> {
+        if receipt.state != MailAccountLifecycleStateV1::Completed {
+            return Ok(());
+        }
+        record_public_account_retired_v1(
+            &self.address_book_persistence,
+            &self.logical_human_owner_id,
+            &receipt.connection_id,
+            &makosh_mail_address_book_contract::MailAddressBookEnvelopeContextV1 {
+                module_id: makosh_mail_address_book_contract::MAIL_RUNTIME_MODULE_ID_V1.to_owned(),
+                runtime_instance_id: self.runtime_instance_id.clone(),
+                runtime_generation: self.runtime_generation,
+                recorded_at_unix_seconds: occurred_at_unix_seconds,
+                recorded_at_nanos: 0,
+            },
+            occurred_at_unix_seconds
+                .checked_mul(1_000)
+                .ok_or(MailBootstrapError::Persistence)?,
+        )
+        .await
+        .map_err(|_| MailBootstrapError::Persistence)?;
+        Ok(())
     }
 
     pub async fn account_lifecycle_status(
@@ -2420,61 +2496,39 @@ impl MailAdmittedRuntime {
         .map_err(|_| MailDeliveryIntentOutboxRelayErrorV1::Unavailable)?
     }
 
-    pub async fn try_consume_address_book_upsert(
-        &self,
+    pub async fn try_consume_person_source_fetch(
+        &mut self,
         consumed_at_unix_seconds: i64,
-    ) -> Result<bool, MailAddressBookConsumeErrorV1> {
-        consume_next_mail_address_book_upsert_v1(
-            &self.address_book_persistence,
-            &self.event_connection,
-            &self.address_book_upsert_subscribe_permit,
-            &self.logical_human_owner_id,
-            consumed_at_unix_seconds,
-        )
-        .await
-        .map(|outcome| {
-            matches!(
-                outcome,
-                makosh_mail_address_book_persistence::MailAddressBookCommandInboxOutcomeV1::Accepted
-            )
-        })
+    ) -> Result<bool, MailPersonSourceFetchWorkerErrorV1> {
+        consume_and_process_person_source_fetch_v1(self, consumed_at_unix_seconds).await
     }
 
-    pub async fn try_consume_address_book_fetch(
+    pub async fn relay_person_source_fetch_outbox(
         &self,
-        consumed_at_unix_seconds: i64,
-    ) -> Result<bool, MailAddressBookConsumeErrorV1> {
-        consume_next_mail_address_book_fetch_v1(
+        published_at_unix_millis: i64,
+    ) -> Result<bool, MailPersonSourceFetchWorkerErrorV1> {
+        relay_person_source_fetch_outbox_once_v1(
             &self.address_book_persistence,
             &self.event_connection,
-            &self.address_book_fetch_subscribe_permit,
+            &self.event_publish_permit,
             &self.logical_human_owner_id,
-            consumed_at_unix_seconds,
+            published_at_unix_millis,
         )
         .await
-        .map(|outcome| {
-            matches!(
-                outcome,
-                makosh_mail_address_book_persistence::MailAddressBookFetchInboxOutcomeV1::Accepted
-            )
-        })
     }
 
-    pub async fn relay_address_book_outbox(
+    pub async fn relay_person_source_lifecycle_outbox(
         &self,
-        published_at_unix_seconds: i64,
-    ) -> Result<usize, MailAddressBookOutboxRelayErrorV1> {
-        tokio::time::timeout(
-            OUTBOX_RELAY_TIMEOUT,
-            relay_mail_address_book_outbox_once_v1(
-                &self.address_book_persistence,
-                &self.event_connection,
-                &self.event_publish_permit,
-                published_at_unix_seconds,
-            ),
+        now_unix_millis: i64,
+    ) -> Result<bool, MailPersonSourceProducerErrorV1> {
+        relay_public_account_lifecycle_once_v1(
+            &self.address_book_persistence,
+            &self.logical_human_owner_id,
+            &self.event_connection,
+            &self.event_publish_permit,
+            now_unix_millis,
         )
         .await
-        .map_err(|_| MailAddressBookOutboxRelayErrorV1::Unavailable)?
     }
 
     pub async fn try_consume_replay_command(
@@ -3632,6 +3686,16 @@ impl MailAdmittedRuntime {
     }
 }
 
+fn requires_person_source_retired_reconciliation_v1(
+    receipt: &MailAccountLifecycleReceiptV1,
+) -> bool {
+    receipt.state == MailAccountLifecycleStateV1::Completed
+        && matches!(
+            receipt.action,
+            MailAccountLifecycleActionV1::Retire | MailAccountLifecycleActionV1::Delete
+        )
+}
+
 #[must_use]
 pub fn execute_imap_sync_provider_operation(
     prepared: PreparedImapSyncProviderOperationV1,
@@ -4007,8 +4071,7 @@ struct MailEventSubscribePermitsV1 {
     anchor: Option<RuntimeSubscribePermitV1>,
     safety: Option<RuntimeSubscribePermitV1>,
     delivery_intent: RuntimeSubscribePermitV1,
-    address_book_fetch: RuntimeSubscribePermitV1,
-    address_book_upsert: RuntimeSubscribePermitV1,
+    person_source_fetch: RuntimeSubscribePermitV1,
     replay_command: RuntimeSubscribePermitV1,
 }
 
@@ -4022,17 +4085,13 @@ fn bind_event_subscribe_permits(
     let expected_delivery_intent =
         makosh_mail_delivery_intent_contract::mail_delivery_intent_execute_contract_reference_v1();
     let expected_replay_command = mail_replay_command_contract_reference_v1();
-    let expected_address_book_upsert =
-        makosh_mail_address_book_contract::MailAddressBookContractV1::UpsertEntryCommand
-            .reference();
-    let expected_address_book_fetch =
-        makosh_mail_address_book_contract::MailAddressBookContractV1::FetchPageCommand.reference();
+    let expected_person_source_fetch =
+        makosh_mail_address_book_contract::MailPersonSourceContractV1::FetchPageCommand.reference();
     let mut anchor = None;
     let mut safety = None;
     let mut delivery_intent = None;
     let mut replay_command = None;
-    let mut address_book_upsert = None;
-    let mut address_book_fetch = None;
+    let mut person_source_fetch = None;
     for permit in permits {
         let Some(contract) = permit.contract() else {
             return Err(MailBootstrapError::EventHub);
@@ -4053,12 +4112,8 @@ fn bind_event_subscribe_permits(
             if replay_command.replace(permit).is_some() {
                 return Err(MailBootstrapError::EventHub);
             }
-        } else if exact_runtime_contract(contract, &expected_address_book_upsert) {
-            if address_book_upsert.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
-            }
-        } else if exact_runtime_contract(contract, &expected_address_book_fetch) {
-            if address_book_fetch.replace(permit).is_some() {
+        } else if exact_runtime_contract(contract, &expected_person_source_fetch) {
+            if person_source_fetch.replace(permit).is_some() {
                 return Err(MailBootstrapError::EventHub);
             }
         } else {
@@ -4069,8 +4124,7 @@ fn bind_event_subscribe_permits(
         anchor,
         safety,
         delivery_intent: delivery_intent.ok_or(MailBootstrapError::EventHub)?,
-        address_book_fetch: address_book_fetch.ok_or(MailBootstrapError::EventHub)?,
-        address_book_upsert: address_book_upsert.ok_or(MailBootstrapError::EventHub)?,
+        person_source_fetch: person_source_fetch.ok_or(MailBootstrapError::EventHub)?,
         replay_command: replay_command.ok_or(MailBootstrapError::EventHub)?,
     })
 }
@@ -4366,6 +4420,25 @@ mod tests {
     use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
 
     use super::*;
+
+    #[test]
+    fn only_exact_completed_retire_or_delete_requires_bootstrap_reconciliation() {
+        let mut receipt = MailAccountLifecycleReceiptV1 {
+            operation_id: "retire-operation".to_owned(),
+            connection_id: "account-1".to_owned(),
+            action: MailAccountLifecycleActionV1::Retire,
+            lifecycle_revision: 2,
+            state: MailAccountLifecycleStateV1::Completed,
+            credentials: Vec::new(),
+        };
+        assert!(requires_person_source_retired_reconciliation_v1(&receipt));
+        receipt.action = MailAccountLifecycleActionV1::Delete;
+        assert!(requires_person_source_retired_reconciliation_v1(&receipt));
+        receipt.state = MailAccountLifecycleStateV1::Pending;
+        assert!(!requires_person_source_retired_reconciliation_v1(&receipt));
+        receipt.state = MailAccountLifecycleStateV1::Rejected;
+        assert!(!requires_person_source_retired_reconciliation_v1(&receipt));
+    }
 
     #[test]
     fn sync_operation_deadline_is_absolute_and_fails_closed_on_overflow() {

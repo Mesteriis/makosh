@@ -27,7 +27,18 @@ pub(super) struct StartedSpeechToTextRuntimeV1 {
     pub(super) registration_id: String,
     pub(super) runtime_instance_id: String,
     pub(super) runtime_generation: u64,
+    pub(super) grant_epoch: u64,
     capability_ids: Vec<String>,
+}
+
+#[derive(Clone, Copy)]
+pub(super) enum SpeechToTextBootstrapOverrideV1 {
+    None,
+    MissingSettings,
+    DriftedSettingsRevision,
+    MissingStorage,
+    StaleStorageFence,
+    StopVaultAfterConfiguration,
 }
 
 pub(super) fn speech_to_text_release_artifact_v1() -> SignedRuntimeArtifact {
@@ -146,7 +157,136 @@ pub(super) fn start_speech_to_text_runtime_v1(
 ) -> StartedSpeechToTextRuntimeV1 {
     let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
         .expect("load Speech-to-Text launch reservation");
-    start_reserved_speech_to_text_runtime_v1(supervisor, store, runtime_dir, reservation, admitted)
+    launch_reserved_speech_to_text_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        admitted,
+        SpeechToTextBootstrapOverrideV1::None,
+        true,
+        None,
+    )
+}
+
+pub(super) fn launch_speech_to_text_runtime_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    admitted: AdmittedSpeechToTextRuntimeV1,
+    bootstrap_override: SpeechToTextBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedSpeechToTextRuntimeV1 {
+    let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
+        .expect("load Speech-to-Text launch reservation");
+    launch_reserved_speech_to_text_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        admitted,
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
+}
+
+pub(super) fn retry_speech_to_text_runtime_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    predecessor: StartedSpeechToTextRuntimeV1,
+) -> StartedSpeechToTextRuntimeV1 {
+    retry_speech_to_text_runtime_with_override_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        predecessor,
+        SpeechToTextBootstrapOverrideV1::None,
+        true,
+        None,
+    )
+}
+
+pub(super) fn retry_speech_to_text_runtime_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    predecessor: StartedSpeechToTextRuntimeV1,
+    bootstrap_override: SpeechToTextBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedSpeechToTextRuntimeV1 {
+    retry_speech_to_text_runtime_with_override_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        predecessor,
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn retry_speech_to_text_runtime_with_override_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    predecessor: StartedSpeechToTextRuntimeV1,
+    bootstrap_override: SpeechToTextBootstrapOverrideV1,
+    wait_until_ready: bool,
+    test_stdio_capture_directory: Option<&Path>,
+) -> StartedSpeechToTextRuntimeV1 {
+    let reservation = managed_launch::load(supervisor, store, &predecessor.registration_id)
+        .expect("reload Speech-to-Text launch reservation");
+    launch_reserved_speech_to_text_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        AdmittedSpeechToTextRuntimeV1 {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        bootstrap_override,
+        wait_until_ready,
+        test_stdio_capture_directory,
+    )
+}
+
+pub(super) fn launch_speech_to_text_successor_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    runtime_dir: &Path,
+    predecessor: StartedSpeechToTextRuntimeV1,
+    bootstrap_override: SpeechToTextBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedSpeechToTextRuntimeV1 {
+    let binding = speech_to_text_storage_binding_v1(store, &predecessor.registration_id);
+    let issue = storage_successor::issue_after(&binding).expect("derive Speech-to-Text successor");
+    let (reservation, binding) = storage_successor::reserve(
+        supervisor,
+        store,
+        &predecessor.registration_id,
+        SPEECH_TO_TEXT_STORAGE_CAPABILITY_ID_V1,
+        issue,
+    )
+    .expect("reserve Speech-to-Text successor");
+    crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
+        .expect("provision Speech-to-Text successor");
+    launch_reserved_speech_to_text_runtime_v1(
+        supervisor,
+        store,
+        runtime_dir,
+        reservation,
+        AdmittedSpeechToTextRuntimeV1 {
+            registration_id: predecessor.registration_id,
+            capability_ids: predecessor.capability_ids,
+        },
+        bootstrap_override,
+        false,
+        Some(test_stdio_capture_directory),
+    )
 }
 
 pub(super) fn restart_speech_to_text_runtime_v1(
@@ -169,7 +309,7 @@ pub(super) fn restart_speech_to_text_runtime_v1(
     .expect("reserve Speech-to-Text successor");
     crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
         .expect("provision Speech-to-Text successor");
-    let successor = start_reserved_speech_to_text_runtime_v1(
+    let successor = launch_reserved_speech_to_text_runtime_v1(
         supervisor,
         store,
         runtime_dir,
@@ -178,18 +318,25 @@ pub(super) fn restart_speech_to_text_runtime_v1(
             registration_id: predecessor.registration_id,
             capability_ids: predecessor.capability_ids,
         },
+        SpeechToTextBootstrapOverrideV1::None,
+        true,
+        None,
     );
     assert_eq!(successor.runtime_generation, previous_generation + 1);
     assert_ne!(successor.runtime_instance_id, previous_instance);
     successor
 }
 
-fn start_reserved_speech_to_text_runtime_v1(
+#[allow(clippy::too_many_arguments)]
+fn launch_reserved_speech_to_text_runtime_v1(
     supervisor: &ManagedRuntimeSupervisor,
     store: &SqliteControlStore,
     runtime_dir: &Path,
     reservation: managed_launch::ManagedLaunchReservation,
     admitted: AdmittedSpeechToTextRuntimeV1,
+    bootstrap_override: SpeechToTextBootstrapOverrideV1,
+    wait_until_ready: bool,
+    test_stdio_capture_directory: Option<&Path>,
 ) -> StartedSpeechToTextRuntimeV1 {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
@@ -199,7 +346,7 @@ fn start_reserved_speech_to_text_runtime_v1(
         .expect("Speech-to-Text Storage topology");
     let vault =
         vault_status::read_current(store, &supervisor.relay_port()).expect("live Vault status");
-    let storage = crate::platform::storage::topology::to_managed_runtime_configuration(
+    let mut storage = crate::platform::storage::topology::to_managed_runtime_configuration(
         &topology,
         &binding,
         store.snapshot().instance_id(),
@@ -207,6 +354,30 @@ fn start_reserved_speech_to_text_runtime_v1(
         vault.hpke_public_key_x25519(),
     )
     .expect("Speech-to-Text Storage configuration");
+    let mut settings = SettingsSnapshotV1 {
+        target_id: admitted.registration_id.clone(),
+        revision: 1,
+        values: Vec::new(),
+    };
+    let include_storage = match bootstrap_override {
+        SpeechToTextBootstrapOverrideV1::None
+        | SpeechToTextBootstrapOverrideV1::MissingSettings => true,
+        SpeechToTextBootstrapOverrideV1::DriftedSettingsRevision => {
+            settings.revision = 2;
+            true
+        }
+        SpeechToTextBootstrapOverrideV1::MissingStorage => false,
+        SpeechToTextBootstrapOverrideV1::StaleStorageFence => {
+            storage.credential_revision = storage.credential_revision.saturating_add(1);
+            true
+        }
+        SpeechToTextBootstrapOverrideV1::StopVaultAfterConfiguration => {
+            supervisor
+                .stop(vault_binding::VAULT_PROCESS_ID)
+                .expect("stop Vault after Speech-to-Text configuration");
+            true
+        }
+    };
     let configuration = ManagedEngineRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: SPEECH_TO_TEXT_OWNER_V1.to_owned(),
@@ -214,39 +385,63 @@ fn start_reserved_speech_to_text_runtime_v1(
         runtime_instance_id: runtime_instance_id.clone(),
         runtime_generation,
         grant_epoch,
-        storage: Some(storage),
+        storage: include_storage.then_some(storage),
         event_hub_endpoint: String::new(),
         event_credential_revision: 0,
         settings_revision: 1,
         logical_human_owner_id: SPEECH_TO_TEXT_LOGICAL_OWNER_ID_V1.to_owned(),
         runtime_artifacts: Vec::new(),
     };
-    managed_launch::start_reserved_engine(
+    if let Some(directory) = test_stdio_capture_directory {
+        unsafe {
+            std::env::set_var(
+                crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+                directory,
+            );
+        }
+    }
+    let started = managed_launch::start_reserved_engine(
         supervisor,
         runtime_dir,
         reservation,
         configuration,
-        SettingsSnapshotV1 {
-            target_id: admitted.registration_id.clone(),
-            revision: 1,
-            values: Vec::new(),
-        }
-        .encode_to_vec(),
+        if matches!(
+            bootstrap_override,
+            SpeechToTextBootstrapOverrideV1::MissingSettings
+        ) {
+            Vec::new()
+        } else {
+            settings.encode_to_vec()
+        },
         &[],
-    )
-    .expect("start managed Speech-to-Text engine");
-    supervisor
-        .wait_until_ready(&admitted.registration_id)
-        .unwrap_or_else(|error| {
-            panic!(
-                "Speech-to-Text readiness: {error}; last_failure={:?}",
-                supervisor.last_failure(&admitted.registration_id)
-            )
-        });
+    );
+    if matches!(
+        bootstrap_override,
+        SpeechToTextBootstrapOverrideV1::MissingSettings
+            | SpeechToTextBootstrapOverrideV1::MissingStorage
+    ) {
+        assert!(
+            started.is_err(),
+            "Kernel must deny incomplete Speech-to-Text bootstrap"
+        );
+    } else {
+        started.expect("start managed Speech-to-Text engine");
+    }
+    if wait_until_ready {
+        supervisor
+            .wait_until_ready(&admitted.registration_id)
+            .unwrap_or_else(|error| {
+                panic!(
+                    "Speech-to-Text readiness: {error}; last_failure={:?}",
+                    supervisor.last_failure(&admitted.registration_id)
+                )
+            });
+    }
     StartedSpeechToTextRuntimeV1 {
         registration_id: admitted.registration_id,
         runtime_instance_id,
         runtime_generation,
+        grant_epoch,
         capability_ids: admitted.capability_ids,
     }
 }

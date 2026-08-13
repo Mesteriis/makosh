@@ -56,6 +56,7 @@ impl CommunicationBulkActionPersistenceV1 {
         {
             return Err(BulkDeliveryPersistenceErrorV1::InvalidInput);
         }
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let batch = sqlx::query(
             "SELECT state_revision,
                     COUNT(*) FILTER (WHERE targets.state = 3) AS accepted_count,
@@ -70,7 +71,7 @@ impl CommunicationBulkActionPersistenceV1 {
         )
         .bind(logical_owner_id)
         .bind(batch_id.as_slice())
-        .fetch_optional(&self.pool)
+        .fetch_optional(&mut *transaction)
         .await
         .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?
         .ok_or(BulkDeliveryPersistenceErrorV1::NotFound)?;
@@ -102,7 +103,7 @@ impl CommunicationBulkActionPersistenceV1 {
         .bind(batch_id.as_slice())
         .bind(i16::try_from(start).map_err(|_| BulkDeliveryPersistenceErrorV1::InvalidInput)?)
         .bind(i64::from(limit) + 1)
-        .fetch_all(&self.pool)
+        .fetch_all(&mut *transaction)
         .await
         .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
         let has_more = rows.len() > usize::from(limit);
@@ -115,13 +116,18 @@ impl CommunicationBulkActionPersistenceV1 {
         } else {
             None
         };
-        Ok(BulkDeliveryStatusPageV1 {
+        let page = BulkDeliveryStatusPageV1 {
             batch_id,
             state,
             state_revision,
             targets,
             next_cursor,
-        })
+        };
+        transaction
+            .commit()
+            .await
+            .map_err(|_| BulkDeliveryPersistenceErrorV1::StorageUnavailable)?;
+        Ok(page)
     }
 }
 

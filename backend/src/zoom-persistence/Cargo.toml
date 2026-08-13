@@ -1,0 +1,15 @@
+[package]
+name = "makosh-zoom-persistence"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[package.metadata.makosh]
+role = "integration"
+owner = "zoom"
+surface = "persistence"
+[dependencies]
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+sha2 = { version = "=0.11.0", default-features = false }
+sqlx = { version = "=0.9.0", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring"] }

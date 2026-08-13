@@ -1,25 +1,22 @@
-import { useQuery } from '@tanstack/vue-query'
-import { fetchProjects, fetchProjectDetail } from '../api/projects'
-import type { ProjectSummary, ProjectDetail } from '../types/project'
+import { computed } from 'vue'
+import { useProjectsStore } from '../stores/projects'
 
 export function useProjectsQuery() {
-  return useQuery<ProjectSummary[]>({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const response = await fetchProjects(25)
-      return response.items
-    }
-  })
+  const store = useProjectsStore()
+  return {
+    data: computed(() => store.projects),
+    error: computed(() => store.error ? new Error(store.error) : null),
+    isLoading: computed(() => store.isLoading),
+    refetch: store.loadAll
+  }
 }
 
-export function useProjectQuery(projectId: string | null) {
-  return useQuery<ProjectDetail | null>({
-    queryKey: ['project', projectId],
-    queryFn: async () => {
-      if (!projectId) return null
-      const detail = await fetchProjectDetail(projectId)
-      return detail
-    },
-    enabled: !!projectId
-  })
+export function useProjectQuery() {
+  const store = useProjectsStore()
+  return {
+    data: computed(() => store.selectedProject),
+    outcomes: computed(() => store.outcomes),
+    references: computed(() => store.references),
+    isLoading: computed(() => store.isLoading)
+  }
 }

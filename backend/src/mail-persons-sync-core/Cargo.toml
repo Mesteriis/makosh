@@ -1,0 +1,22 @@
+[package]
+name = "makosh-mail-persons-sync-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[package.metadata.makosh]
+role = "workflow"
+owner = "mail_persons_sync"
+surface = "implementation"
+
+[dependencies]
+makosh-mail-address-book-contract = { path = "../mail-address-book-contract" }
+makosh-mail-persons-sync-api = { path = "../mail-persons-sync-api" }
+makosh-persons-api = { path = "../persons-api" }
+sha2 = { version = "=0.11.0", default-features = false }
+
+[dev-dependencies]
+prost-types = "=0.14.4"

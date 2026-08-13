@@ -1,0 +1,26 @@
+[package]
+name = "makosh-obligations-assembly"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "makosh-obligations-assembly"
+path = "src/main.rs"
+
+[package.metadata.makosh]
+role = "domain"
+owner = "obligations"
+surface = "assembly"
+
+[dependencies]
+makosh-obligations-persistence = { path = "../obligations-persistence" }
+makosh-obligations-runtime = { path = "../obligations-runtime" }
+makosh-runtime-protocol = { path = "../platform/runtime_protocol" }
+makosh-storage-protocol = { path = "../platform/storage/protocol" }
+prost = "=0.14.4"
+serde = { version = "=1.0.228", default-features = false, features = ["derive", "std"] }
+serde_json = "=1.0.150"

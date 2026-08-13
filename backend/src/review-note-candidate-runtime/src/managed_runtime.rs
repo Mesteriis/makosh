@@ -34,11 +34,14 @@ use makosh_storage_vault::{
 };
 
 use crate::{
-    client_port::{ReviewNoteCandidateClientRuntimeContextV1, decide_payload_v1, get_payload_v1},
+    client_port::{
+        ReviewNoteCandidateClientRuntimeContextV1, decide_payload_v1, get_payload_v1,
+        list_payload_v1,
+    },
     client_realtime::{
         ReviewNoteCandidateClientRealtimeErrorV1, ReviewNoteCandidateClientRealtimePublisherV1,
     },
-    contracts::{command_contract_v1, query_contract_v1},
+    contracts::{command_contract_v1, list_contract_v1, query_contract_v1},
     event_outbox::{
         ReviewNoteCandidateEventRelayErrorV1, relay_review_note_candidate_outbox_once_v1,
     },
@@ -415,6 +418,16 @@ async fn dispatch_client(
         } else if request.contract.as_ref() == Some(&query_contract_v1()) {
             (
                 get_payload_v1(
+                    persistence,
+                    &admission.logical_human_owner_id,
+                    &request.request_payload,
+                )
+                .await,
+                true,
+            )
+        } else if request.contract.as_ref() == Some(&list_contract_v1()) {
+            (
+                list_payload_v1(
                     persistence,
                     &admission.logical_human_owner_id,
                     &request.request_payload,

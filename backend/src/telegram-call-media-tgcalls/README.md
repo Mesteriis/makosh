@@ -17,6 +17,18 @@ Xcode version other than the version pinned by Telegram-iOS, altered upstream
 commits, altered tgcalls license bytes, or altered Bazel bytes. Its output
 contains the dylib, the upstream LGPL-3.0 license and a provenance manifest.
 
+On the pinned Xcode release toolchain, the same release build can also emit the
+real CoreAudio conformance binary without making the bridge development-only:
+
+```sh
+backend/scripts/build-telegram-tgcalls-bridge-macos.sh \
+  --output-dir /absolute/new/release-with-audio-conformance \
+  --audio-conformance
+```
+
+This profile keeps `release_eligible: true`; the probe remains a separate test
+artifact and is never referenced by Telegram assembly.
+
 For development-only CoreAudio conformance, the same exact source, dependency,
 license and Bazel pins can build a separate test binary on the active Xcode:
 

@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package makosh.organizations.client.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+enum OrganizationStateV1 {
+  ORGANIZATION_STATE_UNSPECIFIED = 0;
+  ORGANIZATION_STATE_ACTIVE = 1;
+  ORGANIZATION_STATE_ARCHIVED = 2;
+}
+
+enum OrganizationSourceStateV1 {
+  ORGANIZATION_SOURCE_STATE_UNSPECIFIED = 0;
+  ORGANIZATION_SOURCE_STATE_ACTIVE = 1;
+  ORGANIZATION_SOURCE_STATE_REMOVED = 2;
+}
+
+message OrganizationSourceV1 {
+  bytes source_id = 1;
+  string source_owner_id = 2;
+  string source_record_id = 3;
+  uint64 source_revision = 4;
+  bytes evidence_digest = 5;
+  OrganizationSourceStateV1 state = 6;
+  uint64 updated_at_organization_revision = 7;
+}
+
+message OrganizationV1 {
+  bytes organization_id = 1;
+  string logical_owner_id = 2;
+  string display_name = 3;
+  string legal_name = 4;
+  string description = 5;
+  string website = 6;
+  string industry = 7;
+  string country_code = 8;
+  OrganizationStateV1 state = 9;
+  uint64 organization_revision = 10;
+  TimestampV1 created_at = 11;
+  TimestampV1 updated_at = 12;
+}
+
+message CreateOrganizationRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  string display_name = 3;
+  string legal_name = 4;
+  string description = 5;
+  string website = 6;
+  string industry = 7;
+  string country_code = 8;
+  TimestampV1 created_at = 9;
+}
+
+message UpdateOrganizationRequestV1 {
+  bytes operation_id = 1;
+  bytes organization_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_organization_revision = 4;
+  optional string display_name = 5;
+  optional string legal_name = 6;
+  optional string description = 7;
+  optional string website = 8;
+  optional string industry = 9;
+  optional string country_code = 10;
+  TimestampV1 updated_at = 11;
+}
+
+message SetOrganizationStateRequestV1 {
+  bytes operation_id = 1;
+  bytes organization_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_organization_revision = 4;
+  OrganizationStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddOrganizationSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes organization_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_organization_revision = 4;
+  string source_owner_id = 5;
+  string source_record_id = 6;
+  uint64 source_revision = 7;
+  bytes evidence_digest = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message RemoveOrganizationSourceRequestV1 {
+  bytes operation_id = 1;
+  bytes organization_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_organization_revision = 4;
+  bytes source_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message OrganizationMutationResultV1 {
+  bytes operation_id = 1;
+  OrganizationV1 organization = 2;
+}
+
+message GetOrganizationRequestV1 {
+  string logical_owner_id = 1;
+  bytes organization_id = 2;
+}
+
+message ListOrganizationsRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_organization_id = 2;
+  uint32 limit = 3;
+}
+
+message SearchOrganizationsRequestV1 {
+  string logical_owner_id = 1;
+  string query = 2;
+  bytes after_organization_id = 3;
+  uint32 limit = 4;
+}
+
+message ListOrganizationsResultV1 {
+  repeated OrganizationV1 organizations = 1;
+  bytes next_after_organization_id = 2;
+}
+
+message ListOrganizationSourcesRequestV1 {
+  string logical_owner_id = 1;
+  bytes organization_id = 2;
+  bytes after_source_id = 3;
+  uint32 limit = 4;
+}
+
+message ListOrganizationSourcesResultV1 {
+  repeated OrganizationSourceV1 sources = 1;
+  bytes next_after_source_id = 2;
+}
+
+// Public lifecycle event excludes profile and source provenance fields.
+message OrganizationChangedV1 {
+  bytes event_id = 1;
+  bytes organization_id = 2;
+  string logical_owner_id = 3;
+  uint64 organization_revision = 4;
+  OrganizationStateV1 state = 5;
+  TimestampV1 occurred_at = 6;
+}
+
+service OrganizationsCommandService {
+  rpc Create(CreateOrganizationRequestV1) returns (OrganizationMutationResultV1);
+  rpc Update(UpdateOrganizationRequestV1) returns (OrganizationMutationResultV1);
+  rpc SetState(SetOrganizationStateRequestV1) returns (OrganizationMutationResultV1);
+  rpc AddSource(AddOrganizationSourceRequestV1) returns (OrganizationMutationResultV1);
+  rpc RemoveSource(RemoveOrganizationSourceRequestV1) returns (OrganizationMutationResultV1);
+}
+
+service OrganizationsQueryService {
+  rpc Get(GetOrganizationRequestV1) returns (OrganizationV1);
+  rpc List(ListOrganizationsRequestV1) returns (ListOrganizationsResultV1);
+  rpc Search(SearchOrganizationsRequestV1) returns (ListOrganizationsResultV1);
+  rpc ListSources(ListOrganizationSourcesRequestV1) returns (ListOrganizationSourcesResultV1);
+}

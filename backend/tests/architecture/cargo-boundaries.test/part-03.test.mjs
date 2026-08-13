@@ -18,12 +18,12 @@ import { canonicalPolicyForTests } from '../support/canonical-policy.mjs';
 
 import { eventsProtocol, metadata } from './support.mjs';
 
-test('rejects a singular blocked domain hidden in metadata owner', () => {
+test('rejects a singular retired Contacts domain hidden in metadata owner', () => {
   const packages = [
     kernel(),
     workspacePackage('makosh-generic-runtime', {
       role: 'integration',
-      owner: 'project',
+      owner: 'contact',
       surface: 'runtime',
     }),
   ];
@@ -154,17 +154,17 @@ test('allows a use-case workflow to assemble AI context from explicit owner cont
       owner: 'ai',
       surface: 'contract',
     }),
-    workspacePackage('makosh-contacts-contracts', {
+    workspacePackage('makosh-persons-contracts', {
       role: 'domain',
-      owner: 'contacts',
+      owner: 'persons',
       surface: 'contract',
     }),
     workspacePackage(
-      'makosh-contact-summary-workflow',
-      { role: 'workflow', owner: 'contact_summary', surface: 'runtime' },
+      'makosh-person-summary-workflow',
+      { role: 'workflow', owner: 'person_summary', surface: 'runtime' },
       [
         dependency('makosh-ai-contracts'),
-        dependency('makosh-contacts-contracts'),
+        dependency('makosh-persons-contracts'),
       ],
     ),
   ];
@@ -189,10 +189,10 @@ test('rejects the blocked projection role independently of its owner name', () =
 
 
 
-test('rejects singular aliases of blocked domains in package names', () => {
+test('rejects singular aliases of the retired Contacts domain in package names', () => {
   const packages = [
     kernel(),
-    workspacePackage('makosh-project-runtime', {
+    workspacePackage('makosh-contact-runtime', {
       role: 'platform',
       owner: 'events',
       surface: 'runtime',
@@ -205,24 +205,24 @@ test('rejects singular aliases of blocked domains in package names', () => {
 
 
 test('allows a workflow to use contracts but not implementations', () => {
-  const contactsContract = workspacePackage('makosh-contacts-contracts', {
+  const personsContract = workspacePackage('makosh-persons-contracts', {
     role: 'domain',
-    owner: 'contacts',
+    owner: 'persons',
     surface: 'contract',
   });
-  const contactsRuntime = workspacePackage('makosh-contacts-runtime', {
+  const personsRuntime = workspacePackage('makosh-persons-runtime', {
     role: 'domain',
-    owner: 'contacts',
+    owner: 'persons',
     surface: 'runtime',
   });
 
   const allowed = [
     kernel(),
-    contactsContract,
+    personsContract,
     workspacePackage(
-      'makosh-contact-import-workflow',
-      { role: 'workflow', owner: 'contact_import', surface: 'runtime' },
-      [dependency('makosh-contacts-contracts')],
+      'makosh-person-import-workflow',
+      { role: 'workflow', owner: 'person_import', surface: 'runtime' },
+      [dependency('makosh-persons-contracts')],
     ),
   ];
   assert.deepEqual(validateCargoMetadata(canonicalPolicyForTests(), metadata(allowed)), []);
@@ -248,11 +248,11 @@ test('allows a workflow to use contracts but not implementations', () => {
 
   const forbidden = [
     kernel(),
-    contactsRuntime,
+    personsRuntime,
     workspacePackage(
-      'makosh-contact-import-workflow',
-      { role: 'workflow', owner: 'contact_import', surface: 'runtime' },
-      [dependency('makosh-contacts-runtime')],
+      'makosh-person-import-workflow',
+      { role: 'workflow', owner: 'person_import', surface: 'runtime' },
+      [dependency('makosh-persons-runtime')],
     ),
   ];
   assert.ok(codes(validateCargoMetadata(canonicalPolicyForTests(), metadata(forbidden))).has('implementation_dependency'));
@@ -305,13 +305,13 @@ test('keeps a contract independent from its owner runtime and persistence', () =
 
 test('keeps domain implementation independent from persistence while runtime composes both', () => {
   const implementation = workspacePackage(
-    'makosh-contacts-implementation',
-    { role: 'domain', owner: 'contacts', surface: 'implementation' },
-    [dependency('makosh-contacts-persistence')],
+    'makosh-persons-implementation',
+    { role: 'domain', owner: 'persons', surface: 'implementation' },
+    [dependency('makosh-persons-persistence')],
   );
-  const persistence = workspacePackage('makosh-contacts-persistence', {
+  const persistence = workspacePackage('makosh-persons-persistence', {
     role: 'domain',
-    owner: 'contacts',
+    owner: 'persons',
     surface: 'persistence',
   });
   const forbidden = [kernel(), implementation, persistence];
@@ -320,16 +320,16 @@ test('keeps domain implementation independent from persistence while runtime com
   const allowed = [
     kernel(),
     workspacePackage(
-      'makosh-contacts-runtime',
-      { role: 'domain', owner: 'contacts', surface: 'runtime' },
+      'makosh-persons-runtime',
+      { role: 'domain', owner: 'persons', surface: 'runtime' },
       [
-        dependency('makosh-contacts-implementation'),
-        dependency('makosh-contacts-persistence'),
+        dependency('makosh-persons-implementation'),
+        dependency('makosh-persons-persistence'),
       ],
     ),
-    workspacePackage('makosh-contacts-implementation', {
+    workspacePackage('makosh-persons-implementation', {
       role: 'domain',
-      owner: 'contacts',
+      owner: 'persons',
       surface: 'implementation',
     }),
     persistence,
@@ -436,8 +436,8 @@ for (const sqlClient of ['sqlx']) {
     const forbidden = [
       kernel(),
       workspacePackage(
-        'makosh-contacts-runtime',
-        { role: 'domain', owner: 'contacts', surface: 'runtime' },
+        'makosh-persons-runtime',
+        { role: 'domain', owner: 'persons', surface: 'runtime' },
         [dependency(sqlClient)],
       ),
     ];
@@ -446,8 +446,8 @@ for (const sqlClient of ['sqlx']) {
     const allowed = [
       kernel(),
       workspacePackage(
-        'makosh-contacts-persistence',
-        { role: 'domain', owner: 'contacts', surface: 'persistence' },
+        'makosh-persons-persistence',
+        { role: 'domain', owner: 'persons', surface: 'persistence' },
         [dependency(sqlClient)],
       ),
     ];

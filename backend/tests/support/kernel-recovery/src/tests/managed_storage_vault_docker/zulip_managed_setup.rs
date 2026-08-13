@@ -2,6 +2,7 @@
 
 use super::*;
 
+use makosh_kernel_control_store::SettingsInitialSnapshot;
 use makosh_vault_key_provider::WrappingKeyProvider;
 use makosh_vault_key_provider_file::FileWrappingKeyProvider;
 use makosh_vault_protocol::SecretClassV1;
@@ -14,8 +15,11 @@ use makosh_zulip_api::{
         ZulipCredentialBindingStateV1,
     },
 };
+use makosh_zulip_assembly::{
+    ZULIP_STORAGE_BUNDLE_REVISION_V7, zulip_storage_bundle_with_owner_rls_v7,
+};
 use makosh_zulip_core::credential_lease_purpose;
-use makosh_zulip_persistence::{ZULIP_STORAGE_BUNDLE_REVISION_V3, zulip_storage_bundle_v1};
+use makosh_zulip_delivery_intent_contract::ZULIP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
 use makosh_zulip_runtime::client_port::{decode_module_response, encode_module_request};
 use makosh_zulip_runtime::{
     admission::{
@@ -41,10 +45,23 @@ pub(super) struct AdmittedZulipRuntime {
     capability_ids: Vec<String>,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub(super) enum ZulipGrantProfileV1 {
     QueryOnly,
     CommandAndQuery,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub(super) enum ZulipBootstrapOverrideV1 {
+    None,
+    MissingSettings,
+    InvalidSettings,
+    MissingStorage,
+    MissingEventCapability,
+    MissingBlobCapability,
+    StaleStorageFence,
+    StaleVaultFence,
+    StaleEventFence,
 }
 
 #[derive(Clone)]
@@ -170,12 +187,12 @@ pub(super) fn admit_zulip_runtime(
             Some(Sha256::digest(&schema).into()),
         ))
         .expect("record Zulip release binding");
-    let bundle = zulip_storage_bundle_v1().encode_to_vec();
+    let bundle = zulip_storage_bundle_with_owner_rls_v7().encode_to_vec();
     store
         .record_platform_storage_bundle(
             &PlatformStorageBundleV1::new(
                 ZULIP_OWNER_ID,
-                u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V3),
+                u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V7),
                 Sha256::digest(&bundle).into(),
                 bundle,
             )
@@ -208,6 +225,7 @@ fn granted_capability_ids(grant_profile: ZulipGrantProfileV1) -> Vec<String> {
     }
     capability_ids.extend([
         ZULIP_CREDENTIALS_CAPABILITY_ID.to_owned(),
+        ZULIP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1.to_owned(),
         ZULIP_EVENTS_CAPABILITY_ID.to_owned(),
         ZulipClientContractV1::Query.capability_id().to_owned(),
         ZULIP_STORAGE_CAPABILITY_ID.to_owned(),
@@ -287,7 +305,7 @@ pub(super) fn prepare_zulip_runtime(
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
     let bundle = store
-        .platform_storage_bundle(ZULIP_OWNER_ID, u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V3))
+        .platform_storage_bundle(ZULIP_OWNER_ID, u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V7))
         .expect("read Zulip Storage bundle")
         .expect("Zulip Storage bundle");
     let binding = issue_managed(
@@ -299,7 +317,7 @@ pub(super) fn prepare_zulip_runtime(
         StorageBindingIssueV1::new(
             1,
             1,
-            u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V3),
+            u64::from(ZULIP_STORAGE_BUNDLE_REVISION_V7),
             *bundle.digest(),
         )
         .expect("Zulip Storage binding issue"),
@@ -317,9 +335,35 @@ pub(super) fn start_zulip_runtime(
     runtime_dir: &Path,
     admitted: AdmittedZulipRuntime,
     realm_url: &str,
+    test_stdio_capture_directory: Option<&Path>,
 ) -> StartedZulipRuntime {
     let reservation = managed_launch::load(supervisor, store, &admitted.registration_id)
         .expect("load Zulip managed launch reservation");
+    launch_reserved_zulip_runtime_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        reservation,
+        admitted,
+        realm_url,
+        ZulipBootstrapOverrideV1::None,
+        test_stdio_capture_directory,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn launch_reserved_zulip_runtime_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    reservation: managed_launch::ManagedLaunchReservation,
+    admitted: AdmittedZulipRuntime,
+    realm_url: &str,
+    bootstrap_override: ZulipBootstrapOverrideV1,
+    test_stdio_capture_directory: Option<&Path>,
+) -> StartedZulipRuntime {
     let runtime_instance_id = reservation.runtime_instance_id().to_owned();
     let runtime_generation = reservation.runtime_generation();
     let grant_epoch = reservation.grant_epoch();
@@ -331,7 +375,7 @@ pub(super) fn start_zulip_runtime(
         crate::platform::storage::topology::current(store).expect("read Storage topology");
     let vault = vault_status::read_current(store, &supervisor.relay_port())
         .expect("read live Vault status");
-    let storage = crate::platform::storage::topology::to_managed_runtime_configuration(
+    let mut storage = crate::platform::storage::topology::to_managed_runtime_configuration(
         &topology,
         &binding,
         store.snapshot().instance_id(),
@@ -339,10 +383,30 @@ pub(super) fn start_zulip_runtime(
         vault.hpke_public_key_x25519(),
     )
     .expect("build Zulip Storage configuration");
+    let include_storage = match bootstrap_override {
+        ZulipBootstrapOverrideV1::MissingStorage => false,
+        ZulipBootstrapOverrideV1::StaleStorageFence => {
+            storage.credential_revision = storage.credential_revision.saturating_add(1);
+            true
+        }
+        ZulipBootstrapOverrideV1::StaleVaultFence => {
+            storage.vault_runtime_generation = storage.vault_runtime_generation.saturating_add(1);
+            true
+        }
+        _ => true,
+    };
     let events = store
         .platform_event_hub_topology()
         .expect("read Event Hub topology")
         .expect("Event Hub topology");
+    let event_credential_revision = if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::StaleEventFence
+    ) {
+        events.credential_revision().saturating_add(1)
+    } else {
+        events.credential_revision()
+    };
     let configuration = makosh_runtime_protocol::v1::ManagedIntegrationRuntimeConfigurationV1 {
         major: 1,
         logical_owner_id: ZULIP_OWNER_ID.to_owned(),
@@ -350,31 +414,102 @@ pub(super) fn start_zulip_runtime(
         runtime_instance_id: runtime_instance_id.clone(),
         runtime_generation,
         grant_epoch,
-        storage: Some(storage),
+        storage: include_storage.then_some(storage),
         event_hub_endpoint: events.nats_endpoint().to_owned(),
-        event_credential_revision: events.credential_revision(),
+        event_credential_revision,
         configuration_instance_id: ZULIP_ACCOUNT_ID.to_owned(),
         runtime_artifacts: Vec::new(),
         integration_state_root: None,
         configuration_instances: Vec::new(),
         logical_human_owner_id: "owner-1".to_owned(),
     };
-    managed_launch::start_reserved_integration(
+    let mut settings_snapshot_bytes =
+        current_zulip_settings_snapshot(store, &admitted.registration_id, realm_url);
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::InvalidSettings
+    ) {
+        let mut settings_snapshot = makosh_runtime_protocol::v1::SettingsSnapshotV1::decode(
+            settings_snapshot_bytes.as_slice(),
+        )
+        .expect("decode current Zulip Settings snapshot");
+        settings_snapshot.values[0]
+            .value
+            .as_mut()
+            .expect("Zulip email setting")
+            .value =
+            Some(makosh_runtime_protocol::v1::setting_value_v1::Value::StringValue(" ".to_owned()));
+        settings_snapshot_bytes = settings_snapshot.encode_to_vec();
+    }
+    let mut granted_capability_ids = admitted.capability_ids.clone();
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::MissingEventCapability
+    ) {
+        granted_capability_ids.retain(|capability| capability != ZULIP_EVENTS_CAPABILITY_ID);
+    }
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::MissingBlobCapability
+    ) {
+        granted_capability_ids.retain(|capability| capability != ZULIP_BLOB_CAPABILITY_ID);
+    }
+    if let Some(directory) = test_stdio_capture_directory {
+        unsafe {
+            std::env::set_var(
+                crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+                directory,
+            );
+        }
+    }
+    let started = managed_launch::start_reserved_integration(
         supervisor,
         kernel_data,
         runtime_dir,
         reservation,
         managed_launch::ManagedIntegrationLaunchConfiguration {
             runtime: configuration,
-            settings_snapshot_bytes: current_zulip_settings_snapshot(
-                store,
-                &admitted.registration_id,
-                realm_url,
-            ),
-            granted_capability_ids: &admitted.capability_ids,
+            settings_snapshot_bytes: if matches!(
+                bootstrap_override,
+                ZulipBootstrapOverrideV1::MissingSettings
+            ) {
+                Vec::new()
+            } else {
+                settings_snapshot_bytes
+            },
+            granted_capability_ids: &granted_capability_ids,
         },
-    )
-    .expect("start managed Zulip integration");
+    );
+    if let Some(directory) = test_stdio_capture_directory {
+        let deadline = std::time::Instant::now() + Duration::from_secs(2);
+        while std::fs::read_dir(directory)
+            .map(|entries| entries.flatten().count())
+            .unwrap_or(0)
+            < 2
+            && std::time::Instant::now() < deadline
+        {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        unsafe {
+            std::env::remove_var(
+                crate::runtime::managed::execution::MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV,
+            );
+        }
+    }
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::MissingSettings
+            | ZulipBootstrapOverrideV1::MissingStorage
+            | ZulipBootstrapOverrideV1::MissingEventCapability
+            | ZulipBootstrapOverrideV1::MissingBlobCapability
+    ) {
+        assert!(
+            started.is_err(),
+            "Kernel must deny incomplete Zulip bootstrap: {bootstrap_override:?}"
+        );
+    } else {
+        started.expect("start managed Zulip integration");
+    }
     StartedZulipRuntime {
         registration_id: admitted.registration_id,
         runtime_instance_id,
@@ -384,6 +519,74 @@ pub(super) fn start_zulip_runtime(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+pub(super) fn launch_zulip_successor_without_ready_v1(
+    supervisor: &ManagedRuntimeSupervisor,
+    store: &SqliteControlStore,
+    kernel_data: &Path,
+    runtime_dir: &Path,
+    predecessor: &StartedZulipRuntime,
+    realm_url: &str,
+    bootstrap_override: ZulipBootstrapOverrideV1,
+    test_stdio_capture_directory: &Path,
+) -> StartedZulipRuntime {
+    let mut approved_capability_ids = predecessor.capability_ids.clone();
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::MissingEventCapability
+    ) {
+        approved_capability_ids.retain(|capability| capability != ZULIP_EVENTS_CAPABILITY_ID);
+    }
+    if matches!(
+        bootstrap_override,
+        ZulipBootstrapOverrideV1::MissingBlobCapability
+    ) {
+        approved_capability_ids.retain(|capability| capability != ZULIP_BLOB_CAPABILITY_ID);
+    }
+    crate::modules::registration::registry::transition_after_owner_authorization(
+        store,
+        &predecessor.registration_id,
+        makosh_kernel_control_store::ModuleRegistrationState::Suspended,
+    )
+    .expect("suspend Zulip grants before successor");
+    crate::modules::registration::registry::approve_after_owner_authorization(
+        store,
+        &predecessor.registration_id,
+        &approved_capability_ids,
+    )
+    .expect("approve exact Zulip successor grants");
+    let predecessor_binding = store
+        .platform_storage_binding(&predecessor.registration_id, ZULIP_STORAGE_CAPABILITY_ID)
+        .expect("read predecessor Zulip Storage binding")
+        .expect("predecessor Zulip Storage binding");
+    let issue = storage_successor::issue_after(&predecessor_binding)
+        .expect("derive Zulip successor Storage fences");
+    let (reservation, binding) = storage_successor::reserve(
+        supervisor,
+        store,
+        &predecessor.registration_id,
+        ZULIP_STORAGE_CAPABILITY_ID,
+        issue,
+    )
+    .expect("reserve successor Zulip launch and Storage binding");
+    crate::platform::storage::provisioning::apply_reserved_binding(supervisor, store, &binding)
+        .expect("provision successor Zulip Storage binding");
+    launch_reserved_zulip_runtime_v1(
+        supervisor,
+        store,
+        kernel_data,
+        runtime_dir,
+        reservation,
+        AdmittedZulipRuntime {
+            registration_id: predecessor.registration_id.clone(),
+            capability_ids: predecessor.capability_ids.clone(),
+        },
+        realm_url,
+        bootstrap_override,
+        Some(test_stdio_capture_directory),
+    )
+}
+
 pub(super) fn restart_zulip_runtime(
     supervisor: &ManagedRuntimeSupervisor,
     store: &SqliteControlStore,
@@ -391,6 +594,7 @@ pub(super) fn restart_zulip_runtime(
     runtime_dir: &Path,
     predecessor: &StartedZulipRuntime,
     realm_url: &str,
+    test_stdio_capture_directory: Option<&Path>,
 ) -> StartedZulipRuntime {
     let predecessor_generation = predecessor.runtime_generation;
     let predecessor_binding = store
@@ -419,6 +623,7 @@ pub(super) fn restart_zulip_runtime(
             capability_ids: predecessor.capability_ids.clone(),
         },
         realm_url,
+        test_stdio_capture_directory,
     );
     assert_eq!(
         successor.runtime_generation,
@@ -429,7 +634,7 @@ pub(super) fn restart_zulip_runtime(
 }
 
 pub(super) fn zulip_settings_snapshot(
-    registration_id: &str,
+    configuration_instance_id: &str,
     revision: u64,
     realm_url: &str,
 ) -> makosh_runtime_protocol::v1::SettingsSnapshotV1 {
@@ -445,16 +650,16 @@ pub(super) fn zulip_settings_snapshot(
     }
 
     makosh_runtime_protocol::v1::SettingsSnapshotV1 {
-        target_id: registration_id.to_owned(),
+        target_id: configuration_instance_id.to_owned(),
         revision,
         values: vec![
             entry(
-                "zulip.account_id",
-                Value::StringValue(ZULIP_ACCOUNT_ID.to_owned()),
-            ),
-            entry(
                 "zulip.account_email",
                 Value::StringValue("managed-account@example.test".to_owned()),
+            ),
+            entry(
+                "zulip.account_id",
+                Value::StringValue(ZULIP_ACCOUNT_ID.to_owned()),
             ),
             entry("zulip.realm_url", Value::StringValue(realm_url.to_owned())),
         ],
@@ -466,27 +671,29 @@ fn current_zulip_settings_snapshot(
     registration_id: &str,
     realm_url: &str,
 ) -> Vec<u8> {
-    let binding = store
-        .settings_schema_binding(registration_id)
-        .expect("read Zulip Settings binding")
-        .expect("Zulip Settings binding");
-    if binding.desired_revision() == 0 {
-        let snapshot = zulip_settings_snapshot(registration_id, 1, realm_url).encode_to_vec();
-        crate::modules::settings::mutation::commit_after_owner_authorization(
-            store,
-            registration_id,
-            0,
-            &snapshot,
-        )
-        .expect("commit initial Zulip Settings");
+    let target = store
+        .settings_configuration_target(registration_id, ZULIP_ACCOUNT_ID)
+        .expect("read Zulip Settings target");
+    if target.is_none() {
+        let snapshot = zulip_settings_snapshot(ZULIP_ACCOUNT_ID, 1, realm_url).encode_to_vec();
+        store
+            .materialize_initial_settings_snapshot(&SettingsInitialSnapshot {
+                registration_id: registration_id.to_owned(),
+                configuration_instance_id: ZULIP_ACCOUNT_ID.to_owned(),
+                created_operation_id: Some([0x7a; 16]),
+                snapshot_bytes: snapshot.clone(),
+                complete: true,
+            })
+            .expect("materialize initial Zulip Settings target");
         for acknowledgement in [
             crate::modules::settings::application::ApplyAcknowledgement::ValidationAccepted,
             crate::modules::settings::application::ApplyAcknowledgement::ApplyStarted,
             crate::modules::settings::application::ApplyAcknowledgement::RuntimeApplied,
         ] {
-            crate::modules::settings::application::acknowledge(
+            crate::modules::settings::application::acknowledge_target(
                 store,
                 registration_id,
+                ZULIP_ACCOUNT_ID,
                 1,
                 acknowledgement,
             )
@@ -494,11 +701,12 @@ fn current_zulip_settings_snapshot(
         }
         return snapshot;
     }
+    let target = target.expect("existing Zulip Settings target");
     let (revision, snapshot) = store
-        .desired_settings_snapshot(registration_id)
-        .expect("read desired Zulip Settings")
+        .desired_settings_snapshot_for_target(registration_id, ZULIP_ACCOUNT_ID)
+        .expect("read desired Zulip Settings target")
         .expect("desired Zulip Settings");
-    assert_eq!(revision, binding.effective_revision());
+    assert_eq!(revision, target.effective_revision());
     snapshot
 }
 

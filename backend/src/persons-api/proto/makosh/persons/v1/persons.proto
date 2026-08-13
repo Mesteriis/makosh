@@ -1,0 +1,375 @@
+syntax = "proto3";
+
+package makosh.persons.v1;
+
+// Persons owns canonical people, owner-authored profiles, public source links,
+// and confirmed lineage. Provider protocol state and secret material stay in
+// the integration that issued the opaque public source identity.
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+message PersonProfileV1 {
+  optional string display_name = 1;
+  optional string given_name = 2;
+  optional string family_name = 3;
+  repeated string normalized_emails = 4;
+  repeated string normalized_phones = 5;
+}
+
+message ProviderSourceIdentityV1 {
+  bytes integration_public_id = 1;
+  bytes account_public_id = 2;
+  bytes provider_source_contact_public_id = 3;
+}
+
+message ProviderSourceClaimsV1 {
+  optional string display_name = 1;
+  repeated string normalized_emails = 2;
+  repeated string normalized_phones = 3;
+}
+
+message ProviderSourceProvenanceV1 {
+  uint64 source_revision = 1;
+  bytes source_digest = 2;
+  TimestampV1 observed_at = 3;
+}
+
+message DecisionProvenanceV1 {
+  bytes decision_id = 1;
+  bytes review_id = 2;
+  uint64 decision_revision = 3;
+  bytes decided_by_owner_device_id = 4;
+  TimestampV1 decided_at = 5;
+  bytes approved_action_digest = 6;
+}
+
+message ManualCreatePersonCommandV1 {
+  bytes command_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  PersonProfileV1 owner_profile = 4;
+  TimestampV1 created_at = 5;
+}
+
+message UpdatePersonOwnerProfileCommandV1 {
+  bytes command_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_person_revision = 4;
+  PersonProfileV1 owner_profile = 5;
+  TimestampV1 updated_at = 6;
+}
+
+message ObserveProviderSourceContactCommandV1 {
+  bytes command_id = 1;
+  string logical_owner_id = 2;
+  ProviderSourceIdentityV1 source = 3;
+  ProviderSourceClaimsV1 claims = 4;
+  ProviderSourceProvenanceV1 provenance = 5;
+}
+
+message UpdateProviderSourceContactCommandV1 {
+  bytes command_id = 1;
+  string logical_owner_id = 2;
+  ProviderSourceIdentityV1 source = 3;
+  ProviderSourceClaimsV1 claims = 4;
+  ProviderSourceProvenanceV1 provenance = 5;
+}
+
+message RemoveProviderSourceContactCommandV1 {
+  bytes command_id = 1;
+  string logical_owner_id = 2;
+  ProviderSourceIdentityV1 source = 3;
+  ProviderSourceProvenanceV1 provenance = 4;
+}
+
+message ConfirmAttachPersonSourceCommandV1 {
+  bytes command_id = 1;
+  bytes from_person_id = 2;
+  bytes to_person_id = 3;
+  string logical_owner_id = 4;
+  ProviderSourceIdentityV1 source = 5;
+  DecisionProvenanceV1 decision = 6;
+  uint64 expected_from_person_revision = 7;
+  uint64 expected_to_person_revision = 8;
+  uint64 expected_source_revision = 9;
+}
+
+message ConfirmDetachPersonSourceCommandV1 {
+  bytes command_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  ProviderSourceIdentityV1 source = 4;
+  DecisionProvenanceV1 decision = 5;
+  uint64 expected_person_revision = 6;
+  uint64 expected_source_revision = 7;
+  uint64 expected_detached_person_revision = 8;
+}
+
+message ConfirmMergePersonsCommandV1 {
+  bytes command_id = 1;
+  bytes source_person_id = 2;
+  bytes target_person_id = 3;
+  string logical_owner_id = 4;
+  DecisionProvenanceV1 decision = 5;
+  uint64 expected_source_person_revision = 6;
+  uint64 expected_target_person_revision = 7;
+}
+
+message SplitPersonSourceSelectionV1 {
+  ProviderSourceIdentityV1 source = 1;
+  uint64 expected_source_revision = 2;
+}
+
+message ConfirmSplitPersonCommandV1 {
+  bytes command_id = 1;
+  bytes merged_person_id = 2;
+  string logical_owner_id = 3;
+  bytes target_person_id = 4;
+  uint64 expected_merged_person_revision = 5;
+  uint64 expected_target_person_revision = 6;
+  repeated SplitPersonSourceSelectionV1 source_selection = 7;
+  repeated SplitProfileFactKindV1 profile_fact_selection = 8;
+  DecisionProvenanceV1 decision = 9;
+}
+
+message PersonsCommandV1 {
+  oneof command {
+    ManualCreatePersonCommandV1 manual_create = 1;
+    UpdatePersonOwnerProfileCommandV1 owner_profile_update = 2;
+    ObserveProviderSourceContactCommandV1 source_observe = 3;
+    UpdateProviderSourceContactCommandV1 source_update = 4;
+    RemoveProviderSourceContactCommandV1 source_remove = 5;
+    ConfirmAttachPersonSourceCommandV1 confirmed_attach = 6;
+    ConfirmDetachPersonSourceCommandV1 confirmed_detach = 7;
+    ConfirmMergePersonsCommandV1 confirmed_merge = 8;
+    ConfirmSplitPersonCommandV1 confirmed_split = 9;
+  }
+}
+
+message ReadPersonDirectoryRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_person_id = 2;
+  uint32 limit = 3;
+}
+
+message ReadPersonProfileRequestV1 {
+  string logical_owner_id = 1;
+  bytes person_id = 2;
+}
+
+message ReadPersonSourceLinksRequestV1 {
+  string logical_owner_id = 1;
+  bytes person_id = 2;
+  bytes after_source_link_id = 3;
+  uint32 limit = 4;
+}
+
+message PersonDirectoryEntryV1 {
+  bytes person_id = 1;
+  PersonLifecycleV1 lifecycle = 2;
+  uint64 person_revision = 3;
+  optional string display_name = 4;
+  uint32 source_count = 5;
+}
+
+message PersonDirectoryResultV1 {
+  repeated PersonDirectoryEntryV1 persons = 1;
+  bytes next_after_person_id = 2;
+}
+
+message PersonProfileResultV1 {
+  bytes person_id = 1;
+  string logical_owner_id = 2;
+  PersonLifecycleV1 lifecycle = 3;
+  uint64 person_revision = 4;
+  PersonProfileV1 owner_profile = 5;
+  TimestampV1 created_at = 6;
+  TimestampV1 updated_at = 7;
+}
+
+message PersonSourceLinkV1 {
+  bytes source_link_id = 1;
+  bytes person_id = 2;
+  ProviderSourceIdentityV1 source = 3;
+  ProviderSourceClaimsV1 claims = 4;
+  ProviderSourceProvenanceV1 provenance = 5;
+}
+
+message PersonSourceLinksResultV1 {
+  repeated PersonSourceLinkV1 source_links = 1;
+  bytes next_after_source_link_id = 2;
+}
+
+message PersonRevisionV1 {
+  bytes person_id = 1;
+  uint64 person_revision = 2;
+}
+
+message PersonCommandSucceededV1 {
+  bytes command_id = 1;
+  PersonChangeKindV1 change_kind = 2;
+  repeated bytes affected_person_ids = 3;
+  repeated PersonRevisionV1 resulting_person_revisions = 4;
+  string logical_owner_id = 5;
+  uint64 resulting_owner_revision = 6;
+}
+
+message PersonCommandRejectedV1 {
+  bytes command_id = 1;
+  PersonRejectCodeV1 code = 2;
+  string logical_owner_id = 3;
+  uint64 resulting_owner_revision = 4;
+}
+
+message PersonChangedEventV1 {
+  bytes event_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  PersonLifecycleV1 lifecycle = 4;
+  uint64 person_revision = 5;
+  PersonChangeKindV1 change_kind = 6;
+  TimestampV1 changed_at = 7;
+  uint64 resulting_owner_revision = 8;
+}
+
+message PersonProfileChangedEventV1 {
+  bytes event_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  uint64 person_revision = 4;
+  bytes profile_digest = 5;
+  TimestampV1 changed_at = 6;
+  uint64 resulting_owner_revision = 7;
+}
+
+message PersonSourceLinkChangedEventV1 {
+  bytes event_id = 1;
+  bytes person_id = 2;
+  string logical_owner_id = 3;
+  bytes source_link_id = 4;
+  ProviderSourceIdentityV1 source = 5;
+  SourceLinkChangeKindV1 change_kind = 6;
+  uint64 source_revision = 7;
+  bytes source_digest = 8;
+  TimestampV1 changed_at = 9;
+  bytes decision_id = 10;
+  uint64 decision_revision = 11;
+  bytes from_person_id = 12;
+  bytes to_person_id = 13;
+  uint64 resulting_owner_revision = 14;
+}
+
+message PersonLineageChangedEventV1 {
+  bytes event_id = 1;
+  string logical_owner_id = 2;
+  bytes source_person_id = 3;
+  bytes target_person_id = 4;
+  LineageChangeKindV1 change_kind = 5;
+  bytes decision_id = 6;
+  uint64 decision_revision = 7;
+  TimestampV1 changed_at = 8;
+  uint64 resulting_owner_revision = 9;
+}
+
+// A candidate is evidence for Review only. It contains public IDs and a bounded
+// match kind; it neither attaches sources nor authorizes a merge.
+message PersonReviewCandidateRaisedEventV1 {
+  bytes event_id = 1;
+  bytes candidate_id = 2;
+  string logical_owner_id = 3;
+  bytes first_person_id = 4;
+  bytes second_person_id = 5;
+  ProviderSourceIdentityV1 first_source = 6;
+  ProviderSourceIdentityV1 second_source = 7;
+  IdentityMatchKindV1 match_kind = 8;
+  TimestampV1 observed_at = 9;
+  uint64 resulting_owner_revision = 10;
+}
+
+message PersonsOwnerEventV1 {
+  oneof event {
+    PersonChangedEventV1 person_changed = 1;
+    PersonProfileChangedEventV1 profile_changed = 2;
+    PersonSourceLinkChangedEventV1 source_link_changed = 3;
+    PersonLineageChangedEventV1 lineage_changed = 4;
+  }
+}
+
+enum PersonLifecycleV1 {
+  PERSON_LIFECYCLE_UNSPECIFIED = 0;
+  PERSON_LIFECYCLE_PROVISIONAL = 1;
+  PERSON_LIFECYCLE_ACTIVE = 2;
+  PERSON_LIFECYCLE_MERGED = 3;
+  PERSON_LIFECYCLE_ARCHIVED = 4;
+}
+
+enum IdentityMatchKindV1 {
+  IDENTITY_MATCH_KIND_UNSPECIFIED = 0;
+  IDENTITY_MATCH_KIND_NORMALIZED_EMAIL = 1;
+  IDENTITY_MATCH_KIND_NORMALIZED_PHONE = 2;
+}
+
+enum PersonChangeKindV1 {
+  PERSON_CHANGE_KIND_UNSPECIFIED = 0;
+  PERSON_CHANGE_KIND_CREATED = 1;
+  PERSON_CHANGE_KIND_PROFILE_UPDATED = 2;
+  PERSON_CHANGE_KIND_SOURCE_OBSERVED = 3;
+  PERSON_CHANGE_KIND_SOURCE_UPDATED = 4;
+  PERSON_CHANGE_KIND_SOURCE_REMOVED = 5;
+  PERSON_CHANGE_KIND_SOURCE_ATTACHED = 6;
+  PERSON_CHANGE_KIND_SOURCE_DETACHED = 7;
+  PERSON_CHANGE_KIND_MERGED = 8;
+  PERSON_CHANGE_KIND_SPLIT = 9;
+  PERSON_CHANGE_KIND_ARCHIVED = 10;
+}
+
+enum SourceLinkChangeKindV1 {
+  SOURCE_LINK_CHANGE_KIND_UNSPECIFIED = 0;
+  SOURCE_LINK_CHANGE_KIND_OBSERVED = 1;
+  SOURCE_LINK_CHANGE_KIND_UPDATED = 2;
+  SOURCE_LINK_CHANGE_KIND_REMOVED = 3;
+  SOURCE_LINK_CHANGE_KIND_ATTACHED = 4;
+  SOURCE_LINK_CHANGE_KIND_DETACHED = 5;
+}
+
+enum LineageChangeKindV1 {
+  LINEAGE_CHANGE_KIND_UNSPECIFIED = 0;
+  LINEAGE_CHANGE_KIND_MERGED = 1;
+  LINEAGE_CHANGE_KIND_SPLIT = 2;
+}
+
+enum SplitProfileFactKindV1 {
+  SPLIT_PROFILE_FACT_KIND_UNSPECIFIED = 0;
+  SPLIT_PROFILE_FACT_KIND_DISPLAY_NAME = 1;
+  SPLIT_PROFILE_FACT_KIND_GIVEN_NAME = 2;
+  SPLIT_PROFILE_FACT_KIND_FAMILY_NAME = 3;
+  SPLIT_PROFILE_FACT_KIND_EMAILS = 4;
+  SPLIT_PROFILE_FACT_KIND_PHONES = 5;
+}
+
+enum PersonRejectCodeV1 {
+  PERSON_REJECT_CODE_UNSPECIFIED = 0;
+  PERSON_REJECT_CODE_INVALID_REQUEST = 1;
+  PERSON_REJECT_CODE_NOT_FOUND = 2;
+  PERSON_REJECT_CODE_STALE_REVISION = 3;
+  PERSON_REJECT_CODE_CONFLICT = 4;
+  PERSON_REJECT_CODE_DECISION_REQUIRED = 5;
+  PERSON_REJECT_CODE_SOURCE_ALREADY_ATTACHED = 6;
+  PERSON_REJECT_CODE_LINEAGE_CONFLICT = 7;
+  PERSON_REJECT_CODE_POLICY = 8;
+}
+
+service PersonsCommandService {
+  rpc Create(ManualCreatePersonCommandV1) returns (PersonCommandSucceededV1);
+  rpc UpdateOwnerProfile(UpdatePersonOwnerProfileCommandV1) returns (PersonCommandSucceededV1);
+}
+
+service PersonsQueryService {
+  rpc ListDirectory(ReadPersonDirectoryRequestV1) returns (PersonDirectoryResultV1);
+  rpc GetProfile(ReadPersonProfileRequestV1) returns (PersonProfileResultV1);
+  rpc ListSourceLinks(ReadPersonSourceLinksRequestV1) returns (PersonSourceLinksResultV1);
+}

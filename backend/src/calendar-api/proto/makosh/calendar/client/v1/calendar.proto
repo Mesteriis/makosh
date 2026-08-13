@@ -1,0 +1,281 @@
+syntax = "proto3";
+
+package makosh.calendar.client.v1;
+
+message TimestampV1 {
+  int64 unix_seconds = 1;
+  int32 nanos = 2;
+}
+
+enum CalendarEventStateV1 {
+  CALENDAR_EVENT_STATE_UNSPECIFIED = 0;
+  CALENDAR_EVENT_STATE_SCHEDULED = 1;
+  CALENDAR_EVENT_STATE_COMPLETED = 2;
+  CALENDAR_EVENT_STATE_CANCELLED = 3;
+}
+
+enum CalendarParticipantRoleV1 {
+  CALENDAR_PARTICIPANT_ROLE_UNSPECIFIED = 0;
+  CALENDAR_PARTICIPANT_ROLE_ORGANIZER = 1;
+  CALENDAR_PARTICIPANT_ROLE_REQUIRED = 2;
+  CALENDAR_PARTICIPANT_ROLE_OPTIONAL = 3;
+}
+
+enum CalendarParticipantResponseV1 {
+  CALENDAR_PARTICIPANT_RESPONSE_UNSPECIFIED = 0;
+  CALENDAR_PARTICIPANT_RESPONSE_PENDING = 1;
+  CALENDAR_PARTICIPANT_RESPONSE_ACCEPTED = 2;
+  CALENDAR_PARTICIPANT_RESPONSE_DECLINED = 3;
+  CALENDAR_PARTICIPANT_RESPONSE_TENTATIVE = 4;
+}
+
+enum CalendarReminderStateV1 {
+  CALENDAR_REMINDER_STATE_UNSPECIFIED = 0;
+  CALENDAR_REMINDER_STATE_PENDING = 1;
+  CALENDAR_REMINDER_STATE_FIRED = 2;
+  CALENDAR_REMINDER_STATE_CANCELLED = 3;
+}
+
+enum CalendarOutcomeKindV1 {
+  CALENDAR_OUTCOME_KIND_UNSPECIFIED = 0;
+  CALENDAR_OUTCOME_KIND_COMPLETED = 1;
+  CALENDAR_OUTCOME_KIND_CANCELLED = 2;
+  CALENDAR_OUTCOME_KIND_NO_SHOW = 3;
+}
+
+message CalendarParticipantV1 {
+  bytes participant_id = 1;
+  string display_name = 2;
+  string address = 3;
+  CalendarParticipantRoleV1 role = 4;
+  CalendarParticipantResponseV1 response = 5;
+  uint64 updated_at_event_revision = 6;
+}
+
+message CalendarConstraintsV1 {
+  TimestampV1 earliest_start = 1;
+  TimestampV1 latest_end = 2;
+  uint32 minimum_duration_minutes = 3;
+  string timezone = 4;
+  uint64 updated_at_event_revision = 5;
+}
+
+message CalendarReminderV1 {
+  bytes reminder_id = 1;
+  TimestampV1 due_at = 2;
+  CalendarReminderStateV1 state = 3;
+  uint64 updated_at_event_revision = 4;
+}
+
+message CalendarOutcomeV1 {
+  bytes outcome_id = 1;
+  CalendarOutcomeKindV1 kind = 2;
+  string note = 3;
+  TimestampV1 recorded_at = 4;
+  uint64 recorded_at_event_revision = 5;
+}
+
+message CalendarEventV1 {
+  bytes calendar_event_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string description = 4;
+  TimestampV1 starts_at = 5;
+  TimestampV1 ends_at = 6;
+  string timezone = 7;
+  CalendarEventStateV1 state = 8;
+  uint64 event_revision = 9;
+  optional CalendarConstraintsV1 constraints = 10;
+  TimestampV1 created_at = 11;
+  TimestampV1 updated_at = 12;
+}
+
+message CreateCalendarEventRequestV1 {
+  bytes operation_id = 1;
+  string logical_owner_id = 2;
+  string title = 3;
+  string description = 4;
+  TimestampV1 starts_at = 5;
+  TimestampV1 ends_at = 6;
+  string timezone = 7;
+  TimestampV1 created_at = 8;
+}
+
+message UpdateCalendarEventRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  optional string title = 5;
+  optional string description = 6;
+  optional TimestampV1 starts_at = 7;
+  optional TimestampV1 ends_at = 8;
+  optional string timezone = 9;
+  TimestampV1 updated_at = 10;
+}
+
+message SetCalendarEventStateRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  CalendarEventStateV1 state = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message AddCalendarParticipantRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  string display_name = 5;
+  string address = 6;
+  CalendarParticipantRoleV1 role = 7;
+  CalendarParticipantResponseV1 response = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message UpdateCalendarParticipantRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  bytes participant_id = 5;
+  optional string display_name = 6;
+  optional string address = 7;
+  optional CalendarParticipantRoleV1 role = 8;
+  optional CalendarParticipantResponseV1 response = 9;
+  TimestampV1 changed_at = 10;
+}
+
+message RemoveCalendarParticipantRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  bytes participant_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message SetCalendarConstraintsRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  TimestampV1 earliest_start = 5;
+  TimestampV1 latest_end = 6;
+  uint32 minimum_duration_minutes = 7;
+  string timezone = 8;
+  TimestampV1 changed_at = 9;
+}
+
+message AddCalendarReminderRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  TimestampV1 due_at = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message RemoveCalendarReminderRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  bytes reminder_id = 5;
+  TimestampV1 changed_at = 6;
+}
+
+message RecordCalendarOutcomeRequestV1 {
+  bytes operation_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 expected_event_revision = 4;
+  CalendarOutcomeKindV1 kind = 5;
+  string note = 6;
+  TimestampV1 recorded_at = 7;
+}
+
+message CalendarEventMutationResultV1 {
+  bytes operation_id = 1;
+  CalendarEventV1 event = 2;
+}
+
+message GetCalendarEventRequestV1 {
+  string logical_owner_id = 1;
+  bytes calendar_event_id = 2;
+}
+
+message ListCalendarEventsRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_calendar_event_id = 2;
+  uint32 limit = 3;
+}
+
+message SearchCalendarEventsRequestV1 {
+  string logical_owner_id = 1;
+  string query = 2;
+  bytes after_calendar_event_id = 3;
+  uint32 limit = 4;
+}
+
+message ListCalendarEventsResultV1 {
+  repeated CalendarEventV1 events = 1;
+  bytes next_after_calendar_event_id = 2;
+}
+
+message CalendarEventChildListRequestV1 {
+  string logical_owner_id = 1;
+  bytes calendar_event_id = 2;
+  bytes after_id = 3;
+  uint32 limit = 4;
+}
+
+message ListCalendarParticipantsResultV1 {
+  repeated CalendarParticipantV1 participants = 1;
+  bytes next_after_participant_id = 2;
+}
+
+message ListCalendarRemindersResultV1 {
+  repeated CalendarReminderV1 reminders = 1;
+  bytes next_after_reminder_id = 2;
+}
+
+message ListCalendarOutcomesResultV1 {
+  repeated CalendarOutcomeV1 outcomes = 1;
+  bytes next_after_outcome_id = 2;
+}
+
+// Public lifecycle event excludes title, description, participant addresses,
+// constraints, reminder notes and outcome notes.
+message CalendarEventChangedV1 {
+  bytes event_id = 1;
+  bytes calendar_event_id = 2;
+  string logical_owner_id = 3;
+  uint64 event_revision = 4;
+  CalendarEventStateV1 state = 5;
+  TimestampV1 occurred_at = 6;
+}
+
+service CalendarCommandService {
+  rpc Create(CreateCalendarEventRequestV1) returns (CalendarEventMutationResultV1);
+  rpc Update(UpdateCalendarEventRequestV1) returns (CalendarEventMutationResultV1);
+  rpc SetState(SetCalendarEventStateRequestV1) returns (CalendarEventMutationResultV1);
+  rpc AddParticipant(AddCalendarParticipantRequestV1) returns (CalendarEventMutationResultV1);
+  rpc UpdateParticipant(UpdateCalendarParticipantRequestV1) returns (CalendarEventMutationResultV1);
+  rpc RemoveParticipant(RemoveCalendarParticipantRequestV1) returns (CalendarEventMutationResultV1);
+  rpc SetConstraints(SetCalendarConstraintsRequestV1) returns (CalendarEventMutationResultV1);
+  rpc AddReminder(AddCalendarReminderRequestV1) returns (CalendarEventMutationResultV1);
+  rpc RemoveReminder(RemoveCalendarReminderRequestV1) returns (CalendarEventMutationResultV1);
+  rpc RecordOutcome(RecordCalendarOutcomeRequestV1) returns (CalendarEventMutationResultV1);
+}
+
+service CalendarQueryService {
+  rpc Get(GetCalendarEventRequestV1) returns (CalendarEventV1);
+  rpc List(ListCalendarEventsRequestV1) returns (ListCalendarEventsResultV1);
+  rpc Search(SearchCalendarEventsRequestV1) returns (ListCalendarEventsResultV1);
+  rpc ListParticipants(CalendarEventChildListRequestV1) returns (ListCalendarParticipantsResultV1);
+  rpc ListReminders(CalendarEventChildListRequestV1) returns (ListCalendarRemindersResultV1);
+  rpc ListOutcomes(CalendarEventChildListRequestV1) returns (ListCalendarOutcomesResultV1);
+}

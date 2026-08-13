@@ -14,6 +14,13 @@ const MAX_ATTEMPTS: u8 = 8;
 const MAX_RUNTIME_SECONDS: u64 = 300;
 pub const PLATFORM_CONTROL_INHERITED_FD: i32 = 3;
 pub const PLATFORM_CONTROL_INHERITED_FD_ENV: &str = "MAKOSH_PLATFORM_CONTROL_FD";
+#[cfg(test)]
+pub const MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV: &str =
+    "MAKOSH_MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY";
+
+#[cfg(test)]
+static MANAGED_CHILD_TEST_STDIO_CAPTURE_SEQUENCE: std::sync::atomic::AtomicU64 =
+    std::sync::atomic::AtomicU64::new(0);
 
 pub struct ManagedChildExecutionPolicy {
     max_attempts: u8,
@@ -116,18 +123,9 @@ pub fn spawn_with_platform_control(
     platform_control: Option<std::os::unix::net::UnixStream>,
 ) -> Result<Child, String> {
     ensure_staged_executable(staged_executable.path())?;
-    let stderr = if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-        Stdio::inherit()
-    } else {
-        Stdio::null()
-    };
     let mut command = Command::new(staged_executable.path());
-    command
-        .args(arguments)
-        .stdin(stdin)
-        .stdout(Stdio::null())
-        .stderr(stderr)
-        .env_clear();
+    command.args(arguments).stdin(stdin).env_clear();
+    configure_child_stdio(&mut command)?;
     if let Some(platform_control) = platform_control {
         let child_fd = platform_control.as_raw_fd();
         unsafe {
@@ -160,6 +158,51 @@ pub fn spawn_with_platform_control(
     command
         .spawn()
         .map_err(|error| format!("managed child could not start: {error}"))
+}
+
+fn configure_child_stdio(command: &mut Command) -> Result<(), String> {
+    #[cfg(test)]
+    if let Some(directory) = std::env::var_os(MANAGED_CHILD_TEST_STDIO_CAPTURE_DIRECTORY_ENV) {
+        let directory = std::path::PathBuf::from(directory);
+        if !directory.is_absolute() {
+            return Err("managed child test stdio capture directory must be absolute".to_owned());
+        }
+        let metadata = std::fs::symlink_metadata(&directory).map_err(|error| error.to_string())?;
+        if metadata.file_type().is_symlink() || !metadata.is_dir() {
+            return Err(
+                "managed child test stdio capture directory must be a non-symlink directory"
+                    .to_owned(),
+            );
+        }
+        let sequence = MANAGED_CHILD_TEST_STDIO_CAPTURE_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+        let stdout = open_test_stdio_capture(&directory, sequence, "stdout")?;
+        let stderr = open_test_stdio_capture(&directory, sequence, "stderr")?;
+        command
+            .stdout(Stdio::from(stdout))
+            .stderr(Stdio::from(stderr));
+        return Ok(());
+    }
+
+    let stderr = if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        Stdio::inherit()
+    } else {
+        Stdio::null()
+    };
+    command.stdout(Stdio::null()).stderr(stderr);
+    Ok(())
+}
+
+#[cfg(test)]
+fn open_test_stdio_capture(
+    directory: &std::path::Path,
+    sequence: u64,
+    stream: &str,
+) -> Result<std::fs::File, String> {
+    std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(directory.join(format!("managed-child-{sequence:016x}.{stream}")))
+        .map_err(|error| format!("managed child test stdio capture could not open: {error}"))
 }
 
 pub fn wait(child: &mut Child, max_runtime: Duration) -> Result<ExitStatus, String> {

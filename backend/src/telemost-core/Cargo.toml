@@ -1,0 +1,13 @@
+[package]
+name = "makosh-telemost-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+[lib]
+path = "src/lib.rs"
+[package.metadata.makosh]
+role = "integration"
+owner = "telemost"
+surface = "core"
+[dependencies]
+makosh-communications-call-evidence-ingress = { path = "../communications-call-evidence-ingress" }

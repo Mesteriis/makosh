@@ -386,6 +386,7 @@ fn assert_delayed_delivery_round_trip(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let delayed_operation_id = vec![operation_byte; 16];
     let private_body = b"delayed private body must not enter durable events or realtime";
     let deliver_at_unix_millis =
@@ -430,8 +431,7 @@ fn assert_delayed_delivery_round_trip(
         terminal.state,
         DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted as i32
     );
-    let event =
-        read_delayed_delivery_terminal_sse(&router, &runtime, &cookie, &delayed_operation_id);
+    let event = read_delayed_delivery_terminal_sse(&runtime, sse_response, &delayed_operation_id);
     assert!(
         !event
             .encode_to_vec()
@@ -471,6 +471,7 @@ fn assert_delayed_delivery_cancellation_round_trip(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let delayed_operation_id = vec![operation_byte; 16];
     let private_body = b"cancelled delayed private body must stay outside durable events";
     let deliver_at_unix_millis =
@@ -600,9 +601,8 @@ fn assert_delayed_delivery_cancellation_round_trip(
     );
     assert_eq!(cancelled.state_revision, accepted.state_revision + 1);
     let event = read_delayed_delivery_state_sse(
-        &router,
         &runtime,
-        &cookie,
+        sse_response,
         &delayed_operation_id,
         DelayedDeliveryStateV1::DelayedDeliveryStateCancelled,
     );
@@ -699,6 +699,7 @@ fn assert_delayed_delivery_survives_ambiguous_delivery_response(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let delayed_operation_id = vec![operation_byte; 16];
     let delivery_operation_id = vec![operation_byte.wrapping_add(1); 16];
     let private_body = b"delayed private body retained through ambiguous request outcome";
@@ -758,8 +759,7 @@ fn assert_delayed_delivery_survives_ambiguous_delivery_response(
     let replayed = SubmitDeliveryIntentRequestV1::decode(requests[1].as_slice())
         .expect("decode replayed delivery-intent request");
     assert_eq!(replayed.operation_id, delivery_operation_id);
-    let event =
-        read_delayed_delivery_terminal_sse(&router, &runtime, &cookie, &delayed_operation_id);
+    let event = read_delayed_delivery_terminal_sse(&runtime, sse_response, &delayed_operation_id);
     assert!(
         !event
             .encode_to_vec()
@@ -793,6 +793,7 @@ fn assert_delayed_delivery_survives_nats_outage(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let nats_endpoint = store
         .platform_event_hub_topology()
         .expect("read Event Hub topology")
@@ -881,8 +882,7 @@ fn assert_delayed_delivery_survives_nats_outage(
         DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted as i32,
         "the retained Scheduler command must complete after NATS reconnect"
     );
-    let event =
-        read_delayed_delivery_terminal_sse(&router, &runtime, &cookie, &delayed_operation_id);
+    let event = read_delayed_delivery_terminal_sse(&runtime, sse_response, &delayed_operation_id);
     assert!(
         !event
             .encode_to_vec()
@@ -920,6 +920,7 @@ fn assert_delayed_delivery_survives_scheduler_outage(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let delayed_operation_id = vec![operation_byte; 16];
     let private_body = b"delayed private body retained through Scheduler outage";
     let deliver_at_unix_millis =
@@ -986,8 +987,7 @@ fn assert_delayed_delivery_survives_scheduler_outage(
         DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted as i32,
         "the retained command must complete after Scheduler successor recovery"
     );
-    let event =
-        read_delayed_delivery_terminal_sse(&router, &runtime, &cookie, &delayed_operation_id);
+    let event = read_delayed_delivery_terminal_sse(&runtime, sse_response, &delayed_operation_id);
     assert!(
         !event
             .encode_to_vec()
@@ -1024,6 +1024,7 @@ fn assert_delayed_delivery_fails_closed_during_blob_outage(
         &runtime,
         authentication_sign_count,
     );
+    let sse_response = open_delayed_delivery_sse(&router, &runtime, &cookie);
     let delayed_operation_id = vec![operation_byte; 16];
     let private_body = b"delayed private body must fail closed while Blob is unavailable";
     let deliver_at_unix_millis =
@@ -1119,8 +1120,7 @@ fn assert_delayed_delivery_fails_closed_during_blob_outage(
         DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted as i32,
         "the exact request must complete after Blob successor recovery"
     );
-    let event =
-        read_delayed_delivery_terminal_sse(&router, &runtime, &cookie, &delayed_operation_id);
+    let event = read_delayed_delivery_terminal_sse(&runtime, sse_response, &delayed_operation_id);
     assert!(
         !event
             .encode_to_vec()
@@ -1426,36 +1426,22 @@ fn route_proto(
             return body;
         }
         assert!(
-            status == StatusCode::INTERNAL_SERVER_ERROR && Instant::now() < deadline,
-            "Gateway protobuf route failed with {status}: {}",
+            matches!(
+                status,
+                StatusCode::INTERNAL_SERVER_ERROR | StatusCode::SERVICE_UNAVAILABLE
+            ) && Instant::now() < deadline,
+            "Gateway protobuf route {path} failed with {status}: {}",
             String::from_utf8_lossy(&body)
         );
         std::thread::sleep(Duration::from_millis(25));
     }
 }
 
-fn read_delayed_delivery_terminal_sse(
+fn open_delayed_delivery_sse(
     router: &super::delivery_intent_realtime_flow::DeliveryIntentGateway,
     runtime: &tokio::runtime::Runtime,
     cookie: &str,
-    delayed_operation_id: &[u8],
-) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
-    read_delayed_delivery_state_sse(
-        router,
-        runtime,
-        cookie,
-        delayed_operation_id,
-        DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted,
-    )
-}
-
-fn read_delayed_delivery_state_sse(
-    router: &super::delivery_intent_realtime_flow::DeliveryIntentGateway,
-    runtime: &tokio::runtime::Runtime,
-    cookie: &str,
-    delayed_operation_id: &[u8],
-    expected_state: DelayedDeliveryStateV1,
-) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
+) -> makosh_gateway_runtime::GatewayHttpResponse {
     let response = runtime.block_on(
         router.route(
             Request::builder()
@@ -1463,10 +1449,32 @@ fn read_delayed_delivery_state_sse(
                 .uri("/api/realtime/v1/events")
                 .header("cookie", cookie)
                 .body(http_body_util::Full::new(Bytes::new()))
-                .expect("Gateway SSE request"),
+                .expect("Gateway SSE request before delayed-delivery transition"),
         ),
     );
     assert_eq!(response.status(), StatusCode::OK);
+    response
+}
+
+fn read_delayed_delivery_terminal_sse(
+    runtime: &tokio::runtime::Runtime,
+    response: makosh_gateway_runtime::GatewayHttpResponse,
+    delayed_operation_id: &[u8],
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
+    read_delayed_delivery_state_sse(
+        runtime,
+        response,
+        delayed_operation_id,
+        DelayedDeliveryStateV1::DelayedDeliveryStateDeliveryAccepted,
+    )
+}
+
+fn read_delayed_delivery_state_sse(
+    runtime: &tokio::runtime::Runtime,
+    response: makosh_gateway_runtime::GatewayHttpResponse,
+    delayed_operation_id: &[u8],
+    expected_state: DelayedDeliveryStateV1,
+) -> makosh_gateway_protocol::v1::ClientRealtimeEventV1 {
     runtime.block_on(async {
         tokio::time::timeout(
             Duration::from_secs(8),
@@ -1477,7 +1485,7 @@ fn read_delayed_delivery_state_sse(
             ),
         )
         .await
-        .expect("delayed-delivery SSE event timeout")
+        .unwrap_or_else(|_| panic!("delayed-delivery SSE event timeout for {expected_state:?}"))
     })
 }
 

@@ -8,8 +8,9 @@ use sqlx::{
 };
 
 use crate::{
-    MAIL_ADDRESS_BOOK_CUSTODY_SCHEMA_V1, MAIL_ADDRESS_BOOK_PROVIDER_PAGE_SCHEMA_V1,
-    MAIL_ADDRESS_BOOK_SCHEMA_V1, MailAddressBookPersistenceErrorV1, MailAddressBookPersistenceV1,
+    MAIL_ADDRESS_BOOK_CUSTODY_SCHEMA_V1, MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1,
+    MAIL_ADDRESS_BOOK_PROVIDER_PAGE_SCHEMA_V1, MAIL_ADDRESS_BOOK_SCHEMA_V1,
+    MailAddressBookPersistenceErrorV1, MailAddressBookPersistenceV1,
 };
 
 pub struct MailAddressBookPersistenceConformanceV1;
@@ -66,6 +67,18 @@ impl MailAddressBookPersistenceConformanceV1 {
                 .map_err(storage_error)?;
         }
         Ok(())
+    }
+
+    pub async fn install_person_source_schema(
+        persistence: &MailAddressBookPersistenceV1,
+    ) -> Result<(), MailAddressBookPersistenceErrorV1> {
+        let sql = std::str::from_utf8(MAIL_ADDRESS_BOOK_PERSON_SOURCE_SCHEMA_V1)
+            .map_err(|_| MailAddressBookPersistenceErrorV1::InvalidInput)?;
+        sqlx::raw_sql(sqlx::AssertSqlSafe(sql.to_owned()))
+            .execute(&persistence.pool)
+            .await
+            .map(|_| ())
+            .map_err(storage_error)
     }
 }
 

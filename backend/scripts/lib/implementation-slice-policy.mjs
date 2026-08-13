@@ -1360,6 +1360,46 @@ const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES = [
   { name: 'makosh-call-transcription-assembly', role: 'workflow', owner: 'call_transcription', surface: 'assembly' },
 ];
 
+const PERSONS_CONTRACT_CORE_PRODUCTION_PACKAGES = [
+  ...CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES,
+  { name: 'makosh-persons-api', role: 'domain', owner: 'persons', surface: 'contract' },
+  { name: 'makosh-persons-core', role: 'domain', owner: 'persons', surface: 'implementation' },
+];
+
+const PERSONS_PERSISTENCE_PRODUCTION_PACKAGES = [
+  ...PERSONS_CONTRACT_CORE_PRODUCTION_PACKAGES,
+  { name: 'makosh-persons-persistence', role: 'domain', owner: 'persons', surface: 'persistence' },
+];
+
+const PERSONS_RUNTIME_PRODUCTION_PACKAGES = [
+  ...PERSONS_PERSISTENCE_PRODUCTION_PACKAGES,
+  { name: 'makosh-persons-runtime', role: 'domain', owner: 'persons', surface: 'runtime' },
+];
+
+const PERSONS_ASSEMBLY_PRODUCTION_PACKAGES = [
+  ...PERSONS_RUNTIME_PRODUCTION_PACKAGES,
+  { name: 'makosh-persons-assembly', role: 'domain', owner: 'persons', surface: 'assembly' },
+];
+
+const MAIL_PERSONS_SYNC_CONTRACT_CORE_PRODUCTION_PACKAGES = [
+  ...PERSONS_ASSEMBLY_PRODUCTION_PACKAGES,
+  { name: 'makosh-mail-persons-sync-api', role: 'workflow', owner: 'mail_persons_sync', surface: 'contract' },
+  { name: 'makosh-mail-persons-sync-core', role: 'workflow', owner: 'mail_persons_sync', surface: 'implementation' },
+  { name: 'makosh-mail-persons-sync-persistence', role: 'workflow', owner: 'mail_persons_sync', surface: 'persistence' },
+  { name: 'makosh-mail-persons-sync-runtime', role: 'workflow', owner: 'mail_persons_sync', surface: 'runtime' },
+  { name: 'makosh-mail-persons-sync-assembly', role: 'workflow', owner: 'mail_persons_sync', surface: 'assembly' },
+  { name: 'makosh-review-person-match-candidate-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-review-person-match-candidate-core', role: 'domain', owner: 'review', surface: 'implementation' },
+  { name: 'makosh-review-person-match-candidate-persistence', role: 'domain', owner: 'review', surface: 'persistence' },
+  { name: 'makosh-review-person-match-candidate-runtime', role: 'domain', owner: 'review', surface: 'runtime' },
+  { name: 'makosh-review-person-match-candidate-assembly', role: 'domain', owner: 'review', surface: 'assembly' },
+  { name: 'makosh-review-person-match-candidate-promotion-api', role: 'domain', owner: 'review', surface: 'contract' },
+  { name: 'makosh-reviewed-person-match-candidate-promotion-core', role: 'workflow', owner: 'reviewed_person_match_candidate_promotion', surface: 'implementation' },
+  { name: 'makosh-reviewed-person-match-candidate-promotion-persistence', role: 'workflow', owner: 'reviewed_person_match_candidate_promotion', surface: 'persistence' },
+  { name: 'makosh-reviewed-person-match-candidate-promotion-runtime', role: 'workflow', owner: 'reviewed_person_match_candidate_promotion', surface: 'runtime' },
+  { name: 'makosh-reviewed-person-match-candidate-promotion-assembly', role: 'workflow', owner: 'reviewed_person_match_candidate_promotion', surface: 'assembly' },
+];
+
 const BLOB_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ...NATS_FOUNDATION_WORKSPACE_DEPENDENCY_ALLOWLIST,
   'makosh-blob-protocol': [],
@@ -1855,6 +1895,7 @@ const RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
   'makosh-runtime-protocol': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     ...PROTOCOL_THIRD_PARTY_DEPENDENCIES,
     { name: 'getrandom', kind: 'normal', source: 'crates_io', version: '=0.4.3', defaultFeatures: false, features: [] },
   ],
@@ -4037,6 +4078,142 @@ const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
   ],
 };
 
+const PERSONS_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+  ],
+  'makosh-persons-core': [
+    { name: 'makosh-persons-api', kind: 'normal' },
+  ],
+};
+
+const PERSONS_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-persistence': [
+    { name: 'makosh-persons-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+};
+
+const PERSONS_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_PERSISTENCE_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-runtime': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-persons-api', kind: 'normal' },
+    { name: 'makosh-persons-core', kind: 'normal' },
+    { name: 'makosh-persons-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+};
+
+const PERSONS_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_RUNTIME_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-assembly': [
+    { name: 'makosh-persons-persistence', kind: 'normal' },
+    { name: 'makosh-persons-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+};
+
+const MAIL_PERSONS_SYNC_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-mail-persons-sync-api': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+  ],
+  'makosh-mail-persons-sync-core': [
+    { name: 'makosh-mail-address-book-contract', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-api', kind: 'normal' },
+    { name: 'makosh-persons-api', kind: 'normal' },
+  ],
+  'makosh-mail-persons-sync-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-api', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-mail-persons-sync-runtime': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-mail-address-book-contract', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-api', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-core', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-persistence', kind: 'normal' },
+    { name: 'makosh-persons-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-scheduler-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+  'makosh-mail-persons-sync-assembly': [
+    { name: 'makosh-mail-persons-sync-persistence', kind: 'normal' },
+    { name: 'makosh-mail-persons-sync-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-review-person-match-candidate-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+  ],
+  'makosh-review-person-match-candidate-core': [],
+  'makosh-review-person-match-candidate-persistence': [
+    { name: 'makosh-review-person-match-candidate-core', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-review-person-match-candidate-runtime': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-persons-api', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-core', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+  'makosh-review-person-match-candidate-assembly': [
+    { name: 'makosh-review-person-match-candidate-persistence', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-review-person-match-candidate-promotion-api': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-core': [
+    { name: 'makosh-persons-api', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-api', kind: 'normal' },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-persistence': [
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-runtime': [
+    { name: 'makosh-events-jetstream', kind: 'normal' },
+    { name: 'makosh-events-protocol', kind: 'normal' },
+    { name: 'makosh-persons-api', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-api', kind: 'normal' },
+    { name: 'makosh-review-person-match-candidate-promotion-api', kind: 'normal' },
+    { name: 'makosh-reviewed-person-match-candidate-promotion-core', kind: 'normal' },
+    { name: 'makosh-reviewed-person-match-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-assembly': [
+    { name: 'makosh-reviewed-person-match-candidate-promotion-persistence', kind: 'normal' },
+    { name: 'makosh-reviewed-person-match-candidate-promotion-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+};
+
 const COMMUNICATIONS_EXPORT_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ...COMMUNICATIONS_SENDER_INSIGHTS_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
   'makosh-communications-evidence-export-source-api': [
@@ -5540,6 +5717,139 @@ const CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   ],
 };
 
+const PERSONS_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-api': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-persons-core': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+};
+
+const PERSONS_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-persistence': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
+  ],
+};
+
+const PERSONS_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_PERSISTENCE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+};
+
+const PERSONS_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_RUNTIME_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-persons-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+};
+
+const MAIL_PERSONS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-mail-persons-sync-api': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-mail-persons-sync-core': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-types', kind: 'dev', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+  ],
+  'makosh-mail-persons-sync-persistence': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
+  ],
+  'makosh-mail-persons-sync-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+  'makosh-mail-persons-sync-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+  'makosh-review-person-match-candidate-api': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-review-person-match-candidate-core': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-review-person-match-candidate-persistence': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
+  ],
+  'makosh-review-person-match-candidate-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+  'makosh-review-person-match-candidate-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+  'makosh-review-person-match-candidate-promotion-api': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-core': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-persistence': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'prost-types', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+  'makosh-reviewed-person-match-candidate-promotion-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+};
+
 const FORBIDDEN_DEPENDENCIES = [
   'async-nats',
   'nats',
@@ -6512,6 +6822,376 @@ const MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_CARGO_FEATURE_ALLOWLIST = {
   },
 };
 
+const PERSONS_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
+  ...MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_CARGO_FEATURE_ALLOWLIST,
+  'makosh-persons-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+};
+
+const MAIL_PERSONS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST = {
+  ...PERSONS_PERSISTENCE_CARGO_FEATURE_ALLOWLIST,
+  'makosh-mail-persons-sync-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+  'makosh-review-person-match-candidate-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+  'makosh-reviewed-person-match-candidate-promotion-persistence': {
+    default: [],
+    'conformance-test-support': [],
+  },
+};
+
+const PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES = new Set([
+  'makosh-contacts-command-api',
+  'makosh-contacts-mail-sync-source-api',
+  'makosh-contacts-core',
+  'makosh-contacts-persistence',
+  'makosh-contacts-runtime',
+  'makosh-contacts-assembly',
+  'makosh-mail-contacts-sync-api',
+  'makosh-mail-contacts-sync-core',
+  'makosh-mail-contacts-sync-persistence',
+  'makosh-mail-contacts-sync-runtime',
+  'makosh-mail-contacts-sync-assembly',
+]);
+
+const PERSONS_ADMISSION_PRODUCTION_PACKAGES =
+  MAIL_PERSONS_SYNC_CONTRACT_CORE_PRODUCTION_PACKAGES.filter(
+    ({ name }) => !PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES.has(name),
+  );
+
+const PERSONS_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST = Object.fromEntries(
+  Object.entries(MAIL_PERSONS_SYNC_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST)
+    .filter(([name]) => !PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES.has(name))
+    .map(([name, dependencies]) => [
+      name,
+      dependencies.filter(({ name: dependency }) => (
+        !PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES.has(dependency)
+      )),
+    ]),
+);
+
+const PERSONS_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = Object.fromEntries(
+  Object.entries(MAIL_PERSONS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST)
+    .filter(([name]) => !PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES.has(name)),
+);
+
+const PERSONS_ADMISSION_CARGO_FEATURE_ALLOWLIST = Object.fromEntries(
+  Object.entries(MAIL_PERSONS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST)
+    .filter(([name]) => !PERSONS_ADMISSION_RETIRED_PACKAGE_NAMES.has(name)),
+);
+
+const PERSONS_ADMISSION_RETIRED_CAPABILITIES = [
+  'contacts.mail-identity.command.v1',
+  'contacts.mail-sync-source.blob-writer.v1',
+  'contacts.mail-sync-source.changed.v1',
+  'contacts.mail-sync-source.v1',
+  'mail.address-book.contact-source.blob.v1',
+  'mail.address-book.provider.v1',
+  'mail.contacts-sync.v1',
+  'mail_contacts_sync.contacts.changed.v1',
+  'mail_contacts_sync.contacts.command.v1',
+  'mail_contacts_sync.contacts.rejected.v1',
+  'mail_contacts_sync.contacts.source-prepare.v1',
+  'mail_contacts_sync.contacts.source-prepared.v1',
+  'mail_contacts_sync.contacts.source-rejected.v1',
+  'mail_contacts_sync.contacts.upserted.v1',
+  'mail_contacts_sync.mail.entry-observed.v1',
+  'mail_contacts_sync.mail.entry-upsert-rejected.v1',
+  'mail_contacts_sync.mail.entry-upserted.v1',
+  'mail_contacts_sync.mail.fetch-page.v1',
+  'mail_contacts_sync.mail.page-completed.v1',
+  'mail_contacts_sync.mail.page-rejected.v1',
+  'mail_contacts_sync.mail.upsert-entry.v1',
+  'mail_contacts_sync.scheduler.receipt.v1',
+  'mail_contacts_sync.scheduler.v1',
+  'mail_contacts_sync.storage.v1',
+];
+
+const PERSONS_ADMISSION_CAPABILITIES = [
+  'mail.person-source.provider.v1',
+  'mail_persons_sync.mail.account-ready.v1',
+  'mail_persons_sync.mail.account-retired.v1',
+  'mail_persons_sync.mail.fetch-page.v1',
+  'mail_persons_sync.mail.page-completed.v1',
+  'mail_persons_sync.mail.page-rejected.v1',
+  'mail_persons_sync.mail.source-observed.v1',
+  'mail_persons_sync.mail.source-removed.v1',
+  'mail_persons_sync.mail.source-updated.v1',
+  'mail_persons_sync.page-receipt.v1',
+  'mail_persons_sync.persons.command-rejected.v1',
+  'mail_persons_sync.persons.command-succeeded.v1',
+  'mail_persons_sync.persons.command.v1',
+  'mail_persons_sync.run-result.v1',
+  'mail_persons_sync.scheduler.receipt.v1',
+  'mail_persons_sync.scheduler.v1',
+  'mail_persons_sync.scheduler_schedule_command.v1',
+  'mail_persons_sync.scheduler_schedule_result.v1',
+  'mail_persons_sync.storage.v1',
+  'persons.client.v1',
+  'persons.command-rejected.v1',
+  'persons.command-succeeded.v1',
+  'persons.command.v1',
+  'persons.owner-event.v1',
+  'persons.review-candidate.v1',
+  'persons.storage.v1',
+  'review.person-match-candidate.approved.publisher.v1',
+  'review.person-match-candidate.client.v1',
+  'review.person-match-candidate.decision.consumer.v1',
+  'review.person-match-candidate.persons-candidate.consumer.v1',
+  'review.person-match-candidate.promotion-result.consumer.v1',
+  'review.person-match-candidate.storage.v1',
+  'review.person-match-candidate.submission-rejected.publisher.v1',
+  'review.person-match-candidate.submitted.publisher.v1',
+  'reviewed-person-match-candidate-promotion.approval.consumer.v1',
+  'reviewed-person-match-candidate-promotion.persons-command.publisher.v1',
+  'reviewed-person-match-candidate-promotion.persons-rejected.consumer.v1',
+  'reviewed-person-match-candidate-promotion.persons-succeeded.consumer.v1',
+  'reviewed-person-match-candidate-promotion.result.publisher.v1',
+  'reviewed-person-match-candidate-promotion.storage.v1',
+];
+
+const PERSONS_ADMISSION_INVENTORY = {
+  ...CALL_TRANSCRIPTION_RUNTIME_INVENTORY,
+  domains: [
+    ...CALL_TRANSCRIPTION_RUNTIME_INVENTORY.domains.filter((owner) => owner !== 'contacts'),
+    'persons',
+  ].sort(),
+  workflows: [
+    ...CALL_TRANSCRIPTION_RUNTIME_INVENTORY.workflows.filter(
+      (owner) => owner !== 'mail_contacts_sync',
+    ),
+    'mail_persons_sync',
+    'reviewed_person_match_candidate_promotion',
+  ].sort(),
+  businessCapabilities: [
+    ...CALL_TRANSCRIPTION_RUNTIME_INVENTORY.businessCapabilities.filter(
+      (capability) => !PERSONS_ADMISSION_RETIRED_CAPABILITIES.includes(capability),
+    ),
+    ...PERSONS_ADMISSION_CAPABILITIES,
+  ].sort(),
+};
+
+const COMMUNICATION_BULK_DELAYED_DELIVERY_ADMISSION_INVENTORY = {
+  ...PERSONS_ADMISSION_INVENTORY,
+  workflows: [
+    ...PERSONS_ADMISSION_INVENTORY.workflows,
+    'communication_bulk_action',
+    'communication_delayed_delivery',
+  ].sort(),
+  businessCapabilities: [
+    ...PERSONS_ADMISSION_INVENTORY.businessCapabilities,
+    'communication.bulk_action.v1',
+    'communication.delayed_delivery.blob.v1',
+    'communication.delayed_delivery.clock.v1',
+    'communication.delayed_delivery.delivery_intent.v1',
+    'communication.delayed_delivery.scheduler_due.v1',
+    'communication.delayed_delivery.scheduler_receipt.v1',
+    'communication.delayed_delivery.scheduler_schedule_command.v1',
+    'communication.delayed_delivery.scheduler_schedule_result.v1',
+    'communication.delayed_delivery.storage.v1',
+    'communication.delayed_delivery.v1',
+    'communication_bulk_action.delivery_intent.v1',
+    'communication_bulk_action.storage.v1',
+  ].sort(),
+};
+
+const AI_INFERENCE_OLLAMA_ADMISSION_PRODUCTION_PACKAGES =
+  PERSONS_ADMISSION_PRODUCTION_PACKAGES.flatMap((descriptor) => (
+    descriptor.name === 'makosh-ai-inference-persistence'
+      ? [
+        descriptor,
+        { name: 'makosh-ai-inference-runtime', role: 'engine', owner: 'ai', surface: 'runtime' },
+        { name: 'makosh-ai-inference-assembly', role: 'engine', owner: 'ai', surface: 'assembly' },
+      ]
+      : [descriptor]
+  ));
+
+const AI_INFERENCE_OLLAMA_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-ai-inference-runtime': [
+    { name: 'makosh-ai-contracts', kind: 'normal' },
+    { name: 'makosh-ai-inference-core', kind: 'normal' },
+    { name: 'makosh-ai-inference-persistence', kind: 'normal' },
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+  'makosh-ai-inference-assembly': [
+    { name: 'makosh-ai-inference-persistence', kind: 'normal' },
+    { name: 'makosh-ai-inference-runtime', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+};
+
+const AI_INFERENCE_OLLAMA_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...PERSONS_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-ai-inference-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+  'makosh-ai-inference-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+};
+
+const AI_INFERENCE_OLLAMA_ADMISSION_INVENTORY = {
+  ...COMMUNICATION_BULK_DELAYED_DELIVERY_ADMISSION_INVENTORY,
+  integrations: [
+    ...COMMUNICATION_BULK_DELAYED_DELIVERY_ADMISSION_INVENTORY.integrations,
+    'ollama',
+  ].sort(),
+  businessCapabilities: [
+    ...COMMUNICATION_BULK_DELAYED_DELIVERY_ADMISSION_INVENTORY.businessCapabilities,
+    'ai.inference.blob.v1',
+    'ai.inference.request.v1',
+    'ai.inference.storage.v1',
+    'ai.provider.generate.v1',
+    'ai.provider.summarize.v1',
+    'ai.summary.request.v1',
+    'ollama.ai.storage.v1',
+  ].sort(),
+};
+
+const SPEECH_TO_TEXT_WHISPER_ADMISSION_PRODUCTION_PACKAGES =
+  AI_INFERENCE_OLLAMA_ADMISSION_PRODUCTION_PACKAGES.flatMap((descriptor) => (
+    descriptor.name === 'makosh-speech-to-text-persistence'
+      ? [
+        descriptor,
+        { name: 'makosh-speech-to-text-runtime', role: 'engine', owner: 'speech_to_text', surface: 'runtime' },
+        { name: 'makosh-speech-to-text-assembly', role: 'engine', owner: 'speech_to_text', surface: 'assembly' },
+        { name: 'makosh-speech-transcript-artifact', role: 'engine', owner: 'speech_to_text', surface: 'contract' },
+        { name: 'makosh-whisper-stt-core', role: 'integration', owner: 'whisper_stt', surface: 'implementation' },
+        { name: 'makosh-whisper-stt-assembly', role: 'integration', owner: 'whisper_stt', surface: 'assembly' },
+        { name: 'makosh-whisper-stt-persistence', role: 'integration', owner: 'whisper_stt', surface: 'persistence' },
+        { name: 'makosh-whisper-stt-process', role: 'integration', owner: 'whisper_stt', surface: 'implementation' },
+        { name: 'makosh-whisper-stt-runtime', role: 'integration', owner: 'whisper_stt', surface: 'runtime' },
+      ]
+      : [descriptor]
+  ));
+
+const SPEECH_TO_TEXT_WHISPER_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST = {
+  ...AI_INFERENCE_OLLAMA_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+  'makosh-speech-to-text-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-speech-to-text-api', kind: 'normal' },
+    { name: 'makosh-speech-to-text-core', kind: 'normal' },
+    { name: 'makosh-speech-to-text-persistence', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+  ],
+  'makosh-speech-to-text-assembly': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-speech-to-text-persistence', kind: 'normal' },
+    { name: 'makosh-speech-to-text-runtime', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-speech-transcript-artifact': [],
+  'makosh-whisper-stt-core': [
+    { name: 'makosh-speech-to-text-api', kind: 'normal' },
+    { name: 'makosh-speech-transcript-artifact', kind: 'normal' },
+  ],
+  'makosh-whisper-stt-assembly': [
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-whisper-stt-persistence', kind: 'normal' },
+    { name: 'makosh-whisper-stt-runtime', kind: 'normal' },
+  ],
+  'makosh-whisper-stt-persistence': [
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+  ],
+  'makosh-whisper-stt-process': [
+    { name: 'makosh-speech-to-text-api', kind: 'normal' },
+    { name: 'makosh-whisper-stt-core', kind: 'normal' },
+  ],
+  'makosh-whisper-stt-runtime': [
+    { name: 'makosh-blob-client', kind: 'normal' },
+    { name: 'makosh-runtime-protocol', kind: 'normal' },
+    { name: 'makosh-speech-to-text-api', kind: 'normal' },
+    { name: 'makosh-storage-protocol', kind: 'normal' },
+    { name: 'makosh-storage-vault', kind: 'normal' },
+    { name: 'makosh-whisper-stt-core', kind: 'normal' },
+    { name: 'makosh-whisper-stt-persistence', kind: 'normal' },
+    { name: 'makosh-whisper-stt-process', kind: 'normal' },
+  ],
+};
+
+const SPEECH_TO_TEXT_WHISPER_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
+  ...AI_INFERENCE_OLLAMA_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+  'makosh-speech-to-text-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+  'makosh-speech-to-text-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+  'makosh-speech-transcript-artifact': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'prost-build', kind: 'build', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'protoc-bin-vendored', kind: 'build', source: 'crates_io', version: '=3.2.0', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'build', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+  ],
+  'makosh-whisper-stt-core': [],
+  'makosh-whisper-stt-assembly': [
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+  'makosh-whisper-stt-persistence': [
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'sqlx', kind: 'normal', source: 'crates_io', version: '=0.9.0', defaultFeatures: false, features: ['postgres', 'runtime-tokio', 'tls-rustls-ring'] },
+  ],
+  'makosh-whisper-stt-process': [
+    { name: 'serde', kind: 'normal', source: 'crates_io', version: '=1.0.228', defaultFeatures: false, features: ['derive', 'std'] },
+    { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
+  ],
+  'makosh-whisper-stt-runtime': [
+    { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
+    { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
+    { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['rt-multi-thread', 'time'] },
+    { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
+  ],
+};
+
+const SPEECH_TO_TEXT_WHISPER_ADMISSION_INVENTORY = {
+  ...AI_INFERENCE_OLLAMA_ADMISSION_INVENTORY,
+  integrations: [
+    ...AI_INFERENCE_OLLAMA_ADMISSION_INVENTORY.integrations,
+    'whisper_stt',
+  ].sort(),
+  businessCapabilities: [
+    ...AI_INFERENCE_OLLAMA_ADMISSION_INVENTORY.businessCapabilities,
+    'speech_to_text.blob.v1',
+    'speech_to_text.provider.v1',
+    'speech_to_text.storage.v1',
+    'speech_to_text.transcribe.v1',
+    'whisper_stt.blob.v1',
+    'whisper_stt.native.v1',
+    'whisper_stt.provider.v1',
+    'whisper_stt.storage.v1',
+  ].sort(),
+};
+
 const CLOCK_KEYS = ['wallTime', 'elapsedTime', 'testTime', 'moduleCapabilityEnabled'];
 
 const EXIT_GATES = [
@@ -6715,9 +7395,14 @@ function isExactTargetPolicy(targetPolicy, expectedPackages) {
       'makosh-mail-address-book-contract',
       'makosh-mail-contacts-sync-api',
       'makosh-speech-to-text-api',
+      'makosh-speech-transcript-artifact',
       'makosh-desktop-call-recording-api',
       'makosh-call-transcription-ingress',
       'makosh-call-transcription-api',
+      'makosh-persons-api',
+      'makosh-mail-persons-sync-api',
+      'makosh-review-person-match-candidate-api',
+      'makosh-review-person-match-candidate-promotion-api',
       'makosh-mail-delivery-intent-contract',
       'makosh-telegram-delivery-intent-contract',
       'makosh-whatsapp-delivery-intent-contract',
@@ -8489,10 +9174,54 @@ function expectedSlice(currentSlice) {
     return {
       profile: FIRST_OWNER_PROFILE,
       ownerInventory: CALL_TRANSCRIPTION_RUNTIME_INVENTORY,
-      cargoFeatures: MAIL_ADDRESS_BOOK_RUNTIME_EXECUTION_CARGO_FEATURE_ALLOWLIST,
-      packages: CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_PRODUCTION_PACKAGES,
-      workspaceDependencies: CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_WORKSPACE_DEPENDENCY_ALLOWLIST,
-      thirdPartyDependencies: CALL_TRANSCRIPTION_RELEASE_ASSEMBLY_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+      cargoFeatures: MAIL_PERSONS_SYNC_PERSISTENCE_CARGO_FEATURE_ALLOWLIST,
+      packages: MAIL_PERSONS_SYNC_CONTRACT_CORE_PRODUCTION_PACKAGES,
+      workspaceDependencies: MAIL_PERSONS_SYNC_CONTRACT_CORE_WORKSPACE_DEPENDENCY_ALLOWLIST,
+      thirdPartyDependencies: MAIL_PERSONS_SYNC_CONTRACT_CORE_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+      forbiddenDependencyPrefixes: STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES,
+    };
+  }
+  if (currentSlice === 'persons_admission_v1') {
+    return {
+      profile: FIRST_OWNER_PROFILE,
+      ownerInventory: PERSONS_ADMISSION_INVENTORY,
+      cargoFeatures: PERSONS_ADMISSION_CARGO_FEATURE_ALLOWLIST,
+      packages: PERSONS_ADMISSION_PRODUCTION_PACKAGES,
+      workspaceDependencies: PERSONS_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+      thirdPartyDependencies: PERSONS_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+      forbiddenDependencyPrefixes: STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES,
+    };
+  }
+  if (currentSlice === 'communication_bulk_delayed_delivery_admission_v1') {
+    return {
+      profile: FIRST_OWNER_PROFILE,
+      ownerInventory: COMMUNICATION_BULK_DELAYED_DELIVERY_ADMISSION_INVENTORY,
+      cargoFeatures: PERSONS_ADMISSION_CARGO_FEATURE_ALLOWLIST,
+      packages: PERSONS_ADMISSION_PRODUCTION_PACKAGES,
+      workspaceDependencies: PERSONS_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+      thirdPartyDependencies: PERSONS_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+      forbiddenDependencyPrefixes: STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES,
+    };
+  }
+  if (currentSlice === 'ai_inference_ollama_admission_v1') {
+    return {
+      profile: FIRST_OWNER_PROFILE,
+      ownerInventory: AI_INFERENCE_OLLAMA_ADMISSION_INVENTORY,
+      cargoFeatures: PERSONS_ADMISSION_CARGO_FEATURE_ALLOWLIST,
+      packages: AI_INFERENCE_OLLAMA_ADMISSION_PRODUCTION_PACKAGES,
+      workspaceDependencies: AI_INFERENCE_OLLAMA_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+      thirdPartyDependencies: AI_INFERENCE_OLLAMA_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
+      forbiddenDependencyPrefixes: STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES,
+    };
+  }
+  if (currentSlice === 'speech_to_text_whisper_admission_v1') {
+    return {
+      profile: FIRST_OWNER_PROFILE,
+      ownerInventory: SPEECH_TO_TEXT_WHISPER_ADMISSION_INVENTORY,
+      cargoFeatures: PERSONS_ADMISSION_CARGO_FEATURE_ALLOWLIST,
+      packages: SPEECH_TO_TEXT_WHISPER_ADMISSION_PRODUCTION_PACKAGES,
+      workspaceDependencies: SPEECH_TO_TEXT_WHISPER_ADMISSION_WORKSPACE_DEPENDENCY_ALLOWLIST,
+      thirdPartyDependencies: SPEECH_TO_TEXT_WHISPER_ADMISSION_THIRD_PARTY_DEPENDENCY_ALLOWLIST,
       forbiddenDependencyPrefixes: STORAGE_FOUNDATION_FORBIDDEN_DEPENDENCY_PREFIXES,
     };
   }

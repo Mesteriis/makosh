@@ -6,7 +6,7 @@ use makosh_communication_bulk_action_api::{
     COMMUNICATION_BULK_ACTION_MODULE_ID_V1, COMMUNICATION_BULK_ACTION_OWNER_V1,
 };
 use makosh_communication_bulk_action_persistence::schema::{
-    COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V2,
+    COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V3,
     communication_bulk_action_storage_bundle_v1,
 };
 use makosh_communication_bulk_action_runtime::admission::{
@@ -96,7 +96,7 @@ pub(super) fn admit_bulk_action_runtime(store: &SqliteControlStore) -> AdmittedB
         .record_platform_storage_bundle(
             &PlatformStorageBundleV1::new(
                 COMMUNICATION_BULK_ACTION_OWNER_V1,
-                u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V2),
+                u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V3),
                 Sha256::digest(&bundle).into(),
                 bundle,
             )
@@ -119,7 +119,7 @@ pub(super) fn prepare_bulk_action_runtime(
     let bundle = store
         .platform_storage_bundle(
             COMMUNICATION_BULK_ACTION_OWNER_V1,
-            u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V2),
+            u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V3),
         )
         .expect("read bulk-action Storage bundle")
         .expect("bulk-action Storage bundle");
@@ -132,7 +132,7 @@ pub(super) fn prepare_bulk_action_runtime(
         StorageBindingIssueV1::new(
             1,
             1,
-            u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V2),
+            u64::from(COMMUNICATION_BULK_ACTION_STORAGE_BUNDLE_REVISION_V3),
             *bundle.digest(),
         )
         .expect("bulk-action Storage binding issue"),

@@ -170,6 +170,10 @@ pub async fn open_admitted_runtime(
     )
     .await
     .map_err(|_| WhatsAppBootstrapError::Persistence)?;
+    durable
+        .bind_owner_scope(&admission.logical_human_owner_id)
+        .await
+        .map_err(|_| WhatsAppBootstrapError::Persistence)?;
 
     let event_access = request_managed_runtime_event_access_v2(
         &mut control_channel,
@@ -464,8 +468,10 @@ impl WhatsAppAdmittedRuntime {
             Err(error) if error.kind() == ErrorKind::WouldBlock => return Ok(false),
             Err(_) => return Err(WhatsAppBootstrapError::HostBridge),
         };
-        crate::host_bridge_transport::serve_connection(stream, self, handle)
-            .map_err(|_| WhatsAppBootstrapError::HostBridge)?;
+        // A provider-owned host connection is untrusted. A malformed frame,
+        // handshake or payload terminates only that connection; it must not
+        // poison the admitted runtime or its durable relay loop.
+        let _ = crate::host_bridge_transport::serve_connection(stream, self, handle);
         Ok(true)
     }
 
@@ -644,6 +650,7 @@ mod tests {
     fn admission() -> WhatsAppRuntimeAdmission {
         WhatsAppRuntimeAdmission {
             logical_owner_id: "whatsapp".to_owned(),
+            logical_human_owner_id: "owner-1".to_owned(),
             module_registration_id: "whatsapp_runtime".to_owned(),
             runtime_instance_id: "whatsapp_runtime_1".to_owned(),
             runtime_generation: 2,

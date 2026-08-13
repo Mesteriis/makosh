@@ -1,0 +1,42 @@
+syntax = "proto3";
+package makosh.timeline.v1;
+
+message TimelineCursorV1 {
+  int64 occurred_at_unix_millis = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  bytes event_id = 6;
+}
+message ListTimelineRequestV1 {
+  string logical_owner_id = 1;
+  bytes after_cursor = 2;
+  uint32 limit = 3;
+}
+message TimelineEntryV1 {
+  bytes event_id = 1;
+  string source_owner = 2;
+  string entity_kind = 3;
+  bytes entity_id = 4;
+  uint64 source_revision = 5;
+  string lifecycle_state = 6;
+  int64 occurred_at_unix_millis = 7;
+  bool tombstone = 8;
+}
+message ListTimelineResultV1 {
+  repeated TimelineEntryV1 entries = 1;
+  bytes next_cursor = 2;
+  uint64 projection_generation = 3;
+}
+message TimelineStatusRequestV1 { string logical_owner_id = 1; }
+message TimelineStatusV1 {
+  uint64 active_generation = 1;
+  uint64 timeline_entries = 2;
+  uint64 source_events = 3;
+  int64 rebuilt_at_unix_millis = 4;
+}
+service TimelineQueryService {
+  rpc List(ListTimelineRequestV1) returns (ListTimelineResultV1);
+  rpc GetStatus(TimelineStatusRequestV1) returns (TimelineStatusV1);
+}

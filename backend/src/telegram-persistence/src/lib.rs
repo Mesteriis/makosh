@@ -7,6 +7,7 @@ mod delivery_intent;
 mod delivery_intent_inbox;
 mod delivery_intent_result_outbox;
 mod durable;
+mod owner_rls;
 mod schema;
 
 pub use communications_outbox::TelegramCommunicationsOutboxStoreV1;
@@ -20,6 +21,10 @@ pub use delivery_intent_inbox::{
 };
 pub use durable::{
     TELEGRAM_SCHEMA_V1, TelegramDurablePersistence, TelegramDurablePersistenceError,
+};
+pub use owner_rls::{
+    TELEGRAM_OWNER_RLS_STORAGE_REVISION_V1, TELEGRAM_OWNER_RLS_TABLES_V1,
+    telegram_owner_rls_sql_v1, telegram_owner_rls_storage_migration_v1,
 };
 pub use schema::{
     TELEGRAM_DELIVERY_INTENT_STORAGE_REVISION_V1, TELEGRAM_DELIVERY_ROUTE_STORAGE_REVISION_V1,

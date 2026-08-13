@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package makosh.mail.address_book.person_source.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Provider protocol state stays behind Mail. Every identity crossing this
+// boundary is a stable public ID issued by Mail for cross-owner use.
+message MailPersonSourceIdentityV1 {
+  bytes integration_public_id = 1;
+  bytes account_public_id = 2;
+  bytes provider_source_contact_public_id = 3;
+}
+
+message MailPersonSourceClaimsV1 {
+  optional string display_name = 1;
+  repeated string normalized_emails = 2;
+  repeated string normalized_phones = 3;
+}
+
+message MailPersonSourceProvenanceV1 {
+  uint64 source_revision = 1;
+  bytes source_digest = 2;
+  google.protobuf.Timestamp observed_at = 3;
+}
+
+// Mail resolves the next provider page from owner-local state. The workflow
+// never receives or returns a provider continuation token.
+message FetchMailPersonSourcePageCommandV1 {
+  bytes command_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  bytes account_public_id = 4;
+  uint64 page_sequence = 5;
+  uint32 page_size = 6;
+}
+
+// Sanitized lifecycle of the public cross-owner account mapping. The private
+// Mail connection/provider locator never crosses this boundary.
+message MailPersonSourceAccountReadyV1 {
+  bytes account_event_id = 1;
+  string logical_owner_id = 2;
+  bytes integration_public_id = 3;
+  bytes account_public_id = 4;
+  uint64 mapping_revision = 5;
+  google.protobuf.Timestamp observed_at = 6;
+}
+
+message MailPersonSourceAccountRetiredV1 {
+  bytes account_event_id = 1;
+  string logical_owner_id = 2;
+  bytes integration_public_id = 3;
+  bytes account_public_id = 4;
+  uint64 mapping_revision = 5;
+  google.protobuf.Timestamp retired_at = 6;
+}
+
+message MailPersonSourceObservedV1 {
+  bytes observation_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  uint64 page_sequence = 4;
+  MailPersonSourceIdentityV1 source = 5;
+  MailPersonSourceClaimsV1 claims = 6;
+  MailPersonSourceProvenanceV1 provenance = 7;
+}
+
+message MailPersonSourceUpdatedV1 {
+  bytes observation_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  uint64 page_sequence = 4;
+  MailPersonSourceIdentityV1 source = 5;
+  MailPersonSourceClaimsV1 claims = 6;
+  MailPersonSourceProvenanceV1 provenance = 7;
+}
+
+// This is a source tombstone observation. It cannot name or delete a Person.
+message MailPersonSourceRemovedV1 {
+  bytes observation_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  uint64 page_sequence = 4;
+  MailPersonSourceIdentityV1 source = 5;
+  MailPersonSourceProvenanceV1 provenance = 6;
+}
+
+message MailPersonSourcePageCompletedV1 {
+  bytes command_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  bytes account_public_id = 4;
+  uint64 page_sequence = 5;
+  uint32 observed_sources = 6;
+  uint32 updated_sources = 7;
+  uint32 removed_sources = 8;
+  bool has_more = 9;
+  bytes page_digest = 10;
+  google.protobuf.Timestamp completed_at = 11;
+}
+
+message MailPersonSourcePageRejectedV1 {
+  bytes command_id = 1;
+  bytes run_id = 2;
+  string logical_owner_id = 3;
+  bytes account_public_id = 4;
+  uint64 page_sequence = 5;
+  MailPersonSourceRejectCodeV1 code = 6;
+  bool retryable = 7;
+  google.protobuf.Timestamp rejected_at = 8;
+}
+
+enum MailPersonSourceRejectCodeV1 {
+  MAIL_PERSON_SOURCE_REJECT_CODE_UNSPECIFIED = 0;
+  MAIL_PERSON_SOURCE_REJECT_CODE_INVALID_REQUEST = 1;
+  MAIL_PERSON_SOURCE_REJECT_CODE_ACCOUNT_UNAVAILABLE = 2;
+  MAIL_PERSON_SOURCE_REJECT_CODE_SOURCE_UNAVAILABLE = 3;
+  MAIL_PERSON_SOURCE_REJECT_CODE_POLICY = 4;
+}

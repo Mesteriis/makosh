@@ -1,6 +1,7 @@
 use makosh_review_note_candidate_core::{
     ReviewNoteCandidateDecisionV1, ReviewNoteCandidateDraftV1,
-    ReviewNoteCandidatePromotionResultV1, ReviewNoteCandidateTimestampV1, ReviewNoteCandidateV1,
+    ReviewNoteCandidatePromotionResultV1, ReviewNoteCandidateStateV1,
+    ReviewNoteCandidateTimestampV1, ReviewNoteCandidateV1,
 };
 use sha2::{Digest, Sha256};
 
@@ -10,6 +11,20 @@ pub const REVIEW_NOTE_CANDIDATE_OUTBOX_LIMIT_V1: u16 = 128;
 pub const REVIEW_NOTE_CANDIDATE_MAX_EVENT_BYTES_V1: usize = 64 * 1024;
 pub const REVIEW_NOTE_CANDIDATE_MAX_BLOB_BYTES_V1: u64 = 16 * 1024;
 pub const REVIEW_NOTE_CANDIDATE_MAX_CUSTODY_PROOF_BYTES_V1: usize = 2_048;
+pub const REVIEW_NOTE_CANDIDATE_MAX_PAGE_SIZE_V1: u16 = 200;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ListReviewNoteCandidatesV1 {
+    pub after_review_id: Option<[u8; 16]>,
+    pub state: Option<ReviewNoteCandidateStateV1>,
+    pub limit: u16,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ReviewNoteCandidatePageV1 {
+    pub reviews: Vec<ReviewNoteCandidateV1>,
+    pub next_after_review_id: Option<[u8; 16]>,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ReviewNoteCandidateBlobReceiptV1 {

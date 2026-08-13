@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package makosh.identity_resolution.v1;
+
+message PublicPersonSourceIdentityV1 {
+  bytes integration_public_id = 1;
+  bytes account_public_id = 2;
+  bytes provider_source_contact_public_id = 3;
+}
+
+enum IdentityMatchKindV1 {
+  IDENTITY_MATCH_KIND_UNSPECIFIED = 0;
+  IDENTITY_MATCH_KIND_NORMALIZED_EMAIL = 1;
+  IDENTITY_MATCH_KIND_NORMALIZED_PHONE = 2;
+}
+
+// Rebuildable Review evidence only; it cannot mutate Persons.
+message PersonLinkMergeCandidateProposedEventV1 {
+  bytes event_id = 1;
+  bytes evidence_event_id = 2;
+  bytes candidate_id = 3;
+  string logical_owner_id = 4;
+  bytes first_person_id = 5;
+  bytes second_person_id = 6;
+  PublicPersonSourceIdentityV1 first_source = 7;
+  PublicPersonSourceIdentityV1 second_source = 8;
+  IdentityMatchKindV1 match_kind = 9;
+  int64 observed_at_unix_millis = 10;
+  uint64 resulting_owner_revision = 11;
+}

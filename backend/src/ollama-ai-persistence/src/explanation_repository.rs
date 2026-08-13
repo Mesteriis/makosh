@@ -2,7 +2,7 @@ use makosh_ai_contracts::{
     decode_provider_explanation_result_v1, encode_provider_explanation_result_v1,
 };
 use makosh_ollama_ai_core::{OllamaAiRunStateV1, OllamaExplanationRunV1};
-use sqlx::{Row, postgres::PgRow};
+use sqlx::{Postgres, Row, Transaction, postgres::PgRow};
 
 use crate::{
     OllamaAiPersistenceErrorV1, OllamaAiPersistenceV1, OllamaExplanationPersistenceOutcomeV1,
@@ -20,6 +20,7 @@ impl OllamaAiPersistenceV1 {
         run: OllamaExplanationRunV1,
     ) -> Result<OllamaExplanationPersistenceOutcomeV1, OllamaAiPersistenceErrorV1> {
         validate_explanation_accepted(logical_owner_id, &run)?;
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
         let inserted = sqlx::query(
             "INSERT INTO makosh_data.ollama_ai_explanation_runs (
                logical_owner_id, request_id, request_digest, settings_revision,
@@ -33,21 +34,22 @@ impl OllamaAiPersistenceV1 {
         .bind(signed(run.settings_revision)?)
         .bind(signed(run.revision)?)
         .bind(run_state_code(run.state))
-        .execute(&self.pool)
+        .execute(&mut *transaction)
         .await
         .map_err(storage_error)?
         .rows_affected()
             == 1;
-        let persisted = self
-            .load_explanation_run(logical_owner_id, run.request_id)
-            .await?
-            .ok_or(OllamaAiPersistenceErrorV1::InvalidRow)?;
+        let persisted =
+            load_explanation_run_in_transaction(&mut transaction, logical_owner_id, run.request_id)
+                .await?
+                .ok_or(OllamaAiPersistenceErrorV1::InvalidRow)?;
         if !inserted
             && (persisted.run.request_digest != run.request_digest
                 || persisted.run.settings_revision != run.settings_revision)
         {
             return Err(OllamaAiPersistenceErrorV1::RequestConflict);
         }
+        transaction.commit().await.map_err(storage_error)?;
         Ok(OllamaExplanationPersistenceOutcomeV1 {
             persisted,
             replayed: !inserted,
@@ -59,17 +61,15 @@ impl OllamaAiPersistenceV1 {
         logical_owner_id: &str,
         request_id: [u8; 16],
     ) -> Result<Option<PersistedOllamaExplanationRunV1>, OllamaAiPersistenceErrorV1> {
-        if !validate_owner(logical_owner_id) || request_id == [0; 16] {
+        if request_id == [0; 16] {
             return Err(OllamaAiPersistenceErrorV1::InvalidInput);
         }
-        sqlx::query(SELECT_RUN)
-            .bind(logical_owner_id)
-            .bind(request_id.as_slice())
-            .fetch_optional(&self.pool)
-            .await
-            .map_err(storage_error)?
-            .map(|row| persisted_from_row(&row))
-            .transpose()
+        let mut transaction = self.begin_owner_transaction(logical_owner_id).await?;
+        let persisted =
+            load_explanation_run_in_transaction(&mut transaction, logical_owner_id, request_id)
+                .await?;
+        transaction.commit().await.map_err(storage_error)?;
+        Ok(persisted)
     }
 
     pub async fn persist_explanation_transition(
@@ -80,7 +80,9 @@ impl OllamaAiPersistenceV1 {
             .then_some(())
             .ok_or(OllamaAiPersistenceErrorV1::InvalidInput)?;
         validate_explanation_run(&transition.next_run)?;
-        let mut transaction = self.pool.begin().await.map_err(storage_error)?;
+        let mut transaction = self
+            .begin_owner_transaction(&transition.logical_owner_id)
+            .await?;
         let row = sqlx::query(SELECT_RUN_FOR_UPDATE)
             .bind(&transition.logical_owner_id)
             .bind(transition.next_run.request_id.as_slice())
@@ -127,6 +129,21 @@ impl OllamaAiPersistenceV1 {
             run: transition.next_run,
         })
     }
+}
+
+async fn load_explanation_run_in_transaction(
+    transaction: &mut Transaction<'_, Postgres>,
+    logical_owner_id: &str,
+    request_id: [u8; 16],
+) -> Result<Option<PersistedOllamaExplanationRunV1>, OllamaAiPersistenceErrorV1> {
+    sqlx::query(SELECT_RUN)
+        .bind(logical_owner_id)
+        .bind(request_id.as_slice())
+        .fetch_optional(&mut **transaction)
+        .await
+        .map_err(storage_error)?
+        .map(|row| persisted_from_row(&row))
+        .transpose()
 }
 
 const SELECT_RUN: &str = "SELECT logical_owner_id, request_id, request_digest, settings_revision,

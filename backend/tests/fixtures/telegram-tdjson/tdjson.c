@@ -106,6 +106,13 @@ void td_json_client_send(void *raw_client, const char *request) {
         !extract_extra(request, extra, sizeof(extra))) {
         return;
     }
+    if (strstr(request, "task10-private-malformed-provider") != NULL) {
+        enqueue(
+            client,
+            "{\"@type\":\"updateNewMessage\",\"raw\":\"task10-raw-provider-sentinel\",\"body\":\"task10-private-body-sentinel\""
+        );
+        return;
+    }
     const char *format;
     if (strstr(request, "\"@type\":\"getChat\"") != NULL) {
         const char *positions;

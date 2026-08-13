@@ -1,9 +1,12 @@
 use makosh_knowledge_command_api::{
+    KNOWLEDGE_CLIENT_CAPABILITY_ID_V1, KNOWLEDGE_LIFECYCLE_EVENT_CAPABILITY_ID_V1,
     KNOWLEDGE_MODULE_ID_V1, KNOWLEDGE_OWNER_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_BLOB_CAPABILITY_ID_V1,
     KNOWLEDGE_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
     create_knowledge_note_from_reviewed_candidate_consume_request_v1,
     create_knowledge_note_from_reviewed_candidate_contract_reference_v1,
+    knowledge_client_routes_v1, knowledge_lifecycle_event_contract_reference_v1,
+    knowledge_lifecycle_event_publish_request_v1,
     knowledge_note_created_from_reviewed_candidate_contract_reference_v1,
     knowledge_note_created_from_reviewed_candidate_publish_request_v1,
     knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1,
@@ -11,9 +14,10 @@ use makosh_knowledge_command_api::{
 };
 use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
-    CapabilityRequestV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1, ProtocolRangeV1,
-    ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1, SettingsSchemaRefV1,
-    SettingsSchemaV1, StorageNamespaceRequestV1, capability_request_v1::Request,
+    CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, ModuleDescriptorV1, ModuleKindV1,
+    ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
+    SettingsSchemaRefV1, SettingsSchemaV1, StorageNamespaceRequestV1,
+    capability_request_v1::Request,
 };
 use prost::Message;
 use sha2::{Digest, Sha256};
@@ -38,6 +42,36 @@ pub fn knowledge_settings_schema_bytes_v1() -> Vec<u8> {
 #[must_use]
 pub fn knowledge_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
     let settings = knowledge_settings_schema_bytes_v1();
+    let mut capabilities = vec![
+        blob_capability(),
+        event_capability(
+            KNOWLEDGE_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
+            ProvidedSurfaceKindV1::DurableConsumer,
+            create_knowledge_note_from_reviewed_candidate_contract_reference_v1(),
+            create_knowledge_note_from_reviewed_candidate_consume_request_v1(),
+        ),
+        event_capability(
+            "knowledge.reviewed-candidate.created.publisher.v1",
+            ProvidedSurfaceKindV1::DurablePublisher,
+            knowledge_note_created_from_reviewed_candidate_contract_reference_v1(),
+            knowledge_note_created_from_reviewed_candidate_publish_request_v1(),
+        ),
+        event_capability(
+            "knowledge.reviewed-candidate.rejected.publisher.v1",
+            ProvidedSurfaceKindV1::DurablePublisher,
+            knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1(),
+            knowledge_note_creation_from_reviewed_candidate_rejected_publish_request_v1(),
+        ),
+        event_capability(
+            KNOWLEDGE_LIFECYCLE_EVENT_CAPABILITY_ID_V1,
+            ProvidedSurfaceKindV1::DurablePublisher,
+            knowledge_lifecycle_event_contract_reference_v1(),
+            knowledge_lifecycle_event_publish_request_v1(),
+        ),
+        client_capability(),
+        storage_capability(),
+    ];
+    capabilities.sort_by(|left, right| left.capability_id.cmp(&right.capability_id));
     ModuleDescriptorV1 {
         descriptor_major: 1,
         descriptor_revision: 1,
@@ -51,28 +85,7 @@ pub fn knowledge_module_descriptor_v1(build_id: &str) -> ModuleDescriptorV1 {
             maximum_major: 2,
             minimum_revision: 1,
         }),
-        capabilities: vec![
-            blob_capability(),
-            event_capability(
-                KNOWLEDGE_REVIEWED_CANDIDATE_COMMAND_CAPABILITY_ID_V1,
-                ProvidedSurfaceKindV1::DurableConsumer,
-                create_knowledge_note_from_reviewed_candidate_contract_reference_v1(),
-                create_knowledge_note_from_reviewed_candidate_consume_request_v1(),
-            ),
-            event_capability(
-                "knowledge.reviewed-candidate.created.publisher.v1",
-                ProvidedSurfaceKindV1::DurablePublisher,
-                knowledge_note_created_from_reviewed_candidate_contract_reference_v1(),
-                knowledge_note_created_from_reviewed_candidate_publish_request_v1(),
-            ),
-            event_capability(
-                "knowledge.reviewed-candidate.rejected.publisher.v1",
-                ProvidedSurfaceKindV1::DurablePublisher,
-                knowledge_note_creation_from_reviewed_candidate_rejected_contract_reference_v1(),
-                knowledge_note_creation_from_reviewed_candidate_rejected_publish_request_v1(),
-            ),
-            storage_capability(),
-        ],
+        capabilities,
         settings_schema_ref: Some(SettingsSchemaRefV1 {
             major: 1,
             revision: 1,
@@ -147,6 +160,26 @@ fn storage_capability() -> CapabilityDescriptorV1 {
     }
 }
 
+fn client_capability() -> CapabilityDescriptorV1 {
+    CapabilityDescriptorV1 {
+        capability_id: KNOWLEDGE_CLIENT_CAPABILITY_ID_V1.to_owned(),
+        capability_revision: 1,
+        criticality: CapabilityCriticalityV1::Required as i32,
+        provides: knowledge_client_routes_v1()
+            .into_iter()
+            .map(|(contract, path)| ProvidedSurfaceV1 {
+                kind: ProvidedSurfaceKindV1::ClientRpc as i32,
+                contract: Some(contract),
+                client_rpc_route: Some(ClientRpcRouteV1 {
+                    path: path.to_owned(),
+                }),
+                client_blob_route: None,
+            })
+            .collect(),
+        ..Default::default()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use makosh_runtime_protocol::validation::descriptor::{
@@ -162,12 +195,22 @@ mod tests {
         validate_settings_schema_v1(&knowledge_settings_schema_v1()).expect("settings");
         assert_eq!(descriptor.module_kind, ModuleKindV1::Domain as i32);
         assert_eq!(descriptor.owner_id, "knowledge");
-        assert_eq!(descriptor.capabilities.len(), 5);
+        assert_eq!(descriptor.capabilities.len(), 7);
         assert!(descriptor.capabilities.iter().all(|capability| {
             !capability.capability_id.contains("review")
                 || capability
                     .capability_id
                     .starts_with("knowledge.reviewed-candidate")
         }));
+        assert_eq!(
+            descriptor
+                .capabilities
+                .iter()
+                .find(|capability| capability.capability_id == KNOWLEDGE_CLIENT_CAPABILITY_ID_V1)
+                .expect("client")
+                .provides
+                .len(),
+            9
+        );
     }
 }

@@ -1,20 +1,14 @@
 import { computed, ref } from 'vue'
 import { useI18n } from '../../../platform/i18n'
 import {
-  useAssignIdentityTraceMutation,
   useIdentityCandidatesQuery,
-  useIdentityTracesQuery,
-  useOwnerPersonaQuery,
   usePersonasQuery,
   useRelationshipsQuery,
-  useReviewIdentityCandidateMutation,
-  useSetOwnerPersonaMutation,
-  useUpdatePersonaAddressBookMembershipMutation
+  useReviewIdentityCandidateMutation
 } from './usePersonasQuery'
 import { usePersonasStore } from '../stores/personas'
 import type {
   EnrichedPersona,
-  OwnerPersona,
   PersonaDirectoryFilter,
   PersonaPanelProfile,
   PersonaIdentity,
@@ -30,20 +24,15 @@ export function usePersonasPageSurface() {
   const personaSearchQuery = ref('')
   const directoryFilter = ref<PersonaDirectoryFilter>('all')
   const activeSection = ref<PersonaWorkspaceSection>('overview')
+  const unavailableActionError = ref('')
+  const activeReviewCandidateId = ref<string | null>(null)
 
   const personasQuery = usePersonasQuery()
-  const ownerPersonaQuery = useOwnerPersonaQuery()
   const identityCandidatesQuery = useIdentityCandidatesQuery()
-  const identityTracesQuery = useIdentityTracesQuery()
-  const setOwnerPersonaMutation = useSetOwnerPersonaMutation()
-  const updatePersonaAddressBookMembershipMutation = useUpdatePersonaAddressBookMembershipMutation()
   const reviewIdentityCandidateMutation = useReviewIdentityCandidateMutation()
-  const assignIdentityTraceMutation = useAssignIdentityTraceMutation()
 
   const personas = computed(() => personasQuery.data.value ?? [])
-  const ownerPersona = computed<PersonaPanelProfile | null>(() =>
-    ownerProfile(ownerPersonaQuery.data.value, personas.value)
-  )
+  const ownerPersona = computed<PersonaPanelProfile | null>(() => null)
   const filteredPersonas = computed(() => {
     const query = personaSearchQuery.value.trim().toLowerCase()
     if (!query) return personas.value
@@ -87,7 +76,7 @@ export function usePersonasPageSurface() {
 
   const selectedPersonaId = computed(() => selectedPersona.value?.persona_id ?? null)
   const relationshipsQuery = useRelationshipsQuery(selectedPersonaId)
-  const identityTraces = computed(() => identityTracesQuery.data.value ?? [])
+  const identityTraces = computed<PersonaIdentity[]>(() => [])
   const relationships = computed(() => relationshipsQuery.data.value ?? [])
   const suggestedIdentityCandidates = computed(() =>
     (identityCandidatesQuery.data.value ?? []).filter(
@@ -101,55 +90,19 @@ export function usePersonasPageSurface() {
     )
   )
   const directoryCount = computed(() => personas.value.length)
-  const pendingReviewCount = computed(
-    () => suggestedIdentityCandidates.value.length + identityTraces.value.length
-  )
-  const selectedPersonaRelationships = computed(() => {
-    const personaId = selectedPersonaId.value
-    if (!personaId) return []
-
-    return relationships.value.filter((relationship) => {
-      return (
-        relationship.source_entity_id === personaId ||
-        relationship.target_entity_id === personaId
-      )
-    })
-  })
-  const isLoading = computed(
-    () =>
-      personasQuery.isLoading.value ||
-      ownerPersonaQuery.isLoading.value
-  )
+  const pendingReviewCount = computed(() => suggestedIdentityCandidates.value.length)
+  const selectedPersonaRelationships = relationships
+  const isLoading = computed(() => personasQuery.isLoading.value)
   const isRefreshing = computed(
     () =>
       personasQuery.isFetching.value ||
-      ownerPersonaQuery.isFetching.value ||
       identityCandidatesQuery.isFetching.value ||
-      identityTracesQuery.isFetching.value ||
       relationshipsQuery.isFetching.value
   )
-  const actionError = computed(
-    () =>
-      errorMessage(setOwnerPersonaMutation.error.value) ||
-      errorMessage(updatePersonaAddressBookMembershipMutation.error.value) ||
-      errorMessage(reviewIdentityCandidateMutation.error.value) ||
-      errorMessage(assignIdentityTraceMutation.error.value)
-  )
-  const settingOwnerPersonaId = computed(() =>
-    setOwnerPersonaMutation.isPending.value
-      ? setOwnerPersonaMutation.variables.value ?? null
-      : null
-  )
-  const reviewingCandidateId = computed(() =>
-    reviewIdentityCandidateMutation.isPending.value
-      ? reviewIdentityCandidateMutation.variables.value?.candidateId ?? null
-      : null
-  )
-  const assigningTraceId = computed(() =>
-    assignIdentityTraceMutation.isPending.value
-      ? assignIdentityTraceMutation.variables.value?.traceId ?? null
-      : null
-  )
+  const actionError = computed(() => unavailableActionError.value)
+  const settingOwnerPersonaId = computed(() => null)
+  const reviewingCandidateId = computed(() => activeReviewCandidateId.value)
+  const assigningTraceId = computed(() => null)
 
   function identityConfidence(item: PersonaIdentityCandidate | PersonaIdentity): string {
     return `${Math.round(item.confidence * 100)}%`
@@ -227,76 +180,60 @@ export function usePersonasPageSurface() {
   async function refresh(): Promise<void> {
     await Promise.all([
       personasQuery.refetch(),
-      ownerPersonaQuery.refetch(),
       identityCandidatesQuery.refetch(),
-      identityTracesQuery.refetch(),
       relationshipsQuery.refetch()
     ])
   }
 
-  async function setOwnerPersona(persona: EnrichedPersona): Promise<void> {
-    await setOwnerPersonaMutation.mutateAsync(persona.persona_id)
+  function setOwnerPersona(_persona: EnrichedPersona): void {
+    unavailableActionError.value = 'persons_owner_profile_not_configured'
   }
 
-  async function toggleAddressBookMembership(
-    persona: EnrichedPersona,
-    value: boolean
-  ): Promise<void> {
-    await updatePersonaAddressBookMembershipMutation.mutateAsync({
-      personaId: persona.persona_id,
-      isAddressBook: value
-    })
+  function toggleAddressBookMembership(
+    _persona: EnrichedPersona,
+    _value: boolean
+  ): void {
+    unavailableActionError.value = 'persons_address_book_membership_retired'
   }
 
   async function setIdentityCandidateReview(
     candidate: PersonaIdentityCandidate,
     state: PersonaIdentityReviewState
   ): Promise<void> {
-    await reviewIdentityCandidateMutation.mutateAsync({
-      candidateId: candidate.identity_candidate_id,
-      reviewState: state
-    })
+    unavailableActionError.value = ''
+    activeReviewCandidateId.value = candidate.identity_candidate_id
+    try {
+      await reviewIdentityCandidateMutation.mutateAsync({
+        candidateId: candidate.identity_candidate_id,
+        reviewState: state
+      })
+    } catch (error) {
+      unavailableActionError.value = error instanceof Error ? error.message : 'review_action_failed'
+    } finally {
+      activeReviewCandidateId.value = null
+    }
   }
 
-  async function assignTraceToOwner(trace: PersonaIdentity): Promise<void> {
-    const owner = ownerPersona.value
-    if (!owner) return
-
-    await assignIdentityTraceMutation.mutateAsync({
-      traceId: trace.id,
-      personaId: owner.persona_id
-    })
+  function assignTraceToOwner(_trace: PersonaIdentity): void {
+    unavailableActionError.value = 'identity_resolution_projection_unavailable'
   }
 
-  async function assignTraceToSelectedPersona(trace: PersonaIdentity): Promise<void> {
-    const persona = selectedPersona.value
-    if (!persona) return
-
-    await assignIdentityTraceMutation.mutateAsync({
-      traceId: trace.id,
-      personaId: persona.persona_id
-    })
+  function assignTraceToSelectedPersona(_trace: PersonaIdentity): void {
+    unavailableActionError.value = 'identity_resolution_projection_unavailable'
   }
 
   function isSettingOwner(personaId: string): boolean {
-    return (
-      setOwnerPersonaMutation.isPending.value &&
-      setOwnerPersonaMutation.variables.value === personaId
-    )
+    void personaId
+    return false
   }
 
   function isReviewingCandidate(candidateId: string): boolean {
-    return (
-      reviewIdentityCandidateMutation.isPending.value &&
-      reviewIdentityCandidateMutation.variables.value?.candidateId === candidateId
-    )
+    return activeReviewCandidateId.value === candidateId
   }
 
   function isAssigningTrace(traceId: string): boolean {
-    return (
-      assignIdentityTraceMutation.isPending.value &&
-      assignIdentityTraceMutation.variables.value?.traceId === traceId
-    )
+    void traceId
+    return false
   }
 
   function splitConfirmedIdentityMerge(candidate: PersonaIdentityCandidate) {
@@ -355,42 +292,6 @@ export function usePersonasPageSurface() {
   }
 }
 
-function ownerProfile(
-  owner: OwnerPersona | null | undefined,
-  personas: readonly EnrichedPersona[]
-): PersonaPanelProfile | null {
-  if (!owner) return null
-
-  const enriched = personas.find((persona) => persona.persona_id === owner.persona_id)
-  if (enriched) {
-    return { ...enriched, is_owner: true }
-  }
-
-  return {
-    persona_id: owner.persona_id,
-    display_name: owner.display_name,
-    email_address: owner.email_address,
-    language: null,
-    tone: null,
-    trust_score: null,
-    avg_response_hours: null,
-    preferred_channel: null,
-    last_interaction_at: null,
-    interaction_count: 0,
-    frequent_topics: [],
-    writing_style: null,
-    persona_metadata: {},
-    is_favorite: false,
-    is_address_book: owner.is_address_book ?? false,
-    notes: null,
-    linked_projects: [],
-    linked_documents: [],
-    created_at: owner.created_at,
-    updated_at: owner.updated_at,
-    is_owner: true
-  }
-}
-
 function identityKindLabel(kind: string): string {
   const labels: Record<string, string> = {
     email: 'Email',
@@ -402,9 +303,4 @@ function identityKindLabel(kind: string): string {
     organization: 'Organization'
   }
   return labels[kind] ?? kind
-}
-
-function errorMessage(error: unknown): string {
-  if (!error) return ''
-  return error instanceof Error ? error.message : String(error)
 }

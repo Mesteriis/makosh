@@ -18,25 +18,20 @@ pub(crate) async fn relay_knowledge_outbox_once_v1(
     if published_at_unix_millis <= 0 {
         return Err(KnowledgeEventRelayErrorV1::InvalidTimestamp);
     }
-    let Some(record) = persistence
-        .load_pending_outbox(logical_owner_id)
+    let Some(claim) = persistence
+        .claim_next_pending_outbox(logical_owner_id)
         .await
         .map_err(KnowledgeEventRelayErrorV1::Persistence)?
-        .into_iter()
-        .next()
     else {
         return Ok(false);
     };
+    let record = claim.record().clone();
     connection
         .publish_exact(permit, &record.envelope_bytes)
         .await
         .map_err(|_| KnowledgeEventRelayErrorV1::EventUnavailable)?;
-    persistence
-        .mark_outbox_published(
-            logical_owner_id,
-            record.message_id,
-            published_at_unix_millis,
-        )
+    claim
+        .mark_published(record.envelope_sha256, published_at_unix_millis)
         .await
         .map_err(KnowledgeEventRelayErrorV1::Persistence)?;
     Ok(true)

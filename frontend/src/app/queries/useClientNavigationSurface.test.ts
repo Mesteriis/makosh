@@ -17,8 +17,19 @@ describe('compiled client navigation', () => {
 		expect(productRoutes.every((item) => item.disabled)).toBe(true)
 		expect(tree.find((item) => item.id === 'settings')?.disabled).toBe(false)
 		expect(compiledClientSurfaceAdapterIds).toEqual([
+			'calendar-owner',
 			'communications-owner',
+			'documents-owner',
+			'decisions-owner',
+			'knowledge-owner',
+			'organizations-owner',
+			'obligations-owner',
+			'persons-owner',
+			'projects-owner',
 			'mail-integration',
+			'review-owner',
+			'relationships-owner',
+			'tasks-owner',
 			'telegram-integration',
 			'whatsapp-integration',
 			'zulip-integration',
@@ -129,7 +140,15 @@ describe('compiled client navigation', () => {
 				|| item.id === 'communications-mail'
 				|| item.id === 'communications-telegram'
 				|| item.id === 'communications-whatsapp'
-				|| item.id === 'communications-zulip',
+					|| item.id === 'communications-zulip'
+					|| item.id === 'review'
+					|| item.id === 'knowledge'
+					|| item.id === 'tasks'
+					|| item.id === 'calendar'
+					|| item.id === 'organizations'
+					|| item.id === 'documents'
+					|| item.id === 'personas'
+					|| item.id === 'projects',
 		)
 		const uncompiledRoutes = productRoutes.filter(
 			(item) =>
@@ -137,10 +156,18 @@ describe('compiled client navigation', () => {
 				&& item.id !== 'communications-mail'
 				&& item.id !== 'communications-telegram'
 				&& item.id !== 'communications-whatsapp'
-				&& item.id !== 'communications-zulip',
+					&& item.id !== 'communications-zulip'
+					&& item.id !== 'review'
+					&& item.id !== 'knowledge'
+					&& item.id !== 'tasks'
+					&& item.id !== 'calendar'
+					&& item.id !== 'organizations'
+					&& item.id !== 'documents'
+					&& item.id !== 'personas'
+					&& item.id !== 'projects',
 		)
 
-		expect(compiledRoutes).toHaveLength(5)
+		expect(compiledRoutes).toHaveLength(13)
 		expect(compiledRoutes.every((item) => !item.disabled && item.disabledReason === '')).toBe(true)
 		expect(uncompiledRoutes.every((item) => item.disabled)).toBe(true)
 		expect(uncompiledRoutes.every(
