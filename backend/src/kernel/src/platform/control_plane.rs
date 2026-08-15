@@ -519,16 +519,16 @@ fn supervise_workers(
                 shutdown_requested.store(true, Ordering::Release);
             }
             Ok(completion) => {
-                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                    let result = completion
-                        .result
-                        .err()
-                        .unwrap_or_else(|| "stopped".to_owned());
-                    eprintln!(
-                        "developer_control_plane_restarting worker={} error={result}",
-                        completion.label
-                    );
-                }
+                let result = completion
+                    .result
+                    .err()
+                    .unwrap_or_else(|| "stopped".to_owned());
+                tracing::warn!(
+                    event = "control_plane.worker.restarting",
+                    worker.label = completion.label,
+                    error.class = "control_plane_worker",
+                    error.message = %result,
+                );
             }
             Err(mpsc::RecvTimeoutError::Timeout) => {}
             Err(mpsc::RecvTimeoutError::Disconnected) => {

@@ -2,6 +2,10 @@ import { computed, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { hasOwnerVaultProvisioningHostV1 } from '../../../platform/vault'
 import {
+	gmailOAuthLoopbackRedirectUriV1,
+	runGmailOAuthBrowserFlowV1,
+} from '../oauth/gmailOAuthBrowserFlow'
+import {
 	MailAccountSetupWorkflowV1,
 	type MailGmailSetupStateV1,
 } from './mailAccountSetupWorkflow'
@@ -20,11 +24,18 @@ export function useMailAccountSetup(
 	const smtpHost = ref('')
 	const smtpPort = ref('465')
 	const smtpPassword = ref('')
-	const gmailClientId = ref('')
-	const gmailRedirectUri = ref('')
-	const returnedState = ref('')
-	const authorizationCode = ref('')
+	const installedGmailClientId = import.meta.env.VITE_MAKOSH_GMAIL_OAUTH_CLIENT_ID?.trim() ?? ''
+	const gmailClientId = ref(installedGmailClientId)
+	const gmailClientConfigured = computed(() => Boolean(installedGmailClientId))
+	const gmailRedirectUri = computed(() => {
+		try {
+			return gmailOAuthLoopbackRedirectUriV1(window.location.origin)
+		} catch {
+			return ''
+		}
+	})
 	const gmailState = shallowRef<MailGmailSetupStateV1>()
+	const gmailCompletionSubmitted = ref(false)
 	const busy = ref(false)
 	const message = ref('')
 	const messageTone = ref<'neutral' | 'success' | 'error'>('neutral')
@@ -33,9 +44,8 @@ export function useMailAccountSetup(
 	const canSubmit = computed(() => {
 		if (!module()?.settings || !connectionId.value.trim()) return false
 		if (kind.value === 'gmail') {
-			return gmailState.value
-				? Boolean(returnedState.value.trim() && authorizationCode.value)
-				: Boolean(email.value.trim() && gmailClientId.value.trim() && gmailRedirectUri.value.trim())
+			return !gmailState.value
+				&& Boolean(email.value.trim() && gmailClientId.value.trim() && gmailRedirectUri.value)
 		}
 		return Boolean(
 			email.value.trim()
@@ -44,12 +54,11 @@ export function useMailAccountSetup(
 			&& (!smtpEnabled.value || smtpHost.value.trim()),
 		)
 	})
-	const submitLabel = computed(() => {
-		if (kind.value === 'gmail') {
-			return gmailState.value ? 'Complete Gmail OAuth' : 'Start Gmail OAuth'
-		}
-		return 'Connect IMAP account'
-	})
+	const canAuthorize = computed(() => Boolean(
+		gmailState.value
+		&& !gmailCompletionSubmitted.value
+		&& gmailRedirectUri.value,
+	))
 
 	async function submit(): Promise<boolean> {
 		const current = module()
@@ -99,33 +108,54 @@ export function useMailAccountSetup(
 	}
 
 	async function submitGmail(current: ClientModuleBootstrapV1): Promise<boolean> {
-		if (!gmailState.value) {
-			gmailState.value = await workflow.startGmail({
-				registrationId: current.registrationId,
-				expectedDesiredRevision: current.settings!.desiredRevision,
-				connectionId: connectionId.value,
-				email: email.value,
-				clientId: gmailClientId.value,
-				redirectUri: gmailRedirectUri.value,
-			})
-			message.value = 'Gmail configuration is active. Open Google authorization and return the state and code.'
-			messageTone.value = 'neutral'
-			return true
-		}
-		await workflow.completeGmail(gmailState.value, {
-			returnedState: returnedState.value,
-			authorizationCode: authorizationCode.value,
+		if (gmailState.value) return false
+		gmailState.value = await workflow.startGmail({
+			registrationId: current.registrationId,
+			expectedDesiredRevision: current.settings!.desiredRevision,
+			connectionId: connectionId.value,
+			email: email.value,
+			clientId: gmailClientId.value,
+			redirectUri: gmailRedirectUri.value,
 		})
-		authorizationCode.value = ''
-		message.value = 'Gmail OAuth completion accepted. Readiness will update after reconciliation.'
-		messageTone.value = 'success'
+		gmailCompletionSubmitted.value = false
+		message.value = 'Gmail configuration is active. Continue with Google to grant OAuth access.'
+		messageTone.value = 'neutral'
 		return true
+	}
+
+	async function authorizeGmail(): Promise<boolean> {
+		const current = gmailState.value
+		if (!current || !canAuthorize.value || busy.value) return false
+		busy.value = true
+		message.value = ''
+		try {
+			const callback = await runGmailOAuthBrowserFlowV1(
+				current.started.authorizationUrl,
+			)
+			gmailCompletionSubmitted.value = true
+			await workflow.completeGmail(current, callback)
+			message.value = 'Gmail OAuth completion accepted. Readiness will update after reconciliation.'
+			messageTone.value = 'success'
+			return true
+		} catch {
+			message.value = gmailCompletionSubmitted.value
+				? 'Gmail OAuth completion outcome is unavailable. Check account status before starting a new attempt.'
+				: 'Gmail OAuth was not completed. Start a new provider authorization attempt if this one expired.'
+			messageTone.value = 'error'
+			return false
+		} finally {
+			busy.value = false
+		}
+	}
+
+	function resetGmailAuthorization(): void {
+		gmailState.value = undefined
+		gmailCompletionSubmitted.value = false
 	}
 
 	function clearSecrets(): void {
 		imapPassword.value = ''
 		smtpPassword.value = ''
-		authorizationCode.value = ''
 	}
 
 	return {
@@ -140,9 +170,8 @@ export function useMailAccountSetup(
 		smtpPort,
 		smtpPassword,
 		gmailClientId,
+		gmailClientConfigured,
 		gmailRedirectUri,
-		returnedState,
-		authorizationCode,
 		gmailState,
 		busy,
 		message,
@@ -150,7 +179,9 @@ export function useMailAccountSetup(
 		secureHostAvailable,
 		configured,
 		canSubmit,
-		submitLabel,
+		canAuthorize,
 		submit,
+		authorizeGmail,
+		resetGmailAuthorization,
 	}
 }

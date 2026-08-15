@@ -38,9 +38,12 @@ pub fn read(supervisor: &ManagedRuntimeSupervisor) -> Result<TelemetryDiagnostic
 }
 
 fn developer_diagnostics_error(stage: &str, error: &str) {
-    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-        println!("developer_telemetry_diagnostics stage={stage} error={error}");
-    }
+    tracing::warn!(
+        event = "telemetry.diagnostics.failed",
+        diagnostics.stage = stage,
+        error.class = "telemetry_diagnostics",
+        error.message = error,
+    );
 }
 
 pub(crate) fn parse(response: &[u8]) -> Result<TelemetryDiagnostics, String> {

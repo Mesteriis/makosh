@@ -501,6 +501,7 @@ fn relay_runtime_state(route: &ActiveWhatsAppHostRoute, state: &'static str) -> 
         request_payload: payload,
         logical_owner_id: String::new(),
         authenticated_device_id: String::new(),
+        authenticated_client_session_id: String::new(),
     };
     let mut stream = connect_host_route(&route.route)?;
     write_frame(&mut stream, &request.encode_to_vec())?;
@@ -537,7 +538,7 @@ fn kernel_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
     let data_dir = data_dir
         .canonicalize()
         .map_err(|_| "Kernel data directory is unavailable".to_owned())?;
-    let project = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
+    let project = directories::ProjectDirs::from("dev", "makosh", "makosh")
         .ok_or_else(|| "Kernel runtime directory is unavailable".to_owned())?;
     let digest = Sha256::digest(data_dir.as_os_str().as_encoded_bytes());
     let instance_key = digest[..16]

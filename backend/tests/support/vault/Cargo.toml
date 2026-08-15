@@ -21,4 +21,5 @@ libc = "=0.2.186"
 prost = "=0.14.4"
 p256 = { version = "=0.14.0", default-features = false, features = ["ecdsa"] }
 tempfile = "=3.27.0"
+tracing = "=0.1.44"
 zeroize = "=1.9.0"

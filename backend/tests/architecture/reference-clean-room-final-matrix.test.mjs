@@ -55,7 +55,7 @@ test('final active docs state admitted staged and blocked evidence without overc
     'af622174e06f3e32e7852c38f7db05b0cf5f6e1ad4c96c313e1bf81ae383983b',
   );
 
-  for (const path of ['README.md', 'AGENTS.md', 'CORE_CLOSURE_PLAN.md']) {
+  for (const path of ['README.md', 'backend/README.md', 'AGENTS.md', 'CORE_CLOSURE_PLAN.md']) {
     const text = read(path);
     assert.match(text, /speech_to_text_whisper_admission_v1/);
     assert.match(text, /implemented-not-admitted/);

@@ -107,6 +107,7 @@ async function recoverAll(): Promise<void> {
 		<section
 			v-if="recovery.gmailResult.value?.kind === 'gmail'"
 			class="legacy-provider-recovery__continuation"
+			data-auth-method="oauth"
 		>
 			<header>
 				<div>
@@ -116,27 +117,15 @@ async function recoverAll(): Promise<void> {
 				<strong>{{ recovery.oauthAccepted.value ? 'Accepted' : 'Required' }}</strong>
 			</header>
 			<p>The old OAuth token was not imported. Complete a current Google authorization for the recovered target.</p>
-			<a
-				:href="recovery.gmailResult.value.oauth.started.authorizationUrl"
-				target="_blank"
-				rel="noreferrer"
+			<button
+				v-if="!recovery.oauthAccepted.value"
+				type="button"
+				:disabled="recovery.busy.value"
+				@click="recovery.completeGmail"
 			>
-				<Icon icon="tabler:external-link" />
-				Open Google authorization
-			</a>
-			<form v-if="!recovery.oauthAccepted.value" @submit.prevent="recovery.completeGmail">
-				<label>
-					<span>Returned state</span>
-					<input v-model="recovery.returnedState.value" required autocomplete="off">
-				</label>
-				<label>
-					<span>One-time authorization code</span>
-					<input v-model="recovery.authorizationCode.value" required type="password" autocomplete="one-time-code">
-				</label>
-				<button type="submit" :disabled="recovery.busy.value">
-					Complete Gmail OAuth
-				</button>
-			</form>
+				<Icon icon="tabler:brand-google" />
+				Continue with Google
+			</button>
 		</section>
 
 		<TelegramQrPairingPanel

@@ -31,7 +31,7 @@ use prost::Message;
 struct InheritedPaths {
     descriptor: PathBuf,
     settings_schema: PathBuf,
-    settings_snapshot: PathBuf,
+    settings_snapshot: Option<PathBuf>,
     runtime_configuration: PathBuf,
     runtime_instance_id: String,
 }
@@ -70,11 +70,6 @@ where
     let settings_schema = read_contract(&paths.settings_schema)?;
     let schema = decode_settings_schema_v1(&settings_schema)
         .map_err(|_| "Mail Persons Sync settings schema is invalid".to_owned())?;
-    let selected_snapshot_bytes = read_contract(&paths.settings_snapshot)?;
-    let selected_snapshot = decode_settings_snapshot_v1(&selected_snapshot_bytes)
-        .map_err(|_| "Mail Persons Sync selected settings are invalid".to_owned())?;
-    validate_settings_snapshot_against_schema_v1(&schema, &selected_snapshot)
-        .map_err(|_| "Mail Persons Sync selected settings are invalid".to_owned())?;
     let configuration = ManagedWorkflowRuntimeConfigurationV1::decode(
         read_contract(&paths.runtime_configuration)?.as_slice(),
     )
@@ -84,19 +79,7 @@ where
     if configuration.runtime_instance_id != paths.runtime_instance_id {
         return Err("Mail Persons Sync runtime configuration is stale".to_owned());
     }
-    let selected = configuration
-        .configuration_instances
-        .iter()
-        .find(|instance| {
-            instance.configuration_instance_id == configuration.configuration_instance_id
-        })
-        .ok_or_else(|| "Mail Persons Sync settings catalog is invalid".to_owned())?;
-    if selected.settings_snapshot_bytes != selected_snapshot_bytes
-        || selected_snapshot.target_id != configuration.configuration_instance_id
-        || selected_snapshot.revision != configuration.settings_revision
-    {
-        return Err("Mail Persons Sync settings catalog is stale".to_owned());
-    }
+    validate_selected_settings(&schema, paths.settings_snapshot.as_deref(), &configuration)?;
     let storage = configuration
         .storage
         .clone()
@@ -211,15 +194,60 @@ fn parse_paths<I>(arguments: &mut std::iter::Peekable<I>) -> Result<InheritedPat
 where
     I: Iterator<Item = OsString>,
 {
+    let descriptor = required_path(arguments, "--descriptor-path")?;
+    let settings_schema = required_path(arguments, "--settings-schema-path")?;
+    let settings_snapshot = if arguments.peek().map(OsString::as_os_str)
+        == Some(OsStr::new("--settings-snapshot-path"))
+    {
+        Some(required_path(arguments, "--settings-snapshot-path")?)
+    } else {
+        None
+    };
     let paths = InheritedPaths {
-        descriptor: required_path(arguments, "--descriptor-path")?,
-        settings_schema: required_path(arguments, "--settings-schema-path")?,
-        settings_snapshot: required_path(arguments, "--settings-snapshot-path")?,
+        descriptor,
+        settings_schema,
+        settings_snapshot,
         runtime_configuration: required_path(arguments, "--runtime-configuration-path")?,
         runtime_instance_id: required_string(arguments, "--runtime-instance-id")?,
     };
     require_no_arguments(arguments)?;
     Ok(paths)
+}
+
+fn validate_selected_settings(
+    schema: &makosh_runtime_protocol::v1::SettingsSchemaV1,
+    snapshot_path: Option<&Path>,
+    configuration: &ManagedWorkflowRuntimeConfigurationV1,
+) -> Result<(), String> {
+    let Some(snapshot_path) = snapshot_path else {
+        if schema.definitions.is_empty()
+            && configuration.configuration_instance_id.is_empty()
+            && configuration.settings_revision == 0
+            && configuration.configuration_instances.is_empty()
+        {
+            return Ok(());
+        }
+        return Err("Mail Persons Sync selected settings are unavailable".to_owned());
+    };
+    let selected_snapshot_bytes = read_contract(snapshot_path)?;
+    let selected_snapshot = decode_settings_snapshot_v1(&selected_snapshot_bytes)
+        .map_err(|_| "Mail Persons Sync selected settings are invalid".to_owned())?;
+    validate_settings_snapshot_against_schema_v1(schema, &selected_snapshot)
+        .map_err(|_| "Mail Persons Sync selected settings are invalid".to_owned())?;
+    let selected = configuration
+        .configuration_instances
+        .iter()
+        .find(|instance| {
+            instance.configuration_instance_id == configuration.configuration_instance_id
+        })
+        .ok_or_else(|| "Mail Persons Sync settings catalog is invalid".to_owned())?;
+    if selected.settings_snapshot_bytes != selected_snapshot_bytes
+        || selected_snapshot.target_id != configuration.configuration_instance_id
+        || selected_snapshot.revision != configuration.settings_revision
+    {
+        return Err("Mail Persons Sync settings catalog is stale".to_owned());
+    }
+    Ok(())
 }
 
 fn required_path<I>(arguments: &mut I, name: &str) -> Result<PathBuf, String>
@@ -283,6 +311,46 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn inherited_paths_allow_the_empty_settings_schema_without_a_snapshot() {
+        let mut arguments = [
+            "--descriptor-path",
+            "/tmp/descriptor.pb",
+            "--settings-schema-path",
+            "/tmp/settings.pb",
+            "--runtime-configuration-path",
+            "/tmp/runtime.pb",
+            "--runtime-instance-id",
+            "runtime-1",
+        ]
+        .into_iter()
+        .map(OsString::from)
+        .peekable();
+
+        let paths = parse_paths(&mut arguments).expect("paths without a settings snapshot");
+
+        assert!(paths.settings_snapshot.is_none());
+        assert_eq!(paths.runtime_instance_id, "runtime-1");
+    }
+
+    #[test]
+    fn empty_settings_schema_requires_an_empty_workflow_selection() {
+        let schema = makosh_runtime_protocol::v1::SettingsSchemaV1 {
+            major: 1,
+            revision: 1,
+            definitions: Vec::new(),
+        };
+        let configuration = ManagedWorkflowRuntimeConfigurationV1::default();
+
+        assert!(validate_selected_settings(&schema, None, &configuration).is_ok());
+
+        let selected = ManagedWorkflowRuntimeConfigurationV1 {
+            configuration_instance_id: "unexpected".to_owned(),
+            ..Default::default()
+        };
+        assert!(validate_selected_settings(&schema, None, &selected).is_err());
+    }
 
     #[test]
     fn transient_retry_is_exponential_bounded_and_resets_after_progress() {

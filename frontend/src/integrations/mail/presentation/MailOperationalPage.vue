@@ -195,11 +195,14 @@ const syncHealthOpen = ref(false)
 					@update-template="emit('compositionUpdateTemplate', $event)"
 					@use-signature="emit('compositionUseSignature', $event)"
 				/>
-				<MailDeliveryPanel
-					:model="deliveryModel"
-					@refresh-status="emit('refreshStatus')"
-					@update-operation-id="emit('updateOperationId', $event)"
-				/>
+				<details class="mail-compose-delivery-status">
+					<summary>Delivery status</summary>
+					<MailDeliveryPanel
+						:model="deliveryModel"
+						@refresh-status="emit('refreshStatus')"
+						@update-operation-id="emit('updateOperationId', $event)"
+					/>
+				</details>
 			</section>
 		</div>
 	</section>

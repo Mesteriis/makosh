@@ -9,7 +9,7 @@ onMounted(() => void authorization.refreshAccounts())
 </script>
 
 <template>
-	<section class="integration-account-setup" data-provider-tone="mail">
+	<section class="integration-account-setup" data-provider-tone="mail" data-auth-method="oauth">
 		<header class="integration-account-setup__header">
 			<span class="integration-account-setup__icon"><Icon icon="tabler:shield-lock" /></span>
 			<div>
@@ -43,21 +43,9 @@ onMounted(() => void authorization.refreshAccounts())
 							</option>
 						</select>
 					</label>
-					<a
-						v-if="authorization.started.value"
-						class="wide"
-						:href="authorization.started.value.authorizationUrl"
-						target="_blank"
-						rel="noreferrer"
-					>Open Google authorization</a>
-					<label v-if="authorization.started.value">
-						<span>Returned state</span>
-						<input v-model="authorization.returnedState.value" required autocomplete="off">
-					</label>
-					<label v-if="authorization.started.value">
-						<span>Authorization code</span>
-						<input v-model="authorization.authorizationCode.value" required type="password" autocomplete="one-time-code">
-					</label>
+					<p v-if="authorization.started.value" class="wide">
+						Google OAuth opens from the button below and returns through the guarded loopback callback.
+					</p>
 				</div>
 				<footer>
 					<p
@@ -72,7 +60,7 @@ onMounted(() => void authorization.refreshAccounts())
 					<button v-if="authorization.operationId.value" type="button" :disabled="authorization.busy.value" @click="authorization.refreshStatus">
 						Refresh status
 					</button>
-					<button type="submit" :disabled="authorization.busy.value">
+					<button type="submit" :disabled="authorization.busy.value || authorization.completionSubmitted.value">
 						<Icon :icon="authorization.busy.value ? 'tabler:loader-2' : 'tabler:shield-check'" />
 						{{ authorization.busy.value ? 'Applying…' : authorization.submitLabel.value }}
 					</button>

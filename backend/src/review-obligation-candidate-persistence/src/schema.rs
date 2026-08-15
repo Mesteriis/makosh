@@ -4,6 +4,7 @@ use sha2::{Digest, Sha256};
 pub const REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V1: u32 = 1;
 pub const REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V2: u32 = 2;
 pub const REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V3: u32 = 3;
+pub const REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1: &str = "review_obligation_candidate";
 pub const REVIEW_OBLIGATION_CANDIDATE_SCHEMA_V1: &[u8] =
     include_bytes!("../migrations/0001_review_obligation_candidate.sql");
 pub const REVIEW_OBLIGATION_CANDIDATE_OWNER_RLS_SCHEMA_V2: &[u8] =
@@ -17,7 +18,7 @@ pub fn review_obligation_candidate_storage_bundle_v1() -> StorageBundleV1 {
         major: 1,
         revision: REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V3,
         bundle_id: "review_obligation_candidate".to_owned(),
-        owner_id: "review".to_owned(),
+        owner_id: REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1.to_owned(),
         steps: vec![
             StorageMigrationStepV1 {
                 revision: REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
@@ -49,10 +50,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn bundle_is_review_owned_atomic_and_cross_owner_negative() {
+    fn bundle_is_review_obligation_candidate_owned_atomic_and_cross_owner_negative() {
         let bundle = review_obligation_candidate_storage_bundle_v1();
         validate_storage_bundle(&bundle).expect("valid Review obligation-candidate storage bundle");
-        assert_eq!(bundle.owner_id, "review");
+        assert_eq!(
+            bundle.owner_id,
+            REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1
+        );
         assert_eq!(bundle.revision, 3);
         let sql = bundle
             .steps

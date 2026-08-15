@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { userEvent, within } from 'storybook/test'
 
 import { MailCompositionModeV1 } from '../../src/gen/makosh/mail/composition/v1/client_pb'
 import MailOperationalPage from '../../src/integrations/mail/presentation/MailOperationalPage.vue'
@@ -222,15 +223,22 @@ const readModel: MailOperationalReadModel = {
 	hasMoreMessages: false,
 }
 
-export const Default: Story = {
-	args: {
-		compositionModel,
-		deliveryModel,
-		flagModel,
-		locationModel,
-		permanentDeleteModel,
-		readModel,
-		syncHealthModel,
-		syncModel,
+const defaultArgs = {
+	compositionModel,
+	deliveryModel,
+	flagModel,
+	locationModel,
+	permanentDeleteModel,
+	readModel,
+	syncHealthModel,
+	syncModel,
+}
+
+export const Default: Story = { args: defaultArgs }
+
+export const Compose: Story = {
+	args: defaultArgs,
+	play: async ({ canvasElement }) => {
+		await userEvent.click(within(canvasElement).getByRole('button', { name: 'Compose' }))
 	},
 }

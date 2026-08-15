@@ -1,4 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS makosh_data;
 CREATE TABLE IF NOT EXISTS makosh_data.omniroute_runs (
  logical_owner_id TEXT NOT NULL,
  request_id BYTEA NOT NULL,

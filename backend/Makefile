@@ -15,6 +15,7 @@ TARGET ?= $(shell rustc +$(RUST_TOOLCHAIN) -vV | sed -n 's/^host: //p')
 	mail-persons-sync-postgres-conformance \
 	review-person-match-candidate-postgres-conformance \
 	mail-persons-sync-managed-conformance \
+	telegram-admission-preflight \
 	persons-admission-cutover-conformance \
 	restore-postgres-backup verify-release-reproducibility
 
@@ -66,6 +67,12 @@ test-workspace:
 
 test-integration:
 	cargo nextest run --locked --workspace --profile integration
+
+telegram-admission-preflight:
+	cargo +$(RUST_TOOLCHAIN) --config 'build.rustc-wrapper=""' test --locked \
+		-p makosh-kernel-recovery-testkit \
+		managed_telegram_real_provider_prerequisites_are_exact -- \
+		--ignored --test-threads=1
 
 persons-postgres-conformance:
 	@MAKOSH_PERSONS_POSTGRES_TEST_FILTER=all node scripts/test-authenticated-storage.mjs $(RUST_TOOLCHAIN)

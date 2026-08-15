@@ -5,11 +5,12 @@ use makosh_events_jetstream::{
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
 use makosh_review_obligation_candidate_api::{
-    REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1, REVIEW_OBLIGATION_CANDIDATE_OWNER_V1,
-    review_obligation_candidate_submit_contract_reference_v1,
+    REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1, REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1,
+    REVIEW_OBLIGATION_CANDIDATE_OWNER_V1, review_obligation_candidate_submit_contract_reference_v1,
 };
 use makosh_review_obligation_candidate_persistence::{
-    ReviewObligationCandidatePersistenceErrorV1, ReviewObligationCandidatePersistenceV1,
+    REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1, ReviewObligationCandidatePersistenceErrorV1,
+    ReviewObligationCandidatePersistenceV1,
 };
 use makosh_review_obligation_candidate_promotion_api::review_obligation_candidate_promotion_result_contract_reference_v1;
 use makosh_runtime_protocol::{
@@ -482,7 +483,7 @@ fn exact_permit(
 fn validate_admission(
     admission: &ReviewObligationCandidateRuntimeAdmissionV1,
 ) -> Result<(), ReviewObligationCandidateManagedRuntimeErrorV1> {
-    if admission.logical_owner_id != REVIEW_OBLIGATION_CANDIDATE_OWNER_V1
+    if admission.logical_owner_id != REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1
         || admission.logical_human_owner_id.is_empty()
         || admission.logical_human_owner_id == admission.logical_owner_id
         || admission.registration_id.is_empty()
@@ -560,8 +561,8 @@ fn storage_binding(
     admission: &ReviewObligationCandidateRuntimeAdmissionV1,
 ) -> Result<StorageBindingV1, ReviewObligationCandidateManagedRuntimeErrorV1> {
     if configuration.runtime_instance_id != admission.runtime_instance_id
-        || configuration.logical_owner_id != REVIEW_OBLIGATION_CANDIDATE_OWNER_V1
-        || configuration.owner != REVIEW_OBLIGATION_CANDIDATE_OWNER_V1
+        || configuration.logical_owner_id != REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1
+        || configuration.owner != REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1
         || configuration.storage_bundle_digest.len() != 32
         || configuration.storage_generation == 0
         || configuration.credential_revision == 0
@@ -684,7 +685,7 @@ mod tests {
 
     fn admission() -> ReviewObligationCandidateRuntimeAdmissionV1 {
         ReviewObligationCandidateRuntimeAdmissionV1 {
-            logical_owner_id: REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned(),
+            logical_owner_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1.to_owned(),
             logical_human_owner_id: "owner-1".to_owned(),
             registration_id: "registration-1".to_owned(),
             runtime_instance_id: "runtime-1".to_owned(),
@@ -697,7 +698,7 @@ mod tests {
     fn admission_separates_review_owner_from_human_owner() {
         assert_eq!(validate_admission(&admission()), Ok(()));
         let mut invalid = admission();
-        invalid.logical_human_owner_id = REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned();
+        invalid.logical_human_owner_id = REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1.to_owned();
         assert_eq!(
             validate_admission(&invalid),
             Err(ReviewObligationCandidateManagedRuntimeErrorV1::Admission)

@@ -52,4 +52,50 @@ describe('TelegramAccountSetupWorkflowV1', () => {
 			expectedDesiredRevision: 1n,
 		}))
 	})
+
+	it('keeps a development API hash in the native custodied sealer', async () => {
+		const provision = vi.fn().mockResolvedValue({ secretRevision: 1n })
+		const provisionCustodied = vi.fn().mockImplementation(async (_input, seal) => {
+			await seal({ hostSessionId: 'native-session' })
+			return { secretRevision: 2n }
+		})
+		const sealApiHash = vi.fn().mockResolvedValue({})
+		const lifecycle = vi.fn().mockResolvedValue({ accountId: 'personal' })
+		const workflow = new TelegramAccountSetupWorkflowV1({
+			configuration: {
+				apply: vi.fn().mockResolvedValue({
+					settings: { desiredRevision: 2n },
+					application: {},
+				}),
+			},
+			vault: { provision, provisionCustodied },
+			lifecycle: { provision: lifecycle },
+		} as never)
+
+		await workflow.setup({
+			registrationId: 'telegram-registration',
+			expectedDesiredRevision: 1n,
+			accountId: 'personal',
+			displayName: 'Personal',
+			apiId: 42n,
+			apiHashSealer: sealApiHash,
+			replaceExistingCredentials: true,
+		})
+
+		expect(provisionCustodied).toHaveBeenCalledWith(expect.objectContaining({
+			purposeId: 'telegram_api_hash',
+			secretRevision: 2n,
+		}), sealApiHash)
+		expect(sealApiHash).toHaveBeenCalledWith({ hostSessionId: 'native-session' })
+		expect(provision).toHaveBeenCalledTimes(1)
+		expect(provision).toHaveBeenCalledWith(expect.objectContaining({
+			purposeId: 'telegram_session_store_key',
+			secretRevision: 2n,
+		}))
+		expect(lifecycle).toHaveBeenCalledWith(expect.objectContaining({
+			credentials: expect.arrayContaining([
+				{ purpose: 'telegram_api_hash', revision: 2n },
+			]),
+		}))
+	})
 })

@@ -5,8 +5,8 @@ use super::*;
 use makosh_blob_client::BlobDataClient;
 use makosh_kernel_control_store::{ModuleBlobOperationV1, ModuleBlobQuotaRequestV1};
 use makosh_review_obligation_candidate_api::{
-    REVIEW_OBLIGATION_CANDIDATE_BLOB_CAPABILITY_ID_V1, REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1,
-    REVIEW_OBLIGATION_CANDIDATE_OWNER_V1,
+    REVIEW_OBLIGATION_CANDIDATE_BLOB_CAPABILITY_ID_V1,
+    REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_OWNER_ID_V1, REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1,
 };
 use makosh_runtime_protocol::v1::{BlobDataOperationV1, ManagedRuntimeBlobSessionRequestV1};
 
@@ -121,7 +121,8 @@ impl ObligationCandidateBlobSourceFixtureV1 {
                 custody_source_proof: Vec::new(),
                 evidence_id: Vec::new(),
                 evidence_envelope_sha256: Vec::new(),
-                custody_target_owner_id: REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned(),
+                custody_target_owner_id: REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_OWNER_ID_V1
+                    .to_owned(),
                 custody_target_module_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1.to_owned(),
                 custody_target_capability_id: REVIEW_OBLIGATION_CANDIDATE_BLOB_CAPABILITY_ID_V1
                     .to_owned(),

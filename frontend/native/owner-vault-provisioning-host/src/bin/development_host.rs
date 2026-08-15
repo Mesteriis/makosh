@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::fs;
 use std::io::Read;
 use std::net::{IpAddr, SocketAddr};
@@ -31,6 +32,8 @@ const START_PATH: &str = "/__makosh/owner-vault-host/v1/start";
 const SEAL_PATH: &str = "/__makosh/owner-vault-host/v1/seal";
 const OPEN_RECEIPT_PATH: &str = "/__makosh/owner-vault-host/v1/open-receipt";
 const CANCEL_PATH: &str = "/__makosh/owner-vault-host/v1/cancel";
+const TELEGRAM_CREDENTIALS_PATH: &str = "/__makosh/owner-vault-host/v1/telegram-credentials";
+const TELEGRAM_SEAL_API_HASH_PATH: &str = "/__makosh/owner-vault-host/v1/seal-telegram-api-hash";
 const RECOVERY_START_PATH: &str = "/__makosh/legacy-provider-recovery/v1/start";
 const RECOVERY_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/source";
 const RECOVERY_SEAL_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/seal-source";
@@ -51,6 +54,11 @@ fn main() -> Result<(), String> {
         OwnerDeviceProofHostV1::open(&configuration.owner_device_key_file)
             .map_err(|_| "owner device proof signer is unavailable".to_owned())?,
     );
+    let telegram_credentials = configuration
+        .telegram_credentials_environment_file
+        .as_deref()
+        .map(DevelopmentTelegramCredentialsV1::open)
+        .transpose()?;
     let recovery = match (
         configuration.legacy_recovery_bundle_root.as_deref(),
         configuration.legacy_recovery_receipt_file.as_deref(),
@@ -75,6 +83,7 @@ fn main() -> Result<(), String> {
             request,
             &host,
             &owner_device_proof,
+            telegram_credentials.as_ref(),
             recovery.as_deref(),
             &proof,
         );
@@ -87,6 +96,7 @@ struct DevelopmentHostConfigurationV1 {
     listen_address: SocketAddr,
     proof_file: PathBuf,
     owner_device_key_file: PathBuf,
+    telegram_credentials_environment_file: Option<PathBuf>,
     legacy_recovery_bundle_root: Option<PathBuf>,
     legacy_recovery_receipt_file: Option<PathBuf>,
 }
@@ -97,6 +107,7 @@ impl DevelopmentHostConfigurationV1 {
             .map_err(|_| "development host listen address is invalid".to_owned())?;
         let mut proof_file = None;
         let mut owner_device_key_file = None;
+        let mut telegram_credentials_environment_file = None;
         let mut legacy_recovery_bundle_root = None;
         let mut legacy_recovery_receipt_file = None;
         let mut args = args.peekable();
@@ -120,6 +131,12 @@ impl DevelopmentHostConfigurationV1 {
                         .next()
                         .ok_or_else(|| "development owner device key file is missing".to_owned())?;
                     owner_device_key_file = Some(PathBuf::from(value));
+                }
+                "--telegram-credentials-env-file" => {
+                    let value = args.next().ok_or_else(|| {
+                        "development Telegram credentials file is missing".to_owned()
+                    })?;
+                    telegram_credentials_environment_file = Some(PathBuf::from(value));
                 }
                 "--legacy-recovery-bundle-root" => {
                     let value = args.next().ok_or_else(|| {
@@ -149,6 +166,12 @@ impl DevelopmentHostConfigurationV1 {
         if !owner_device_key_file.is_absolute() {
             return Err("development owner device key file must be absolute".to_owned());
         }
+        if telegram_credentials_environment_file
+            .as_ref()
+            .is_some_and(|path| !path.is_absolute())
+        {
+            return Err("development Telegram credentials file must be absolute".to_owned());
+        }
         if legacy_recovery_bundle_root
             .as_ref()
             .is_some_and(|root| !root.is_absolute())
@@ -171,10 +194,131 @@ impl DevelopmentHostConfigurationV1 {
             listen_address,
             proof_file,
             owner_device_key_file,
+            telegram_credentials_environment_file,
             legacy_recovery_bundle_root,
             legacy_recovery_receipt_file,
         })
     }
+}
+
+struct DevelopmentTelegramCredentialsV1 {
+    api_id: i64,
+    api_hash: Zeroizing<Vec<u8>>,
+}
+
+impl DevelopmentTelegramCredentialsV1 {
+    fn open(path: &Path) -> Result<Self, String> {
+        let metadata = fs::symlink_metadata(path)
+            .map_err(|_| "development Telegram credentials file is unavailable".to_owned())?;
+        if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
+            return Err("development Telegram credentials file is invalid".to_owned());
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            if metadata.permissions().mode() & 0o077 != 0 {
+                return Err(
+                    "development Telegram credentials file permissions are invalid".to_owned(),
+                );
+            }
+        }
+        if metadata.len() > 128 * 1024 {
+            return Err("development Telegram credentials file is invalid".to_owned());
+        }
+        let bytes = Zeroizing::new(
+            fs::read(path)
+                .map_err(|_| "development Telegram credentials file is unreadable".to_owned())?,
+        );
+        Self::parse(&bytes)
+    }
+
+    fn parse(bytes: &[u8]) -> Result<Self, String> {
+        let input = std::str::from_utf8(bytes)
+            .map_err(|_| "development Telegram credentials file is invalid".to_owned())?;
+        let allowed = [
+            "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+            "HERMES_TELEGRAM_API_HASH",
+            "HERMES_TELEGRAM_API_ID",
+            "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+            "MAKOSH_TELEGRAM_API_HASH",
+            "MAKOSH_TELEGRAM_API_ID",
+        ];
+        let mut assignments = BTreeMap::<&str, &str>::new();
+        for raw_line in input.lines() {
+            let line = raw_line.trim();
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            let assignment = line.strip_prefix("export ").unwrap_or(line);
+            let (name, value) = assignment
+                .split_once('=')
+                .ok_or_else(|| "development Telegram credentials file is invalid".to_owned())?;
+            let name = name.trim();
+            if !allowed.contains(&name) || assignments.contains_key(name) {
+                return Err("development Telegram credentials file is invalid".to_owned());
+            }
+            let value = literal_environment_value(value.trim())?;
+            assignments.insert(name, value);
+        }
+        let hermes = exact_telegram_pair(
+            &assignments,
+            "HERMES_TELEGRAM_API_ID",
+            "HERMES_TELEGRAM_API_HASH",
+        );
+        let makosh = exact_telegram_pair(
+            &assignments,
+            "MAKOSH_TELEGRAM_API_ID",
+            "MAKOSH_TELEGRAM_API_HASH",
+        );
+        let (api_id, api_hash) = match (hermes, makosh) {
+            (Some(pair), None) | (None, Some(pair)) => pair,
+            _ => return Err("development Telegram credentials file is invalid".to_owned()),
+        };
+        let api_id = api_id
+            .parse::<i64>()
+            .map_err(|_| "development Telegram credentials file is invalid".to_owned())?;
+        if api_id <= 0
+            || api_hash.len() != 32
+            || !api_hash.bytes().all(|byte| byte.is_ascii_hexdigit())
+        {
+            return Err("development Telegram credentials file is invalid".to_owned());
+        }
+        Ok(Self {
+            api_id,
+            api_hash: Zeroizing::new(api_hash.as_bytes().to_vec()),
+        })
+    }
+}
+
+fn exact_telegram_pair<'a>(
+    assignments: &'a BTreeMap<&str, &str>,
+    id_key: &str,
+    hash_key: &str,
+) -> Option<(&'a str, &'a str)> {
+    assignments
+        .get(id_key)
+        .copied()
+        .zip(assignments.get(hash_key).copied())
+}
+
+fn literal_environment_value(value: &str) -> Result<&str, String> {
+    let value = if let Some(value) = value
+        .strip_prefix('"')
+        .and_then(|value| value.strip_suffix('"'))
+    {
+        value
+    } else if let Some(value) = value
+        .strip_prefix('\'')
+        .and_then(|value| value.strip_suffix('\''))
+    {
+        value
+    } else {
+        value
+    };
+    if value.is_empty() || value.chars().any(char::is_control) {
+        return Err("development Telegram credentials file is invalid".to_owned());
+    }
+    Ok(value)
 }
 
 fn load_private_proof(path: &Path) -> Result<Zeroizing<String>, String> {
@@ -204,12 +348,20 @@ fn serve_request(
     mut request: Request,
     host: &OwnerVaultProvisioningHostV1,
     owner_device_proof: &OwnerDeviceProofHostV1,
+    telegram_credentials: Option<&DevelopmentTelegramCredentialsV1>,
     recovery: Option<&LegacyProviderRecoverySessionsV1>,
     proof: &str,
 ) {
     let route = request.url().to_owned();
-    let response = dispatch(&mut request, host, owner_device_proof, recovery, proof)
-        .unwrap_or_else(|error| error.response());
+    let response = dispatch(
+        &mut request,
+        host,
+        owner_device_proof,
+        telegram_credentials,
+        recovery,
+        proof,
+    )
+    .unwrap_or_else(|error| error.response());
     eprintln!(
         "developer_native_host_exchange route={route} status={}",
         response.status_code().0
@@ -221,6 +373,7 @@ fn dispatch(
     request: &mut Request,
     host: &OwnerVaultProvisioningHostV1,
     owner_device_proof: &OwnerDeviceProofHostV1,
+    telegram_credentials: Option<&DevelopmentTelegramCredentialsV1>,
     recovery: Option<&LegacyProviderRecoverySessionsV1>,
     proof: &str,
 ) -> Result<Response<std::io::Cursor<Vec<u8>>>, DevelopmentHostErrorV1> {
@@ -283,6 +436,51 @@ fn dispatch(
             host.cancel(&request.host_session_id)
                 .map_err(|_| DevelopmentHostErrorV1::Rejected)?;
             json_response(StatusCode(200), &EmptyResponseV1 {})
+        }
+        TELEGRAM_CREDENTIALS_PATH => {
+            require_empty_body(request)?;
+            let credentials = telegram_credentials.ok_or(DevelopmentHostErrorV1::Unavailable)?;
+            json_response(
+                StatusCode(200),
+                &DevelopmentTelegramCredentialsResponseV1 {
+                    api_id: credentials.api_id.to_string(),
+                },
+            )
+        }
+        TELEGRAM_SEAL_API_HASH_PATH => {
+            let request: SealDevelopmentTelegramApiHashRequestV1 = json_request(request)?;
+            let credentials = telegram_credentials.ok_or(DevelopmentHostErrorV1::Unavailable)?;
+            if request.secret_purpose != "telegram_api_hash"
+                || !matches!(
+                    owner_vault_action_from_wire_code_v1(request.action),
+                    Ok(VaultActionV1::Create | VaultActionV1::ReplaceCas)
+                )
+                || !matches!(
+                    owner_vault_secret_class_from_wire_code_v1(request.secret_class),
+                    Ok(SecretClassV1::ProviderCredential)
+                )
+            {
+                return Err(DevelopmentHostErrorV1::InvalidRequest);
+            }
+            let sealed = host
+                .seal_custodied(
+                    &request.host_session_id,
+                    request.authorized.try_into()?,
+                    exact_array(request.operation_id)?,
+                    request.action,
+                    request.secret_class,
+                    Zeroizing::new(credentials.api_hash.as_slice().to_vec()),
+                )
+                .map_err(|_| DevelopmentHostErrorV1::Rejected)?;
+            json_response(
+                StatusCode(200),
+                &SealedProvisioningCommandResponseV1 {
+                    operation_digest_sha256: sealed.operation_digest_sha256.to_vec(),
+                    hpke_encapped_key: sealed.hpke_encapped_key,
+                    ciphertext: sealed.ciphertext,
+                    hpke_authentication_tag: sealed.hpke_authentication_tag,
+                },
+            )
         }
         RECOVERY_START_PATH => {
             require_empty_body(request)?;
@@ -693,6 +891,23 @@ struct CancelProvisioningHostSessionRequestV1 {
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
+struct DevelopmentTelegramCredentialsResponseV1 {
+    api_id: String,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct SealDevelopmentTelegramApiHashRequestV1 {
+    secret_purpose: String,
+    host_session_id: String,
+    operation_id: Vec<u8>,
+    action: i32,
+    secret_class: i32,
+    authorized: AuthorizedProvisioningRequestV1,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct RecoveryPlanResponseV1 {
     schema_revision: u16,
     recovery_session_id: String,
@@ -1019,6 +1234,38 @@ mod tests {
             )
             .is_err()
         );
+        let telegram_source = DevelopmentHostConfigurationV1::from_args(
+            [
+                "--proof-file",
+                "/tmp/proof",
+                "--owner-device-key-file",
+                "/tmp/device-es256.key",
+                "--telegram-credentials-env-file",
+                "/tmp/private-telegram.env",
+            ]
+            .into_iter()
+            .map(str::to_owned),
+        )
+        .expect("accept absolute Telegram credentials file");
+        assert_eq!(
+            telegram_source.telegram_credentials_environment_file,
+            Some(PathBuf::from("/tmp/private-telegram.env"))
+        );
+        assert!(
+            DevelopmentHostConfigurationV1::from_args(
+                [
+                    "--proof-file",
+                    "/tmp/proof",
+                    "--owner-device-key-file",
+                    "/tmp/device-es256.key",
+                    "--telegram-credentials-env-file",
+                    "private-telegram.env",
+                ]
+                .into_iter()
+                .map(str::to_owned)
+            )
+            .is_err()
+        );
         assert!(
             DevelopmentHostConfigurationV1::from_args(
                 [
@@ -1106,6 +1353,34 @@ mod tests {
                 ]
                 .into_iter()
                 .map(str::to_owned)
+            )
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn telegram_credentials_accept_one_exact_legacy_namespace() {
+        let credentials = DevelopmentTelegramCredentialsV1::parse(
+            b"HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH=/private/oauth.json\n\
+              HERMES_TELEGRAM_API_ID=12345\n\
+              HERMES_TELEGRAM_API_HASH=0123456789abcdef0123456789abcdef\n",
+        )
+        .expect("accept exact Hermes development credentials");
+        assert_eq!(credentials.api_id, 12345);
+        assert_eq!(credentials.api_hash.len(), 32);
+
+        assert!(
+            DevelopmentTelegramCredentialsV1::parse(
+                b"HERMES_TELEGRAM_API_ID=12345\n\
+                  MAKOSH_TELEGRAM_API_HASH=0123456789abcdef0123456789abcdef\n",
+            )
+            .is_err()
+        );
+        assert!(
+            DevelopmentTelegramCredentialsV1::parse(
+                b"HERMES_TELEGRAM_API_ID=12345\n\
+                  HERMES_TELEGRAM_API_HASH=0123456789abcdef0123456789abcdef\n\
+                  UNKNOWN=value\n",
             )
             .is_err()
         );

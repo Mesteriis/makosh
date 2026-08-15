@@ -10,7 +10,7 @@ local_root="$project_root/.local"
 cargo_target_dir="${MAKOSH_DEV_CARGO_TARGET_DIR:-$backend_root/target}"
 release_root="${MAKOSH_DEV_RELEASE_ROOT:-$local_root/dev-release}"
 signing_key="${MAKOSH_DEV_RELEASE_SIGNING_KEY:-$local_root/dev-release-signing-key.pem}"
-tgcalls_root="${MAKOSH_DEV_TGCALLS_ROOT:-$local_root/dev-native/tgcalls}"
+tgcalls_root="${MAKOSH_DEV_TGCALLS_ROOT:-$local_root/dev-native/tgcalls-makosh}"
 attachment_text_extraction_ocr_root="${MAKOSH_DEV_ATTACHMENT_TEXT_EXTRACTION_OCR_ROOT:-$local_root/dev-native/attachment-text-extraction-ocr}"
 whisper_stt_root="${MAKOSH_DEV_WHISPER_STT_ROOT:-$local_root/dev-native/whisper-stt}"
 distribution_id="makosh-local-development"
@@ -39,6 +39,17 @@ require_absolute_path() {
 
 require_regular_file() {
 	test -f "$1" && test ! -L "$1" || fail "$2 must be a regular non-symlink file"
+}
+
+prepare_new_output_directory() {
+	label="$1"
+	output_directory="$2"
+	if test -e "$output_directory" || test -L "$output_directory"; then
+		test -d "$output_directory" && test ! -L "$output_directory" \
+			|| fail "$label output path is invalid"
+		rmdir -- "$output_directory" 2>/dev/null \
+			|| fail "$label output directory exists but is not empty"
+	fi
 }
 
 next_distribution_generation() {
@@ -126,6 +137,7 @@ require_regular_file "$tdjson_path" "TDLib dylib"
 
 tgcalls_path="$tgcalls_root/libmakosh_tgcalls_bridge.dylib"
 if ! test -f "$tgcalls_path"; then
+	prepare_new_output_directory "Telegram call bridge" "$tgcalls_root"
 	printf '%s\n' 'Building the pinned Telegram call bridge for local development...' >&2
 	"$backend_root/scripts/build-telegram-tgcalls-bridge-macos.sh" \
 		--output-dir "$tgcalls_root" \

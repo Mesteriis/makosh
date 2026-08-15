@@ -12,6 +12,7 @@ defineProps<{
 
 const emit = defineEmits<{
 	addAccount: []
+	compose: []
 	load: []
 	openSearch: []
 	toggleInspector: []
@@ -53,7 +54,7 @@ const emit = defineEmits<{
 			<button type="button" @click="emit('toggleInspector')">
 				<Icon icon="tabler:layout-sidebar-right" size="1rem" /> Details
 			</button>
-			<button type="button" class="telegram-workspace-toolbar__new">
+			<button type="button" class="telegram-workspace-toolbar__new" @click="emit('compose')">
 				New <Icon icon="tabler:plus" size="1rem" />
 			</button>
 		</div>

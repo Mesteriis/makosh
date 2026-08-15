@@ -13,7 +13,7 @@ use makosh_obligations_runtime::{
     obligations_settings_schema_bytes_v1,
 };
 use makosh_review_obligation_candidate_api::{
-    REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1, REVIEW_OBLIGATION_CANDIDATE_OWNER_V1,
+    REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1, REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1,
 };
 use makosh_review_obligation_candidate_persistence::{
     REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V3,
@@ -503,7 +503,7 @@ fn assert_exact_unit_boundary(unit: &ObligationCandidateManagedUnitV1) {
         REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1 => {
             assert_eq!(
                 unit.descriptor.owner_id,
-                REVIEW_OBLIGATION_CANDIDATE_OWNER_V1
+                REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1
             );
             assert_eq!(unit.descriptor.module_kind, ModuleKindV1::Domain as i32);
         }

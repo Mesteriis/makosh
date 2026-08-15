@@ -2,6 +2,7 @@
 
 mod bootstrap;
 pub mod control;
+mod observability;
 mod offline;
 pub mod service;
 pub mod transport;
@@ -87,8 +88,25 @@ enum Command {
     },
 }
 
-fn main() -> Result<(), String> {
-    match CommandLine::parse().command {
+fn main() {
+    if let Err(error) = observability::initialize() {
+        eprintln!("Vault observability initialization failed: {error}");
+        std::process::exit(1);
+    }
+    tracing::info!(event = "vault.process.started");
+    if let Err(error) = run(CommandLine::parse().command) {
+        tracing::error!(
+            event = "vault.process.failed",
+            error.class = "vault_runtime",
+            error.message = %error,
+        );
+        std::process::exit(1);
+    }
+    tracing::info!(event = "vault.process.stopped");
+}
+
+fn run(command: Command) -> Result<(), String> {
+    match command {
         Command::Initialize {
             data_dir,
             instance_id,

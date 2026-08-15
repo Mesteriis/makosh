@@ -8,6 +8,7 @@ import type {
 import MailDraftComposer from './MailDraftComposer.vue'
 import MailSignatureLibrary from './MailSignatureLibrary.vue'
 import MailTemplateLibrary from './MailTemplateLibrary.vue'
+import './mailCompositionPanel.css'
 
 defineProps<{
 	model: MailCompositionModel
@@ -43,9 +44,8 @@ const emit = defineEmits<{
 	<section class="mail-composition-workspace">
 		<header class="mail-composition-toolbar">
 			<div>
-				<span>Composition workspace</span>
-				<h2>Drafts, templates &amp; signatures</h2>
-				<p>Mail integration owns these operational records; Communications is not imported.</p>
+				<span>From</span>
+				<p>Choose the provider account used for this message.</p>
 			</div>
 			<label>
 				Connection
@@ -85,6 +85,9 @@ const emit = defineEmits<{
 				@select-draft="emit('selectDraft', $event)"
 				@update-draft="emit('updateDraft', $event)"
 			/>
+		</div>
+		<details class="mail-composition-resources">
+			<summary>Templates and signatures</summary>
 			<div class="mail-composition-library">
 				<MailTemplateLibrary
 					:model="model"
@@ -105,7 +108,7 @@ const emit = defineEmits<{
 					@use-signature="emit('useSignature', $event)"
 				/>
 			</div>
-		</div>
+		</details>
 		<p v-if="model.notice" class="mail-operational-notice" role="status">{{ model.notice }}</p>
 	</section>
 </template>

@@ -23,6 +23,17 @@ describe('DevelopmentOwnerVaultProvisioningHostV1', () => {
 					hpkeAuthenticationTag: bytes(16, 5),
 				})
 			}
+			if (path.endsWith('/telegram-credentials')) {
+				return Response.json({ apiId: '9007199254740993' })
+			}
+			if (path.endsWith('/seal-telegram-api-hash')) {
+				return Response.json({
+					operationDigestSha256: bytes(32, 21),
+					hpkeEncappedKey: bytes(32, 22),
+					ciphertext: [23],
+					hpkeAuthenticationTag: bytes(16, 24),
+				})
+			}
 			if (path.endsWith('/open-receipt')) {
 				return Response.json({
 					operationId: bytes(16, 6),
@@ -39,26 +50,35 @@ describe('DevelopmentOwnerVaultProvisioningHostV1', () => {
 		)
 
 		const started = await host.start()
+		const authorized = {
+			vaultRuntimeGeneration: 9_007_199_254_740_993n,
+			vaultHpkePublicKeyX25519: new Uint8Array(32).fill(10),
+			audienceRegistrationId: 'telegram-registration',
+			audienceRuntimeInstanceId: 'telegram-runtime',
+			audienceRuntimeGeneration: 2n,
+			audienceGrantEpoch: 3n,
+			leaseRequestId: new Uint8Array(16).fill(11),
+			leaseOperationDigestSha256: new Uint8Array(32).fill(12),
+			commandRequestId: new Uint8Array(16).fill(13),
+			leaseResponseHpkeEncappedKey: new Uint8Array(32).fill(14),
+			leaseResponseCiphertext: new Uint8Array([15]),
+			leaseResponseHpkeAuthenticationTag: new Uint8Array(16).fill(16),
+		}
 		const sealed = await host.seal({
 			hostSessionId: started.hostSessionId,
 			operationId: new Uint8Array(16).fill(7),
 			action: 1,
 			secretClass: 4,
 			secretPayload: Uint8Array.from([8, 9]),
-			authorized: {
-				vaultRuntimeGeneration: 9_007_199_254_740_993n,
-				vaultHpkePublicKeyX25519: new Uint8Array(32).fill(10),
-				audienceRegistrationId: 'telegram-registration',
-				audienceRuntimeInstanceId: 'telegram-runtime',
-				audienceRuntimeGeneration: 2n,
-				audienceGrantEpoch: 3n,
-				leaseRequestId: new Uint8Array(16).fill(11),
-				leaseOperationDigestSha256: new Uint8Array(32).fill(12),
-				commandRequestId: new Uint8Array(16).fill(13),
-				leaseResponseHpkeEncappedKey: new Uint8Array(32).fill(14),
-				leaseResponseCiphertext: new Uint8Array([15]),
-				leaseResponseHpkeAuthenticationTag: new Uint8Array(16).fill(16),
-			},
+			authorized,
+		})
+		const telegramCredentials = await host.telegramCredentials()
+		await host.sealTelegramApiHash({
+			hostSessionId: started.hostSessionId,
+			operationId: new Uint8Array(16).fill(25),
+			action: 1,
+			secretClass: 4,
+			authorized,
 		})
 		const receipt = await host.openReceipt(started.hostSessionId, {
 			vaultRuntimeGeneration: 9_007_199_254_740_993n,
@@ -71,9 +91,12 @@ describe('DevelopmentOwnerVaultProvisioningHostV1', () => {
 		await host.cancel(started.hostSessionId)
 
 		expect(receipt.secretRevision).toBe(9_007_199_254_740_993n)
+		expect(telegramCredentials.apiId).toBe(9_007_199_254_740_993n)
 		expect(requests.map(({ path }) => path)).toEqual([
 			'/__makosh/owner-vault-host/v1/start',
 			'/__makosh/owner-vault-host/v1/seal',
+			'/__makosh/owner-vault-host/v1/telegram-credentials',
+			'/__makosh/owner-vault-host/v1/seal-telegram-api-hash',
 			'/__makosh/owner-vault-host/v1/open-receipt',
 			'/__makosh/owner-vault-host/v1/cancel',
 		])
@@ -86,7 +109,12 @@ describe('DevelopmentOwnerVaultProvisioningHostV1', () => {
 				audienceGrantEpoch: '3',
 			},
 		})
-		expect(requests[2]?.body).toMatchObject({
+		expect(requests[3]?.body).toMatchObject({
+			secretPurpose: 'telegram_api_hash',
+			authorized: { vaultRuntimeGeneration: '9007199254740993' },
+		})
+		expect(requests[3]?.body).not.toHaveProperty('secretPayload')
+		expect(requests[4]?.body).toMatchObject({
 			committed: { vaultRuntimeGeneration: '9007199254740993' },
 		})
 		for (const call of fetchImpl.mock.calls) {

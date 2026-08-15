@@ -14,6 +14,7 @@ use hyper::{Response, StatusCode};
 use makosh_gateway_session_contract::{
     BrowserAuthenticationAuthority, BrowserEnrollmentAuthority, ClientBootstrapAuthority,
 };
+use tracing::Instrument;
 
 use crate::{
     BrowserAuthenticationRouter, BrowserBootstrapRouter, BrowserPairingRouter,
@@ -202,27 +203,34 @@ where
         let path = request.uri().path();
         let route = route_class(path, &self.client_blob_routes, &self.client_rpc_routes);
         let method = request.method().clone();
-        if let Some(policy) = &self.development_policy
-            && !policy.admits(&request)
-        {
-            println!(
-                "developer_gateway_request method={} route={} status={} admission=rejected",
-                method,
-                route,
-                StatusCode::FORBIDDEN.as_u16()
-            );
-            return forbidden();
+        let request_span = tracing::debug_span!(
+            "gateway.http_request",
+            http.method = %method,
+            gateway.route = route,
+        );
+        async {
+            if let Some(policy) = &self.development_policy
+                && !policy.admits(&request)
+            {
+                tracing::warn!(
+                    event = "gateway.request.rejected",
+                    http.status_code = StatusCode::FORBIDDEN.as_u16(),
+                    admission.state = "rejected",
+                );
+                return forbidden();
+            }
+            let response = self.route_admitted(request).await;
+            if self.development_policy.is_some() {
+                tracing::debug!(
+                    event = "gateway.request.completed",
+                    http.status_code = response.status().as_u16(),
+                    admission.state = "accepted",
+                );
+            }
+            response
         }
-        let response = self.route_admitted(request).await;
-        if self.development_policy.is_some() {
-            println!(
-                "developer_gateway_request method={} route={} status={} admission=accepted",
-                method,
-                route,
-                response.status().as_u16()
-            );
-        }
-        response
+        .instrument(request_span)
+        .await
     }
 
     async fn route_admitted<B>(&self, request: Request<B>) -> GatewayHttpResponse

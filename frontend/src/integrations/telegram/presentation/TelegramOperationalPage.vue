@@ -4,6 +4,7 @@ import { useResponsiveWorkspaceInspector } from '../../../shared/ui/shell/useRes
 import TelegramAccountAccessPanel from './TelegramAccountAccessPanel.vue'
 import type { TelegramAccountAccessModel } from './telegramAccountAccessModel'
 import TelegramDiscoveryPanel from './TelegramDiscoveryPanel.vue'
+import TelegramNewMessageDialog from './TelegramNewMessageDialog.vue'
 import type { TelegramDiscoveryModel } from './telegramDiscoveryModel'
 import type { TelegramOperationalPageModel } from './telegramOperationalPageModel'
 import TelegramWorkspaceChatList from './TelegramWorkspaceChatList.vue'
@@ -41,6 +42,7 @@ const emit = defineEmits<{
 }>()
 
 const accountDialogOpen = ref(false)
+const composeOpen = ref(false)
 const discoveryDialogOpen = ref(false)
 const inspectorTab = ref<'actions' | 'context'>('context')
 const inspectorVisible = useResponsiveWorkspaceInspector()
@@ -58,6 +60,7 @@ function openDiscovery(): void {
 			:discovery="discovery"
 			:model="model"
 			@add-account="accountDialogOpen = true"
+			@compose="composeOpen = true"
 			@load="emit('load')"
 			@open-search="openDiscovery"
 			@toggle-inspector="inspectorVisible = !inspectorVisible"
@@ -117,6 +120,15 @@ function openDiscovery(): void {
 				</div>
 			</aside>
 		</div>
+
+		<TelegramNewMessageDialog
+			:open="composeOpen"
+			:model="model"
+			@close="composeOpen = false"
+			@select-chat="emit('selectChat', $event)"
+			@send="emit('send')"
+			@update-draft="emit('updateDraft', $event)"
+		/>
 
 		<div v-if="accountDialogOpen" class="telegram-workspace-dialog" role="dialog" aria-modal="true" aria-label="Telegram accounts">
 			<button type="button" class="telegram-workspace-dialog__backdrop" aria-label="Close Telegram accounts" @click="accountDialogOpen = false" />

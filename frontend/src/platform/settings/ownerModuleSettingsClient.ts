@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import { createClient, type Client } from '@connectrpc/connect'
+import { Code, ConnectError, createClient, type Client } from '@connectrpc/connect'
 
 import {
 	ApplyOwnerManagedIntegrationSettingsV1Schema,
@@ -221,34 +221,49 @@ export class OwnerModuleSettingsClientV1 {
 		>,
 	): Promise<CommitOwnerModuleSettingsResponseV1> {
 		const operationId = resolveOwnerOperationIdV1(requestedOperationId)
-		const prepared = await this.client.prepare(create(
-			PrepareOwnerModuleSettingsRequestV1Schema,
-			{ operationId, operation },
-		))
-		if (prepared.major !== 1
-			|| prepared.challengeId.trim().length === 0
-			|| prepared.challengeBytes.byteLength !== 32
-			|| prepared.expiresAtUnixMillis <= BigInt(Date.now())) {
-			throw new Error('owner settings challenge is invalid')
-		}
+		for (let attempt = 0; attempt < 2; attempt += 1) {
+			const prepared = await this.client.prepare(create(
+				PrepareOwnerModuleSettingsRequestV1Schema,
+				{ operationId, operation },
+			))
+			if (prepared.major !== 1
+				|| prepared.challengeId.trim().length === 0
+				|| prepared.challengeBytes.byteLength !== 32
+				|| prepared.expiresAtUnixMillis <= BigInt(Date.now())) {
+				throw new Error('owner settings challenge is invalid')
+			}
 
-		const signature = await this.deviceProof.sign(prepared.challengeBytes)
-		if (signature.byteLength !== 64) {
-			throw new Error('owner device signature is invalid')
+			const signature = await this.deviceProof.sign(prepared.challengeBytes)
+			if (signature.byteLength !== 64) {
+				throw new Error('owner device signature is invalid')
+			}
+			try {
+				const committed = await this.client.commit(create(
+					CommitOwnerModuleSettingsRequestV1Schema,
+					{
+						challengeId: prepared.challengeId,
+						deviceSignatureRaw: signature,
+					},
+				))
+				if (committed.major !== 1
+					|| !sameOwnerOperationIdV1(committed.operationId, operationId)) {
+					throw new Error('owner settings receipt is invalid')
+				}
+				return committed
+			} catch (error) {
+				if (attempt === 0 && isOwnerSettingsConflict(error)) continue
+				throw error
+			}
 		}
-		const committed = await this.client.commit(create(
-			CommitOwnerModuleSettingsRequestV1Schema,
-			{
-				challengeId: prepared.challengeId,
-				deviceSignatureRaw: signature,
-			},
-		))
-		if (committed.major !== 1
-			|| !sameOwnerOperationIdV1(committed.operationId, operationId)) {
-			throw new Error('owner settings receipt is invalid')
-		}
-		return committed
+		throw new Error('owner settings challenge retry exhausted')
 	}
+}
+
+function isOwnerSettingsConflict(error: unknown): boolean {
+	if (error instanceof ConnectError) return error.code === Code.AlreadyExists
+	if (typeof error !== 'object' || error === null) return false
+	const candidate = error as { name?: unknown; code?: unknown }
+	return candidate.name === 'ConnectError' && candidate.code === Code.AlreadyExists
 }
 
 function validateRegistrationId(value: string): void {

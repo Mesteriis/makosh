@@ -249,18 +249,20 @@ impl VaultService {
             Ok(credential) => Ok(credential),
             Err(error) => {
                 if error.is_malformed_record() {
-                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                        eprintln!("developer_vault_recover_malformed_record");
-                    }
+                    tracing::warn!(
+                        event = "vault.secret_record.malformed",
+                        recovery.action = "delete_record",
+                    );
                     let _ = self.store.delete_secret(&scope, now_unix_seconds);
-                } else if error.is_record_not_found()
-                    && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some()
-                {
-                    eprintln!("developer_vault_missing_record");
+                } else if error.is_record_not_found() {
+                    tracing::debug!(event = "vault.secret_record.missing");
+                    return Err(VaultServiceError::SecretUnavailable);
                 }
-                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                    eprintln!("developer_vault_resolve_runtime_credential_error={error:?}");
-                }
+                tracing::warn!(
+                    event = "vault.secret.resolve.failed",
+                    error.class = "secret_store",
+                    error.message = ?error,
+                );
                 Err(VaultServiceError::SecretUnavailable)
             }
         }
@@ -341,9 +343,11 @@ impl VaultService {
             .store
             .store_secret(&scope, token.as_slice())
             .map_err(|error| {
-                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                    eprintln!("developer_vault_store_runtime_credential_error={error:?}");
-                }
+                tracing::warn!(
+                    event = "vault.secret.store.failed",
+                    error.class = "secret_store",
+                    error.message = ?error,
+                );
                 VaultServiceError::SecretUnavailable
             })?;
         Ok(Zeroizing::new(record_id.as_bytes().to_vec()))
@@ -408,7 +412,17 @@ impl VaultService {
         self.store
             .provision(mutation)
             .map(|receipt| Zeroizing::new(receipt.encode()))
-            .map_err(|_| VaultServiceError::SecretUnavailable)
+            .map_err(|error| {
+                tracing::warn!(
+                    event = "vault.secret.provision.failed",
+                    error.class = "secret_store",
+                    error.message = ?error,
+                    secret.action = ?request.action,
+                    secret.class = ?request.secret_class,
+                    secret.revision = lease.request().secret_revision(),
+                );
+                VaultServiceError::SecretUnavailable
+            })
     }
 
     fn ensure_owner_derived_key_once(
@@ -443,9 +457,6 @@ impl VaultService {
 }
 
 fn log_developer_command(command: &VaultTransportCommandV1) {
-    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_none() {
-        return;
-    }
     let name = match command {
         VaultTransportCommandV1::RevokeAudience => "revoke_audience",
         VaultTransportCommandV1::IssueLease { .. } => "issue_lease",
@@ -458,7 +469,11 @@ fn log_developer_command(command: &VaultTransportCommandV1) {
         VaultTransportCommandV1::ReplaceLease { .. } => "replace_lease",
         VaultTransportCommandV1::ProvisionLease { .. } => "provision_lease",
     };
-    eprintln!("developer_vault_command={name}");
+    tracing::debug!(
+        event = "vault.command.received",
+        command.name = name,
+        payload.redaction = "credential_plaintext",
+    );
 }
 
 fn scope_for_lease(

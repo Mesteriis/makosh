@@ -2,6 +2,7 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { MailLegacyRecoveryWorkflowV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
 import type { MailLegacyRecoveryResultV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
+import { runGmailOAuthBrowserFlowV1 } from '../../../integrations/mail/oauth/gmailOAuthBrowserFlow'
 import {
 	TelegramLegacyRecoveryWorkflowV1,
 	type TelegramLegacyRecoveryResultV1,
@@ -32,8 +33,6 @@ export function useLegacyProviderRecovery(
 	const progress = ref<Record<string, LegacyProviderCandidateProgressV1>>({})
 	const mailResults = shallowRef<MailLegacyRecoveryResultV1[]>([])
 	const telegramResult = shallowRef<TelegramLegacyRecoveryResultV1>()
-	const returnedState = ref('')
-	const authorizationCode = ref('')
 	const oauthAccepted = ref(false)
 	const busy = ref(false)
 	const message = ref('')
@@ -119,14 +118,13 @@ export function useLegacyProviderRecovery(
 		const current = gmailResult.value
 		if (!current || current.kind !== 'gmail') return
 		await run(async () => {
-			await mail.completeGmail(current, {
-				returnedState: returnedState.value,
-				authorizationCode: authorizationCode.value,
-			})
+			const callback = await runGmailOAuthBrowserFlowV1(
+				current.oauth.started.authorizationUrl,
+			)
+			await mail.completeGmail(current, callback)
 			oauthAccepted.value = true
 			message.value = 'Gmail OAuth completion was accepted. Mail readiness will update after reconciliation.'
 		}, 'Gmail OAuth completion was rejected.')
-		authorizationCode.value = ''
 	}
 
 	async function run(action: () => Promise<void>, failure: string): Promise<void> {
@@ -160,8 +158,6 @@ export function useLegacyProviderRecovery(
 
 	onBeforeUnmount(() => {
 		void cancelActiveSession()
-		authorizationCode.value = ''
-		returnedState.value = ''
 	})
 
 	return {
@@ -169,8 +165,6 @@ export function useLegacyProviderRecovery(
 		progress,
 		mailResults,
 		telegramResult,
-		returnedState,
-		authorizationCode,
 		oauthAccepted,
 		busy,
 		message,

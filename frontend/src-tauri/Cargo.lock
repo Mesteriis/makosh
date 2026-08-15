@@ -114,12 +114,12 @@ dependencies = [
  "cpal",
  "directories",
  "getrandom 0.4.3",
+ "libc",
+ "log",
  "makosh-desktop-call-recording-api",
  "makosh-owner-vault-provisioning-host",
  "makosh-runtime-protocol",
  "makosh-whatsapp-api",
- "libc",
- "log",
  "prost",
  "rfd",
  "serde",
@@ -1628,56 +1628,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
-name = "makosh-desktop-call-recording-api"
-version = "0.1.0"
-dependencies = [
- "makosh-runtime-protocol",
- "prost",
- "prost-build",
- "protoc-bin-vendored",
- "sha2 0.11.0",
-]
-
-[[package]]
-name = "makosh-owner-vault-provisioning-host"
-version = "0.1.0"
-dependencies = [
- "makosh-vault-protocol",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "makosh-runtime-protocol"
-version = "0.1.0"
-dependencies = [
- "getrandom 0.4.3",
- "prost",
- "prost-build",
- "prost-types",
- "protoc-bin-vendored",
-]
-
-[[package]]
-name = "makosh-vault-protocol"
-version = "0.1.0"
-dependencies = [
- "hpke",
- "sha2 0.11.0",
- "zeroize",
-]
-
-[[package]]
-name = "makosh-whatsapp-api"
-version = "0.1.0"
-dependencies = [
- "prost",
- "prost-build",
- "protoc-bin-vendored",
- "serde",
-]
-
-[[package]]
 name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2279,6 +2229,57 @@ name = "mach2"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dae608c151f68243f2b000364e1f7b186d9c29845f7d2d85bd31b9ad77ad552b"
+
+[[package]]
+name = "makosh-desktop-call-recording-api"
+version = "0.1.0"
+dependencies = [
+ "makosh-runtime-protocol",
+ "prost",
+ "prost-build",
+ "protoc-bin-vendored",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "makosh-owner-vault-provisioning-host"
+version = "0.1.0"
+dependencies = [
+ "makosh-vault-protocol",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-runtime-protocol"
+version = "0.1.0"
+dependencies = [
+ "getrandom 0.4.3",
+ "libc",
+ "prost",
+ "prost-build",
+ "prost-types",
+ "protoc-bin-vendored",
+]
+
+[[package]]
+name = "makosh-vault-protocol"
+version = "0.1.0"
+dependencies = [
+ "hpke",
+ "sha2 0.11.0",
+ "zeroize",
+]
+
+[[package]]
+name = "makosh-whatsapp-api"
+version = "0.1.0"
+dependencies = [
+ "prost",
+ "prost-build",
+ "protoc-bin-vendored",
+ "serde",
+]
 
 [[package]]
 name = "markup5ever"

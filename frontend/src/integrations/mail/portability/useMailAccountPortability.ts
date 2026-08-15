@@ -1,5 +1,6 @@
 import { computed, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
+import { runGmailOAuthBrowserFlowV1 } from '../oauth/gmailOAuthBrowserFlow'
 import {
 	MailAccountPortabilityWorkflowV1,
 	type MailAccountImportStateV1,
@@ -13,8 +14,6 @@ export function useMailAccountPortability(
 	const importJson = ref('')
 	const imapPassword = ref('')
 	const smtpPassword = ref('')
-	const gmailState = ref('')
-	const gmailAuthorizationCode = ref('')
 	const importState = shallowRef<MailAccountImportStateV1>()
 	const busy = ref(false)
 	const localErrorCode = ref('')
@@ -156,17 +155,18 @@ export function useMailAccountPortability(
 
 	async function completeGmail(): Promise<void> {
 		const current = importState.value
-		if (!current || !gmailState.value || !gmailAuthorizationCode.value) {
+		if (!current?.gmailOAuthStarted) {
 			localErrorCode.value = 'mail_import_gmail_completion_required'
 			return
 		}
 		await run(async () => {
+			const callback = await runGmailOAuthBrowserFlowV1(
+				current.gmailOAuthStarted!.authorizationUrl,
+			)
 			importState.value = await workflow.completeGmailOAuth(current, {
-				state: gmailState.value,
-				authorizationCode: gmailAuthorizationCode.value,
+				state: callback.returnedState,
+				authorizationCode: callback.authorizationCode,
 			})
-			gmailState.value = ''
-			gmailAuthorizationCode.value = ''
 		}, 'mail_import_gmail_completion_failed')
 	}
 
@@ -194,8 +194,6 @@ export function useMailAccountPortability(
 		importJson,
 		imapPassword,
 		smtpPassword,
-		gmailState,
-		gmailAuthorizationCode,
 		importState,
 		busy,
 		canExport,

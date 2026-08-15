@@ -6,6 +6,9 @@ use crate::v1::{
 };
 
 pub const MAX_VAULT_CIPHERTEXT_BYTES: usize = 256 * 1024;
+/// Expected negative result when a caller probes for a credential before
+/// provisioning it. Callers may generate or provision the secret afterwards.
+pub const VAULT_SECRET_UNAVAILABLE_ERROR_CODE: &str = "secret_unavailable";
 /// Opaque SHA-256 digest of the only Storage Vault operation permitted while a
 /// binding is already in the durable `revoking` state.
 pub const STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1: [u8; 32] = [

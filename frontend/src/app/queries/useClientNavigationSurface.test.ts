@@ -186,6 +186,14 @@ describe('compiled client navigation', () => {
 		expect(navigationSource).not.toContain('useCommunicationsPageSurface')
 	})
 
+	it('starts from the shared base-light visual baseline', () => {
+		const navigationSource = readFileSync(new URL('./useClientNavigationSurface.ts', import.meta.url), 'utf8')
+
+		expect(navigationSource).toContain('themeNameToSelection(defaultUiThemeName)')
+		expect(navigationSource).not.toContain("ref<UiThemeFamily>('makosh')")
+		expect(navigationSource).not.toContain("ref<UiThemeMode>('dark')")
+	})
+
 	it('keeps the last confirmed bootstrap while the SSE recovery request is unavailable', () => {
 		const navigationSource = readFileSync(new URL('./useClientNavigationSurface.ts', import.meta.url), 'utf8')
 

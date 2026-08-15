@@ -19,7 +19,7 @@
 | Предыдущая документация | Перенесена в `references/backend-legacy/docs/` и не является действующей policy |
 
 Наличие workspace package или UI route не означает release admission либо
-live provider readiness. `make dev` не создаёт provider credentials и не
+live provider readiness. `make dev` сам по себе не создаёт provider accounts и не
 запускает managed domain/integration runtimes за пределами их отдельных
 assembly/admission units; клиент показывает фактическую availability из
 Gateway bootstrap.
@@ -56,7 +56,12 @@ development owner identity, запускает Kernel с loopback Core Gateway �
 `http://127.0.0.1:5173/`. Kernel и Vite имеют один foreground lifecycle;
 Compose остаётся запущенным после остановки. По умолчанию используется
 `.local/kernel-dev`; другой абсолютный data directory задаётся через
-`MAKOSH_DEV_DATA_DIR`. `tauri` собирает desktop app.
+`MAKOSH_DEV_DATA_DIR`. Если owner-private корневой `.env` существует, loopback
+native host принимает из него только exact Telegram application ID/hash в
+namespace `HERMES_*` или `MAKOSH_*`. При нажатии `Connect with QR` публичный ID
+попадает в typed Settings, а hash шифруется native host напрямую в Vault и не
+возвращается browser JavaScript. Другой absolute source можно явно задать через
+`MAKOSH_DEV_TELEGRAM_CREDENTIALS_FILE`. `tauri` собирает desktop app.
 
 `.pre-commit-config.yaml` устанавливает оба Git hook type одной командой:
 

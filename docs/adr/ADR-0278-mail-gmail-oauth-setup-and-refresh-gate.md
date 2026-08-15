@@ -15,6 +15,17 @@ one-use completion, CAS rotation, stale/revoke fences, sanitized output и
 architecture, SRP, Cargo, Clippy и full backend gates зелёные;
 `mail_gmail_oauth_v1` открыт.
 
+Client update 2026-08-14 реализует loopback browser callback для web/dev
+surface: setup, permanent-delete authority, portability и legacy recovery
+открывают exact Google authorization URL и автоматически передают matching
+`state` и one-use code в generated Mail completion contract. Callback принимает
+только exact Google endpoint, exact текущий loopback redirect, `response_type`
+`code` и PKCE `S256`, удаляет query из browser history до дальнейшей обработки
+и использует отдельный same-origin channel, scoped by exact `state`. UI больше
+не предлагает ручной copy/paste `state` или authorization code; эти значения не
+попадают в логи или rendered callback copy. Native Tauri/system-browser
+loopback host этим client slice не реализован и остаётся отдельным gate.
+
 Уточняет:
 
 - ADR-0204: integration/provider-neutral context boundary;
@@ -256,9 +267,11 @@ compile-time conformance endpoints. Full `make ci` проверяет workspace,
 integration profile, architecture/SRP/Cargo boundaries, dependency policy и
 supply-chain evidence.
 
-Frontend popup/callback UX и Scheduler-driven proactive refresh являются
-следующими client/job slices. Они используют этот owner contract, но не
-доказывают backend gate.
+Loopback web/dev popup/callback UX реализован в frontend и покрывает обычный
+setup, permanent-delete authority, portability и legacy recovery. Он использует
+этот owner contract, но не расширяет и не доказывает backend admission gate.
+Native Tauri/system-browser callback host и Scheduler-driven proactive refresh
+остаются следующими client/job slices.
 
 ## Отклонённые варианты
 

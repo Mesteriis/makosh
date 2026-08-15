@@ -1942,6 +1942,12 @@ const RECOVERY_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     {
       name: 'signal-hook', kind: 'normal', source: 'crates_io', version: '=0.3.18', defaultFeatures: true, features: [],
     },
+    {
+      name: 'tracing', kind: 'normal', source: 'crates_io', version: '=0.1.44', defaultFeatures: true, features: [],
+    },
+    {
+      name: 'tracing-subscriber', kind: 'normal', source: 'crates_io', version: '=0.3.20', defaultFeatures: true, features: [],
+    },
   ],
   'makosh-secure-file': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
@@ -1982,6 +1988,8 @@ const VAULT_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'p256', kind: 'normal', source: 'crates_io', version: '=0.14.0', defaultFeatures: false, features: ['ecdsa'] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'tracing', kind: 'normal', source: 'crates_io', version: '=0.1.44', defaultFeatures: true, features: [] },
+    { name: 'tracing-subscriber', kind: 'normal', source: 'crates_io', version: '=0.3.20', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
 };
@@ -1998,6 +2006,8 @@ const TELEMETRY_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
   'makosh-telemetry-collector': [
     { name: 'libc', kind: 'normal', source: 'crates_io', version: '=0.2.186', defaultFeatures: true, features: [] },
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
+    { name: 'tracing', kind: 'normal', source: 'crates_io', version: '=0.1.44', defaultFeatures: true, features: [] },
+    { name: 'tracing-subscriber', kind: 'normal', source: 'crates_io', version: '=0.3.20', defaultFeatures: true, features: [] },
   ],
 };
 
@@ -2020,6 +2030,8 @@ const STORAGE_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'prost', kind: 'normal', source: 'crates_io', version: '=0.14.4', defaultFeatures: true, features: [] },
     { name: 'sha2', kind: 'normal', source: 'crates_io', version: '=0.11.0', defaultFeatures: false, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['net', 'rt', 'time'] },
+    { name: 'tracing', kind: 'normal', source: 'crates_io', version: '=0.1.44', defaultFeatures: true, features: [] },
+    { name: 'tracing-subscriber', kind: 'normal', source: 'crates_io', version: '=0.3.20', defaultFeatures: true, features: [] },
     { name: 'zeroize', kind: 'normal', source: 'crates_io', version: '=1.9.0', defaultFeatures: true, features: [] },
   ],
   'makosh-storage-postgres': [
@@ -2184,6 +2196,7 @@ const GATEWAY_RUNTIME_FOUNDATION_THIRD_PARTY_DEPENDENCY_ALLOWLIST = {
     { name: 'serde_json', kind: 'normal', source: 'crates_io', version: '=1.0.150', defaultFeatures: true, features: [] },
     { name: 'tokio', kind: 'normal', source: 'crates_io', version: '=1.52.4', defaultFeatures: false, features: ['io-util', 'macros', 'net', 'rt', 'sync'] },
     { name: 'tokio-rustls', kind: 'normal', source: 'crates_io', version: '=0.26.4', defaultFeatures: true, features: [] },
+    { name: 'tracing', kind: 'normal', source: 'crates_io', version: '=0.1.44', defaultFeatures: true, features: [] },
     { name: 'webauthn-rs-core', kind: 'normal', source: 'crates_io', version: '=0.5.5', defaultFeatures: true, features: [] },
   ],
 };

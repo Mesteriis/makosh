@@ -290,14 +290,14 @@ mod tests {
                 .expect("typed fragment");
 
         let descriptor = decode_descriptor_v1(&descriptor_bytes).expect("descriptor");
-        assert_eq!(descriptor.owner_id, "review");
+        assert_eq!(descriptor.owner_id, "review_obligation_candidate");
         assert_eq!(
             descriptor.module_id,
             "makosh-review-obligation-candidate-runtime"
         );
         decode_settings_schema_v1(&settings_bytes).expect("settings");
         StorageBundleV1::decode(storage_bytes.as_slice()).expect("storage");
-        assert_eq!(fragment.owner_id, "review");
+        assert_eq!(fragment.owner_id, "review_obligation_candidate");
         assert_eq!(
             fragment.module_id,
             "makosh-review-obligation-candidate-runtime"

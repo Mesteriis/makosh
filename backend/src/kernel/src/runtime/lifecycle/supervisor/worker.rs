@@ -81,6 +81,15 @@ pub(super) fn new_active_worker(input: ActiveWorkerInput) -> ActiveWorker {
     let (relay, relay_requests) = mpsc::sync_channel(64);
     let (ready_sender, ready) = mpsc::sync_channel(1);
     let join = std::thread::spawn(move || {
+        let worker_span = tracing::info_span!(
+            "managed_runtime.worker",
+            module.id = expectation.module_id(),
+            runtime.generation = expectation.runtime_generation(),
+            grant.epoch = expectation.grant_epoch(),
+            control.transport = ?control_transport,
+        );
+        let _worker_guard = worker_span.enter();
+        tracing::info!(event = "managed_runtime.worker.started");
         record_worker_result(
             &inner,
             &registration_id,
@@ -138,13 +147,18 @@ pub(super) fn remove_staged_launch(
 }
 
 fn record_worker_result(inner: &Inner, registration_id: &str, result: Result<(), String>) {
-    if let Err(error) = result {
-        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-            eprintln!("developer_managed_runtime_failed process={registration_id} error={error}");
+    match result {
+        Ok(()) => tracing::info!(event = "managed_runtime.worker.stopped"),
+        Err(error) => {
+            tracing::error!(
+                event = "managed_runtime.worker.failed",
+                error.class = "managed_runtime_failure",
+                error.message = %error,
+            );
+            let _ = inner
+                .failures
+                .lock()
+                .map(|mut failures| failures.insert(registration_id.to_owned(), error));
         }
-        let _ = inner
-            .failures
-            .lock()
-            .map(|mut failures| failures.insert(registration_id.to_owned(), error));
     }
 }

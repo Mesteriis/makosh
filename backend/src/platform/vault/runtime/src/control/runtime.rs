@@ -8,6 +8,7 @@ use makosh_runtime_protocol::v1::{
     managed_vault_runtime_control_request_v1::Operation,
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
+use makosh_runtime_protocol::validation::vault::VAULT_SECRET_UNAVAILABLE_ERROR_CODE;
 use makosh_runtime_protocol::validation::vault::validate_vault_runtime_status_v1;
 
 use crate::control::inherited::{open_and_describe, read_frame, write_frame};
@@ -35,11 +36,31 @@ pub(crate) fn serve_on_channel(
     keys: &VaultTransportKeyPair,
     authorization_key_sec1: [u8; 65],
 ) -> Result<(), String> {
+    let span = tracing::info_span!(
+        "vault.control",
+        runtime.generation = service.runtime_generation(),
+    );
+    let _entered = span.enter();
+    tracing::info!(event = "vault.control.ready");
     let mut replay_guard = VaultTransportReplayGuard::new(service.runtime_generation());
     loop {
-        let request =
-            ManagedVaultRuntimeControlRequestV1::decode(read_frame(&mut channel)?.as_slice())
-                .map_err(|_| "Vault inherited control frame is invalid".to_owned())?;
+        let frame = read_frame(&mut channel)?;
+        let request = ManagedVaultRuntimeControlRequestV1::decode(frame.as_slice())
+            .map_err(|_| "Vault inherited control frame is invalid".to_owned())?;
+        let is_status_probe = matches!(request.operation, Some(Operation::GetStatus(_)));
+        if is_status_probe {
+            tracing::trace!(
+                event = "vault.control.status_probe.received",
+                control.operation = operation_name(&request),
+                payload.frame_bytes = frame.len(),
+            );
+        } else {
+            tracing::debug!(
+                event = "vault.control.request.received",
+                control.operation = operation_name(&request),
+                payload.frame_bytes = frame.len(),
+            );
+        }
         let response = response_for(
             request,
             service,
@@ -48,13 +69,45 @@ pub(crate) fn serve_on_channel(
             authorization_key_sec1,
         )
         .unwrap_or_else(|error| {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!("developer_vault_operation_denied={error}");
+            if error == VAULT_SECRET_UNAVAILABLE_ERROR_CODE {
+                tracing::debug!(
+                    event = "vault.control.secret_unavailable",
+                    error.code = VAULT_SECRET_UNAVAILABLE_ERROR_CODE,
+                );
+                return error_response(VAULT_SECRET_UNAVAILABLE_ERROR_CODE);
+            }
+            tracing::warn!(
+                event = "vault.control.operation.denied",
+                error.class = "vault_operation_denied",
+                error.message = %error,
+            );
+            if tracing::enabled!(tracing::Level::DEBUG) {
                 return error_response(&format!("developer_denied_{error}"));
             }
             error_response("operation_denied")
         });
+        if is_status_probe {
+            tracing::trace!(
+                event = "vault.control.status_probe.ready",
+                response.error_code = %response.error_code,
+                response.has_result = response.result.is_some(),
+            );
+        } else {
+            tracing::debug!(
+                event = "vault.control.response.ready",
+                response.error_code = %response.error_code,
+                response.has_result = response.result.is_some(),
+            );
+        }
         write_frame(&mut channel, &response.encode_to_vec())?;
+    }
+}
+
+fn operation_name(request: &ManagedVaultRuntimeControlRequestV1) -> &'static str {
+    match request.operation {
+        Some(Operation::GetStatus(_)) => "get_status",
+        Some(Operation::CiphertextRoute(_)) => "ciphertext_route",
+        None => "unavailable",
     }
 }
 

@@ -67,6 +67,16 @@ fn serve_bootstrapped(
     identity: ManagedStorageRuntimeIdentityV1,
     configuration: StorageRuntimeConfigurationV1,
 ) -> Result<(), String> {
+    let span = tracing::info_span!(
+        "storage.control",
+        runtime.generation = identity.audience().runtime_generation(),
+        grant.epoch = identity.audience().grant_epoch(),
+    );
+    let _entered = span.enter();
+    tracing::debug!(
+        event = "storage.configuration.loaded",
+        payload.configuration = ?configuration,
+    );
     let configuration = quarantine_invalid_desired_bindings(&configuration);
     let active_bindings = bootstrap_platform_services(&mut channel, &identity, &configuration)?;
     announce_ready(&mut channel, &identity)?;
@@ -287,7 +297,24 @@ fn response_for(
     configuration: &mut StorageRuntimeConfigurationV1,
     active_bindings: &mut Vec<makosh_storage_protocol::v1::StorageBindingV1>,
 ) -> StorageRuntimeControlResponseV1 {
+    let is_status_probe = matches!(request.operation, Some(Operation::GetStatus(_)));
+    if is_status_probe {
+        tracing::trace!(
+            event = "storage.control.status_probe.received",
+            payload.request = ?request,
+        );
+    } else {
+        tracing::debug!(
+            event = "storage.control.request.received",
+            payload.request = ?request,
+        );
+    }
     if validate_storage_runtime_control_request(&request).is_err() {
+        tracing::warn!(
+            event = "storage.control.request.rejected",
+            error.class = "contract_validation",
+            payload.request = ?request,
+        );
         return error_response("operation_not_available");
     }
     match request.operation {
@@ -311,9 +338,11 @@ fn response_for(
                     revoked_response(binding)
                 })
                 .unwrap_or_else(|error| {
-                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                        eprintln!("developer_storage_binding_revocation_error={error}");
-                    }
+                    tracing::warn!(
+                        event = "storage.binding.revocation.failed",
+                        error.class = "binding_revocation",
+                        error.message = %error,
+                    );
                     error_response(revocation_error_code(&error))
                 })
             },
@@ -331,9 +360,11 @@ fn response_for(
                 )
                 .map(active_response)
                 .unwrap_or_else(|error| {
-                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                        eprintln!("developer_storage_binding_apply_error={error}");
-                    }
+                    tracing::warn!(
+                        event = "storage.binding.apply.failed",
+                        error.class = "binding_apply",
+                        error.message = %error,
+                    );
                     error_response(apply_error_code(&error))
                 })
             },

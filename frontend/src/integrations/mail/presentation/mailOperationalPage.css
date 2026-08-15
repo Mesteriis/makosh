@@ -669,7 +669,7 @@
 }
 
 .mail-workspace-dialog__surface--compose {
-	width: min(74rem, 96vw);
+	width: min(58rem, 96vw);
 }
 
 .mail-workspace-dialog__surface > header {

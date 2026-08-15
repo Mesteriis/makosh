@@ -1,4 +1,5 @@
 import type {
+	AuthorizedProvisioningHostInputV1,
 	CommittedProvisioningHostInputV1,
 	OwnerVaultProvisioningHostV1,
 	SanitizedProvisioningHostReceiptV1,
@@ -10,6 +11,10 @@ import type {
 const DEVELOPMENT_HOST_BASE_PATH = '/__makosh/owner-vault-host/v1'
 
 type HostFetch = typeof fetch
+
+export type DevelopmentTelegramCredentialsV1 = {
+	apiId: bigint
+}
 
 export class DevelopmentOwnerVaultProvisioningHostV1 implements OwnerVaultProvisioningHostV1 {
 	constructor(
@@ -37,22 +42,7 @@ export class DevelopmentOwnerVaultProvisioningHostV1 implements OwnerVaultProvis
 				action: input.action,
 				secretClass: input.secretClass,
 				secretPayload,
-				authorized: {
-					vaultRuntimeGeneration: input.authorized.vaultRuntimeGeneration.toString(),
-					vaultHpkePublicKeyX25519: Array.from(input.authorized.vaultHpkePublicKeyX25519),
-					audienceRegistrationId: input.authorized.audienceRegistrationId,
-					audienceRuntimeInstanceId: input.authorized.audienceRuntimeInstanceId,
-					audienceRuntimeGeneration: input.authorized.audienceRuntimeGeneration.toString(),
-					audienceGrantEpoch: input.authorized.audienceGrantEpoch.toString(),
-					leaseRequestId: Array.from(input.authorized.leaseRequestId),
-					leaseOperationDigestSha256: Array.from(input.authorized.leaseOperationDigestSha256),
-					commandRequestId: Array.from(input.authorized.commandRequestId),
-					leaseResponseHpkeEncappedKey: Array.from(input.authorized.leaseResponseHpkeEncappedKey),
-					leaseResponseCiphertext: Array.from(input.authorized.leaseResponseCiphertext),
-					leaseResponseHpkeAuthenticationTag: Array.from(
-						input.authorized.leaseResponseHpkeAuthenticationTag,
-					),
-				},
+				authorized: authorizedBody(input.authorized),
 			})
 			return {
 				operationDigestSha256: bytes(response.operationDigestSha256, 32),
@@ -62,6 +52,30 @@ export class DevelopmentOwnerVaultProvisioningHostV1 implements OwnerVaultProvis
 			}
 		} finally {
 			secretPayload.fill(0)
+		}
+	}
+
+	async telegramCredentials(): Promise<DevelopmentTelegramCredentialsV1> {
+		const response = await this.post('/telegram-credentials', {})
+		return { apiId: requiredPositiveUnsigned(response.apiId) }
+	}
+
+	async sealTelegramApiHash(
+		input: Omit<SealProvisioningHostInputV1, 'secretPayload'>,
+	): Promise<SealedProvisioningHostCommandV1> {
+		const response = await this.post('/seal-telegram-api-hash', {
+			secretPurpose: 'telegram_api_hash',
+			hostSessionId: input.hostSessionId,
+			operationId: Array.from(input.operationId),
+			action: input.action,
+			secretClass: input.secretClass,
+			authorized: authorizedBody(input.authorized),
+		})
+		return {
+			operationDigestSha256: bytes(response.operationDigestSha256, 32),
+			hpkeEncappedKey: bytes(response.hpkeEncappedKey, 32),
+			ciphertext: bytes(response.ciphertext),
+			hpkeAuthenticationTag: bytes(response.hpkeAuthenticationTag, 16),
 		}
 	}
 
@@ -133,6 +147,29 @@ function requiredUnsigned(value: unknown): bigint {
 		throw new Error('owner Vault development host response is invalid')
 	}
 	return BigInt(value)
+}
+
+function requiredPositiveUnsigned(value: unknown): bigint {
+	const parsed = requiredUnsigned(value)
+	if (parsed <= 0n) throw new Error('owner Vault development host response is invalid')
+	return parsed
+}
+
+function authorizedBody(input: AuthorizedProvisioningHostInputV1): Record<string, unknown> {
+	return {
+		vaultRuntimeGeneration: input.vaultRuntimeGeneration.toString(),
+		vaultHpkePublicKeyX25519: Array.from(input.vaultHpkePublicKeyX25519),
+		audienceRegistrationId: input.audienceRegistrationId,
+		audienceRuntimeInstanceId: input.audienceRuntimeInstanceId,
+		audienceRuntimeGeneration: input.audienceRuntimeGeneration.toString(),
+		audienceGrantEpoch: input.audienceGrantEpoch.toString(),
+		leaseRequestId: Array.from(input.leaseRequestId),
+		leaseOperationDigestSha256: Array.from(input.leaseOperationDigestSha256),
+		commandRequestId: Array.from(input.commandRequestId),
+		leaseResponseHpkeEncappedKey: Array.from(input.leaseResponseHpkeEncappedKey),
+		leaseResponseCiphertext: Array.from(input.leaseResponseCiphertext),
+		leaseResponseHpkeAuthenticationTag: Array.from(input.leaseResponseHpkeAuthenticationTag),
+	}
 }
 
 function bytes(value: unknown, exactLength?: number): Uint8Array {

@@ -1,15 +1,26 @@
 # Макошь backend clean room
 
 The current exact production policy slice is
-`attachment_security_engine_v1`. It contains the admitted platform/Core
-packages, the six-package Communications domain owner, and the six-package
-Attachment Security engine owner. Attachment Security is neither a domain nor
-an integration: it receives typed durable observations, owns its PostgreSQL
-join/jobs/outbox, uses Kernel-issued Storage/Blob/Event capabilities, and emits
-only the typed verdict fact consumed by Communications. Provider integrations
-and workflows remain outside production inventory. With a trustworthy Control
-Store Kernel reaches `module_control_plane`; without one it fails closed to
-`recovery_only`, and no separate Kernel `ready` state is claimed.
+`speech_to_text_whisper_admission_v1`: 283 production packages and 253 business
+capabilities. Its admitted inventory includes the platform/Core and Gateway
+packages, five domain owners, four integration owners, 21 workflow owners and
+four engines recorded in `backend/architecture/policy.json`. The workspace also
+contains 120 `implemented-not-admitted` production-role packages for Tasks
+10–26. Their code, release fragments or development launch do not grant
+production rights.
+
+Task 10 Telegram is the first sequential admission gate. It still requires
+authorized real TDLib account evidence and release-eligible tgcalls macOS audio
+evidence. Tasks 11–25 remain staged behind it; Zoom, Yandex Telemost and
+OmniRoute additionally require their own real-provider success contours. These
+boundaries must not be bypassed by reordering slices or admitting mock success.
+`make -C backend telegram-admission-preflight` checks the exact TDLib digest,
+release-eligible tgcalls provenance and owner-private credential-file metadata
+before starting the live contour. It does not read credential values, contact
+Telegram, request audio-device access or count as provider evidence.
+With a trustworthy Control Store Kernel reaches `module_control_plane`; without
+one it fails closed to `recovery_only`, and no separate Kernel `ready` state is
+claimed.
 
 The previous implementation is available at
 `references/backend-legacy/`, but it is not a dependency and is not an
@@ -17,8 +28,8 @@ architectural template.
 
 ## Entry conditions for new code
 
-The following questions remain mandatory for later product slices, while
-ADR-0225 closes them only for the recovery-only Kernel slice:
+The following questions remain mandatory for every later product admission;
+passing them for an earlier slice does not authorize a later owner:
 
 1. the product capabilities that are actually supported;
 2. canonical evidence and event invariants that must remain stable;
@@ -67,20 +78,18 @@ integration-plugin/client boundary, plus the closed responsibility set and
 boot/recovery states of Kernel. Provider-specific operational screens remain
 first-class desktop/Android experiences, while context domains consume only
 neutral evidence contracts. Canonical domains, the development allowlist and
-the shared durable envelope are fixed. The current implementation inventory
-contains six Kernel packages and five Vault packages
-are authorized, and no owner module is part of the current slice. Owner-specific
-product, evidence and provider contracts still require explicit decisions
-before their phase gate is opened.
+the shared durable envelope are fixed. The current admitted inventory is the
+exact `speech_to_text_whisper_admission_v1` allowlist; additional implemented
+owners remain powerless until their own sequential phase gate is opened.
 
 The compile-isolation policy is already executable: Kernel and Gateway cannot
 depend on owner modules, modules cannot depend on Kernel, integrations can use
 only the exact Communications ingress and attachment contract units, and
 aggregate backend/common/provider packages are forbidden. The
-current-inventory guard is intentionally separate from the
-reusable dependency validator: the former accepts only the exact ADR-0225
-package set in the real workspace, while the latter can still prove future
-owner graphs without authorizing those packages now.
+current-inventory guard is intentionally separate from the reusable dependency
+validator: the former accepts only the current exact production allowlist,
+while the latter can still prove staged owner graphs without authorizing those
+packages now.
 
 ADR-0213 additionally requires every production module to prove independent
 build, test, lifecycle and failure behavior. Its Cargo/storage/test-layout
@@ -89,9 +98,10 @@ must be added with the first production slice where they apply.
 
 ADR-0214 applies one Job Platform contract to every integration, domain, AI,
 workflow and platform owner. Scheduler owns timing and reconciliation;
-executable handlers and durable execution state stay owner-local. The current
-Scheduler packages are platform foundation only: no owner handler, NATS
-dispatch or managed Scheduler runtime exists yet.
+executable handlers and durable execution state stay owner-local. The admitted
+platform includes Scheduler persistence, JetStream dispatch and a managed
+runtime. Each owner-specific job kind still requires the exact owner capability
+and release admission.
 
 ADR-0215 defines open local registration with zero rights before explicit
 approval. Runtime rights are a typed intersection of requested, approved and
@@ -126,28 +136,28 @@ revision/schema SHA-256, preserves outbox bytes through NATS publication and
 separates durable Ack, broker ACK, terminal result, technical DLQ and client
 SSE semantics. The protocol now includes a generic owner-local outbox relay
 port: owner persistence marks an entry published only after a transport ACK.
-Test-only delivery scaffolds exercised that port against PostgreSQL in a separate
-schema per designable owner and relayed exact bytes through an authenticated
-JetStream test runtime before the first owner admission, but contain no owner
-package, domain table, handler, migration or public contract. Their one narrow SQL allowance is
+Test-only delivery scaffolds exercise that port against PostgreSQL in a separate
+schema per designable owner and relay exact bytes through an authenticated
+JetStream test runtime without granting production admission. Their one narrow SQL allowance is
 `makosh-events-jetstream-testkit:dev:sqlx`; the Cargo guard rejects this client
-for production packages and all other test packages. The NATS platform gate is
-open. The later `first_owner_v1` gate admitted the Communications owner, and the
-current `attachment_security_engine_v1` slice also admits the separate
-Attachment Security Engine.
+for production packages and all other test packages. The NATS platform gate and
+the exact owner/event capabilities listed by the current production slice are
+open; staged owners remain outside that inventory.
 
 ADR-0221 defines the exact `makosh-runtime-protocol` package for
 `ModuleDescriptorV1`. Distribution manifest, descriptor, GrantSet and
 RuntimeState have separate authority; capabilities are approved, resolved and
 degraded independently. The package contains wire types only; the current
 private module control plane performs registration, approval and capability
-routing, while owner modules and public data-plane activation remain closed.
+routing. Only owner modules and public data-plane routes in the exact admitted
+inventory are active.
 
 ADR-0222 makes Settings Registry an exclusive Kernel component. Module owners
 declare typed schemas, while Kernel persists desired/effective revisions in the
 private Control Store and supervises hot apply or restart. Settings never carry
-secrets, business/runtime state, cursors or Scheduler records. No production
-settings schema, API or runtime implementation exists.
+secrets, business/runtime state, cursors or Scheduler records. Admitted module
+schemas and public settings routes remain exact capability-gated surfaces;
+staged schemas do not become production settings merely by being compiled.
 
 ADR-0223 makes Vault a separate verified managed process. Kernel supervises it,
 computes grants and routes only HPKE ciphertext; it never receives credential
@@ -254,8 +264,8 @@ the exact current attestation, runtime generation and grant epoch before it can
 write a non-secret binding. An attested external session can retrieve only its
 current canonical `StorageBindingV1`, PgBouncer endpoint and current Vault
 public context; the database credential still requires a separately fenced,
-HPKE-encrypted Vault route. `make -C backend test-storage-external-process`
-now proves live credential delivery and rotation through owner-control IPC, a
+HPKE-encrypted Vault route. The `make -C backend test-integration` contour
+proves live credential delivery and rotation through owner-control IPC, a
 temporary signed Kernel bundle, a real managed Vault child and a distinct
 proof-backed external runtime process. The former binding receives
 `runtime_session_stale`; its successor receives a different credential, while
@@ -331,7 +341,7 @@ Its lease audience is the current verified Events authority registration/runtime
 so the Kernel rejects a route from any other managed child; its identity is
 redacted. The adapter also has a
 short-lived non-bearer runtime JWT/NKey issuer with only exact catalog subjects
-plus its reply inbox. `make -C backend test-events-jwt-integration` creates a
+plus its reply inbox. The `make -C backend test-integration` contour creates a
 throwaway Docker Operator/Account resolver contour, verifies the broker-side
 proof and allowlist, and proves rejection of an unknown signing key. It does
 not place an account signer in Kernel. The same throwaway contour revokes an
@@ -363,13 +373,13 @@ full path, including an Account-claim revocation that disconnects an active
 runtime. `nats_data_plane_v1` is therefore open as a platform gate; a
 production owner-local PostgreSQL outbox/inbox transaction remains part of the
 separate `first_owner_v1` decision.
-`make -C backend test-events-authority-integration` proves
+The `make -C backend test-integration` contour proves
 authority-to-broker reconciliation in an ephemeral authenticated NATS JetStream
 contour: the authority receives only two encrypted test Vault-route responses
 for a fenced Event Hub lease and a password, then creates the declared stream
 and consumer. It is not evidence of a real Vault process or a full Kernel
-composition. `make -C backend test-events-managed-authority-integration`
-proves that missing contour with a real file-initialized Vault runtime, signed
+composition. The same integration contour proves that missing path with a real
+file-initialized Vault runtime, signed
 managed Vault/authority bindings, an authority-fenced Event Hub credential
 lease, Kernel topology relay and independent broker verification. It does not
 create owner data or replace durable owner outbox/inbox conformance.
@@ -427,7 +437,8 @@ socket owned by the current user; a symlink or regular file fails closed. Run
 the lifecycle coverage with:
 
 ```sh
-make -C backend test-kernel-recovery
+cargo +1.97.0 test --locked --manifest-path backend/Cargo.toml \
+  -p makosh-kernel-recovery-testkit
 ```
 
 Browser Gateway остаётся выключенным по умолчанию. Для local HTTPS foundation
@@ -444,7 +455,8 @@ Gateway. Этот listener пока даёт только technical/browser-sess
 выдаёт только opaque pairing ID с коротким TTL. Этот ID открывает на exact
 HTTPS origin только WebAuthn registration options и finish route; неверный
 `Origin` не расходует pairing, а credential/session identifier не возвращается
-browser caller. Это ещё не browser application delivery и не `client_gateway_v1`.
+browser caller. Эта pairing route сама по себе не заменяет admitted
+`client_gateway_v1`; она является только его узким bootstrap boundary.
 
 Для UI-разработки доступен отдельный durable developer setting. Он выключен по
 умолчанию и меняется только локально при остановленном Kernel:
@@ -528,22 +540,33 @@ Apple-Silicon sidecar packaging target and a Linux release-manifest preflight.
 Linux Compose/systemd descriptors are generated only after each digest-pinned
 OCI image passes Cosign verification; neither descriptor gives Kernel Docker
 API authority. See [Linux release notes](release/linux/README.md). Hardware
-identity, managed launch, Vault, Storage, NATS, Blob, Clock,
-Scheduler, Gateway and whole-instance backup remain closed gates.
+protected identity and real release-host attestations remain external gates.
+Managed launch, Vault, Storage, NATS, Blob, Clock, Scheduler, Gateway and
+whole-instance backup are admitted only in the exact capability inventory of
+`speech_to_text_whisper_admission_v1`; this packaging paragraph does not widen
+that inventory.
 
 ## Validation
 
 Run the backend-owned architecture surface from the project root:
 
 ```sh
-make -C backend architecture-check
+make -C backend architecture-policy-check architecture-evidence-check srp-policy-check
 make -C backend test-architecture
-make -C backend validate
-make -C backend test-telemetry
-make -C backend test-storage-conformance
+make -C backend telegram-admission-preflight
+make -C backend fmt-check clippy
+make -C backend test-workspace
+make -C backend dependency-policy-check
 ```
 
-`test-storage-integration` starts the disposable development Compose contour,
+`make -C backend cargo-boundaries-check` remains the explicit admission guard.
+It must stay red while the 120 staged production-role packages are still
+`implemented-not-admitted`; a later admission may make it green only by
+updating the exact policy and evidence, never by weakening source coverage.
+`make -C backend test-integration` additionally requires the disposable local
+infrastructure contour.
+
+`make -C backend test-integration` starts the disposable development Compose contour,
 discovers its live PostgreSQL endpoint, and checks bootstrap, readiness,
 owner-bound DDL, isolated runtime role settings and owner-only DML grants. It
 does not test PgBouncer or release credentials and is deliberately outside CI.

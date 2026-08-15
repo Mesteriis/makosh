@@ -39,8 +39,13 @@ pub(super) fn quarantine_invalid_desired_bindings(
         .desired_bindings
         .len()
         .saturating_sub(desired_bindings.len());
-    if quarantined > 0 && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-        eprintln!("developer_storage_quarantined_invalid_bindings={quarantined}");
+    if quarantined > 0 {
+        tracing::warn!(
+            event = "storage.bindings.quarantined",
+            bindings.quarantined = quarantined,
+            payload.desired_bindings = ?configuration.desired_bindings,
+            payload.desired_bundles = ?configuration.desired_bundles,
+        );
     }
     StorageRuntimeConfigurationV1 {
         desired_bindings,

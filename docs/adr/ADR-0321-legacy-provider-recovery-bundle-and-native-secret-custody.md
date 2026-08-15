@@ -170,6 +170,24 @@ includes или executable fragments. Unknown keys не переносятся �
 Telegram API ID является bounded positive integer. Telegram API hash считается
 secret and stays native.
 
+### Ограниченный development Telegram credential source
+
+Root `make dev` может передать loopback Owner Vault development host explicit
+owner-only `.env` path. Этот путь не является recovery bundle или runtime
+configuration: native host принимает только одну полную exact пару
+`HERMES_TELEGRAM_API_ID/HASH` либо `MAKOSH_TELEGRAM_API_ID/HASH` и допускает
+соответствующий Google OAuth path key только как совместимый соседний literal.
+Unknown, mixed, duplicated, non-literal, symlink и group/world-readable input
+fail closed.
+
+Browser получает только bounded positive Telegram API ID. API hash остаётся в
+native host и передаётся в existing Owner Vault HPKE ceremony через отдельный
+purpose-bound custodied sealer; plaintext hash не возвращается в JavaScript,
+не попадает в Vite environment и не передаётся managed integration runtime.
+Account/Settings mutation начинается только после owner action `Connect with
+QR`; сам `make dev` account не создаёт. Production/Tauri contract этим adapter
+не расширяется.
+
 `google-oauth-client.v1.json` содержит только installed-app:
 
 ```text

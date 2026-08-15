@@ -19,3 +19,5 @@ makosh-telemetry-protocol = { path = "../protocol" }
 makosh-runtime-protocol = { path = "../../runtime_protocol" }
 libc = "=0.2.186"
 prost = "=0.14.4"
+tracing = "=0.1.44"
+tracing-subscriber = "=0.3.20"

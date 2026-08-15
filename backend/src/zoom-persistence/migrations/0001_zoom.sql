@@ -1,4 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS makosh_data;
 CREATE TABLE IF NOT EXISTS makosh_data.zoom_accounts (
  logical_owner_id TEXT NOT NULL,
  account_cursor_sha256 BYTEA NOT NULL,

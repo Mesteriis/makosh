@@ -443,12 +443,11 @@ pub(crate) fn gateway_service(
                 let response = ModuleClientResponseV1::decode(response_bytes.as_slice())
                     .map_err(|_| ClientRpcRouteErrorV1::Internal)?;
                 if !response.error_code.is_empty() {
-                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                        eprintln!(
-                            "developer_gateway_client_rpc_module_error registration={} code={}",
-                            route_registration_id, response.error_code,
-                        );
-                    }
+                    tracing::warn!(
+                        event = "gateway.client_rpc.module_failed",
+                        registration.id = %route_registration_id,
+                        response.error_code = %response.error_code,
+                    );
                     return Err(map_module_client_rpc_error(&response.error_code));
                 }
                 Ok(response.response_payload)

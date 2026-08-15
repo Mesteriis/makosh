@@ -15,21 +15,20 @@ use crate::storage::TelemetrySegmentStore;
 use super::framing::{read_frame, write_frame};
 
 pub fn serve(mut stream: UnixStream, store: TelemetrySegmentStore) -> Result<(), String> {
-    developer_log("ready");
+    let span = tracing::info_span!("telemetry.diagnostics.control");
+    let _entered = span.enter();
+    tracing::info!(event = "telemetry.diagnostics.ready");
     while let Ok(request) = read_frame(&mut stream) {
-        developer_log("request_received");
         let response = response_for(&request, &store);
+        tracing::trace!(
+            event = "telemetry.diagnostics.status_probe.exchange",
+            payload.request_bytes = request.len(),
+            payload.response = ?response,
+        );
         write_frame(&mut stream, &response.encode_to_vec())?;
-        developer_log("response_sent");
     }
-    developer_log("control_closed");
+    tracing::info!(event = "telemetry.diagnostics.control_closed");
     Ok(())
-}
-
-fn developer_log(event: &str) {
-    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-        eprintln!("developer_telemetry_diagnostics event={event}");
-    }
 }
 
 fn response_for(
@@ -39,11 +38,29 @@ fn response_for(
     let result = TelemetryRuntimeControlRequestV1::decode(request)
         .map_err(|_| "invalid_request")
         .and_then(|request| {
+            tracing::trace!(
+                event = "telemetry.diagnostics.status_probe.decoded",
+                payload.request = ?request,
+            );
             validate_telemetry_runtime_control_request(&request)
                 .map_err(|_| "operation_not_available")?;
             diagnostics_response(request, store)
         });
-    result.unwrap_or_else(error_response)
+    result.unwrap_or_else(|error_code| {
+        tracing::warn!(
+            event = "telemetry.diagnostics.request.rejected",
+            error.class = "contract_validation",
+            error.code = error_code,
+            payload.request_bytes = request.len(),
+        );
+        if tracing::enabled!(tracing::Level::DEBUG) {
+            tracing::debug!(
+                event = "telemetry.diagnostics.request.rejected_payload",
+                payload.request = ?request,
+            );
+        }
+        error_response(error_code)
+    })
 }
 
 fn diagnostics_response(

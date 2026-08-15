@@ -293,19 +293,18 @@ fn prepare_managed_telegram_real_provider_fixture_v1(
 }
 
 #[test]
+#[ignore = "requires configured Task 10 real-provider artifacts and private credential-file metadata"]
+fn managed_telegram_real_provider_prerequisites_are_exact() {
+    let _ = task10_real_tdjson_artifact_v1();
+    let _ = task10_release_tgcalls_artifacts_v1();
+    let _ = private_input_file_metadata_v1(TASK10_REAL_API_ID_FILE_ENV_V1, 32);
+    let _ = private_input_file_metadata_v1(TASK10_REAL_API_HASH_FILE_ENV_V1, 128);
+}
+
+#[test]
 #[ignore = "requires an approved real TDLib user credential contour and release-eligible native artifacts"]
 fn managed_telegram_real_tdlib_reaches_qr_authorization() {
-    let tdjson = required_regular_artifact_v1(TASK10_REAL_TDJSON_ENV_V1, false);
-    assert_eq!(
-        tdjson.file_name().and_then(|name| name.to_str()),
-        Some("libtdjson.1.8.0.dylib"),
-        "Task 10 TDLib gate requires the exact admitted Homebrew TDLib artifact",
-    );
-    assert_eq!(
-        sha256_hex_v1(&std::fs::read(&tdjson).expect("read exact Task 10 TDLib artifact")),
-        TASK10_REAL_TDJSON_SHA256_V1,
-        "Task 10 TDLib artifact digest is not exact",
-    );
+    let tdjson = task10_real_tdjson_artifact_v1();
     let (tgcalls, _) = task10_release_tgcalls_artifacts_v1();
     let api_id_bytes = read_private_input_file_v1(TASK10_REAL_API_ID_FILE_ENV_V1, 32);
     let api_id = std::str::from_utf8(api_id_bytes.as_slice())
@@ -947,7 +946,22 @@ fn required_regular_artifact_v1(name: &str, executable: bool) -> PathBuf {
     path
 }
 
-fn read_private_input_file_v1(name: &str, maximum_bytes: u64) -> Zeroizing<Vec<u8>> {
+fn task10_real_tdjson_artifact_v1() -> PathBuf {
+    let tdjson = required_regular_artifact_v1(TASK10_REAL_TDJSON_ENV_V1, false);
+    assert_eq!(
+        tdjson.file_name().and_then(|name| name.to_str()),
+        Some("libtdjson.1.8.0.dylib"),
+        "Task 10 TDLib gate requires the exact admitted Homebrew TDLib artifact",
+    );
+    assert_eq!(
+        sha256_hex_v1(&std::fs::read(&tdjson).expect("read exact Task 10 TDLib artifact")),
+        TASK10_REAL_TDJSON_SHA256_V1,
+        "Task 10 TDLib artifact digest is not exact",
+    );
+    tdjson
+}
+
+fn private_input_file_metadata_v1(name: &str, maximum_bytes: u64) -> PathBuf {
     let path = PathBuf::from(required(name));
     assert!(path.is_absolute(), "{name} must be an absolute path");
     let metadata = std::fs::symlink_metadata(&path)
@@ -959,6 +973,11 @@ fn read_private_input_file_v1(name: &str, maximum_bytes: u64) -> Zeroizing<Vec<u
             && (1..=maximum_bytes).contains(&metadata.len()),
         "{name} must be a bounded owner-private regular non-symlink file",
     );
+    path
+}
+
+fn read_private_input_file_v1(name: &str, maximum_bytes: u64) -> Zeroizing<Vec<u8>> {
+    let path = private_input_file_metadata_v1(name, maximum_bytes);
     Zeroizing::new(
         std::fs::read(path).unwrap_or_else(|_| panic!("{name} private file could not be read")),
     )

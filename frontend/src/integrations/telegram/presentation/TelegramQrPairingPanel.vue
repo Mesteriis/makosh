@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import Icon from '../../../shared/ui/Icon.vue'
 import { useTelegramQrPairing } from '../linking/useTelegramQrPairing'
+import TelegramCloudPasswordForm from './TelegramCloudPasswordForm.vue'
 import './telegramQrPairingPanel.css'
 
 const props = defineProps<{
@@ -9,10 +11,13 @@ const props = defineProps<{
 	startRequest?: number
 	embedded?: boolean
 }>()
+const emit = defineEmits<{ stateChange: [state: string] }>()
 const pairing = useTelegramQrPairing(
 	() => props.module,
 	() => props.startRequest ?? 0,
 )
+
+watch(pairing.state, (state) => emit('stateChange', state), { immediate: true })
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const pairing = useTelegramQrPairing(
 		class="telegram-qr-pairing"
 		:class="{ 'telegram-qr-pairing--embedded': embedded }"
 	>
-		<header>
+		<header v-if="!embedded">
 			<div>
 				<small>Provider authorization</small>
 				<h3>Telegram user QR login</h3>
@@ -28,8 +33,9 @@ const pairing = useTelegramQrPairing(
 			</div>
 			<strong>{{ pairing.state.value }}</strong>
 		</header>
+		<strong v-else class="telegram-qr-pairing__embedded-state">{{ pairing.state.value }}</strong>
 
-		<div v-if="pairing.qrDataUrl.value" class="telegram-qr-pairing__artifact">
+		<div v-if="pairing.qrDataUrl.value && pairing.state.value !== 'waiting_password'" class="telegram-qr-pairing__artifact">
 			<img
 				:src="pairing.qrDataUrl.value"
 				alt="Telegram authorization QR code"
@@ -37,34 +43,37 @@ const pairing = useTelegramQrPairing(
 				height="280"
 			>
 		</div>
-
-		<form
-			v-if="pairing.state.value === 'waiting_password'"
-			class="telegram-qr-pairing__password"
-			@submit.prevent="pairing.submitPassword"
+		<div
+			v-else-if="pairing.state.value !== 'ready' && pairing.state.value !== 'waiting_password'"
+			class="telegram-qr-pairing__placeholder"
+			data-testid="telegram-qr-placeholder"
 		>
-			<label for="telegram-settings-authorization-password">
-				2FA password
-				<small v-if="pairing.passwordHint.value">{{ pairing.passwordHint.value }}</small>
-			</label>
-			<input
-				id="telegram-settings-authorization-password"
-				v-model="pairing.password.value"
-				type="password"
-				autocomplete="current-password"
-				required
-			>
-			<button type="submit" :disabled="pairing.busy.value || !pairing.password.value.trim()">
-				Continue
-			</button>
-		</form>
+			<Icon icon="tabler:qrcode" size="5rem" />
+			<strong>QR will appear here</strong>
+			<small v-if="!pairing.configured.value">
+				Save the Telegram application credentials below so TDLib can request it.
+			</small>
+			<small v-else>Requesting the short-lived provider QR from TDLib.</small>
+		</div>
 
-		<footer>
+		<TelegramCloudPasswordForm
+			v-if="pairing.state.value === 'waiting_password'"
+			id="telegram-settings-cloud-password"
+			:model-value="pairing.password.value"
+			:hint="pairing.passwordHint.value"
+			:busy="pairing.busy.value"
+			:message="pairing.message.value"
+			:message-tone="pairing.messageTone.value"
+			@submit="pairing.submitPassword"
+			@update:model-value="pairing.password.value = $event"
+		/>
+
+		<footer v-if="pairing.state.value !== 'waiting_password'">
 			<p
 				:class="`telegram-qr-pairing__message--${pairing.messageTone.value}`"
 				aria-live="polite"
 			>
-				{{ pairing.message.value || (!pairing.admitted.value ? 'Telegram authorization capability is not admitted.' : !pairing.configured.value ? 'Configure the Telegram account before starting QR authorization.' : 'Refresh to start or resume QR authorization.') }}
+				{{ pairing.message.value || (!pairing.admitted.value ? 'Telegram authorization capability is not admitted.' : !pairing.configured.value ? 'Telegram application credentials are required once before TDLib can issue the QR.' : 'Refresh to start or resume QR authorization.') }}
 			</p>
 			<button
 				type="button"

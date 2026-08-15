@@ -27,6 +27,9 @@ describe('Telegram operational active route boundary', () => {
 		]
 		const presentation = read('../presentation/TelegramOperationalPage.vue')
 		const accountPresentation = read('../presentation/TelegramAccountAccessPanel.vue')
+		const cloudPasswordPresentation = read('../presentation/TelegramCloudPasswordForm.vue')
+		const newMessagePresentation = read('../presentation/TelegramNewMessageDialog.vue')
+		const toolbarPresentation = read('../presentation/TelegramWorkspaceToolbar.vue')
 		const discoveryPresentation = read('../presentation/TelegramDiscoveryPanel.vue')
 		const commandWorkbench = read('../presentation/TelegramCommandWorkbench.vue')
 		const messageInspector = read('../presentation/TelegramMessageInspector.vue')
@@ -49,6 +52,9 @@ describe('Telegram operational active route boundary', () => {
 			...commandControllers,
 			presentation,
 			accountPresentation,
+			cloudPasswordPresentation,
+			newMessagePresentation,
+			toolbarPresentation,
 			discoveryPresentation,
 			commandWorkbench,
 			messageInspector,
@@ -98,6 +104,8 @@ describe('Telegram operational active route boundary', () => {
 		}
 		expect(presentation).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
 		expect(accountPresentation).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
+		expect(cloudPasswordPresentation).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
+		expect(newMessagePresentation).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
 		expect(discoveryPresentation).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
 		expect(messageInspector).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
 		expect(operationRetry).not.toMatch(/queries\/|api\/|connect\/|fetch\(/)
@@ -109,6 +117,11 @@ describe('Telegram operational active route boundary', () => {
 		expect(appLayout).toContain("'telegram.command.v1'")
 		expect(capabilityComposition).toContain('module.sectionsEnabled')
 		expect(compiledAdapters).toContain("'telegram-integration'")
+		expect(toolbarPresentation).toContain("@click=\"emit('compose')\"")
+		expect(presentation).toContain('<TelegramNewMessageDialog')
+		expect(newMessagePresentation).toContain('<ChatInput')
+		expect(newMessagePresentation).toContain("emit('selectChat'")
+		expect(accountPresentation).toContain("model.authorizationState === 'waiting_password'")
 	})
 })
 

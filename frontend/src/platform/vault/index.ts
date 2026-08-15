@@ -15,6 +15,10 @@ export type {
 	SealedProvisioningHostCommandV1,
 } from './ownerVaultProvisioningHost'
 export {
+	DevelopmentOwnerVaultProvisioningHostV1,
+	type DevelopmentTelegramCredentialsV1,
+} from './developmentOwnerVaultProvisioningHost'
+export {
 	hasDevelopmentOwnerVaultProvisioningHostV1,
 	hasNativeOwnerVaultProvisioningHostV1,
 	hasOwnerVaultProvisioningHostV1,

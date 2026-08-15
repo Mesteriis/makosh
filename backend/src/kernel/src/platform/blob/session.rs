@@ -334,9 +334,10 @@ impl BlobSessionHandlerV1 {
             CustodySourceProofUseV1::Transfer,
         )
         .inspect_err(|_| {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!("developer_blob_custody_denied_stage=source_proof");
-            }
+            tracing::warn!(
+                event = "blob.custody_transfer.denied",
+                denial.stage = "source_proof",
+            );
         })?;
         let source_matches = source.reference_id == request.reference_id
             && source.declared_size == request.declared_size
@@ -357,11 +358,13 @@ impl BlobSessionHandlerV1 {
                     .is_some_and(|operation| entry.request().allows(operation))
         });
         if !source_matches || !target_authorized || !source_grant_current {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!(
-                    "developer_blob_custody_denied_stage=binding source_matches={source_matches} target_authorized={target_authorized} source_grant_current={source_grant_current}"
-                );
-            }
+            tracing::warn!(
+                event = "blob.custody_transfer.denied",
+                denial.stage = "binding",
+                proof.source_matches = source_matches,
+                proof.target_authorized = target_authorized,
+                proof.source_grant_current = source_grant_current,
+            );
             return Err("managed runtime Blob custody transfer is denied".to_owned());
         }
         let blob = status::read_current(&self.store, &self.relay)?;

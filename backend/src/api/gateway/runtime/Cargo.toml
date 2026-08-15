@@ -30,4 +30,5 @@ prost = "=0.14.4"
 quinn = "=0.11.7"
 tokio = { version = "=1.52.4", default-features = false, features = ["io-util", "macros", "net", "rt", "sync"] }
 tokio-rustls = "=0.26.4"
+tracing = "=0.1.44"
 webauthn-rs-core = "=0.5.5"

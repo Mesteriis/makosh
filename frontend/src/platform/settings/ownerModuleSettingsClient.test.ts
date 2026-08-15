@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import type { Client } from '@connectrpc/connect'
+import { Code, ConnectError, type Client } from '@connectrpc/connect'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -172,6 +172,40 @@ describe('OwnerModuleSettingsClientV1', () => {
 				},
 			},
 		})
+	})
+
+	it('re-prepares a fresh challenge after a transient control-generation conflict', async () => {
+		const gateway = gatewayClient({
+			case: 'updated',
+			value: create(UpdateOwnerModuleSettingsReceiptV1Schema, {
+				registrationId: 'telegram-registration',
+				desiredRevision: 2n,
+				applyState: 'pending',
+			}),
+		})
+		gateway.commit.mockRejectedValueOnce(
+			new ConnectError('already_exists', Code.AlreadyExists),
+		)
+		const deviceProof = proof()
+
+		const receipt = await new OwnerModuleSettingsClientV1(
+			gateway.client,
+			deviceProof,
+		).updateDesired({
+			operationId: new Uint8Array(16).fill(6),
+			registrationId: 'telegram-registration',
+			configurationInstanceId: 'telegram-registration',
+			expectedDesiredRevision: 1n,
+			values: [{
+				settingId: 'telegram.api_id',
+				value: { case: 'signedIntegerValue', value: 123n },
+			}],
+		})
+
+		expect(receipt.desiredRevision).toBe(2n)
+		expect(gateway.prepare).toHaveBeenCalledTimes(2)
+		expect(deviceProof.sign).toHaveBeenCalledTimes(2)
+		expect(gateway.commit).toHaveBeenCalledTimes(2)
 	})
 
 	it('does not sign an expired owner challenge', async () => {

@@ -16,7 +16,8 @@ use makosh_runtime_protocol::v1::{
 };
 
 pub const PACKAGE: &str = "makosh-review-obligation-candidate-api";
-pub const REVIEW_OBLIGATION_CANDIDATE_OWNER_V1: &str = "review";
+pub const REVIEW_OBLIGATION_CANDIDATE_OWNER_V1: &str = "review_obligation_candidate";
+pub const REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1: &str = REVIEW_OBLIGATION_CANDIDATE_OWNER_V1;
 pub const REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1: &str =
     "makosh-review-obligation-candidate-runtime";
 pub const REVIEW_OBLIGATION_CANDIDATE_CLIENT_CAPABILITY_ID_V1: &str =
@@ -27,7 +28,8 @@ pub const REVIEW_OBLIGATION_CANDIDATE_PROMOTION_CAPABILITY_ID_V1: &str =
     "review.obligation-candidate.promotion.v1";
 pub const REVIEW_OBLIGATION_CANDIDATE_BLOB_CAPABILITY_ID_V1: &str =
     "review.obligation-candidate.blob.v1";
-pub const REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_OWNER_ID_V1: &str = "review";
+pub const REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_OWNER_ID_V1: &str =
+    REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1;
 pub const REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_MODULE_ID_V1: &str =
     REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1;
 pub const REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_CAPABILITY_ID_V1: &str =
@@ -222,7 +224,18 @@ mod tests {
 
     #[test]
     fn obligation_candidate_is_an_exact_review_capability() {
-        assert_eq!(REVIEW_OBLIGATION_CANDIDATE_OWNER_V1, "review");
+        assert_eq!(
+            REVIEW_OBLIGATION_CANDIDATE_OWNER_V1,
+            "review_obligation_candidate"
+        );
+        assert_eq!(
+            REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1,
+            REVIEW_OBLIGATION_CANDIDATE_BLOB_TARGET_OWNER_ID_V1
+        );
+        assert_eq!(
+            REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1,
+            REVIEW_OBLIGATION_CANDIDATE_OWNER_V1
+        );
         assert_ne!(
             REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1,
             "makosh-review-runtime"

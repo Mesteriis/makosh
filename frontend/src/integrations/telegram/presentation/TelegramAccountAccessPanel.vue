@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TelegramAccountAccessModel } from './telegramAccountAccessModel'
+import TelegramCloudPasswordForm from './TelegramCloudPasswordForm.vue'
 import './telegramAccountAccessPanel.css'
 
 defineProps<{ model: TelegramAccountAccessModel }>()
@@ -58,7 +59,7 @@ const emit = defineEmits<{
 				</div>
 
 				<img
-					v-if="model.authorizationQrDataUrl"
+					v-if="model.authorizationQrDataUrl && model.authorizationState !== 'waiting_password'"
 					class="telegram-account-access__qr"
 					:src="model.authorizationQrDataUrl"
 					alt="Telegram authorization QR code"
@@ -66,22 +67,17 @@ const emit = defineEmits<{
 					height="280"
 				>
 
-				<form v-if="model.canAuthorize" @submit.prevent="emit('submitPassword')">
-					<label for="telegram-authorization-password">
-						2FA password
-						<small v-if="model.authorizationPasswordHint">{{ model.authorizationPasswordHint }}</small>
-					</label>
-					<div>
-						<input
-							id="telegram-authorization-password"
-							type="password"
-							autocomplete="current-password"
-							:value="model.password"
-							@input="emit('updatePassword', ($event.target as HTMLInputElement).value)"
-						>
-						<button type="submit" :disabled="!model.password.trim() || model.pending">Submit</button>
-					</div>
-				</form>
+				<TelegramCloudPasswordForm
+					v-if="model.canAuthorize && model.authorizationState === 'waiting_password'"
+					id="telegram-account-cloud-password"
+					:model-value="model.password"
+					:hint="model.authorizationPasswordHint"
+					:busy="model.pending"
+					:message="model.statusMessage"
+					compact
+					@submit="emit('submitPassword')"
+					@update:model-value="emit('updatePassword', $event)"
+				/>
 			</div>
 		</div>
 

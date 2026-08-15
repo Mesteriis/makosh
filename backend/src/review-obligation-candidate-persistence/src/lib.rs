@@ -26,7 +26,7 @@ pub use schema::{
     REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V1,
     REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V2,
     REVIEW_OBLIGATION_CANDIDATE_STORAGE_BUNDLE_REVISION_V3,
-    review_obligation_candidate_storage_bundle_v1,
+    REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1, review_obligation_candidate_storage_bundle_v1,
 };
 
 pub const PACKAGE: &str = "makosh-review-obligation-candidate-persistence";

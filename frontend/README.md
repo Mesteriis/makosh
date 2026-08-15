@@ -31,6 +31,13 @@ make dev
 только exact Gateway paths и добавляет process-local proof на server-side hop;
 proof не попадает в browser bundle.
 
+Для локального Telegram QR `make dev` может подключить owner-only корневой
+`.env` как bounded native credential source. Принимается ровно одна полная пара
+`HERMES_TELEGRAM_API_ID/HASH` либо `MAKOSH_TELEGRAM_API_ID/HASH`; API hash не
+выдаётся Vite/browser и sealing выполняет loopback Owner Vault host. Source
+можно переопределить absolute path через
+`MAKOSH_DEV_TELEGRAM_CREDENTIALS_FILE`.
+
 Для scoped frontend validation используйте scripts из `package.json`:
 
 ```sh

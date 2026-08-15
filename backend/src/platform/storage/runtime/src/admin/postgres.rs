@@ -101,9 +101,11 @@ async fn reconcile_roles(
         ensure_storage_roles(&connector, &spec)
             .await
             .map_err(|error| {
-                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                    eprintln!("developer_storage_role_reconciliation_error={error:?}");
-                }
+                tracing::warn!(
+                    event = "storage.role.reconciliation.failed",
+                    error.class = "postgres_role_reconciliation",
+                    error.message = ?error,
+                );
                 "Storage role reconciliation is unavailable".to_owned()
             })?;
         set_runtime_role_password(&connector, &spec, &runtime_credential.password)

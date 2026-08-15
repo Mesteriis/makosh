@@ -1,18 +1,12 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
-import App from './app/App.vue'
-import './style.css'
-import './styles/surfaces.css'
-import './styles/theme-classes.css'
-import './shared/ui/styles/index.css'
-import './shared/ui/shell/app-layout.css'
+import {
+	completeGmailOAuthBrowserCallbackV1,
+	mountGmailOAuthCallbackPageV1,
+} from './integrations/mail/oauth/gmailOAuthBrowserFlow'
+import './integrations/mail/oauth/gmailOAuthCallbackPage.css'
 
-const app = createApp(App)
-const pinia = createPinia()
-const queryClient = new QueryClient()
-
-app.use(pinia)
-app.use(VueQueryPlugin, { queryClient })
-
-app.mount('#app')
+const gmailOAuthCallback = completeGmailOAuthBrowserCallbackV1()
+if (gmailOAuthCallback !== 'not_callback') {
+	mountGmailOAuthCallbackPageV1(gmailOAuthCallback)
+} else {
+	void import('./app/bootstrap').then(({ mountClientApp }) => mountClientApp())
+}

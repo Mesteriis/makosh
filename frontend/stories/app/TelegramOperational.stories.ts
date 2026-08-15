@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { userEvent, within } from 'storybook/test'
 
 import TelegramOperationalPage from '../../src/integrations/telegram/presentation/TelegramOperationalPage.vue'
 import type { TelegramAccountAccessModel } from '../../src/integrations/telegram/presentation/telegramAccountAccessModel'
@@ -70,6 +71,13 @@ const discovery: TelegramDiscoveryModel = {
 	chatState: [],
 }
 
-export const Default: Story = {
-	args: { accountAccess, discovery, model },
+const defaultArgs = { accountAccess, discovery, model }
+
+export const Default: Story = { args: defaultArgs }
+
+export const NewMessage: Story = {
+	args: defaultArgs,
+	play: async ({ canvasElement }) => {
+		await userEvent.click(within(canvasElement).getByRole('button', { name: 'New' }))
+	},
 }

@@ -65,9 +65,7 @@ pub(crate) fn serve(
             &mut pending_topology_observations,
         ) {
             Ok(ReconcileOutcome::Refreshed) => {
-                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                    eprintln!("developer_scheduler_topology_refreshed");
-                }
+                tracing::debug!(event = "scheduler.topology.refreshed");
             }
             Ok(ReconcileOutcome::Idle | ReconcileOutcome::Active | ReconcileOutcome::Started) => {}
             Err(error) => {

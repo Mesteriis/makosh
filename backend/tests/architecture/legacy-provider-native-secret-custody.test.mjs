@@ -115,11 +115,17 @@ test('legacy provider source secrets stay in the native recovery and Vault hosts
   assert.match(developmentHost, /GeneratedTelegramSessionStoreKey/);
   assert.match(developmentHost, /LegacyProviderRecoverySecretPurposeV1::IcloudImapPassword/);
   assert.match(developmentHost, /LegacyProviderRecoverySecretPurposeV1::TelegramApiHash/);
+  assert.match(developmentHost, /TELEGRAM_CREDENTIALS_PATH/);
+  assert.match(developmentHost, /TELEGRAM_SEAL_API_HASH_PATH/);
+  assert.match(developmentHost, /HERMES_TELEGRAM_API_HASH/);
+  assert.match(developmentHost, /seal_custodied/);
   assert.doesNotMatch(developmentHost, /LegacyProviderRecoverySecretPurposeV1::TelegramSession/);
   assert.doesNotMatch(developmentHost, /println!\([^)]*(?:source|secret|email|username)/s);
 
   assert.match(vite, /\/__makosh\/legacy-provider-recovery\/v1/);
   assert.match(ensemble, /MAKOSH_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT/);
+  assert.match(ensemble, /MAKOSH_DEV_TELEGRAM_CREDENTIALS_FILE/);
+  assert.match(ensemble, /--telegram-credentials-env-file/);
   assert.match(ensemble, /maintenance\/legacy-provider-recovery-v1/);
   assert.match(ensemble, /--legacy-recovery-receipt-file/);
   assert.match(ensemble, /VITE_MAKOSH_LEGACY_PROVIDER_RECOVERY/);

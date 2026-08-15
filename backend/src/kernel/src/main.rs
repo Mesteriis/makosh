@@ -12,6 +12,7 @@ mod distribution;
 mod identity;
 mod infrastructure;
 mod modules;
+mod observability;
 mod platform;
 mod recovery;
 mod runtime;
@@ -19,10 +20,20 @@ mod runtime;
 use cli::{BrowserPairingCommand, Cli, Command};
 
 fn main() {
-    if let Err(error) = run(Cli::parse()) {
-        eprintln!("kernel bootstrap failed: {error}");
+    if let Err(error) = observability::initialize() {
+        eprintln!("kernel observability initialization failed: {error}");
         std::process::exit(1);
     }
+    tracing::info!(event = "kernel.process.started");
+    if let Err(error) = run(Cli::parse()) {
+        tracing::error!(
+            event = "kernel.bootstrap.failed",
+            error.class = "kernel_bootstrap",
+            error.message = %error,
+        );
+        std::process::exit(1);
+    }
+    tracing::info!(event = "kernel.process.stopped");
 }
 
 fn run(cli: Cli) -> Result<(), String> {

@@ -5,13 +5,15 @@ use std::os::fd::OwnedFd;
 use std::os::unix::net::UnixStream;
 use std::process::Stdio;
 use std::sync::mpsc::SyncSender;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use makosh_kernel_control_store::{
     BundledManagedLaunchBinding, ManagedLaunchRecord, ModuleRegistration,
     PlatformManagedProcessBinding, PlatformManagedProcessLaunch,
 };
-use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::managed_control::{
+    ManagedControlChannelV2, ManagedControlTransportErrorV2,
+};
 use makosh_runtime_protocol::v1::{
     DescribeManagedRuntimeResponseV1, ManagedRuntimeBlobCustodyDelegationDeliveryV1,
     ManagedRuntimeBlobCustodyDelegationRequestV1, ManagedRuntimeBlobCustodyReleaseDeliveryV1,
@@ -34,6 +36,7 @@ use sha2::{Digest, Sha256};
 
 const MAX_FRAME_BYTES: usize = 512 * 1024;
 const CONTROL_TIMEOUT: Duration = Duration::from_secs(5);
+const CORRELATED_HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(60);
 
 #[path = "control/inbound.rs"]
 pub(crate) mod inbound;
@@ -443,11 +446,34 @@ pub fn establish_correlated_channel(
         .set_read_timeout(Some(CONTROL_TIMEOUT))
         .and_then(|_| stream.set_write_timeout(Some(CONTROL_TIMEOUT)))
         .map_err(|error| error.to_string())?;
+    tracing::debug!(
+        event = "managed_runtime.control.launch_binding",
+        registration.id = %expectation.registration_id,
+        module.id = %expectation.module_id,
+        runtime.instance_id = %expectation.runtime_instance_id,
+        runtime.generation = expectation.runtime_generation,
+        grant.epoch = expectation.grant_epoch,
+        binding.descriptor_sha256 = ?expectation.descriptor_sha256,
+        binding.settings_schema_sha256 = ?expectation.settings_schema_sha256,
+    );
     let mut channel = ManagedControlChannelV2::new(stream);
-    let (correlation_id, request) = channel
-        .receive_request()
-        .map_err(|_| "managed runtime correlated control request is invalid".to_owned())?;
-    validate_describe(request, expectation)?;
+    let (correlation_id, request) = receive_correlated_request_until(
+        &mut channel,
+        Instant::now() + CORRELATED_HANDSHAKE_TIMEOUT,
+    )
+    .map_err(|error| {
+        log_correlated_control_error("managed_runtime.control.describe.receive_failed", &error);
+        "managed runtime correlated control request is invalid".to_owned()
+    })?;
+    log_sanitized_control_request(correlation_id, &request);
+    validate_describe(request, expectation).map_err(|error| {
+        tracing::error!(
+            event = "managed_runtime.control.describe.validation_failed",
+            error.class = "describe_validation",
+            error.message = %error,
+        );
+        error
+    })?;
     channel
         .write_response(
             correlation_id,
@@ -464,13 +490,132 @@ pub fn establish_correlated_channel(
                 error_code: String::new(),
             },
         )
-        .map_err(|_| "managed runtime correlated control response is invalid".to_owned())?;
+        .map_err(|error| {
+            log_correlated_control_error(
+                "managed_runtime.control.describe.response_failed",
+                &error,
+            );
+            "managed runtime correlated control response is invalid".to_owned()
+        })?;
     channel
         .inner_mut()
         .set_read_timeout(None)
         .and_then(|_| channel.inner_mut().set_write_timeout(None))
         .map_err(|error| error.to_string())?;
     Ok(channel)
+}
+
+fn receive_correlated_request_until(
+    channel: &mut ManagedControlChannelV2<UnixStream>,
+    deadline: Instant,
+) -> Result<
+    (
+        [u8; makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES],
+        ManagedRuntimeControlRequestV1,
+    ),
+    ManagedControlTransportErrorV2,
+>{
+    loop {
+        match channel.receive_request() {
+            Err(ManagedControlTransportErrorV2::Io(error))
+                if matches!(
+                    error.kind(),
+                    std::io::ErrorKind::WouldBlock | std::io::ErrorKind::TimedOut
+                ) && Instant::now() < deadline =>
+            {
+                tracing::debug!(
+                    event = "managed_runtime.control.describe.waiting",
+                    control.deadline_remaining_millis = u64::try_from(
+                        deadline
+                            .saturating_duration_since(Instant::now())
+                            .as_millis(),
+                    )
+                    .unwrap_or(u64::MAX),
+                );
+            }
+            result => return result,
+        }
+    }
+}
+
+fn log_sanitized_control_request(
+    correlation_id: [u8; makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES],
+    request: &ManagedRuntimeControlRequestV1,
+) {
+    use makosh_runtime_protocol::v1::managed_runtime_control_request_v1::Operation;
+
+    match request.operation.as_ref() {
+        Some(Operation::Describe(describe)) => {
+            let descriptor = decode_descriptor_v1(&describe.descriptor_bytes);
+            let settings_schema = if describe.settings_schema_bytes.is_empty() {
+                Ok(None)
+            } else {
+                decode_settings_schema_v1(&describe.settings_schema_bytes).map(Some)
+            };
+            tracing::debug!(
+                event = "managed_runtime.control.request.received",
+                control.operation = "describe",
+                control.correlation_id = ?correlation_id,
+                payload.descriptor_bytes = describe.descriptor_bytes.len(),
+                payload.settings_schema_bytes = describe.settings_schema_bytes.len(),
+                payload.descriptor = ?descriptor,
+                payload.settings_schema = ?settings_schema,
+            );
+            if descriptor.is_err() || settings_schema.is_err() {
+                tracing::debug!(
+                    event = "managed_runtime.control.request.invalid_payload_bytes",
+                    control.operation = "describe",
+                    control.correlation_id = ?correlation_id,
+                    payload.descriptor = ?describe.descriptor_bytes,
+                    payload.settings_schema = ?describe.settings_schema_bytes,
+                );
+            }
+        }
+        Some(_) => tracing::debug!(
+            event = "managed_runtime.control.request.received",
+            control.operation = "unexpected",
+            control.correlation_id = ?correlation_id,
+        ),
+        None => tracing::debug!(
+            event = "managed_runtime.control.request.received",
+            control.operation = "missing",
+            control.correlation_id = ?correlation_id,
+        ),
+    }
+}
+
+fn log_correlated_control_error(event: &'static str, error: &ManagedControlTransportErrorV2) {
+    if let ManagedControlTransportErrorV2::Io(io_error) = error {
+        tracing::error!(
+            event = event,
+            error.class = managed_control_transport_error_class(error),
+            error.io_kind = ?io_error.kind(),
+            error.os_code = ?io_error.raw_os_error(),
+            error.message = %io_error,
+        );
+    } else {
+        tracing::error!(
+            event = event,
+            error.class = managed_control_transport_error_class(error),
+        );
+    }
+}
+
+const fn managed_control_transport_error_class(
+    error: &ManagedControlTransportErrorV2,
+) -> &'static str {
+    match error {
+        ManagedControlTransportErrorV2::InvalidTransportSelection => "invalid_transport_selection",
+        ManagedControlTransportErrorV2::InvalidCorrelationId => "invalid_correlation_id",
+        ManagedControlTransportErrorV2::InvalidFrame => "invalid_frame",
+        ManagedControlTransportErrorV2::FrameTooLarge => "frame_too_large",
+        ManagedControlTransportErrorV2::Io(_) => "io",
+        ManagedControlTransportErrorV2::UnexpectedResponse => "unexpected_response",
+        ManagedControlTransportErrorV2::UnexpectedRequest => "unexpected_request",
+        ManagedControlTransportErrorV2::DuplicateCorrelationId => "duplicate_correlation_id",
+        ManagedControlTransportErrorV2::PendingRequestLimit => "pending_request_limit",
+        ManagedControlTransportErrorV2::PeerClosed => "peer_closed",
+    }
 }
 
 pub fn relay(channel: &mut UnixStream, payload: &[u8]) -> Result<Vec<u8>, String> {
@@ -676,4 +821,45 @@ fn write_frame(stream: &mut impl Write, bytes: &[u8]) -> Result<(), String> {
         .and_then(|_| stream.write_all(bytes))
         .and_then(|_| stream.flush())
         .map_err(|error| error.to_string())
+}
+
+#[cfg(test)]
+mod correlated_handshake_timeout_tests {
+    use super::*;
+    use makosh_runtime_protocol::v1::{
+        DescribeManagedRuntimeRequestV1, managed_runtime_control_request_v1::Operation,
+    };
+
+    #[test]
+    fn transient_read_timeout_does_not_abort_the_correlated_handshake() {
+        let (kernel_stream, child_stream) = UnixStream::pair().expect("control pair");
+        kernel_stream
+            .set_read_timeout(Some(Duration::from_millis(5)))
+            .expect("short read poll");
+        let child = std::thread::spawn(move || {
+            std::thread::sleep(Duration::from_millis(20));
+            ManagedControlChannelV2::new(child_stream)
+                .write_request(
+                    [7_u8;
+                        makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES],
+                    ManagedRuntimeControlRequestV1 {
+                        operation: Some(Operation::Describe(
+                            DescribeManagedRuntimeRequestV1::default(),
+                        )),
+                    },
+                )
+                .expect("delayed describe request");
+        });
+        let mut channel = ManagedControlChannelV2::new(kernel_stream);
+
+        let (correlation_id, request) = receive_correlated_request_until(
+            &mut channel,
+            Instant::now() + Duration::from_millis(250),
+        )
+        .expect("correlated request after transient timeout");
+
+        assert_eq!(correlation_id, [7_u8; 16]);
+        assert!(matches!(request.operation, Some(Operation::Describe(_))));
+        child.join().expect("delayed child");
+    }
 }

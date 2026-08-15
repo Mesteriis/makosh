@@ -174,7 +174,7 @@ fn validate_registration_id(value: &str) -> Result<(), String> {
 fn kernel_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
     let data_dir = data_dir.canonicalize().map_err(|_| unavailable())?;
     let project =
-        directories::ProjectDirs::from("dev", "Макошь", "Макошь").ok_or_else(unavailable)?;
+        directories::ProjectDirs::from("dev", "makosh", "makosh").ok_or_else(unavailable)?;
     let digest = Sha256::digest(data_dir.as_os_str().as_encoded_bytes());
     let instance_key = digest[..16]
         .iter()

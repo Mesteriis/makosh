@@ -1,0 +1,8 @@
+.telegram-account-wizard {
+	--integration-account-accent: #229ed9;
+}
+
+.telegram-account-wizard .makosh-steps__dot--active,
+.telegram-account-wizard .makosh-steps__dock-next.makosh-btn {
+	background: var(--integration-account-accent);
+}

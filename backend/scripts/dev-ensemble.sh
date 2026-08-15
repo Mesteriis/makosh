@@ -23,6 +23,9 @@ startup_timeout_seconds="${MAKOSH_DEV_STARTUP_TIMEOUT_SECONDS:-120}"
 rust_toolchain="${RUST_TOOLCHAIN:-1.97.0}"
 legacy_recovery_bundle_root="${MAKOSH_LEGACY_PROVIDER_RECOVERY_BUNDLE_ROOT:-}"
 legacy_recovery_frontend_flag=0
+telegram_credentials_environment_file="${MAKOSH_DEV_TELEGRAM_CREDENTIALS_FILE:-}"
+google_oauth_client_config_file="${MAKOSH_DEV_GOOGLE_OAUTH_CLIENT_CONFIG_PATH:-}"
+google_oauth_client_id=""
 kernel_pid=""
 owner_vault_host_pid=""
 frontend_pid=""
@@ -58,6 +61,22 @@ if test -n "$legacy_recovery_bundle_root"; then
 	test -d "$legacy_recovery_bundle_root" && test ! -L "$legacy_recovery_bundle_root" \
 		|| fail "legacy provider recovery bundle root is unavailable"
 	legacy_recovery_frontend_flag=1
+fi
+
+if test -z "$telegram_credentials_environment_file" && test -f "$project_root/.env"; then
+	telegram_credentials_environment_file="$project_root/.env"
+fi
+if test -n "$telegram_credentials_environment_file"; then
+	require_absolute_directory_path \
+		"development Telegram credentials file" \
+		"$telegram_credentials_environment_file"
+	test -f "$telegram_credentials_environment_file" \
+		&& test ! -L "$telegram_credentials_environment_file" \
+		|| fail "development Telegram credentials file is unavailable"
+	case "$(stat -f '%Lp' "$telegram_credentials_environment_file")" in
+		*00) ;;
+		*) fail "development Telegram credentials file permissions must be owner-only" ;;
+	esac
 fi
 
 run_compose() {
@@ -139,6 +158,23 @@ trap 'exit 129' HUP
 for command_name in cargo curl docker id lsof make mktemp node pnpm; do
 	require_command "$command_name"
 done
+if test -n "$google_oauth_client_config_file"; then
+	require_absolute_directory_path \
+		"development Google OAuth client configuration" \
+		"$google_oauth_client_config_file"
+	google_oauth_client_id="$(
+		node "$backend_root/scripts/read-dev-google-oauth-client-id.mjs" \
+			--config-file "$google_oauth_client_config_file"
+	)" || fail "development Google OAuth client configuration is invalid"
+elif test -f "$project_root/.env"; then
+	google_oauth_client_id="$(
+		node "$backend_root/scripts/read-dev-google-oauth-client-id.mjs" \
+			--env-file "$project_root/.env"
+	)" || fail "development Google OAuth client configuration is invalid"
+fi
+if test -n "$google_oauth_client_id"; then
+	printf '%s\n' 'Detected the installed Google OAuth client for Gmail development setup.'
+fi
 case "$no_browser" in
 	0) require_command open ;;
 	1) ;;
@@ -224,7 +260,9 @@ runtime_dir="$("$development_assembly_bin" --data-dir "$data_dir" runtime-direct
 require_absolute_directory_path "development runtime directory" "$runtime_dir"
 
 printf '%s\n' 'Starting authenticated PostgreSQL, PgBouncer, NATS and ClamAV infrastructure...'
-docker compose -f "$legacy_compose_file" down --remove-orphans >/dev/null 2>&1 || true
+if test -n "$(docker compose -f "$legacy_compose_file" ps --all --quiet 2>/dev/null)"; then
+	docker compose -f "$legacy_compose_file" down --remove-orphans >/dev/null 2>&1 || true
+fi
 run_compose up --detach --wait
 # PgBouncer is stateless and binds the OS-cache runtime directory. Docker
 # Desktop can retain a mount to a removed/recreated cache-directory inode while
@@ -253,6 +291,11 @@ owner_vault_host_args=(
 	--proof-file "$proof_file"
 	--owner-device-key-file "$data_dir/device-es256.key"
 )
+if test -n "$telegram_credentials_environment_file"; then
+	owner_vault_host_args+=(
+		--telegram-credentials-env-file "$telegram_credentials_environment_file"
+	)
+fi
 if test "$legacy_recovery_frontend_flag" = 1; then
 	legacy_recovery_receipt_dir="$data_dir/maintenance/legacy-provider-recovery-v1"
 	mkdir -p -- "$legacy_recovery_receipt_dir"
@@ -363,6 +406,7 @@ printf '%s\n' 'Starting the Vue/Vite browser client...'
 		MAKOSH_DEV_OWNER_VAULT_HOST_TARGET="$owner_vault_host_target" \
 		VITE_MAKOSH_DEV_OWNER_VAULT_HOST=1 \
 		VITE_MAKOSH_DEV_OWNER_DEVICE_PROOF_HOST=1 \
+		VITE_MAKOSH_GMAIL_OAUTH_CLIENT_ID="$google_oauth_client_id" \
 		VITE_MAKOSH_LEGACY_PROVIDER_RECOVERY="$legacy_recovery_frontend_flag" \
 		pnpm exec vite --host 127.0.0.1 --strictPort
 ) &

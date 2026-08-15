@@ -9,6 +9,7 @@ import {
 } from '../../../gen/makosh/mail/v1/client_pb'
 import { MailGmailOAuthClientV1 } from '../api/mailGmailOAuthClient'
 import { listMailAccounts } from '../api/mailAccountQueryClient'
+import { runGmailOAuthBrowserFlowV1 } from '../oauth/gmailOAuthBrowserFlow'
 
 export function useMailGmailPermanentDeleteAuthorization() {
 	const client = new MailGmailOAuthClientV1()
@@ -16,13 +17,14 @@ export function useMailGmailPermanentDeleteAuthorization() {
 	const connectionId = ref('')
 	const operationId = ref('')
 	const started = ref<GmailOAuthStartedV1>()
-	const returnedState = ref('')
-	const authorizationCode = ref('')
+	const completionSubmitted = ref(false)
 	const busy = ref(false)
 	const message = ref('')
 	const failed = ref(false)
 	const submitLabel = computed(() =>
-		started.value ? 'Complete authorization' : 'Authorize deletion',
+		completionSubmitted.value
+			? 'OAuth submitted'
+			: started.value ? 'Continue with Google' : 'Authorize deletion',
 	)
 
 	async function refreshAccounts(): Promise<void> {
@@ -58,21 +60,26 @@ export function useMailGmailPermanentDeleteAuthorization() {
 					requiredConnectionId(connectionId.value),
 					'permanent-delete',
 				)
-				message.value = 'Open Google authorization, then paste the returned state and code.'
+				completionSubmitted.value = false
+				message.value = 'Authorization request is ready. Continue with Google to grant the permission.'
 				return
 			}
+			if (completionSubmitted.value) return
+			const callback = await runGmailOAuthBrowserFlowV1(started.value.authorizationUrl)
+			completionSubmitted.value = true
 			await client.complete({
 				operationId: operationId.value,
 				connectionId: requiredConnectionId(connectionId.value),
 				setupId: started.value.setupId,
-				state: returnedState.value,
-				authorizationCode: authorizationCode.value,
+				state: callback.returnedState,
+				authorizationCode: callback.authorizationCode,
 			})
-			authorizationCode.value = ''
 			message.value = 'Authorization accepted; refresh status after provider exchange.'
 		} catch (error) {
 			failed.value = true
-			message.value = error instanceof Error ? error.message : 'Gmail authorization failed.'
+			message.value = completionSubmitted.value
+				? 'Gmail OAuth completion outcome is unavailable. Refresh status before starting another attempt.'
+				: error instanceof Error ? error.message : 'Gmail authorization failed.'
 		} finally {
 			busy.value = false
 		}
@@ -109,15 +116,14 @@ export function useMailGmailPermanentDeleteAuthorization() {
 
 	return {
 		accounts,
-		authorizationCode,
 		busy,
+		completionSubmitted,
 		connectionId,
 		failed,
 		message,
 		operationId,
 		refreshAccounts,
 		refreshStatus,
-		returnedState,
 		started,
 		submit,
 		submitLabel,

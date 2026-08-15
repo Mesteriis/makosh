@@ -15,7 +15,7 @@ pub fn resolve_data_directory(override_path: Option<PathBuf>) -> Result<PathBuf,
 }
 
 pub fn resolve_runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
-    let directories = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
+    let directories = directories::ProjectDirs::from("dev", "makosh", "makosh")
         .ok_or_else(|| "OS-standard local runtime directory is unavailable".to_owned())?;
     let canonical_data_dir = data_dir.canonicalize().map_err(|error| error.to_string())?;
     let instance_key = Sha256::digest(canonical_data_dir.as_os_str().as_encoded_bytes())

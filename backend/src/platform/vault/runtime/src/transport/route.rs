@@ -1,7 +1,9 @@
 //! Private execution of an opaque, Kernel-fenced Vault ciphertext route.
 
 use makosh_runtime_protocol::v1::{VaultCiphertextResponseV1, VaultCiphertextRouteV1};
-use makosh_runtime_protocol::validation::vault::validate_vault_ciphertext_route_v1;
+use makosh_runtime_protocol::validation::vault::{
+    VAULT_SECRET_UNAVAILABLE_ERROR_CODE, validate_vault_ciphertext_route_v1,
+};
 use makosh_vault_protocol::{
     LeaseAudienceV1, VaultCiphertextFrameV1, VaultTransportBindingV1, VaultTransportDirectionV1,
     VaultTransportSessionV1,
@@ -10,11 +12,11 @@ use p256::ecdsa::signature::Verifier;
 use p256::ecdsa::{Signature, VerifyingKey};
 use prost::Message;
 
-use crate::service::runtime::VaultService;
+use crate::service::runtime::{VaultService, VaultServiceError};
 use crate::transport::keys::VaultTransportKeyPair;
 use crate::transport::response::encrypt_result;
 use crate::transport::session::{
-    VaultTransportReplayGuard, execute_session, execute_storage_session,
+    VaultSessionExecutionError, VaultTransportReplayGuard, execute_session, execute_storage_session,
 };
 
 pub fn execute_route(
@@ -49,12 +51,23 @@ pub fn execute_route(
         execute_session(replay_guard, keys, service, &session, now_unix_seconds)
     }
     .map_err(|error| {
+        if session_error_code(&error) == Some(VAULT_SECRET_UNAVAILABLE_ERROR_CODE) {
+            return VAULT_SECRET_UNAVAILABLE_ERROR_CODE.to_owned();
+        }
         if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
             return format!("developer Vault ciphertext route was denied: {error:?}");
         }
         "Vault ciphertext route was denied".to_owned()
     })?;
     encrypt_result(session.binding(), plaintext.as_slice())
+}
+
+fn session_error_code(error: &VaultSessionExecutionError) -> Option<&'static str> {
+    matches!(
+        error,
+        VaultSessionExecutionError::Service(VaultServiceError::SecretUnavailable)
+    )
+    .then_some(VAULT_SECRET_UNAVAILABLE_ERROR_CODE)
 }
 
 pub(crate) fn verify_kernel_authorization(
@@ -100,4 +113,25 @@ fn fixed<const N: usize>(value: &[u8]) -> Result<[u8; N], String> {
     value
         .try_into()
         .map_err(|_| "Vault ciphertext route is invalid".to_owned())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn unavailable_secret_has_an_expected_control_error_code() {
+        assert_eq!(
+            session_error_code(&VaultSessionExecutionError::Service(
+                VaultServiceError::SecretUnavailable,
+            )),
+            Some(VAULT_SECRET_UNAVAILABLE_ERROR_CODE),
+        );
+        assert_eq!(
+            session_error_code(&VaultSessionExecutionError::Service(
+                VaultServiceError::LeaseScopeMismatch,
+            )),
+            None,
+        );
+    }
 }

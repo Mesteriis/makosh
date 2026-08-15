@@ -13,7 +13,7 @@ use makosh_runtime_protocol::{
         ManagedStorageRuntimeConfigurationV1, ManagedWorkflowRuntimeConfigurationV1, ModuleKindV1,
     },
     validation::{
-        descriptor::decode_descriptor_v1,
+        descriptor::{decode_descriptor_v1, decode_settings_snapshot_v1},
         integration_host_bridge::validate_managed_integration_host_bridge_configuration,
         managed_domain_runtime::validate_managed_domain_runtime_configuration,
         managed_engine_runtime::validate_managed_engine_runtime_configuration,
@@ -545,6 +545,12 @@ fn start_prepared_with_configuration_bytes(
         cleanup,
         expected_module_kind,
     } = input;
+    log_developer_launch_contracts(
+        expected_module_kind,
+        &runtime_configuration_bytes,
+        settings_snapshot_bytes.as_deref(),
+        host_bridge_configuration.as_ref(),
+    );
     let preflight = (|| {
         let descriptor = decode_descriptor_v1(prepared.descriptor_bytes())
             .map_err(|_| "managed runtime descriptor is invalid".to_owned())?;
@@ -662,6 +668,55 @@ fn start_prepared_with_configuration_bytes(
         },
     )?;
     Ok(runtime_generation)
+}
+
+fn log_developer_launch_contracts(
+    expected_module_kind: ModuleKindV1,
+    runtime_configuration_bytes: &[u8],
+    settings_snapshot_bytes: Option<&[u8]>,
+    host_bridge_configuration: Option<&ManagedIntegrationHostBridgeConfigurationV1>,
+) {
+    if !tracing::enabled!(tracing::Level::DEBUG) {
+        return;
+    }
+    let settings_snapshot = settings_snapshot_bytes.map(decode_settings_snapshot_v1);
+    match expected_module_kind {
+        ModuleKindV1::Domain => tracing::debug!(
+            event = "managed_runtime.launch.contracts",
+            module.kind = "domain",
+            payload.runtime_configuration = ?ManagedDomainRuntimeConfigurationV1::decode(runtime_configuration_bytes),
+            payload.settings_snapshot = ?settings_snapshot,
+            payload.host_bridge_configuration = ?host_bridge_configuration,
+        ),
+        ModuleKindV1::Engine => tracing::debug!(
+            event = "managed_runtime.launch.contracts",
+            module.kind = "engine",
+            payload.runtime_configuration = ?ManagedEngineRuntimeConfigurationV1::decode(runtime_configuration_bytes),
+            payload.settings_snapshot = ?settings_snapshot,
+            payload.host_bridge_configuration = ?host_bridge_configuration,
+        ),
+        ModuleKindV1::Integration => tracing::debug!(
+            event = "managed_runtime.launch.contracts",
+            module.kind = "integration",
+            payload.runtime_configuration = ?ManagedIntegrationRuntimeConfigurationV1::decode(runtime_configuration_bytes),
+            payload.settings_snapshot = ?settings_snapshot,
+            payload.host_bridge_configuration = ?host_bridge_configuration,
+        ),
+        ModuleKindV1::Workflow => tracing::debug!(
+            event = "managed_runtime.launch.contracts",
+            module.kind = "workflow",
+            payload.runtime_configuration = ?ManagedWorkflowRuntimeConfigurationV1::decode(runtime_configuration_bytes),
+            payload.settings_snapshot = ?settings_snapshot,
+            payload.host_bridge_configuration = ?host_bridge_configuration,
+        ),
+        _ => tracing::debug!(
+            event = "managed_runtime.launch.contracts",
+            module.kind = "unsupported",
+            payload.runtime_configuration_bytes = runtime_configuration_bytes.len(),
+            payload.settings_snapshot = ?settings_snapshot,
+            payload.host_bridge_configuration = ?host_bridge_configuration,
+        ),
+    }
 }
 
 fn prepare_runtime_with_artifacts(

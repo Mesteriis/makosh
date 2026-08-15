@@ -3,7 +3,7 @@ use makosh_review_obligation_candidate_api::{
     REVIEW_OBLIGATION_CANDIDATE_CLIENT_CAPABILITY_ID_V1,
     REVIEW_OBLIGATION_CANDIDATE_COMMAND_CONNECT_PATH_V1,
     REVIEW_OBLIGATION_CANDIDATE_LIST_CONNECT_PATH_V1, REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1,
-    REVIEW_OBLIGATION_CANDIDATE_OWNER_V1, REVIEW_OBLIGATION_CANDIDATE_QUERY_CONNECT_PATH_V1,
+    REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1, REVIEW_OBLIGATION_CANDIDATE_QUERY_CONNECT_PATH_V1,
     REVIEW_OBLIGATION_CANDIDATE_SUBMISSION_CAPABILITY_ID_V1,
     review_obligation_candidate_approved_contract_reference_v1,
     review_obligation_candidate_approved_publish_request_v1,
@@ -57,7 +57,7 @@ pub fn review_obligation_candidate_module_descriptor_v1(build_id: &str) -> Modul
         descriptor_major: 1,
         descriptor_revision: 1,
         module_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_ID_V1.to_owned(),
-        owner_id: REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned(),
+        owner_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1.to_owned(),
         module_kind: ModuleKindV1::Domain as i32,
         module_version: "1".to_owned(),
         build_id: build_id.to_owned(),
@@ -165,7 +165,7 @@ fn blob_capability() -> CapabilityDescriptorV1 {
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::BlobQuota(BlobQuotaRequestV1 {
                 max_bytes: 2 * 1024 * 1024,
-                custody_scope_id: REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned(),
+                custody_scope_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1.to_owned(),
                 allowed_operations: vec![
                     BlobQuotaOperationV1::ReadRange as i32,
                     BlobQuotaOperationV1::Write as i32,
@@ -206,7 +206,7 @@ fn storage_capability() -> CapabilityDescriptorV1 {
         criticality: CapabilityCriticalityV1::Required as i32,
         requests: vec![CapabilityRequestV1 {
             request: Some(Request::StorageNamespace(StorageNamespaceRequestV1 {
-                owner_id: REVIEW_OBLIGATION_CANDIDATE_OWNER_V1.to_owned(),
+                owner_id: REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1.to_owned(),
                 connection_budget: STORAGE_CONNECTION_BUDGET_V1,
                 timeout_millis: 5_000,
             })),
@@ -218,6 +218,8 @@ fn storage_capability() -> CapabilityDescriptorV1 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use makosh_review_obligation_candidate_api::REVIEW_OBLIGATION_CANDIDATE_OWNER_V1;
+    use makosh_review_obligation_candidate_persistence::REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1;
     use makosh_runtime_protocol::validation::descriptor::{
         validate_descriptor_v1, validate_settings_schema_v1,
     };
@@ -241,6 +243,25 @@ mod tests {
                 .capabilities
                 .iter()
                 .all(|capability| !capability.capability_id.contains("obligations.runtime"))
+        );
+        let storage_owner = descriptor
+            .capabilities
+            .iter()
+            .flat_map(|capability| &capability.requests)
+            .find_map(|request| match request.request.as_ref() {
+                Some(Request::StorageNamespace(storage)) => Some(storage.owner_id.as_str()),
+                _ => None,
+            })
+            .expect("storage namespace request");
+        assert_eq!(
+            descriptor.owner_id,
+            REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1
+        );
+        assert_eq!(storage_owner, REVIEW_OBLIGATION_CANDIDATE_STORAGE_OWNER_V1);
+        assert_eq!(descriptor.owner_id, storage_owner);
+        assert_eq!(
+            REVIEW_OBLIGATION_CANDIDATE_OWNER_V1,
+            REVIEW_OBLIGATION_CANDIDATE_MODULE_OWNER_V1
         );
     }
 }

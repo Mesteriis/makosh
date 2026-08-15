@@ -24,8 +24,10 @@ import {
 import { getBrowserGatewayRealtimeHub } from '../../platform/gateway/browserGatewayRealtimeHub'
 import { applyClientSystemStatusEvent } from '../../platform/gateway/browserGatewaySystemStatus'
 import {
+	defaultUiThemeName,
 	isUiThemeFamily,
 	isUiThemeMode,
+	themeNameToSelection,
 	themeSelectionToName,
 	type UiThemeFamily,
 	type UiThemeMode,
@@ -53,10 +55,9 @@ export type ClientNavigationHealthCheck = {
 
 export function useClientNavigationSurface() {
 	const selectedRouteId = ref<ClientSurfaceRouteId>('settings')
-	// The recovery shell must preserve Макошь' established first impression even
-	// before any product surface is admitted by the Kernel.
-	const currentThemeFamily = ref<UiThemeFamily>('makosh')
-	const currentThemeMode = ref<UiThemeMode>('dark')
+	const initialTheme = themeNameToSelection(defaultUiThemeName)
+	const currentThemeFamily = ref<UiThemeFamily>(initialTheme.family)
+	const currentThemeMode = ref<UiThemeMode>(initialTheme.mode)
 	const currentLanguage = ref<'ru' | 'en'>(readInterfaceLanguage())
 	const bootstrap = ref<ClientBootstrapSnapshot>(recoveryClientBootstrap())
 	const bootstrapError = ref('bootstrap_unavailable')

@@ -8026,6 +8026,22 @@
           "features": []
         },
         {
+          "name": "tracing",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.1.44",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing-subscriber",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.3.20",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
           "name": "chacha20poly1305",
           "kind": "normal",
           "source": "crates_io",
@@ -8297,6 +8313,22 @@
           "features": []
         },
         {
+          "name": "tracing",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.1.44",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing-subscriber",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.3.20",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
           "name": "zeroize",
           "kind": "normal",
           "source": "crates_io",
@@ -8322,6 +8354,22 @@
           "kind": "normal",
           "source": "crates_io",
           "version": "=0.14.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.1.44",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing-subscriber",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.3.20",
           "defaultFeatures": true,
           "features": []
         }
@@ -8423,6 +8471,22 @@
             "rt",
             "time"
           ]
+        },
+        {
+          "name": "tracing",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.1.44",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing-subscriber",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.3.20",
+          "defaultFeatures": true,
+          "features": []
         },
         {
           "name": "zeroize",
@@ -9194,6 +9258,14 @@
           "kind": "normal",
           "source": "crates_io",
           "version": "=0.26.4",
+          "defaultFeatures": true,
+          "features": []
+        },
+        {
+          "name": "tracing",
+          "kind": "normal",
+          "source": "crates_io",
+          "version": "=0.1.44",
           "defaultFeatures": true,
           "features": []
         },

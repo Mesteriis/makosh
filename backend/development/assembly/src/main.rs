@@ -951,6 +951,13 @@ fn start_ensemble(
         {
             return Err("development assembly module state does not match the plan".to_owned());
         }
+        if requires_real_provider_evidence(plan.runtime_artifact_id) {
+            println!(
+                "{}_runtime=blocked_provider_evidence",
+                plan.runtime_artifact_id
+            );
+            continue;
+        }
         match plan.runtime_kind {
             ModuleRuntimeKindV1::Domain => {
                 client.start_reserved_domain_runtime(
@@ -998,6 +1005,13 @@ fn start_ensemble(
     Ok(())
 }
 
+fn requires_real_provider_evidence(runtime_artifact_id: &str) -> bool {
+    matches!(
+        runtime_artifact_id,
+        ZOOM_RUNTIME_ARTIFACT | TELEMOST_RUNTIME_ARTIFACT | OMNIROUTE_RUNTIME_ARTIFACT
+    )
+}
+
 fn validate_cli(cli: &Cli) -> Result<(), String> {
     if !cli.data_dir.is_absolute()
         || cli.distribution_id.is_empty()
@@ -1015,7 +1029,7 @@ fn client(data_dir: &Path) -> Result<OwnerControlClientV1, String> {
 }
 
 fn runtime_directory(data_dir: &Path) -> Result<PathBuf, String> {
-    let directories = directories::ProjectDirs::from("dev", "Макошь", "Макошь")
+    let directories = directories::ProjectDirs::from("dev", "makosh", "makosh")
         .ok_or_else(|| "OS-standard local runtime directory is unavailable".to_owned())?;
     let instance_key = Sha256::digest(data_dir.as_os_str().as_encoded_bytes())
         .iter()
@@ -1722,6 +1736,8 @@ struct ModuleReservationV1 {
     storage_bundle_digest: [u8; 32],
 }
 
+const MAX_DEVELOPMENT_RESERVATION_BYTES: u64 = 64 * 1024;
+
 fn write_reservation(path: &Path, reservation: &EnsembleReservationV2) -> Result<(), String> {
     if reservation.modules.len() != MODULE_PLAN.len() {
         return Err("development ensemble reservation is incomplete".to_owned());
@@ -1746,6 +1762,9 @@ fn write_reservation(path: &Path, reservation: &EnsembleReservationV2) -> Result
             hex(&module.storage_bundle_digest),
         ));
     }
+    if bytes.len() as u64 > MAX_DEVELOPMENT_RESERVATION_BYTES {
+        return Err("development ensemble reservation is incomplete".to_owned());
+    }
     let mut file = OpenOptions::new()
         .write(true)
         .create_new(true)
@@ -1763,7 +1782,7 @@ fn read_reservation_if_present(path: &Path) -> Result<Option<EnsembleReservation
             if !metadata.file_type().is_symlink()
                 && metadata.is_file()
                 && metadata.permissions().mode() & 0o077 == 0
-                && metadata.len() <= 16_384 =>
+                && metadata.len() <= MAX_DEVELOPMENT_RESERVATION_BYTES =>
         {
             read_reservation(path).map(Some)
         }
@@ -2180,6 +2199,28 @@ mod tests {
         }
     }
 
+    fn fixture_reservation(distribution_generation: u64) -> EnsembleReservationV2 {
+        EnsembleReservationV2 {
+            distribution_id: "makosh-local-development".to_owned(),
+            distribution_generation,
+            modules: MODULE_PLAN
+                .iter()
+                .enumerate()
+                .map(|(index, plan)| ModuleReservationV1 {
+                    runtime_artifact_id: plan.runtime_artifact_id.to_owned(),
+                    registration_id: format!("registration-{index}"),
+                    storage_capability_id: plan.storage_capability_id.to_owned(),
+                    runtime_instance_id: format!("runtime-instance-{index}"),
+                    runtime_generation: 4,
+                    role_epoch: 4,
+                    credential_lease_revision: 4,
+                    storage_bundle_revision: 1,
+                    storage_bundle_digest: [u8::try_from(index).unwrap(); 32],
+                })
+                .collect(),
+        }
+    }
+
     fn fixture_state_before_zoom_telemost_omniroute(
         distribution_generation: u64,
     ) -> DevelopmentAssemblyStateV1 {
@@ -2549,6 +2590,55 @@ mod tests {
             MODULE_PLAN[34].runtime_kind,
             ModuleRuntimeKindV1::Engine
         ));
+    }
+
+    #[test]
+    fn development_start_does_not_launch_provider_placeholders_without_real_evidence() {
+        let blocked = MODULE_PLAN
+            .iter()
+            .filter(|plan| requires_real_provider_evidence(plan.runtime_artifact_id))
+            .map(|plan| plan.runtime_artifact_id)
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            blocked,
+            vec![
+                ZOOM_RUNTIME_ARTIFACT,
+                TELEMOST_RUNTIME_ARTIFACT,
+                OMNIROUTE_RUNTIME_ARTIFACT,
+            ]
+        );
+    }
+
+    #[test]
+    fn current_full_plan_reservation_is_bounded_and_resumable() {
+        let path = temporary_state_path("full-plan-reservation");
+        let reservation = fixture_reservation(4);
+
+        write_reservation(&path, &reservation).expect("full reservation must be writable");
+        let metadata = std::fs::metadata(&path).expect("reservation metadata");
+        let restored = read_reservation_if_present(&path)
+            .expect("full reservation must be readable")
+            .expect("reservation must be present");
+        std::fs::remove_file(path).expect("reservation fixture must be removable");
+
+        assert!(metadata.len() > 16_384);
+        assert!(metadata.len() <= MAX_DEVELOPMENT_RESERVATION_BYTES);
+        assert_eq!(restored.distribution_generation, 4);
+        assert_eq!(restored.modules.len(), MODULE_PLAN.len());
+    }
+
+    #[test]
+    fn runtime_directory_keeps_control_socket_within_the_portable_macos_limit() {
+        let runtime_socket = runtime_directory(Path::new("/private/tmp/makosh-development"))
+            .unwrap()
+            .join("runtime.sock");
+
+        assert!(
+            runtime_socket.as_os_str().as_encoded_bytes().len() <= 103,
+            "development runtime socket path exceeds the portable macOS limit: {}",
+            runtime_socket.display(),
+        );
     }
 
     #[test]

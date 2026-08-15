@@ -15,9 +15,17 @@
 	background: transparent;
 }
 
+.telegram-qr-pairing__embedded-state {
+	justify-self: center;
+	border-radius: var(--h-radius-pill);
+	padding: var(--h-space-1) var(--h-space-3);
+	color: #1678a6;
+	background: color-mix(in srgb, #229ed9 12%, transparent);
+	font-size: var(--h-font-size-sm);
+}
+
 .telegram-qr-pairing header,
-.telegram-qr-pairing footer,
-.telegram-qr-pairing__password {
+.telegram-qr-pairing footer {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -46,17 +54,30 @@
 	min-height: 18rem;
 }
 
+.telegram-qr-pairing__placeholder {
+	display: grid;
+	place-items: center;
+	align-content: center;
+	gap: var(--h-space-2);
+	min-height: 18rem;
+	border: 1px dashed color-mix(in srgb, #229ed9 48%, var(--h-color-border));
+	border-radius: var(--h-radius-lg);
+	color: #229ed9;
+	background: color-mix(in srgb, #229ed9 6%, var(--h-color-surface));
+	text-align: center;
+}
+
+.telegram-qr-pairing__placeholder small {
+	max-width: 32rem;
+	color: var(--h-color-text-muted);
+}
+
 .telegram-qr-pairing__artifact img {
 	max-width: 100%;
 	height: auto;
 	padding: var(--h-space-2);
 	border-radius: var(--h-radius-lg);
 	background: #fff;
-}
-
-.telegram-qr-pairing__password label {
-	display: grid;
-	gap: var(--h-space-1);
 }
 
 .telegram-qr-pairing__message--success {
@@ -75,8 +96,7 @@
 
 @media (max-width: 760px) {
 	.telegram-qr-pairing header,
-	.telegram-qr-pairing footer,
-	.telegram-qr-pairing__password {
+	.telegram-qr-pairing footer {
 		align-items: stretch;
 		flex-direction: column;
 	}

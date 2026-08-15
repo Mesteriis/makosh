@@ -159,9 +159,11 @@ pub(crate) fn module_query_response(
             error_code: "managed_module_query_invalid_response".to_owned(),
         },
         Err(error) => {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!("developer_managed_module_query_error={error}");
-            }
+            tracing::warn!(
+                event = "managed_runtime.module_query.failed",
+                error.class = "module_query",
+                error.message = %error,
+            );
             ManagedRuntimeControlResponseV1 {
                 result: None,
                 error_code: module_query_error_code(&error).to_owned(),
@@ -200,9 +202,11 @@ pub(crate) fn module_request_response(
             error_code: "managed_module_request_invalid_response".to_owned(),
         },
         Err(error) => {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!("developer_managed_module_request_error={error}");
-            }
+            tracing::warn!(
+                event = "managed_runtime.module_request.failed",
+                error.class = "module_request",
+                error.message = %error,
+            );
             ManagedRuntimeControlResponseV1 {
                 result: None,
                 error_code: module_request_error_code(&error).to_owned(),

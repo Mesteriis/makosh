@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import Icon from '../../../shared/ui/Icon.vue'
 import { useMailAccountPortability } from '../portability/useMailAccountPortability'
@@ -7,9 +6,6 @@ import './mailPortabilityPanel.css'
 
 const props = defineProps<{ module: ClientModuleBootstrapV1 | null }>()
 const portability = useMailAccountPortability(() => props.module)
-const gmailAuthorizationUrl = computed(
-	() => portability.importState.value?.gmailOAuthStarted?.authorizationUrl ?? '',
-)
 </script>
 
 <template>
@@ -133,33 +129,15 @@ const gmailAuthorizationUrl = computed(
 			<div
 				v-if="portability.importState.value.gmailOAuthStarted"
 				class="mail-portability-oauth"
+				data-auth-method="oauth"
 			>
-				<a
-					:href="gmailAuthorizationUrl"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Open Gmail authorization
-					<Icon icon="tabler:external-link" />
-				</a>
-				<label>
-					<span>Returned state</span>
-					<input v-model="portability.gmailState.value" autocomplete="off">
-				</label>
-				<label>
-					<span>Authorization code</span>
-					<input
-						v-model="portability.gmailAuthorizationCode.value"
-						type="password"
-						autocomplete="one-time-code"
-					>
-				</label>
+				<p>Google OAuth opens in a separate browser surface and returns automatically.</p>
 				<button
 					type="button"
 					:disabled="portability.busy.value"
 					@click="portability.completeGmail"
 				>
-					Complete Gmail OAuth
+					Continue with Google
 				</button>
 			</div>
 

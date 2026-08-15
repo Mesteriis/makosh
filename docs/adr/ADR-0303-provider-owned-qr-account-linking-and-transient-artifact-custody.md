@@ -12,6 +12,13 @@ Frontend unit/type/boundary tests, native Tauri feature build и live browser
 negative contour зелёные. Ручное сканирование реального provider QR не
 выполнялось и не заявляется как evidence.
 
+Client UX update 2026-08-14 делает Telegram QR первой и основной областью
+account dialog. Если TDLib application credentials ещё не provisioned, вместо
+provider-looking fixture показывается пустая QR custody area с exact blocker и
+отдельной owner action для одноразовой application configuration. После
+write-only Vault provisioning тот же dialog запрашивает real transient QR без
+перехода через технический wizard step.
+
 Уточняет:
 
 - [ADR-0204: integration/provider boundary](ADR-0204-bundled-integration-plugins-and-provider-neutral-context-boundary.md);

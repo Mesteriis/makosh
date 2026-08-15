@@ -12,7 +12,8 @@ use makosh_runtime_protocol::v1::{
     managed_vault_runtime_control_response_v1::Result as ResponseResult,
 };
 use makosh_runtime_protocol::validation::vault::{
-    STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1, validate_vault_ciphertext_route_v1,
+    STORAGE_REVOKE_AUDIENCE_OPERATION_DIGEST_V1, VAULT_SECRET_UNAVAILABLE_ERROR_CODE,
+    validate_vault_ciphertext_route_v1,
 };
 use prost::Message;
 
@@ -177,10 +178,16 @@ pub(crate) fn relay_kernel_authorized_route(
     let response = ManagedVaultRuntimeControlResponseV1::decode(response.as_slice())
         .map_err(|_| "managed Vault ciphertext response is invalid".to_owned())?;
     if !response.error_code.is_empty() {
-        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-            eprintln!(
-                "developer_vault_ciphertext_response_error_code={}",
-                response.error_code
+        if response.error_code == VAULT_SECRET_UNAVAILABLE_ERROR_CODE {
+            tracing::debug!(
+                event = "vault.ciphertext_route.secret_unavailable",
+                response.error_code = %response.error_code,
+            );
+        } else {
+            tracing::warn!(
+                event = "vault.ciphertext_route.response.failed",
+                error.class = "vault_ciphertext_route",
+                response.error_code = %response.error_code,
             );
         }
         return Err("managed Vault ciphertext response is unavailable".to_owned());

@@ -847,9 +847,11 @@ fn response(result: Result<OwnerResult, String>) -> OwnerControlResponseV1 {
             error_code: String::new(),
         },
         Err(error) => {
-            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
-                eprintln!("developer_owner_control_denied error={error}");
-            }
+            tracing::warn!(
+                event = "owner_control.operation.denied",
+                error.class = "owner_control",
+                error.message = %error,
+            );
             OwnerControlResponseV1 {
                 result: None,
                 error_code: "operation_denied".to_owned(),

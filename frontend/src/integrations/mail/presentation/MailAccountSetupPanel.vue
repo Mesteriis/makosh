@@ -31,10 +31,13 @@ const steps = [
 		description: 'Provider readiness remains account-scoped and can be refreshed after the wizard closes.',
 	},
 ]
+const finishLabel = computed(() => provider.value === 'gmail'
+	? 'Continue with Google'
+	: 'Complete setup')
 const canAdvance = computed(() => {
 	if (step.value === 1) return Boolean(props.module?.settings)
 	if (step.value === 2) return setup.canSubmit.value && !setup.busy.value
-	if (provider.value === 'gmail') return setup.canSubmit.value && !setup.busy.value
+	if (provider.value === 'gmail') return setup.canAuthorize.value && !setup.busy.value
 	return setup.messageTone.value === 'success' && !setup.busy.value
 })
 
@@ -49,9 +52,7 @@ function selectProvider(next: MailProviderChoice): void {
 }
 
 function applyProviderDefaults(): void {
-	setup.gmailState.value = undefined
-	setup.returnedState.value = ''
-	setup.authorizationCode.value = ''
+	setup.resetGmailAuthorization()
 	if (provider.value === 'gmail') {
 		setup.kind.value = 'gmail'
 		return
@@ -76,7 +77,7 @@ async function handleNext(nextStep: number): Promise<void> {
 
 async function finish(): Promise<void> {
 	if (provider.value === 'gmail') {
-		if (!await setup.submit() || setup.messageTone.value !== 'success') return
+		if (!await setup.authorizeGmail() || setup.messageTone.value !== 'success') return
 	}
 	if (setup.messageTone.value !== 'success') return
 	emit('completed')
@@ -89,7 +90,7 @@ async function activateRecoveredAccounts(): Promise<void> {
 </script>
 
 <template>
-	<section class="integration-account-setup" data-provider-tone="mail">
+	<section class="integration-account-setup" data-provider-tone="mail" data-auth-method="oauth">
 		<header class="integration-account-setup__header">
 			<span class="integration-account-setup__icon"><Icon icon="tabler:mail-plus" /></span>
 			<div>
@@ -140,7 +141,7 @@ async function activateRecoveredAccounts(): Promise<void> {
 		:steps="steps"
 		title="Add mail account"
 		description="Mail owns provider setup; Communications receives only provider-neutral events."
-		finish-label="Complete setup"
+		:finish-label="finishLabel"
 		:can-advance="canAdvance"
 		:busy="setup.busy.value"
 		size="lg"
@@ -195,14 +196,21 @@ async function activateRecoveredAccounts(): Promise<void> {
 				</label>
 
 				<template v-if="provider === 'gmail'">
-					<label class="wide">
+					<label v-if="!setup.gmailClientConfigured.value" class="wide">
 						<span>Google OAuth client ID</span>
 						<input v-model="setup.gmailClientId.value" required autocomplete="off">
 					</label>
+					<p v-else class="provider-account-wizard__notice wide">
+						The installed Google OAuth client is configured for this Макошь build.
+					</p>
 					<label class="wide">
 						<span>OAuth redirect URI</span>
-						<input v-model="setup.gmailRedirectUri.value" required type="url">
+						<input :value="setup.gmailRedirectUri.value" readonly type="url">
 					</label>
+					<p class="provider-account-wizard__notice wide">
+						Google returns to a one-use loopback callback. State and authorization code
+						are validated and submitted automatically; they are never copied into this form.
+					</p>
 				</template>
 
 				<template v-else>
@@ -253,26 +261,10 @@ async function activateRecoveredAccounts(): Promise<void> {
 				:class="`provider-account-wizard__status--${setup.messageTone.value}`"
 			>
 				<template v-if="provider === 'gmail' && setup.gmailState.value">
-					<h4>Google authorization required</h4>
-					<p>Open the provider URL, then return the exact state and one-time code.</p>
-					<a
-						:href="setup.gmailState.value.started.authorizationUrl"
-						target="_blank"
-						rel="noreferrer"
-					>
-						<Icon icon="tabler:external-link" />
-						Open Google authorization
-					</a>
-					<div class="provider-account-wizard__form">
-						<label>
-							<span>Returned state</span>
-							<input v-model="setup.returnedState.value" required autocomplete="off">
-						</label>
-						<label>
-							<span>Authorization code</span>
-							<input v-model="setup.authorizationCode.value" required type="password" autocomplete="one-time-code">
-						</label>
-					</div>
+					<h4>Continue with Google OAuth</h4>
+					<p>Select “Continue with Google”. Макошь opens the provider authorization URL
+						and consumes only the exact matching loopback callback.</p>
+					<p>{{ setup.message.value }}</p>
 				</template>
 				<template v-else>
 					<h4>{{ setup.busy.value ? 'Applying account configuration…' : 'Account setup result' }}</h4>

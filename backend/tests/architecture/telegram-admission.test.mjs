@@ -197,15 +197,21 @@ test('Task 10 release keeps one Telegram module with four compiler-consumed arti
     assert.equal(compilerTest.includes(artifact), true, artifact);
   }
   assert.match(materializer, /telegram\.release-artifacts\.json/);
+  assert.match(
+    materializer,
+    /prepare_new_output_directory "Telegram call bridge" "\$tgcalls_root"/,
+  );
+  assert.match(materializer, /dev-native\/tgcalls-makosh/);
   assert.match(developmentAssembly, /const MODULE_PLAN: \[ModulePlanV1; 41\]/);
   assert.equal((developmentAssembly.match(/runtime_artifact_id: TELEGRAM_RUNTIME_ARTIFACT/g) ?? []).length, 1);
 });
 
 test('Task 10 admission requires managed bootstrap privacy and real TDLib plus tgcalls evidence', async () => {
-  const [runner, flow, tgcallsBuilder] = await Promise.all([
+  const [runner, flow, tgcallsBuilder, makefile] = await Promise.all([
     read('backend/scripts/test-authenticated-storage.mjs'),
     read('backend/tests/support/kernel-recovery/src/tests/managed_storage_vault_docker/telegram_managed_flow.rs'),
     read('backend/scripts/build-telegram-tgcalls-bridge-macos.sh'),
+    read('backend/Makefile'),
   ]);
 
   for (const testName of [
@@ -225,6 +231,9 @@ test('Task 10 admission requires managed bootstrap privacy and real TDLib plus t
   assert.match(flow, /runtime_storage_credential_for_registration_v1/);
   assert.match(flow, /assert_supervised_telegram_child_output_is_private_v1/);
   assert.match(flow, /NOBYPASSRLS/);
+  assert.match(flow, /managed_telegram_real_provider_prerequisites_are_exact/);
+  assert.match(makefile, /telegram-admission-preflight:/);
+  assert.match(makefile, /managed_telegram_real_provider_prerequisites_are_exact/);
   assert.match(tgcallsBuilder, /release_eligible=true/);
   assert.match(tgcallsBuilder, /AUDIO_CONFORMANCE_NAME/);
 });

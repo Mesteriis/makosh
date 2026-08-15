@@ -94,6 +94,13 @@ where
     ) -> Result<ManagedChildAttemptOutcomeV1, String>,
 {
     for attempt in 1..=policy.max_attempts() {
+        let attempt_span = tracing::info_span!(
+            "managed_runtime.attempt",
+            attempt,
+            attempts.maximum = policy.max_attempts(),
+            control.transport = "legacy_v1",
+        );
+        let _attempt_guard = attempt_span.enter();
         let (kernel_end, child_stdin) = managed_runtime_control::create_inherited_channel()?;
         let mut child =
             bounded_managed_child_execution::spawn(staged_executable, arguments, child_stdin)?;
@@ -105,6 +112,11 @@ where
                     if attempt == policy.max_attempts() {
                         return Err(error);
                     }
+                    tracing::warn!(
+                        event = "managed_runtime.attempt.retrying",
+                        error.class = "control_handshake",
+                        error.message = %error,
+                    );
                     continue;
                 }
             };
@@ -119,6 +131,11 @@ where
                 if attempt == policy.max_attempts() {
                     return Err(error);
                 }
+                tracing::warn!(
+                    event = "managed_runtime.attempt.retrying",
+                    error.class = "control_fault",
+                    error.message = %error,
+                );
             }
             ManagedChildAttemptOutcomeV1::Exited(status) if status.success() => {
                 return Ok(ManagedChildExecutionResult::succeeded(
@@ -126,7 +143,11 @@ where
                     status.code().unwrap_or(0),
                 ));
             }
-            ManagedChildAttemptOutcomeV1::Exited(_) => {}
+            ManagedChildAttemptOutcomeV1::Exited(status) => tracing::warn!(
+                event = "managed_runtime.attempt.retrying",
+                error.class = "child_exit",
+                child.exit_code = ?status.code(),
+            ),
         }
     }
     Err("managed child exhausted its bounded restart attempts".to_owned())
@@ -146,6 +167,13 @@ where
     ) -> Result<ManagedChildAttemptOutcomeV1, String>,
 {
     for attempt in 1..=policy.max_attempts() {
+        let attempt_span = tracing::info_span!(
+            "managed_runtime.attempt",
+            attempt,
+            attempts.maximum = policy.max_attempts(),
+            control.transport = "correlated_v2",
+        );
+        let _attempt_guard = attempt_span.enter();
         let (kernel_end, child_stdin) = managed_runtime_control::create_inherited_channel()?;
         let mut child =
             bounded_managed_child_execution::spawn(staged_executable, arguments, child_stdin)?;
@@ -157,6 +185,11 @@ where
                     if attempt == policy.max_attempts() {
                         return Err(error);
                     }
+                    tracing::warn!(
+                        event = "managed_runtime.attempt.retrying",
+                        error.class = "control_handshake",
+                        error.message = %error,
+                    );
                     continue;
                 }
             };
@@ -171,6 +204,11 @@ where
                 if attempt == policy.max_attempts() {
                     return Err(error);
                 }
+                tracing::warn!(
+                    event = "managed_runtime.attempt.retrying",
+                    error.class = "control_fault",
+                    error.message = %error,
+                );
             }
             ManagedChildAttemptOutcomeV1::Exited(status) if status.success() => {
                 return Ok(ManagedChildExecutionResult::succeeded(
@@ -178,7 +216,11 @@ where
                     status.code().unwrap_or(0),
                 ));
             }
-            ManagedChildAttemptOutcomeV1::Exited(_) => {}
+            ManagedChildAttemptOutcomeV1::Exited(status) => tracing::warn!(
+                event = "managed_runtime.attempt.retrying",
+                error.class = "child_exit",
+                child.exit_code = ?status.code(),
+            ),
         }
     }
     Err("managed child exhausted its bounded restart attempts".to_owned())
