@@ -6,6 +6,7 @@
 
 pub mod admission;
 pub mod client_port;
+mod client_realtime;
 mod communications_outbox;
 pub mod delivery_intent_consumer;
 pub mod delivery_intent_execution;

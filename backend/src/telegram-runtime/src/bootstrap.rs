@@ -25,7 +25,8 @@ use makosh_storage_protocol::{
 use makosh_storage_vault::StorageVaultRouteContextV1;
 use makosh_telegram_api::client_contract::TELEGRAM_OWNER_ID;
 use makosh_telegram_api::{
-    TelegramAccountSetup, TelegramCredentialBinding, TelegramCredentialPurpose,
+    TelegramAccountSetup, TelegramAccountState, TelegramCredentialBinding,
+    TelegramCredentialPurpose,
 };
 use makosh_telegram_automation_persistence::TelegramAutomationPersistence;
 use makosh_telegram_calls_persistence::TelegramCallsPersistence;
@@ -230,11 +231,29 @@ pub async fn open_admitted_runtime(
             }
             TelegramBootstrapError::CallsBackfill
         })?;
-    let persisted_account = durable
+    let mut persisted_account = durable
         .account(account_id)
         .await
         .map_err(TelegramBootstrapError::Persistence)?
         .filter(|(account, _)| account.account_id == account_id);
+    let persisted_accounts = if persisted_account.is_none() {
+        durable
+            .accounts()
+            .await
+            .map_err(TelegramBootstrapError::Persistence)?
+    } else {
+        Vec::new()
+    };
+    let resolved_account_id =
+        resolve_restorable_account_id(account_id, persisted_account.is_some(), &persisted_accounts)
+            .unwrap_or_else(|| account_id.to_owned());
+    if persisted_account.is_none() && resolved_account_id != account_id {
+        persisted_account = durable
+            .account(&resolved_account_id)
+            .await
+            .map_err(TelegramBootstrapError::Persistence)?
+            .filter(|(account, _)| account.account_id == resolved_account_id);
+    }
     let provider_context = provider_credential_context(launch_admission, &storage_configuration)?;
     let mut admission = TelegramRuntimeAdmission {
         logical_owner_id: launch_admission.logical_owner_id.clone(),
@@ -248,10 +267,27 @@ pub async fn open_admitted_runtime(
         api_hash_revision: 0,
         session_encryption_key_revision: 0,
     };
-    let mut composition = match persisted_account {
-        Some((persisted_account, credential_bindings)) => {
-            let (api_hash_revision, session_encryption_key_revision) =
-                credential_revisions(&credential_bindings)?;
+    let restorable_account = persisted_account.and_then(|(account, credential_bindings)| {
+        let revisions = restorable_credential_revisions(account.state, &credential_bindings);
+        if revisions.is_none() && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+            eprintln!(
+                "developer_telegram_account_restore=configuration_only state={:?} credential_bindings={}",
+                account.state,
+                credential_bindings.len()
+            );
+        }
+        revisions.map(|revisions| (account, credential_bindings, revisions))
+    });
+    if let Some((account, credential_bindings, _)) = restorable_account.as_ref() {
+        let authorizing = account_awaiting_provider_authorization(account);
+        durable
+            .upsert_account(&authorizing, credential_bindings)
+            .await
+            .map_err(TelegramBootstrapError::Persistence)?;
+    }
+    let mut composition = match restorable_account {
+        Some((persisted_account, credential_bindings, revisions)) => {
+            let (api_hash_revision, session_encryption_key_revision) = revisions;
             admission.api_hash_revision = api_hash_revision;
             admission.session_encryption_key_revision = session_encryption_key_revision;
             let mut bootstrap_dispatcher = RejectManagedControlRequestsV2;
@@ -269,7 +305,7 @@ pub async fn open_admitted_runtime(
             TelegramRuntimeComposition::new_with_account_setup(
                 library,
                 TelegramAccountSetup {
-                    account_id: account_id.to_owned(),
+                    account_id: resolved_account_id.clone(),
                     display_name: persisted_account.display_name,
                     external_account_id: persisted_account.external_account_id,
                     credentials: credential_bindings,
@@ -279,8 +315,10 @@ pub async fn open_admitted_runtime(
             )
             .map_err(TelegramBootstrapError::Provider)?
         }
-        None => TelegramRuntimeComposition::new_configuration_only(library, account_id)
-            .map_err(TelegramBootstrapError::Provider)?,
+        None => {
+            TelegramRuntimeComposition::new_configuration_only(library, resolved_account_id.clone())
+                .map_err(TelegramBootstrapError::Provider)?
+        }
     };
     let event_access = request_managed_runtime_event_access_v2(
         &mut control_channel,
@@ -339,7 +377,7 @@ pub async fn open_admitted_runtime(
     Ok(TelegramAdmittedRuntime {
         identity,
         control_channel,
-        account_id: account_id.to_owned(),
+        account_id: resolved_account_id,
         composition,
         durable,
         automation,
@@ -401,6 +439,44 @@ pub(crate) fn credential_revisions(
         }
         _ => Err(TelegramBootstrapError::AdmissionMismatch),
     }
+}
+
+fn restorable_credential_revisions(
+    account_state: TelegramAccountState,
+    bindings: &[TelegramCredentialBinding],
+) -> Option<(u64, u64)> {
+    if account_state == TelegramAccountState::Retired {
+        return None;
+    }
+    credential_revisions(bindings).ok()
+}
+
+fn account_awaiting_provider_authorization(
+    account: &makosh_telegram_api::TelegramAccount,
+) -> makosh_telegram_api::TelegramAccount {
+    makosh_telegram_api::TelegramAccount {
+        state: TelegramAccountState::Degraded,
+        runtime_state: makosh_telegram_api::TelegramRuntimeState::Starting,
+        ..account.clone()
+    }
+}
+
+fn resolve_restorable_account_id(
+    configured_account_id: &str,
+    exact_account_present: bool,
+    persisted_accounts: &[makosh_telegram_api::TelegramAccount],
+) -> Option<String> {
+    if exact_account_present {
+        return Some(configured_account_id.to_owned());
+    }
+    let mut candidates = persisted_accounts
+        .iter()
+        .filter(|account| account.state != TelegramAccountState::Retired);
+    let candidate = candidates.next()?;
+    candidates
+        .next()
+        .is_none()
+        .then(|| candidate.account_id.clone())
 }
 
 fn provider_credential_context(
@@ -648,9 +724,54 @@ fn storage_binding_from_configuration(
 
 #[cfg(test)]
 mod credential_binding_tests {
-    use makosh_telegram_api::{TelegramCredentialBinding, TelegramCredentialPurpose};
+    use makosh_telegram_api::{
+        TelegramAccount, TelegramAccountState, TelegramCredentialBinding,
+        TelegramCredentialPurpose, TelegramRuntimeState,
+    };
 
-    use super::credential_revisions;
+    use super::{
+        account_awaiting_provider_authorization, credential_revisions,
+        resolve_restorable_account_id, restorable_credential_revisions,
+    };
+
+    #[test]
+    fn restored_account_does_not_report_ready_before_tdlib_authorization() {
+        let account = TelegramAccount {
+            account_id: "personal-telegram".to_owned(),
+            display_name: "Personal Telegram".to_owned(),
+            external_account_id: String::new(),
+            state: TelegramAccountState::Ready,
+            runtime_state: TelegramRuntimeState::Running,
+            runtime_epoch: 7,
+        };
+
+        let authorizing = account_awaiting_provider_authorization(&account);
+
+        assert_eq!(authorizing.state, TelegramAccountState::Degraded);
+        assert_eq!(authorizing.runtime_state, TelegramRuntimeState::Starting);
+        assert_eq!(authorizing.runtime_epoch, 7);
+    }
+
+    #[test]
+    fn restores_a_single_persisted_account_when_migrated_settings_keep_the_legacy_id() {
+        let accounts = vec![TelegramAccount {
+            account_id: "personal-telegram".to_owned(),
+            display_name: "Personal Telegram".to_owned(),
+            external_account_id: String::new(),
+            state: TelegramAccountState::Ready,
+            runtime_state: TelegramRuntimeState::Running,
+            runtime_epoch: 1,
+        }];
+
+        assert_eq!(
+            resolve_restorable_account_id("legacy-account-id", false, &accounts),
+            Some("personal-telegram".to_owned())
+        );
+        assert_eq!(
+            resolve_restorable_account_id("personal-telegram", true, &accounts),
+            Some("personal-telegram".to_owned())
+        );
+    }
 
     #[test]
     fn selects_one_exact_revision_for_each_admitted_user_purpose() {
@@ -682,6 +803,18 @@ mod credential_binding_tests {
                 },
             ])
             .is_err()
+        );
+    }
+
+    #[test]
+    fn retired_or_incomplete_accounts_fall_back_to_configuration_only_runtime() {
+        assert_eq!(
+            restorable_credential_revisions(TelegramAccountState::Retired, &[]),
+            None
+        );
+        assert_eq!(
+            restorable_credential_revisions(TelegramAccountState::Ready, &[]),
+            None
         );
     }
 }

@@ -16,7 +16,9 @@ use super::{
     client_blob_route::{insert_client_blob_routes, validate_client_blob_routes},
     client_realtime_route::{insert_client_realtime_routes, validate_client_realtime_routes},
     client_rpc_route::{insert_client_rpc_routes, validate_client_rpc_routes},
-    event_request::{insert_event_route_requests, validate_event_route_requests},
+    event_request::{
+        insert_event_route_requests, read_event_route_requests, validate_event_route_requests,
+    },
     module_query_route::{
         insert_module_contract_dependencies, insert_module_query_rpc_routes,
         validate_module_query_contracts,
@@ -334,6 +336,81 @@ impl SqliteControlStore {
             insert_module_query_rpc_routes(&transaction, &query_rpc_routes)?;
             insert_module_request_rpc_routes(&transaction, &request_rpc_routes)?;
             insert_module_contract_dependencies(&transaction, &contract_dependencies)?;
+            transaction.commit()?;
+            Ok(())
+        })
+    }
+
+    pub fn reconcile_approved_registration_event_routes(
+        &self,
+        registration: &ModuleRegistration,
+        event_requests: &[ModuleEventRouteRequestV1],
+    ) -> Result<(), StoreError> {
+        if registration.state() != ModuleRegistrationState::Approved
+            || !valid_identity_token(registration.registration_id())
+            || !valid_identity_token(registration.module_id())
+            || !valid_identity_token(registration.owner_id())
+        {
+            return Err(StoreError::InvalidModuleRegistration);
+        }
+        let registration = registration.clone();
+        let event_requests = event_requests.to_vec();
+        self.with_connection(move |connection| {
+            let transaction = connection.transaction()?;
+            let current = read_required_registration(&transaction, registration.registration_id())?;
+            if current.state() != ModuleRegistrationState::Approved
+                || current.module_id() != registration.module_id()
+                || current.owner_id() != registration.owner_id()
+                || current.descriptor_sha256() != registration.descriptor_sha256()
+                || current.grant_epoch().checked_add(1) != Some(registration.grant_epoch())
+            {
+                return Err(StoreError::InvalidModuleRegistrationTransition);
+            }
+            let capabilities =
+                read_approved_capabilities(&transaction, registration.registration_id())?;
+            validate_event_route_requests(&registration, &capabilities, &event_requests)?;
+            let routes_are_unchanged = capabilities.iter().all(|capability| {
+                let Ok(current_routes) = read_event_route_requests(
+                    &transaction,
+                    registration.registration_id(),
+                    capability,
+                ) else {
+                    return false;
+                };
+                let expected_routes = event_requests
+                    .iter()
+                    .filter(|request| request.capability_id() == capability)
+                    .collect::<Vec<_>>();
+                current_routes.len() == expected_routes.len()
+                    && current_routes.iter().all(|current_route| {
+                        expected_routes
+                            .iter()
+                            .any(|expected_route| current_route == *expected_route)
+                    })
+            });
+            if routes_are_unchanged {
+                return Err(StoreError::InvalidModuleRegistrationTransition);
+            }
+            transaction.execute(
+                "DELETE FROM makosh_kernel_module_event_route_request WHERE registration_id = ?1",
+                [registration.registration_id()],
+            )?;
+            let changed = transaction.execute(
+                "UPDATE makosh_kernel_module_registration
+                 SET grant_epoch = ?2
+                 WHERE registration_id = ?1 AND descriptor_sha256 = ?3
+                   AND grant_epoch = ?4 AND state = 'approved'",
+                params![
+                    registration.registration_id(),
+                    as_sql(registration.grant_epoch())?,
+                    registration.descriptor_sha256().as_slice(),
+                    as_sql(current.grant_epoch())?,
+                ],
+            )?;
+            if changed != 1 {
+                return Err(StoreError::InvalidModuleRegistrationTransition);
+            }
+            insert_event_route_requests(&transaction, &event_requests)?;
             transaction.commit()?;
             Ok(())
         })
@@ -658,7 +735,7 @@ pub(crate) fn read_required_registration(
 fn read_approved_registrations(
     connection: &Connection,
 ) -> Result<Vec<ModuleRegistration>, StoreError> {
-    let mut statement = connection.prepare(
+    let mut statement = connection.prepare_cached(
         "SELECT registration_id, module_id, owner_id, descriptor_sha256, state, grant_epoch
          FROM makosh_kernel_module_registration WHERE state = 'approved' ORDER BY registration_id",
     )?;
@@ -671,7 +748,7 @@ pub(crate) fn read_approved_capabilities(
     connection: &Connection,
     registration_id: &str,
 ) -> Result<Vec<String>, StoreError> {
-    let mut statement = connection.prepare(
+    let mut statement = connection.prepare_cached(
         "SELECT capability_id FROM makosh_kernel_module_registration_capability
          WHERE registration_id = ?1 AND approved = 1 ORDER BY capability_id",
     )?;

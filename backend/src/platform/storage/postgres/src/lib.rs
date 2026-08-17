@@ -19,5 +19,5 @@ pub use roles::{
     StorageRoleAuditV1, StorageRoleErrorV1, StorageRoleSpecV1, ensure_storage_roles,
     fence_postgres_runtime_role, read_runtime_role_scram_verifier,
     read_storage_data_privilege_audit, read_storage_role_audit, reconcile_owner_data_privileges,
-    set_runtime_role_password,
+    repair_legacy_storage_ledger_binding, set_runtime_role_password,
 };

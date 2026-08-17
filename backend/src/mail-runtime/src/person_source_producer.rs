@@ -64,6 +64,14 @@ pub async fn ensure_public_account_ready_v1(
         }
         Err(_) => return Err(MailPersonSourceProducerErrorV1::PersistenceUnavailable),
     };
+    if persistence
+        .load_person_source_account_lifecycle_record(logical_owner_id, &mapping, false)
+        .await
+        .map_err(|_| MailPersonSourceProducerErrorV1::PersistenceUnavailable)?
+        .is_some()
+    {
+        return Ok(mapping);
+    }
     let account_event_id = lifecycle_id(
         b"makosh.mail.person-source.account-ready.v1",
         logical_owner_id,

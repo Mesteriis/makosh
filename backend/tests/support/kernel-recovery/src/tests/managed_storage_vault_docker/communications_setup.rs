@@ -2504,6 +2504,7 @@ pub(super) fn assert_communications_relationship_projection(
             provider_topic_id: None,
             sender_id: PRIVATE_PARTICIPANT_ID.to_owned(),
             sender_display_name: None,
+            sender_source_identity: None,
             is_outgoing: false,
             text: None,
             media: None,

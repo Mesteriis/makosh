@@ -119,6 +119,9 @@ message BindBundledManagedReleaseResponseV1 {
   uint64 binding_revision = 2;
   string distribution_id = 3;
   string artifact_id = 4;
+  // True only when the already-bound executable, descriptor and Settings
+  // schema bytes are exactly identical to the selected signed artifact.
+  bool replayed = 5;
 }
 
 message ProposeBundledManagedArtifactRequestV1 {
@@ -531,6 +534,11 @@ message GetManagedStorageBindingStatusResponseV1 {
   uint64 role_epoch = 4;
   uint64 credential_lease_revision = 5;
   string binding_state = 6;
+  string runtime_instance_id = 7;
+  uint64 runtime_generation = 8;
+  uint64 grant_epoch = 9;
+  uint64 storage_bundle_revision = 10;
+  bytes storage_bundle_digest = 11;
 }
 
 // An external runtime must have a current owner-bound attestation for the

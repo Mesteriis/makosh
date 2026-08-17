@@ -68,6 +68,7 @@ export type MailGmailSettingsInputV1 = {
 export type MailGmailSetupStateV1 = {
 	operationId: string
 	connectionId: string
+	configurationInstanceId: string
 	started: GmailOAuthStartedV1
 	configuration: ManagedIntegrationSetupReceiptV1
 }
@@ -112,7 +113,6 @@ export class MailAccountSetupWorkflowV1 {
 		registrationId: string
 		expectedDesiredRevision: bigint
 		connectionId: string
-		email: string
 		clientId: string
 		redirectUri: string
 	}): Promise<MailGmailSetupStateV1> {
@@ -124,11 +124,17 @@ export class MailAccountSetupWorkflowV1 {
 			storageCapabilityId: MAIL_STORAGE_CAPABILITY_ID,
 			configurationInstanceId: target.configurationInstanceId,
 			requestHostBridge: false,
-			values: mailGmailSettings(input),
+			values: mailGmailPreauthorizationSettings(input),
 		})
 		const operationId = crypto.randomUUID()
 		const started = await this.ports.oauth.start(operationId, connectionId)
-		return { operationId, connectionId, started, configuration }
+		return {
+			operationId,
+			connectionId,
+			configurationInstanceId: target.configurationInstanceId,
+			started,
+			configuration,
+		}
 	}
 
 	async completeGmail(

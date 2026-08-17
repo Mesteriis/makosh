@@ -14,10 +14,11 @@ use makosh_attachment_text_extraction_runtime::{
     prepare_attachment_text_extraction_ocr_resources_v1,
     runtime::{
         AttachmentTextExtractionManagedRuntimeV1, AttachmentTextExtractionRuntimeAdmissionV1,
-        current_runtime_time_v1,
+        JobTickV1, current_runtime_time_v1,
     },
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -120,12 +121,13 @@ fn serve_inherited(paths: InheritedPaths) -> Result<(), String> {
             diagnostic("startup", error);
             "Attachment Text Extraction runtime admission was rejected".to_owned()
         })?;
-    let mut interval =
-        executor.block_on(async { tokio::time::interval(Duration::from_millis(250)) });
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(250), Duration::from_millis(500))
+            .map_err(|_| "Attachment Text Extraction polling bounds are invalid".to_owned())?;
     loop {
-        executor.block_on(interval.tick());
         let (now_millis, nanos) = current_runtime_time_v1()
             .map_err(|_| "Attachment Text Extraction clock is unavailable".to_owned())?;
+        let mut progressed = false;
         for (stage, result) in [
             (
                 "client-delivery",
@@ -136,26 +138,35 @@ fn serve_inherited(paths: InheritedPaths) -> Result<(), String> {
                 executor.block_on(runtime.consume_next(now_millis)),
             ),
         ] {
-            if let Err(error) = result {
-                diagnostic(stage, error);
+            match result {
+                Ok(value) => progressed |= value,
+                Err(error) => diagnostic(stage, error),
             }
         }
-        if let Err(error) =
-            executor.block_on(runtime.materialize_pending_custody_requests(now_millis, nanos))
-        {
-            diagnostic("custody-materialize", error);
+        match executor.block_on(runtime.materialize_pending_custody_requests(now_millis, nanos)) {
+            Ok(count) => progressed |= count > 0,
+            Err(error) => diagnostic("custody-materialize", error),
         }
-        if let Err(error) = executor.block_on(runtime.relay_custody_outbox(now_millis)) {
-            diagnostic("custody-outbox", error);
+        match executor.block_on(runtime.relay_custody_outbox(now_millis)) {
+            Ok(count) => progressed |= count > 0,
+            Err(error) => diagnostic("custody-outbox", error),
         }
-        if let Err(error) = executor.block_on(runtime.relay_translation_source_outbox(now_millis)) {
-            diagnostic("translation-source-outbox", error);
+        match executor.block_on(runtime.relay_translation_source_outbox(now_millis)) {
+            Ok(count) => progressed |= count > 0,
+            Err(error) => diagnostic("translation-source-outbox", error),
         }
-        if let Err(error) = executor.block_on(runtime.process_next_job(now_millis)) {
-            diagnostic("extract", error);
+        match executor.block_on(runtime.process_next_job(now_millis)) {
+            Ok(JobTickV1::Idle) => {}
+            Ok(JobTickV1::Completed | JobTickV1::Rejected(_)) => progressed = true,
+            Err(error) => diagnostic("extract", error),
         }
-        if let Err(error) = executor.block_on(runtime.pump_client_realtime_once()) {
-            diagnostic("client-realtime", error);
+        match executor.block_on(runtime.pump_client_realtime_once()) {
+            Ok(value) => progressed |= value,
+            Err(error) => diagnostic("client-realtime", error),
+        }
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
         }
     }
 }

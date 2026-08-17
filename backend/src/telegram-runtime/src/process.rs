@@ -1,10 +1,14 @@
 //! Long-lived Telegram process orchestration around the provider runtime.
 
+use std::collections::VecDeque;
+use std::fs::File;
+use std::io::{Read, Seek, SeekFrom};
 use std::os::unix::net::UnixStream;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::sync::mpsc::{self, Receiver, TryRecvError};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use makosh_blob_client::{
-    BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
+    BlobClientError, BlobDataClient, ManagedBlobCustodyTargetV1, ManagedBlobSessionRequestV1,
     request_managed_blob_session_v2,
 };
 use makosh_communications_ingress::{
@@ -88,25 +92,68 @@ pub enum TelegramDurableProcessError {
     CallExecution(TelegramCallExecutionError),
 }
 
+const TELEGRAM_MEDIA_CHUNK_BYTES: usize = 1024 * 1024;
+const TELEGRAM_MEDIA_ADMISSION_MAX_FAILURES: u8 = 8;
+
+type TelegramMediaHashResult = Result<(u64, [u8; 32]), &'static str>;
+
+#[derive(Default)]
+struct TelegramMediaAdmissionQueue {
+    pending: VecDeque<makosh_telegram_tdlib::TdlibDownloadedFile>,
+    hashing: Option<TelegramMediaHashJob>,
+    uploading: Option<TelegramMediaUploadJob>,
+}
+
+struct TelegramMediaHashJob {
+    downloaded: makosh_telegram_tdlib::TdlibDownloadedFile,
+    receiver: Receiver<TelegramMediaHashResult>,
+}
+
+struct TelegramMediaUploadJob {
+    downloaded: makosh_telegram_tdlib::TdlibDownloadedFile,
+    provider_file: File,
+    declared_size: u64,
+    receipt_sha256: [u8; 32],
+    reference_id: [u8; 16],
+    offset: u64,
+    failures: u8,
+    retry_not_before: Instant,
+    aborting: bool,
+}
+
+enum TelegramMediaAdmissionProgress {
+    Idle,
+    Completed(makosh_telegram_api::TelegramFileSnapshot),
+    Failed(&'static str),
+}
+
 pub struct TelegramProcessLoop {
     composition: TelegramRuntimeComposition,
     provider_cursor: Option<String>,
     authorization_status: Option<makosh_telegram_api::TelegramAuthorizationStatus>,
     authorization_status_revision: u64,
     published_authorization_status_revision: u64,
+    pending_operational_sequence: u64,
+    published_operational_sequence: u64,
     durable_restore_required: bool,
+    pending_downloaded_files: Vec<makosh_telegram_tdlib::TdlibDownloadedFile>,
 }
 
 impl TelegramProcessLoop {
     #[must_use]
     pub fn new(composition: TelegramRuntimeComposition) -> Self {
+        let authorization_status = composition.has_runtime().then(telegram_ready_status);
+        let authorization_status_revision = u64::from(authorization_status.is_some());
         Self {
             composition,
             provider_cursor: None,
-            authorization_status: None,
-            authorization_status_revision: 0,
+            authorization_status,
+            authorization_status_revision,
             published_authorization_status_revision: 0,
+            pending_operational_sequence: 0,
+            published_operational_sequence: 0,
             durable_restore_required: true,
+            pending_downloaded_files: Vec::new(),
         }
     }
 
@@ -152,6 +199,19 @@ impl TelegramProcessLoop {
         if revision == self.authorization_status_revision {
             self.published_authorization_status_revision = revision;
         }
+    }
+
+    fn observe_operational_sequence(&mut self, sequence: u64) {
+        self.pending_operational_sequence = self.pending_operational_sequence.max(sequence);
+    }
+
+    fn pending_operational_projection_changed(&self) -> Option<u64> {
+        (self.pending_operational_sequence > self.published_operational_sequence)
+            .then_some(self.pending_operational_sequence)
+    }
+
+    fn mark_operational_projection_published(&mut self, sequence: u64) {
+        self.published_operational_sequence = self.published_operational_sequence.max(sequence);
     }
 
     pub fn serve_client_connection_durable(
@@ -228,6 +288,27 @@ impl TelegramProcessLoop {
         self.composition.clear_pending_runtime_reconfiguration();
     }
 
+    fn take_downloaded_files(&mut self) -> Vec<makosh_telegram_tdlib::TdlibDownloadedFile> {
+        std::mem::take(&mut self.pending_downloaded_files)
+    }
+
+    async fn persist_admitted_downloaded_file(
+        &mut self,
+        durable: &TelegramDurablePersistence,
+        file: makosh_telegram_api::TelegramFileSnapshot,
+    ) -> Result<(), TelegramDurableProcessError> {
+        self.composition
+            .runtime_mut()
+            .ok_or_else(|| {
+                TelegramDurableProcessError::Provider(TdlibError::Protocol(
+                    "Telegram downloaded file has no runtime".to_owned(),
+                ))
+            })?
+            .persist_admitted_downloaded_file_durable(durable, file)
+            .await
+            .map_err(TelegramDurableProcessError::Projection)
+    }
+
     pub fn poll_once(&mut self, timeout: Duration) -> Result<TelegramProcessTick, TdlibError> {
         if self.composition.has_pending_authorization() {
             let event = self.composition.poll_authorization(timeout)?;
@@ -248,6 +329,9 @@ impl TelegramProcessLoop {
                 .and_then(|frame| frame.provider_cursor.clone())
             {
                 self.provider_cursor = Some(cursor);
+            }
+            if let Some(sequence) = batch.frames.last().map(|frame| frame.sequence) {
+                self.observe_operational_sequence(sequence);
             }
             return Ok(TelegramProcessTick::Runtime {
                 frames: batch.frames.len() + batch.call_updates.len(),
@@ -280,10 +364,13 @@ impl TelegramProcessLoop {
                 .unwrap_or(TelegramProcessTick::Idle));
         }
         if self.composition.has_runtime() {
-            let batch = self
+            let mut batch = self
                 .composition
                 .poll_runtime_events(self.provider_cursor.clone())
                 .map_err(TelegramDurableProcessError::Provider)?;
+            let downloaded_file_count = batch.downloaded_files.len();
+            self.pending_downloaded_files
+                .extend(std::mem::take(&mut batch.downloaded_files));
             for frame in &batch.frames {
                 durable
                     .append_provider_event(frame)
@@ -416,8 +503,11 @@ impl TelegramProcessLoop {
             {
                 self.provider_cursor = Some(cursor);
             }
+            if let Some(sequence) = batch.frames.last().map(|frame| frame.sequence) {
+                self.observe_operational_sequence(sequence);
+            }
             return Ok(TelegramProcessTick::Runtime {
-                frames: batch.frames.len() + call_update_count,
+                frames: batch.frames.len() + call_update_count + downloaded_file_count,
                 provider_cursor: self.provider_cursor.clone(),
             });
         }
@@ -510,6 +600,7 @@ pub fn serve_admitted_provider_loop(
         delivery_intent_subscribe_permit,
     } = admitted;
     let mut process = TelegramProcessLoop::new(composition);
+    let mut media_admission = TelegramMediaAdmissionQueue::default();
 
     loop {
         handle_client_delivery(
@@ -559,7 +650,33 @@ pub fn serve_admitted_provider_loop(
                 &mut body_admitter,
             ))
         };
-        poll.map_err(|error| format!("Telegram runtime provider loop failed: {error:?}"))?;
+        let provider_tick =
+            poll.map_err(|error| format!("Telegram runtime provider loop failed: {error:?}"))?;
+        for downloaded in process.take_downloaded_files() {
+            let existing = executor
+                .block_on(durable.file(
+                    &downloaded.snapshot.account_id,
+                    &downloaded.snapshot.provider_file_id,
+                ))
+                .map_err(|_| "Telegram downloaded file projection is unavailable".to_owned())?;
+            if existing.as_ref().is_some_and(valid_blob_file_snapshot) {
+                continue;
+            }
+            media_admission.push(downloaded);
+        }
+        match media_admission.advance(&mut control_channel) {
+            TelegramMediaAdmissionProgress::Completed(file) => executor
+                .block_on(process.persist_admitted_downloaded_file(&durable, file))
+                .map_err(|error| {
+                    format!("Telegram downloaded file persistence failed: {error:?}")
+                })?,
+            TelegramMediaAdmissionProgress::Failed(stage) => {
+                if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                    eprintln!("developer_telegram_downloaded_file_unavailable stage={stage}");
+                }
+            }
+            TelegramMediaAdmissionProgress::Idle => {}
+        }
         if let Some((status, revision)) = process.pending_authorization_status_changed() {
             let admission = process
                 .composition()
@@ -583,11 +700,38 @@ pub fn serve_admitted_provider_loop(
                 &status,
             ) {
                 Ok(()) => process.mark_authorization_status_published(revision),
-                Err(crate::client_realtime::TelegramAuthorizationRealtimeErrorV1::Unavailable) => {}
-                Err(
-                    crate::client_realtime::TelegramAuthorizationRealtimeErrorV1::InvalidStatus,
-                ) => {
+                Err(crate::client_realtime::TelegramClientRealtimeErrorV1::Unavailable) => {}
+                Err(crate::client_realtime::TelegramClientRealtimeErrorV1::InvalidEvent) => {
                     return Err("Telegram authorization realtime status is invalid".to_owned());
+                }
+            }
+        }
+        if let Some(sequence) = process.pending_operational_projection_changed() {
+            let admission = process
+                .composition()
+                .runtime_admission()
+                .cloned()
+                .ok_or_else(|| "Telegram runtime admission is unavailable".to_owned())?;
+            let occurred_at_unix_millis = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .map_err(|_| "Telegram runtime clock is unavailable".to_owned())?
+                .as_millis()
+                .try_into()
+                .map_err(|_| "Telegram runtime clock is unavailable".to_owned())?;
+            let mut dispatcher = TelegramBusyControlDispatcher;
+            match crate::client_realtime::publish_operational_projection_changed_v1(
+                &mut control_channel,
+                &mut dispatcher,
+                &admission.logical_human_owner_id,
+                admission.runtime_generation,
+                &account_id,
+                sequence,
+                occurred_at_unix_millis,
+            ) {
+                Ok(()) => process.mark_operational_projection_published(sequence),
+                Err(crate::client_realtime::TelegramClientRealtimeErrorV1::Unavailable) => {}
+                Err(crate::client_realtime::TelegramClientRealtimeErrorV1::InvalidEvent) => {
+                    return Err("Telegram operational realtime event is invalid".to_owned());
                 }
             }
         }
@@ -606,6 +750,12 @@ pub fn serve_admitted_provider_loop(
                 .map_err(|error| {
                     format!("Telegram runtime reconfiguration completion failed: {error:?}")
                 })?;
+            if let Some((_, latest_sequence)) = executor
+                .block_on(durable.provider_event_sequence_bounds(&account_id))
+                .map_err(|_| "Telegram operational realtime restore is unavailable".to_owned())?
+            {
+                process.observe_operational_sequence(latest_sequence);
+            }
             process.mark_durable_restore_complete();
         }
         let delivery_intent_context = process.composition().runtime_admission().map(|admission| {
@@ -758,7 +908,25 @@ pub fn serve_admitted_provider_loop(
                 return Err("Telegram call evidence outbox persistence failed".to_owned());
             }
         }
+        if provider_tick_needs_idle_pause(&provider_tick) {
+            std::thread::sleep(Duration::from_millis(25));
+        }
     }
+}
+
+fn telegram_ready_status() -> makosh_telegram_api::TelegramAuthorizationStatus {
+    makosh_telegram_api::TelegramAuthorizationStatus {
+        state: "ready".to_owned(),
+        qr_link: None,
+        password_hint: None,
+    }
+}
+
+fn provider_tick_needs_idle_pause(tick: &TelegramProcessTick) -> bool {
+    matches!(
+        tick,
+        TelegramProcessTick::Idle | TelegramProcessTick::Runtime { frames: 0, .. }
+    )
 }
 
 fn admit_telegram_plaintext(
@@ -813,6 +981,316 @@ fn admit_telegram_plaintext(
         custody_transfer_source_proof,
         media_type: "text/plain".to_owned(),
     })
+}
+
+fn valid_blob_file_snapshot(file: &makosh_telegram_api::TelegramFileSnapshot) -> bool {
+    file.is_downloaded
+        && file
+            .blob_reference_id
+            .as_ref()
+            .is_some_and(|value| value.len() == 16)
+        && file
+            .blob_plaintext_sha256
+            .as_ref()
+            .is_some_and(|value| value.len() == 32)
+        && file.blob_backup_class.is_some_and(|value| value > 0)
+}
+
+impl TelegramMediaAdmissionQueue {
+    fn push(&mut self, downloaded: makosh_telegram_tdlib::TdlibDownloadedFile) {
+        let account_id = &downloaded.snapshot.account_id;
+        let provider_file_id = &downloaded.snapshot.provider_file_id;
+        let already_pending = self.pending.iter().any(|candidate| {
+            candidate.snapshot.account_id == *account_id
+                && candidate.snapshot.provider_file_id == *provider_file_id
+        });
+        let already_hashing = self.hashing.as_ref().is_some_and(|candidate| {
+            candidate.downloaded.snapshot.account_id == *account_id
+                && candidate.downloaded.snapshot.provider_file_id == *provider_file_id
+        });
+        let already_uploading = self.uploading.as_ref().is_some_and(|candidate| {
+            candidate.downloaded.snapshot.account_id == *account_id
+                && candidate.downloaded.snapshot.provider_file_id == *provider_file_id
+        });
+        if !already_pending && !already_hashing && !already_uploading {
+            self.pending.push_back(downloaded);
+        }
+    }
+
+    fn advance(
+        &mut self,
+        control_channel: &mut ManagedControlChannelV2<UnixStream>,
+    ) -> TelegramMediaAdmissionProgress {
+        if self.uploading.is_none() {
+            if let Err(stage) = self.promote_finished_hash() {
+                return TelegramMediaAdmissionProgress::Failed(stage);
+            }
+            if self.hashing.is_none() {
+                if let Err(stage) = self.start_next_hash() {
+                    return TelegramMediaAdmissionProgress::Failed(stage);
+                }
+            }
+            if let Err(stage) = self.promote_finished_hash() {
+                return TelegramMediaAdmissionProgress::Failed(stage);
+            }
+        }
+        let Some(uploading) = self.uploading.as_mut() else {
+            return TelegramMediaAdmissionProgress::Idle;
+        };
+        if Instant::now() < uploading.retry_not_before {
+            return TelegramMediaAdmissionProgress::Idle;
+        }
+        if uploading.aborting {
+            return match abort_telegram_media_upload(control_channel, uploading) {
+                Ok(()) => {
+                    self.uploading = None;
+                    TelegramMediaAdmissionProgress::Idle
+                }
+                Err(stage) => {
+                    schedule_telegram_media_retry(uploading);
+                    TelegramMediaAdmissionProgress::Failed(stage)
+                }
+            };
+        }
+        match upload_one_telegram_media_chunk(control_channel, uploading) {
+            Ok(false) => TelegramMediaAdmissionProgress::Idle,
+            Ok(true) => {
+                let completed = self
+                    .uploading
+                    .take()
+                    .expect("completed Telegram media upload exists");
+                let mut file = completed.downloaded.snapshot;
+                file.size_bytes = Some(completed.declared_size);
+                file.downloaded_size_bytes = Some(completed.declared_size);
+                file.blob_reference_id = Some(completed.reference_id.to_vec());
+                file.blob_plaintext_sha256 = Some(completed.receipt_sha256.to_vec());
+                file.blob_backup_class = Some(1);
+                TelegramMediaAdmissionProgress::Completed(file)
+            }
+            Err(stage) => {
+                uploading.failures = uploading.failures.saturating_add(1);
+                let permanent = matches!(
+                    stage,
+                    "read_provider_file" | "size_provider_file" | "bound_provider_file"
+                );
+                if permanent || uploading.failures >= TELEGRAM_MEDIA_ADMISSION_MAX_FAILURES {
+                    uploading.aborting = true;
+                    uploading.retry_not_before = Instant::now();
+                } else {
+                    schedule_telegram_media_retry(uploading);
+                }
+                TelegramMediaAdmissionProgress::Failed(stage)
+            }
+        }
+    }
+
+    fn start_next_hash(&mut self) -> Result<(), &'static str> {
+        let Some(downloaded) = self.pending.pop_front() else {
+            return Ok(());
+        };
+        let local_path = downloaded.local_path.clone();
+        let (sender, receiver) = mpsc::sync_channel(1);
+        if std::thread::Builder::new()
+            .name("telegram-media-hash".to_owned())
+            .spawn(move || {
+                let _ = sender.send(hash_telegram_provider_file(&local_path));
+            })
+            .is_err()
+        {
+            self.pending.push_front(downloaded);
+            return Err("start_provider_file_hash");
+        }
+        self.hashing = Some(TelegramMediaHashJob {
+            downloaded,
+            receiver,
+        });
+        Ok(())
+    }
+
+    fn promote_finished_hash(&mut self) -> Result<(), &'static str> {
+        let result = match self.hashing.as_ref() {
+            Some(job) => match job.receiver.try_recv() {
+                Ok(result) => Some(result),
+                Err(TryRecvError::Empty) => None,
+                Err(TryRecvError::Disconnected) => Some(Err("hash_provider_file")),
+            },
+            None => None,
+        };
+        let Some(result) = result else {
+            return Ok(());
+        };
+        let job = self.hashing.take().expect("finished hash job exists");
+        let (declared_size, receipt_sha256) = result?;
+        let provider_file =
+            File::open(&job.downloaded.local_path).map_err(|_| "read_provider_file")?;
+        if provider_file
+            .metadata()
+            .map_err(|_| "size_provider_file")?
+            .len()
+            != declared_size
+        {
+            return Err("changed_provider_file");
+        }
+        let mut reference_id = [0_u8; 16];
+        getrandom::fill(&mut reference_id).map_err(|_| "identify_provider_file")?;
+        if reference_id.iter().all(|byte| *byte == 0) {
+            return Err("identify_provider_file");
+        }
+        self.uploading = Some(TelegramMediaUploadJob {
+            downloaded: job.downloaded,
+            provider_file,
+            declared_size,
+            receipt_sha256,
+            reference_id,
+            offset: 0,
+            failures: 0,
+            retry_not_before: Instant::now(),
+            aborting: false,
+        });
+        Ok(())
+    }
+}
+
+fn hash_telegram_provider_file(path: &std::path::Path) -> TelegramMediaHashResult {
+    let mut provider_file = File::open(path).map_err(|_| "read_provider_file")?;
+    let declared_size = provider_file
+        .metadata()
+        .map_err(|_| "size_provider_file")?
+        .len();
+    if declared_size == 0 || declared_size > crate::admission::TELEGRAM_MEDIA_CLIENT_MAX_BYTES_V1 {
+        return Err("bound_provider_file");
+    }
+    let mut hasher = Sha256::new();
+    let mut buffer = vec![0_u8; TELEGRAM_MEDIA_CHUNK_BYTES];
+    loop {
+        let read = provider_file
+            .read(&mut buffer)
+            .map_err(|_| "read_provider_file")?;
+        if read == 0 {
+            break;
+        }
+        hasher.update(&buffer[..read]);
+    }
+    Ok((declared_size, hasher.finalize().into()))
+}
+
+fn upload_one_telegram_media_chunk(
+    control_channel: &mut ManagedControlChannelV2<UnixStream>,
+    upload: &mut TelegramMediaUploadJob,
+) -> Result<bool, &'static str> {
+    let remaining = upload
+        .declared_size
+        .checked_sub(upload.offset)
+        .ok_or("size_provider_file")?;
+    if remaining == 0 {
+        return Ok(true);
+    }
+    let chunk_len = usize::try_from(
+        remaining.min(u64::try_from(TELEGRAM_MEDIA_CHUNK_BYTES).map_err(|_| "size_provider_file")?),
+    )
+    .map_err(|_| "size_provider_file")?;
+    upload
+        .provider_file
+        .seek(SeekFrom::Start(upload.offset))
+        .map_err(|_| "read_provider_file")?;
+    let mut chunk = vec![0_u8; chunk_len];
+    upload
+        .provider_file
+        .read_exact(&mut chunk)
+        .map_err(|_| "read_provider_file")?;
+    let end = upload
+        .offset
+        .checked_add(u64::try_from(chunk_len).map_err(|_| "size_provider_file")?)
+        .ok_or("size_provider_file")?;
+    let complete = end == upload.declared_size;
+    let session = request_telegram_media_upload_session(control_channel, upload)?;
+    BlobDataClient::new(session.data_socket_path.clone())
+        .and_then(|client| {
+            client.write_chunk(
+                session.grant.clone(),
+                session.channel_binding.clone(),
+                upload.offset,
+                chunk,
+                complete,
+            )
+        })
+        .map_err(|error| blob_write_error_stage(error, upload.offset == 0))?;
+    upload.offset = end;
+    upload.failures = 0;
+    upload.retry_not_before = Instant::now();
+    Ok(complete)
+}
+
+fn request_telegram_media_upload_session(
+    control_channel: &mut ManagedControlChannelV2<UnixStream>,
+    upload: &TelegramMediaUploadJob,
+) -> Result<makosh_blob_client::ManagedBlobSessionV1, &'static str> {
+    control_channel
+        .inner_mut()
+        .set_nonblocking(false)
+        .map_err(|_| "prepare_blob_session")?;
+    let result = (|| {
+        let mut dispatcher = TelegramBusyControlDispatcher;
+        request_managed_blob_session_v2(
+            control_channel,
+            &mut dispatcher,
+            ManagedBlobSessionRequestV1 {
+                capability_id: crate::admission::TELEGRAM_BLOB_CAPABILITY_ID,
+                operation: BlobDataOperationV1::BlobDataOperationWriteV1,
+                reference_id: &upload.reference_id,
+                declared_size: upload.declared_size,
+                backup_class: 1,
+                receipt_sha256: Some(&upload.receipt_sha256),
+                custody_target: None,
+            },
+        )
+        .map_err(|_| "request_blob_session")
+    })();
+    let restored = control_channel.inner_mut().set_nonblocking(true);
+    restored.map_err(|_| "restore_control_channel")?;
+    result
+}
+
+fn abort_telegram_media_upload(
+    control_channel: &mut ManagedControlChannelV2<UnixStream>,
+    upload: &TelegramMediaUploadJob,
+) -> Result<(), &'static str> {
+    let session = request_telegram_media_upload_session(control_channel, upload)?;
+    BlobDataClient::new(session.data_socket_path.clone())
+        .and_then(|client| {
+            client.abort_write(session.grant.clone(), session.channel_binding.clone())
+        })
+        .map_err(blob_abort_error_stage)
+}
+
+fn blob_write_error_stage(error: BlobClientError, initial_chunk: bool) -> &'static str {
+    match (initial_chunk, error) {
+        (true, BlobClientError::Rejected(_)) => "write_provider_file_initial_rejected",
+        (false, BlobClientError::Rejected(_)) => "write_provider_file_resume_rejected",
+        (true, BlobClientError::Connect(_)) => "write_provider_file_initial_connect",
+        (false, BlobClientError::Connect(_)) => "write_provider_file_resume_connect",
+        (true, BlobClientError::Io(_)) => "write_provider_file_initial_io",
+        (false, BlobClientError::Io(_)) => "write_provider_file_resume_io",
+        (true, BlobClientError::Unavailable) => "write_provider_file_initial_unavailable",
+        (false, BlobClientError::Unavailable) => "write_provider_file_resume_unavailable",
+        (true, _) => "write_provider_file_initial_protocol",
+        (false, _) => "write_provider_file_resume_protocol",
+    }
+}
+
+fn blob_abort_error_stage(error: BlobClientError) -> &'static str {
+    match error {
+        BlobClientError::Rejected(_) => "abort_provider_file_write_rejected",
+        BlobClientError::Connect(_) => "abort_provider_file_write_connect",
+        BlobClientError::Io(_) => "abort_provider_file_write_io",
+        BlobClientError::Unavailable => "abort_provider_file_write_unavailable",
+        _ => "abort_provider_file_write_protocol",
+    }
+}
+
+fn schedule_telegram_media_retry(upload: &mut TelegramMediaUploadJob) {
+    let exponent = u32::from(upload.failures.min(5));
+    upload.retry_not_before = Instant::now() + Duration::from_millis(100 * 2_u64.pow(exponent));
 }
 
 fn hex_reference_id(reference_id: &[u8; 16]) -> String {
@@ -1026,12 +1504,20 @@ fn handle_client_delivery(
             )) {
                 Ok(payload) => ModuleClientResponseV1::decode(payload.as_slice())
                     .map_err(|_| "Telegram runtime client response is invalid".to_owned())?,
-                Err(error) => ModuleClientResponseV1 {
-                    protocol_major: 1,
-                    request_id: request.request_id,
-                    response_payload: Vec::new(),
-                    error_code: client_transport::module_error_code(&error).to_owned(),
-                },
+                Err(error) => {
+                    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                        eprintln!(
+                            "developer_telegram_client_request_error request_id={} error={error:?}",
+                            request.request_id,
+                        );
+                    }
+                    ModuleClientResponseV1 {
+                        protocol_major: 1,
+                        request_id: request.request_id,
+                        response_payload: Vec::new(),
+                        error_code: client_transport::module_error_code(&error).to_owned(),
+                    }
+                }
             }
         }
         Ok(None) => ModuleClientResponseV1 {
@@ -1201,8 +1687,10 @@ fn authorization_status(
 
 #[cfg(test)]
 mod control_dispatch_tests {
+    use std::fs;
     use std::os::unix::net::UnixStream;
     use std::thread;
+    use std::time::{SystemTime, UNIX_EPOCH};
 
     use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
     use makosh_runtime_protocol::v1::{
@@ -1213,8 +1701,58 @@ mod control_dispatch_tests {
         managed_runtime_control_response_v1::Result as ControlResult,
     };
     use makosh_runtime_protocol::validation::managed_control::MANAGED_CONTROL_CORRELATION_ID_BYTES;
+    use sha2::{Digest, Sha256};
 
-    use super::TelegramBusyControlDispatcher;
+    use super::{
+        TelegramBusyControlDispatcher, TelegramProcessTick, hash_telegram_provider_file,
+        provider_tick_needs_idle_pause, telegram_ready_status,
+    };
+
+    #[test]
+    fn restored_runtime_reports_ready_before_the_first_provider_update() {
+        let status = telegram_ready_status();
+
+        assert_eq!(status.state, "ready");
+        assert!(status.qr_link.is_none());
+        assert!(status.password_hint.is_none());
+    }
+
+    #[test]
+    fn empty_provider_ticks_are_paced_without_delaying_real_updates() {
+        assert!(provider_tick_needs_idle_pause(&TelegramProcessTick::Idle));
+        assert!(provider_tick_needs_idle_pause(
+            &TelegramProcessTick::Runtime {
+                frames: 0,
+                provider_cursor: None,
+            }
+        ));
+        assert!(!provider_tick_needs_idle_pause(
+            &TelegramProcessTick::Runtime {
+                frames: 1,
+                provider_cursor: Some("cursor".to_owned()),
+            }
+        ));
+    }
+
+    #[test]
+    fn media_hash_worker_reads_the_provider_file_without_loading_it_whole() {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("test clock")
+            .as_nanos();
+        let path = std::env::temp_dir().join(format!(
+            "makosh-telegram-media-hash-{}-{nonce}",
+            std::process::id()
+        ));
+        let content = vec![17_u8; 2 * 1024 * 1024 + 37];
+        fs::write(&path, &content).expect("write media fixture");
+
+        let result = hash_telegram_provider_file(&path).expect("hash media fixture");
+        fs::remove_file(&path).expect("remove media fixture");
+
+        assert_eq!(result.0, content.len() as u64);
+        assert_eq!(result.1, <[u8; 32]>::from(Sha256::digest(&content)));
+    }
 
     #[test]
     fn nested_client_delivery_gets_a_correlated_busy_response_without_stealing_platform_reply() {

@@ -11,7 +11,10 @@ use makosh_blob_runtime::{
         BlobCustodyReleaseErrorV1, BlobCustodyReleaseLedgerV1,
         BlobCustodyReleaseOutcomeV1 as RuntimeReleaseOutcome, BlobCustodyReleaseRequestV1,
     },
-    storage::{BlobContentLifecycleStore, BlobContentWriteRequestV1, BlobCustodyTransferRequestV1},
+    storage::{
+        BlobContentLifecycleStore, BlobContentWriteChunkRequestV1, BlobContentWriteRequestV1,
+        BlobCustodyTransferRequestV1,
+    },
     vault::{BlobContentKeyFenceV1, BlobVaultKeyLeaseAdapterV1, BlobVaultRoutePortV1},
 };
 use makosh_runtime_protocol::v1::{
@@ -147,6 +150,10 @@ where
                 request.operation,
                 BlobDataOperationV1::BlobDataOperationWriteV1,
             ),
+            Some(Operation::WriteChunk(_)) => (
+                request.operation,
+                BlobDataOperationV1::BlobDataOperationWriteV1,
+            ),
             Some(Operation::ReadRange(_)) => (
                 request.operation,
                 BlobDataOperationV1::BlobDataOperationReadRangeV1,
@@ -191,6 +198,46 @@ where
                     error_code: String::new(),
                 })
             }
+            Operation::WriteChunk(write) => {
+                let expected_sha256 = session.expected_plaintext_sha256().ok_or(())?;
+                if write.abort {
+                    if write.offset != 0 || !write.plaintext.is_empty() || write.complete {
+                        return Err(());
+                    }
+                    self.store
+                        .abort_receipt_bound_write(
+                            session.reference(),
+                            session.access(),
+                            session.custody(),
+                            session.quota(),
+                        )
+                        .map_err(|error| developer_storage_denied("abort_write", &error))?;
+                    return Ok(BlobDataResponseV1 {
+                        plaintext: Vec::new(),
+                        accepted: true,
+                        error_code: String::new(),
+                    });
+                }
+                self.store
+                    .write_receipt_bound_chunk(BlobContentWriteChunkRequestV1 {
+                        reference: session.reference(),
+                        access: session.access(),
+                        custody: session.custody(),
+                        quota: session.quota(),
+                        lease: &lease,
+                        offset: write.offset,
+                        plaintext: &write.plaintext,
+                        complete: write.complete,
+                        expected_plaintext_sha256: expected_sha256,
+                        now_unix_ms: now,
+                    })
+                    .map_err(|error| developer_storage_denied("write_chunk", &error))?;
+                Ok(BlobDataResponseV1 {
+                    plaintext: Vec::new(),
+                    accepted: true,
+                    error_code: String::new(),
+                })
+            }
             Operation::ReadRange(read) => {
                 if !exact_read_range_binding(
                     session.expected_plaintext_sha256(),
@@ -217,7 +264,10 @@ where
                         now,
                     )
                     .map_err(|error| developer_storage_denied("read", &error))?;
-                if !exact_plaintext_binding(session.expected_plaintext_sha256(), &plaintext) {
+                if read.start == 0
+                    && read.end_exclusive == session.reference().declared_size()
+                    && !exact_plaintext_binding(session.expected_plaintext_sha256(), &plaintext)
+                {
                     return Err(());
                 }
                 Ok(BlobDataResponseV1 {
@@ -307,12 +357,12 @@ where
 }
 
 fn exact_read_range_binding(
-    expected_plaintext_sha256: Option<&[u8; 32]>,
+    _expected_plaintext_sha256: Option<&[u8; 32]>,
     start: u64,
     end_exclusive: u64,
     declared_size: u64,
 ) -> bool {
-    expected_plaintext_sha256.is_none() || (start == 0 && end_exclusive == declared_size)
+    start < end_exclusive && end_exclusive <= declared_size
 }
 
 fn exact_plaintext_binding(expected_plaintext_sha256: Option<&[u8; 32]>, plaintext: &[u8]) -> bool {
@@ -363,8 +413,9 @@ mod tests {
         let digest: [u8; 32] = Sha256::digest(bytes).into();
 
         assert!(exact_read_range_binding(Some(&digest), 0, 10, 10));
-        assert!(!exact_read_range_binding(Some(&digest), 1, 10, 10));
-        assert!(!exact_read_range_binding(Some(&digest), 0, 9, 10));
+        assert!(exact_read_range_binding(Some(&digest), 1, 10, 10));
+        assert!(exact_read_range_binding(Some(&digest), 0, 9, 10));
+        assert!(!exact_read_range_binding(Some(&digest), 9, 9, 10));
         assert!(exact_plaintext_binding(Some(&digest), bytes));
         assert!(!exact_plaintext_binding(Some(&digest), b"changed"));
         assert!(exact_read_range_binding(None, 1, 9, 10));

@@ -10,7 +10,7 @@ use crate::v1::{
 
 const MAX_PATH_BYTES: usize = 4_096;
 const MAX_UNIX_SOCKET_PATH_BYTES: usize = 100;
-const MAX_BLOB_BYTES: u64 = 64 * 1024 * 1024;
+const MAX_BLOB_BYTES: u64 = 4 * 1024 * 1024 * 1024;
 const MAX_CUSTODY_RELEASE_GRACE_PERIOD_MS: u64 = 7 * 24 * 60 * 60 * 1_000;
 const ID_BYTES: usize = 16;
 const SHA256_BYTES: usize = 32;

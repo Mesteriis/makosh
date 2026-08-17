@@ -9,7 +9,7 @@ mod revoke;
 pub use admin::{
     PgBouncerAdminConnectionErrorV1, PgBouncerAdminCredentialV1, PgBouncerAdminEndpointV1,
     PgBouncerAdminPortV1, PgBouncerPoolFenceAdapterV1, TokioPostgresPgBouncerAdminPortV1,
-    database_is_configured, reload_configuration, verify_admin_connection,
+    database_is_configured, reload_configuration, user_is_configured, verify_admin_connection,
 };
 pub use command::PoolLifecycleCommandV1;
 pub use error::PoolLifecycleErrorV1;

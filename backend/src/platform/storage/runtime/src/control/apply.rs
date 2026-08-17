@@ -11,7 +11,7 @@ use makosh_storage_protocol::{
 
 use super::{
     handshake::ManagedStorageRuntimeIdentityV1,
-    runtime::{resolve_platform_credential, resolve_runtime_credentials},
+    runtime::{resolve_platform_credential, resolve_runtime_credential},
 };
 use crate::admin::{
     apply_authorized_bindings, apply_authorized_migrations, reconcile_authorized_roles,
@@ -32,7 +32,7 @@ pub(super) fn apply_active_binding(
     }
     validate_candidate(configuration, active_bindings, &binding, &bundle)?;
     let desired = configuration_for_apply(configuration, active_bindings, &binding, &bundle)?;
-    provision(channel, identity, &desired)?;
+    provision(channel, identity, &desired, &binding)?;
     retain_applied_configuration(configuration, active_bindings, desired);
     Ok(binding)
 }
@@ -153,6 +153,7 @@ fn provision(
     channel: &UnixStream,
     identity: &ManagedStorageRuntimeIdentityV1,
     configuration: &StorageRuntimeConfigurationV1,
+    binding: &StorageBindingV1,
 ) -> Result<(), String> {
     let topology = configuration
         .topology
@@ -170,10 +171,14 @@ fn provision(
         configuration,
         StoragePlatformCredentialPurposeV1::PostgresAdmin,
     )?;
-    let runtime_credentials = resolve_runtime_credentials(channel, configuration)?;
+    let runtime_credential = resolve_runtime_credential(channel, configuration, binding.clone())?;
     verify_platform_admin(topology, &pgbouncer_credential)?;
     verify_platform_postgres(topology, &postgres_credential)?;
-    reconcile_authorized_roles(topology, &postgres_credential, &runtime_credentials)?;
+    reconcile_authorized_roles(
+        topology,
+        &postgres_credential,
+        std::slice::from_ref(&runtime_credential),
+    )?;
     apply_authorized_migrations(
         topology,
         &postgres_credential,
@@ -184,7 +189,7 @@ fn provision(
         configuration,
         &pgbouncer_credential,
         &postgres_credential,
-        &runtime_credentials,
+        &configuration.desired_bindings,
     )
 }
 

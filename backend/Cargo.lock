@@ -4701,6 +4701,7 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "futures-util",
+ "getrandom 0.4.3",
  "h3",
  "h3-quinn",
  "http-body-util",
@@ -5338,6 +5339,7 @@ dependencies = [
  "makosh-mail-api",
  "serde",
  "serde_json",
+ "zeroize",
 ]
 
 [[package]]
@@ -7171,6 +7173,7 @@ dependencies = [
  "prost-build 0.14.4",
  "protoc-bin-vendored",
  "serde",
+ "sha2 0.10.9",
 ]
 
 [[package]]

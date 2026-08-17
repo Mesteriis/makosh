@@ -15,13 +15,15 @@ const SCHEDULE_CONTROL_SCHEMA: &[u8] =
     include_bytes!("../../migrations/0008_scheduler_schedule_control.sql");
 const SCHEDULE_CONTROL_AUTHORITY_SCHEMA: &[u8] =
     include_bytes!("../../migrations/0009_scheduler_schedule_control_authority.sql");
+const PENDING_FIRES_SCHEDULE_SCHEMA: &[u8] =
+    include_bytes!("../../migrations/0010_scheduler_pending_fires_schedule.sql");
 
 /// Canonical Scheduler state schema admitted through the existing Storage bundle path.
 #[must_use]
 pub fn scheduler_storage_bundle_v1() -> StorageBundleV1 {
     StorageBundleV1 {
         major: 1,
-        revision: 9,
+        revision: 10,
         bundle_id: "scheduler_state".to_owned(),
         owner_id: "scheduler".to_owned(),
         steps: vec![
@@ -41,6 +43,11 @@ pub fn scheduler_storage_bundle_v1() -> StorageBundleV1 {
                 9,
                 "scheduler_schedule_control_authority",
                 SCHEDULE_CONTROL_AUTHORITY_SCHEMA,
+            ),
+            step(
+                10,
+                "scheduler_pending_fires_schedule",
+                PENDING_FIRES_SCHEDULE_SCHEMA,
             ),
         ],
     }

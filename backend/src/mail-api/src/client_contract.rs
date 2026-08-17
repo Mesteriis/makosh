@@ -1,9 +1,12 @@
 pub const MAIL_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
     include_bytes!(concat!(env!("OUT_DIR"), "/makosh.mail.v1.bin"));
 pub const MAIL_CLIENT_CONTRACT_MAJOR: u32 = 1;
-pub const MAIL_CLIENT_CONTRACT_REVISION: u32 = 14;
+pub const MAIL_CLIENT_CONTRACT_REVISION: u32 = 15;
 pub const MAIL_MODULE_ID: &str = "makosh-mail-runtime";
 pub const MAIL_OWNER_ID: &str = "mail";
+pub const MAIL_OPERATIONAL_REALTIME_CAPABILITY_ID_V1: &str = "mail.operational.realtime.shared.v1";
+pub const MAIL_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1: &str =
+    "mail.operational.projection_changed.v1";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MailClientContractV1 {

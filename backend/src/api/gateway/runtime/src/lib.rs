@@ -13,15 +13,16 @@ mod transport;
 pub use application::GatewayApplicationRouter;
 pub use browser::{
     BrowserAuthenticationRouter, BrowserBootstrapRouter, BrowserPairingRouter,
-    BrowserSessionStatusRouter, ClientBlobContractVersionV1, ClientBlobRouteErrorV1,
-    ClientBlobRouteHandler, ClientBlobRouteV1, ClientBlobRouter, ClientBlobTransportV1,
-    ClientBootstrapRouter, ClientRpcContractVersionV1, ClientRpcRouteErrorV1,
-    ClientRpcRouteHandler, ClientRpcRouteV1, ClientRpcRouter, OWNER_MODULE_SETTINGS_COMMIT_PATH,
-    OWNER_MODULE_SETTINGS_PREPARE_PATH, OWNER_VAULT_AUTHORIZE_PATH, OWNER_VAULT_COMMIT_PATH,
-    OWNER_VAULT_PREPARE_PATH, OwnerBrowserPrincipalV1, OwnerModuleSettingsHandlerV1,
-    OwnerModuleSettingsRouteErrorV1, OwnerModuleSettingsRouter, OwnerVaultClientPrincipalV1,
-    OwnerVaultProvisioningHandlerV1, OwnerVaultProvisioningRouteErrorV1,
-    OwnerVaultProvisioningRouter, SharedBrowserGatewaySessionService, SharedBrowserPairingManager,
+    BrowserSessionStatusRouter, ClientBlobContractVersionV1, ClientBlobReadV1,
+    ClientBlobRouteErrorV1, ClientBlobRouteHandler, ClientBlobRouteV1, ClientBlobRouter,
+    ClientBlobTransportV1, ClientBootstrapRouter, ClientRpcContractVersionV1,
+    ClientRpcRouteErrorV1, ClientRpcRouteHandler, ClientRpcRouteV1, ClientRpcRouter,
+    OWNER_MODULE_SETTINGS_COMMIT_PATH, OWNER_MODULE_SETTINGS_PREPARE_PATH,
+    OWNER_VAULT_AUTHORIZE_PATH, OWNER_VAULT_COMMIT_PATH, OWNER_VAULT_PREPARE_PATH,
+    OwnerBrowserPrincipalV1, OwnerModuleSettingsHandlerV1, OwnerModuleSettingsRouteErrorV1,
+    OwnerModuleSettingsRouter, OwnerVaultClientPrincipalV1, OwnerVaultProvisioningHandlerV1,
+    OwnerVaultProvisioningRouteErrorV1, OwnerVaultProvisioningRouter,
+    SharedBrowserGatewaySessionService, SharedBrowserPairingManager,
 };
 pub use realtime::{
     BrowserRealtimePublisherV1, BrowserRealtimeRouter, BrowserRealtimeSubscriptionSource,

@@ -58,6 +58,7 @@ describe('Zulip operational active route boundary', () => {
 		expect(appLayout).toContain("'zulip.command.v1'")
 		expect(appLayout).toContain("'zulip.operational.query.v1'")
 		expect(appLayout).toContain("'zulip.operational.realtime.v1'")
+		expect(appLayout).toContain("'zulip.operational.realtime.shared.v1'")
 		expect(compiledAdapters).toContain("'zulip-integration'")
 	})
 })

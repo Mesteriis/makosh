@@ -1,12 +1,18 @@
 import { Code, ConnectError } from '@connectrpc/connect'
 
-const DEFAULT_ATTEMPTS = 12
+import {
+	type TelegramRuntimeRequestPriority,
+	withTelegramRuntimeRequestQueue,
+} from '../api/telegramRuntimeRequestQueue'
+
+const DEFAULT_ATTEMPTS = 40
 const DEFAULT_DELAY_MILLIS = 250
 
 export type TelegramConfigurationRuntimeRetryOptionsV1 = {
 	attempts?: number
 	delayMillis?: number
 	wait?: (delayMillis: number) => Promise<void>
+	priority?: TelegramRuntimeRequestPriority
 }
 
 /**
@@ -21,6 +27,7 @@ export async function withTelegramConfigurationRuntimeV1<T>(
 	const attempts = options.attempts ?? DEFAULT_ATTEMPTS
 	const delayMillis = options.delayMillis ?? DEFAULT_DELAY_MILLIS
 	const wait = options.wait ?? waitForDelay
+	const priority = options.priority ?? 'interactive'
 	if (!Number.isSafeInteger(attempts) || attempts <= 0) {
 		throw new Error('telegram_configuration_retry_attempts_invalid')
 	}
@@ -29,7 +36,7 @@ export async function withTelegramConfigurationRuntimeV1<T>(
 	}
 	for (let attempt = 1; attempt <= attempts; attempt += 1) {
 		try {
-			return await operation()
+			return await withTelegramRuntimeRequestQueue(operation, priority)
 		} catch (error) {
 			if (attempt === attempts || !isConfigurationRuntimeHandoff(error)) throw error
 			await wait(delayMillis)

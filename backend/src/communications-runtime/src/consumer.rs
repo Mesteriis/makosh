@@ -46,6 +46,8 @@ pub enum CommunicationsEventConsumeErrorV1 {
     InvalidEnvelope,
     WrongContract,
     InvalidPayload,
+    MissingMessageScope,
+    MissingCanonicalMessage,
     DomainRejected,
     PersistenceRejected,
 }
@@ -64,10 +66,25 @@ pub async fn consume_next_observation_v1(
         .map_err(delivery_error)?;
     let record = OutboxRecordV1::accept(delivery.exact_bytes().to_vec())
         .map_err(|_| CommunicationsDeliveryErrorV1::InvalidEnvelope)?;
-    let outcome =
-        consume_communication_observation_durable_v1(persistence, &record, canonical_event_context)
-            .await
-            .map_err(CommunicationsDeliveryErrorV1::Consume)?;
+    let outcome = match consume_communication_observation_durable_v1(
+        persistence,
+        &record,
+        canonical_event_context,
+    )
+    .await
+    {
+        Ok(outcome) => outcome,
+        Err(
+            CommunicationsEventConsumeErrorV1::MissingMessageScope
+            | CommunicationsEventConsumeErrorV1::MissingCanonicalMessage,
+        ) => {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                eprintln!("developer_communications_terminal_rejection=invalid_message_lineage");
+            }
+            CommunicationsConsumeOutcomeV1::Rejected
+        }
+        Err(error) => return Err(CommunicationsDeliveryErrorV1::Consume(error)),
+    };
     delivery.acknowledge().await.map_err(delivery_error)?;
     Ok(outcome)
 }
@@ -91,18 +108,32 @@ pub async fn consume_communication_observation_durable_v1(
     let envelope = decode_envelope_v1(record.exact_bytes())
         .map_err(|_| CommunicationsEventConsumeErrorV1::InvalidEnvelope)?;
     let decoded = command_from_envelope(&envelope)?;
-    let summary = accept_command(decoded.command)
-        .map_err(|_| CommunicationsEventConsumeErrorV1::DomainRejected)?;
-    let projection = canonicalize_communication(&summary)
-        .map_err(|_| CommunicationsEventConsumeErrorV1::DomainRejected)?;
+    let summary = accept_command(decoded.command).map_err(|error| {
+        log_domain_rejection("accept_command", error);
+        consume_error_from_domain(error)
+    })?;
+    let projection = canonicalize_communication(&summary).map_err(|error| {
+        log_domain_rejection("canonicalize_communication", error);
+        CommunicationsEventConsumeErrorV1::DomainRejected
+    })?;
     let causation_message_id: [u8; 16] = envelope
         .message_id
         .as_slice()
         .try_into()
         .map_err(|_| CommunicationsEventConsumeErrorV1::WrongContract)?;
-    let canonical_outbox_record =
-        build_evidence_recorded_outbox_v1(&summary, causation_message_id, canonical_event_context)
-            .map_err(|_| CommunicationsEventConsumeErrorV1::DomainRejected)?;
+    let canonical_outbox_record = build_evidence_recorded_outbox_v1(
+        &summary,
+        causation_message_id,
+        canonical_event_context,
+    )
+    .map_err(|error| {
+        if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+            eprintln!(
+                "developer_communications_domain_rejection_stage=canonical_outbox error={error:?}"
+            );
+        }
+        CommunicationsEventConsumeErrorV1::DomainRejected
+    })?;
     let attachment_anchor_outbox_record = projection
         .attachment_anchor
         .as_ref()
@@ -116,7 +147,14 @@ pub async fn consume_communication_observation_durable_v1(
             )
         })
         .transpose()
-        .map_err(|_| CommunicationsEventConsumeErrorV1::DomainRejected)?;
+        .map_err(|error| {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                eprintln!(
+                    "developer_communications_domain_rejection_stage=attachment_anchor_outbox error={error:?}"
+                );
+            }
+            CommunicationsEventConsumeErrorV1::DomainRejected
+        })?;
     let derived_index_work = derived_index_work_from_decision_v1(
         decide_search_index_v1(&projection, COMMUNICATIONS_SEARCH_PROJECTION_REVISION_V1),
         canonical_event_context.recorded_at_unix_seconds,
@@ -153,6 +191,26 @@ pub async fn consume_communication_observation_durable_v1(
         )
         .await
         .map_err(persistence_error)
+}
+
+fn log_domain_rejection(
+    stage: &'static str,
+    error: makosh_communications_domain::CommunicationsDomainError,
+) {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        eprintln!("developer_communications_domain_rejection_stage={stage} error={error:?}");
+    }
+}
+
+const fn consume_error_from_domain(
+    error: makosh_communications_domain::CommunicationsDomainError,
+) -> CommunicationsEventConsumeErrorV1 {
+    match error {
+        makosh_communications_domain::CommunicationsDomainError::MissingMessageScope => {
+            CommunicationsEventConsumeErrorV1::MissingMessageScope
+        }
+        _ => CommunicationsEventConsumeErrorV1::DomainRejected,
+    }
 }
 
 struct DecodedCommunicationObservationV1 {
@@ -511,7 +569,12 @@ fn persistence_error(error: CommunicationsPersistenceError) -> CommunicationsEve
     if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
         eprintln!("developer_communications_persistence_error={error:?}");
     }
-    CommunicationsEventConsumeErrorV1::PersistenceRejected
+    match error {
+        CommunicationsPersistenceError::MissingCanonicalMessage => {
+            CommunicationsEventConsumeErrorV1::MissingCanonicalMessage
+        }
+        _ => CommunicationsEventConsumeErrorV1::PersistenceRejected,
+    }
 }
 
 #[cfg(test)]
@@ -522,6 +585,27 @@ mod tests {
         ObservationEnvelopeContextV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
         build_observation_outbox_record_v1, new_scoped_communication_observation_draft,
     };
+
+    #[test]
+    fn missing_message_scope_is_a_terminal_input_rejection() {
+        assert_eq!(
+            consume_error_from_domain(
+                makosh_communications_domain::CommunicationsDomainError::MissingMessageScope,
+            ),
+            CommunicationsEventConsumeErrorV1::MissingMessageScope,
+        );
+        assert_eq!(
+            consume_error_from_domain(
+                makosh_communications_domain::CommunicationsDomainError::InvalidObservedTime,
+            ),
+            CommunicationsEventConsumeErrorV1::DomainRejected,
+        );
+        assert_eq!(
+            persistence_error(CommunicationsPersistenceError::MissingCanonicalMessage),
+            CommunicationsEventConsumeErrorV1::MissingCanonicalMessage,
+        );
+    }
+
     #[test]
     fn applies_whatsapp_event_once_without_access_to_provider_locator() {
         let draft = new_scoped_communication_observation_draft(

@@ -11,6 +11,7 @@ use makosh_communication_delayed_delivery_runtime::{
     communication_delayed_delivery_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -110,6 +111,9 @@ where
         ))
         .map_err(runtime_error)?;
 
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Delayed Delivery polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -117,35 +121,30 @@ where
             .as_millis()
             .try_into()
             .map_err(|_| "Delayed Delivery clock is invalid".to_owned())?;
-        executor
+        let mut progressed = executor
             .block_on(runtime.pump_control_once(now))
             .map_err(runtime_error)?;
-        match executor.block_on(runtime.relay_scheduler_outbox_once(now)) {
-            Ok(_) | Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
-            Err(error) => return Err(runtime_error(error)),
+        progressed |= retry_progress(executor.block_on(runtime.relay_scheduler_outbox_once(now)))?;
+        progressed |=
+            retry_progress(executor.block_on(runtime.consume_scheduler_result_once(now)))?;
+        progressed |= retry_progress(executor.block_on(runtime.consume_due_delivery_once(now)))?;
+        progressed |= retry_progress(executor.block_on(runtime.process_body_cleanup_once(now)))?;
+        progressed |= retry_progress(executor.block_on(runtime.pump_client_realtime_once()))?;
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
         }
-        match executor.block_on(runtime.consume_scheduler_result_once(now)) {
-            Ok(_) | Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.consume_due_delivery_once(now)) {
-            Ok(_) | Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.process_body_cleanup_once(now)) {
-            Ok(_) | Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.pump_client_realtime_once()) {
-            Ok(_) | Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        std::thread::sleep(Duration::from_millis(25));
+    }
+}
+
+fn retry_progress(
+    result: Result<bool, DelayedDeliveryManagedRuntimeErrorV1>,
+) -> Result<bool, String> {
+    match result {
+        Ok(progressed) => Ok(progressed),
+        Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable)
+        | Err(DelayedDeliveryManagedRuntimeErrorV1::Persistence(_)) => Ok(false),
+        Err(error) => Err(runtime_error(error)),
     }
 }
 
@@ -228,4 +227,21 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
         return Err("Delayed Delivery contract is unavailable".to_owned());
     }
     std::fs::read(path).map_err(|_| "Delayed Delivery contract is unavailable".to_owned())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn retryable_idle_steps_do_not_claim_progress() {
+        assert_eq!(retry_progress(Ok(false)), Ok(false));
+        assert_eq!(
+            retry_progress(Err(DelayedDeliveryManagedRuntimeErrorV1::Unavailable)),
+            Ok(false)
+        );
+        assert!(
+            retry_progress(Err(DelayedDeliveryManagedRuntimeErrorV1::InvalidTransition)).is_err()
+        );
+    }
 }

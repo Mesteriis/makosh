@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { computed, onBeforeUnmount, watch } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import type { ProviderAccountNavigationSnapshot } from '../../../shared/ui/shell/providerAccountNavigation'
 import MailOperationalPage from '../presentation/MailOperationalPage.vue'
 import { useMailComposition } from '../queries/useMailComposition'
 import { useMailDelivery } from '../queries/useMailDelivery'
 import { useMailAccountConnections } from '../queries/useMailAccountConnections'
+import { mailConnectionCredentialRequired } from '../queries/mailAccountConnections'
 import { useMailOperationalRead } from '../queries/useMailOperationalRead'
 import { useMailMessageFlags } from '../queries/useMailMessageFlags'
 import { useMailMessageLocation } from '../queries/useMailMessageLocation'
@@ -20,6 +21,7 @@ const props = defineProps<{
 	canDeliver: boolean
 	canMutateFlags: boolean
 	canQuery: boolean
+	canRealtime: boolean
 	canQueryAccounts: boolean
 	canQueryFlagStatus: boolean
 	canMutateLocation: boolean
@@ -38,6 +40,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	accountNavigationChange: [snapshot: ProviderAccountNavigationSnapshot]
 	messageEvidenceChange: [evidenceId: Uint8Array | undefined]
+	openSettings: []
 }>()
 let accountNavigationLoading = true
 
@@ -60,6 +63,7 @@ const delivery = useMailDelivery({
 })
 const read = useMailOperationalRead({
 	canQuery: () => props.canQuery,
+	canRealtime: () => props.canRealtime,
 	connections: () => accountConnections.connections.value,
 })
 const sync = useMailSync({
@@ -122,11 +126,16 @@ const syncHealth = useMailSyncHealth({
 	canQuery: () => props.canSyncHealth,
 	connections: () => accountConnections.connections.value,
 })
+const credentialRequired = computed(() => mailConnectionCredentialRequired(
+	accountConnections.connections.value,
+	read.model.value.selectedConnectionId,
+))
 
 watch(
 	() => [
 		props.canComposeQuery,
 		props.canQuery,
+		props.canRealtime,
 		props.canQueryAccounts,
 		props.canSyncHealth,
 		props.modules,
@@ -184,11 +193,14 @@ watch(
 	(evidenceId) => emit('messageEvidenceChange', evidenceId),
 	{ immediate: true },
 )
+
+onBeforeUnmount(() => read.stopRealtime())
 </script>
 
 <template>
 	<MailOperationalPage
 		:composition-model="composition.model.value"
+		:credential-required="credentialRequired"
 		:body-content-status="bodyContentStatus"
 		:body-content-status-message="bodyContentStatusMessage"
 		:body-text="bodyText"
@@ -223,6 +235,7 @@ watch(
 		@load-more-folders="read.loadMoreFolders"
 		@load-more-messages="read.loadMoreMessages"
 		@load-more-threads="read.loadMoreThreads"
+		@open-settings="emit('openSettings')"
 		@read-refresh="read.refresh"
 		@flag-refresh-status="messageFlags.refreshStatus"
 		@flag-set-read="messageFlags.setRead"

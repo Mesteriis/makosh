@@ -1,10 +1,14 @@
 import { computed, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
-import { hasOwnerVaultProvisioningHostV1 } from '../../../platform/vault'
+import {
+	hasDevelopmentOwnerVaultProvisioningHostV1,
+	hasOwnerVaultProvisioningHostV1,
+} from '../../../platform/vault'
+import { provisionDevelopmentGmailOAuthClientSecretV1 } from '../oauth/developmentGmailOAuthClientSecret'
 import {
 	gmailOAuthLoopbackRedirectUriV1,
-	runGmailOAuthBrowserFlowV1,
 } from '../oauth/gmailOAuthBrowserFlow'
+import { redirectGmailOAuthInSameTabV1 } from '../oauth/gmailOAuthRedirectFlow'
 import {
 	MailAccountSetupWorkflowV1,
 	type MailGmailSetupStateV1,
@@ -45,7 +49,7 @@ export function useMailAccountSetup(
 		if (!module()?.settings || !connectionId.value.trim()) return false
 		if (kind.value === 'gmail') {
 			return !gmailState.value
-				&& Boolean(email.value.trim() && gmailClientId.value.trim() && gmailRedirectUri.value)
+				&& Boolean(gmailClientId.value.trim() && gmailRedirectUri.value)
 		}
 		return Boolean(
 			email.value.trim()
@@ -113,10 +117,15 @@ export function useMailAccountSetup(
 			registrationId: current.registrationId,
 			expectedDesiredRevision: current.settings!.desiredRevision,
 			connectionId: connectionId.value,
-			email: email.value,
 			clientId: gmailClientId.value,
 			redirectUri: gmailRedirectUri.value,
 		})
+		if (hasDevelopmentOwnerVaultProvisioningHostV1()) {
+			await provisionDevelopmentGmailOAuthClientSecretV1(
+				current.registrationId,
+				gmailState.value.configurationInstanceId,
+			)
+		}
 		gmailCompletionSubmitted.value = false
 		message.value = 'Gmail configuration is active. Continue with Google to grant OAuth access.'
 		messageTone.value = 'neutral'
@@ -129,12 +138,12 @@ export function useMailAccountSetup(
 		busy.value = true
 		message.value = ''
 		try {
-			const callback = await runGmailOAuthBrowserFlowV1(
-				current.started.authorizationUrl,
-			)
-			gmailCompletionSubmitted.value = true
-			await workflow.completeGmail(current, callback)
-			message.value = 'Gmail OAuth completion accepted. Readiness will update after reconciliation.'
+			redirectGmailOAuthInSameTabV1(current.started.authorizationUrl, {
+				operationId: current.operationId,
+				connectionId: current.connectionId,
+				setupId: current.started.setupId,
+			})
+			message.value = 'Redirecting to Google. Макошь will resume authorization after the callback.'
 			messageTone.value = 'success'
 			return true
 		} catch {

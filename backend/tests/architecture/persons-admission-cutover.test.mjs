@@ -177,7 +177,13 @@ test('Task 6 release and Personas surface contain only compiled successor paths'
     'review_person_match_candidate',
     'reviewed_person_match_candidate_promotion',
   ]) assert.match(release, new RegExp(owner));
-  assert.doesNotMatch(release, /mail_contacts_sync|contacts\.runtime|contacts\.storage/);
+  const activeModulePlan = development.slice(
+    development.indexOf('const MODULE_PLAN:'),
+    development.indexOf('const LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3:'),
+  );
+  assert.doesNotMatch(materializer, /mail_contacts_sync|contacts\.runtime|contacts\.storage/);
+  assert.doesNotMatch(activeModulePlan, /mail_contacts_sync|contacts\.runtime|contacts\.storage/);
+  assert.match(development, /fn legacy_hermes_pre_persons_successor/);
   assert.match(surfaces, /'persons-owner'/);
   assert.match(surfaces, /routeId: 'personas'[\s\S]*adapterId: 'persons-owner'/);
   assert.doesNotMatch(personasApi, /ApiClient|\/api\/v1\/(?:personas|identity-candidates|identity-traces|relationships)/);

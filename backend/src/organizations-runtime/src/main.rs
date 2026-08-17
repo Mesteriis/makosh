@@ -18,6 +18,7 @@ use makosh_organizations_runtime::{
     organizations_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -101,6 +102,9 @@ where
             configuration.event_credential_revision,
         ))
         .map_err(runtime_error)?;
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Organizations runtime polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -108,13 +112,18 @@ where
             .as_millis()
             .try_into()
             .map_err(|_| "Organizations clock is invalid".to_owned())?;
-        retry_runtime(executor.block_on(runtime.pump_control_once(now)))?;
+        let mut progressed = retry_runtime(executor.block_on(runtime.pump_control_once(now)))?;
         for _ in 0..4 {
-            if !retry_runtime(executor.block_on(runtime.relay_outbox_once(now)))? {
+            let relayed = retry_runtime(executor.block_on(runtime.relay_outbox_once(now)))?;
+            progressed |= relayed;
+            if !relayed {
                 break;
             }
         }
-        std::thread::sleep(Duration::from_millis(25));
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
+        }
     }
 }
 

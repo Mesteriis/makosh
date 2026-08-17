@@ -194,10 +194,22 @@ message BlobDataRequestV1 {
     BlobDataWriteRequestV1 write = 3;
     BlobDataReadRangeRequestV1 read_range = 4;
     BlobDataCustodyTransferRequestV1 custody_transfer = 5;
+    BlobDataWriteChunkRequestV1 write_chunk = 6;
   }
 }
 
 message BlobDataWriteRequestV1 { bytes plaintext = 1; }
+
+// One bounded, sequential part of a receipt-bound Blob write. Each chunk uses
+// a fresh one-use WRITE session grant; `complete` is valid only for the exact
+// final chunk of the declared BlobRef size. `abort` is an idempotent cleanup
+// request and therefore carries no offset, plaintext or completion flag.
+message BlobDataWriteChunkRequestV1 {
+  uint64 offset = 1;
+  bytes plaintext = 2;
+  bool complete = 3;
+  bool abort = 4;
+}
 
 message BlobDataReadRangeRequestV1 {
   uint64 start = 1;

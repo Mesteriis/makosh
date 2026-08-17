@@ -42,6 +42,48 @@ fn file_platform_credential_source_imports_only_exact_storage_scopes() {
 }
 
 #[test]
+fn file_platform_credential_source_reconciles_exact_storage_scopes() {
+    let temporary = private_temporary_directory();
+    let source = private_directory(temporary.path().join("credentials"));
+    write_private(
+        &source.join("pgbouncer-admin-password"),
+        b"initial-pgbouncer-secret\n",
+    );
+    write_private(
+        &source.join("postgres-admin-password"),
+        b"initial-postgres-secret\n",
+    );
+    let store = initialize_store(temporary.path());
+
+    bootstrap::import_platform_credentials(&store, Some(&source)).expect("initial credentials");
+    write_private(
+        &source.join("pgbouncer-admin-password"),
+        b"current-pgbouncer-secret\n",
+    );
+    write_private(
+        &source.join("postgres-admin-password"),
+        b"current-postgres-secret\n",
+    );
+
+    bootstrap::import_platform_credentials(&store, Some(&source)).expect("reconcile credentials");
+
+    assert_eq!(
+        store
+            .resolve_current_secret(&platform_scope("storage.control.pgbouncer.admin"))
+            .expect("current PgBouncer credential")
+            .as_slice(),
+        b"current-pgbouncer-secret"
+    );
+    assert_eq!(
+        store
+            .resolve_current_secret(&platform_scope("storage.control.postgres.admin"))
+            .expect("current PostgreSQL credential")
+            .as_slice(),
+        b"current-postgres-secret"
+    );
+}
+
+#[test]
 fn file_platform_credential_source_imports_the_optional_event_hub_scope() {
     let temporary = private_temporary_directory();
     let source = private_directory(temporary.path().join("credentials"));
@@ -122,6 +164,23 @@ fn platform_credential_import_is_atomic_when_a_scope_conflicts() {
     assert!(
         store
             .store_secrets_atomically(vec![
+                (scope.clone(), Zeroizing::new(b"first-secret".to_vec())),
+                (scope.clone(), Zeroizing::new(b"second-secret".to_vec())),
+            ])
+            .is_err()
+    );
+    assert!(store.resolve_current_secret(&scope).is_err());
+}
+
+#[test]
+fn bootstrap_reconciliation_rejects_duplicate_scopes_atomically() {
+    let temporary = private_temporary_directory();
+    let store = initialize_store(temporary.path());
+    let scope = platform_scope("storage.control.pgbouncer.admin");
+
+    assert!(
+        store
+            .reconcile_bootstrap_secrets_atomically(vec![
                 (scope.clone(), Zeroizing::new(b"first-secret".to_vec())),
                 (scope.clone(), Zeroizing::new(b"second-secret".to_vec())),
             ])

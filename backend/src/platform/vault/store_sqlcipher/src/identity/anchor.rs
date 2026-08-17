@@ -40,12 +40,30 @@ impl VaultRootKey {
         derive_key(instance_id, &self.0, b"makosh-vault/sqlcipher-key/v1")
     }
 
+    pub(crate) fn derive_legacy_sqlcipher_key(
+        &self,
+        instance_id: &str,
+    ) -> Result<Zeroizing<[u8; 32]>, VaultAnchorError> {
+        derive_key(instance_id, &self.0, b"hermes-vault/sqlcipher-key/v1")
+    }
+
     pub fn derive_record_key(
         &self,
         instance_id: &str,
         key_epoch: u32,
     ) -> Result<Zeroizing<[u8; 32]>, VaultAnchorError> {
         let mut info = *b"makosh-vault/record-key/v1/0000";
+        let offset = info.len() - key_epoch.to_be_bytes().len();
+        info[offset..].copy_from_slice(&key_epoch.to_be_bytes());
+        derive_key(instance_id, &self.0, &info)
+    }
+
+    pub(crate) fn derive_legacy_record_key(
+        &self,
+        instance_id: &str,
+        key_epoch: u32,
+    ) -> Result<Zeroizing<[u8; 32]>, VaultAnchorError> {
+        let mut info = *b"hermes-vault/record-key/v1/0000";
         let offset = info.len() - key_epoch.to_be_bytes().len();
         info[offset..].copy_from_slice(&key_epoch.to_be_bytes());
         derive_key(instance_id, &self.0, &info)

@@ -13,6 +13,7 @@ import {
 	type MailThreadPageV1,
 } from '../../../gen/makosh/mail/operational/v1/client_pb'
 import { getMailOperationalQueryConnectClient } from './mailOperationalQueryClient'
+import { getClientAccountLaneRegistry } from '../../../platform/gateway/clientAccountLane'
 
 const DEFAULT_PAGE_LIMIT = 50
 const MAX_PAGE_LIMIT = 200
@@ -28,7 +29,7 @@ export type MailOperationalPageInput = {
 export async function listMailOperationalFolders(
 	input: MailOperationalPageInput,
 ): Promise<MailFolderPageV1> {
-	const response = await query({
+	const response = await query(input.connectionId, {
 		case: 'listFolders',
 		value: create(ListMailFoldersQueryV1Schema, {
 			connectionId: identifier('connection ID', input.connectionId),
@@ -45,7 +46,7 @@ export async function listMailOperationalFolders(
 export async function listMailOperationalThreads(
 	input: MailOperationalPageInput & { folderId?: string },
 ): Promise<MailThreadPageV1> {
-	const response = await query({
+	const response = await query(input.connectionId, {
 		case: 'listThreads',
 		value: create(ListMailThreadsQueryV1Schema, {
 			connectionId: identifier('connection ID', input.connectionId),
@@ -66,7 +67,7 @@ export async function listMailOperationalMessages(
 		providerThreadId?: string
 	},
 ): Promise<MailMessagePageV1> {
-	const response = await query({
+	const response = await query(input.connectionId, {
 		case: 'listMessages',
 		value: create(ListMailMessagesQueryV1Schema, {
 			connectionId: identifier('connection ID', input.connectionId),
@@ -86,7 +87,7 @@ export async function getMailOperationalMessage(input: {
 	connectionId: string
 	messageId: string
 }): Promise<MailMessageDetailV1> {
-	const response = await query({
+	const response = await query(input.connectionId, {
 		case: 'getMessage',
 		value: create(GetMailMessageQueryV1Schema, {
 			connectionId: identifier('connection ID', input.connectionId),
@@ -100,11 +101,14 @@ export async function getMailOperationalMessage(input: {
 }
 
 function query(
+	connectionId: string,
 	queryInput: MailOperationalQueryV1['query'],
 ) {
-	return getMailOperationalQueryConnectClient().query(
-		create(MailOperationalQueryV1Schema, { query: queryInput }),
-	)
+	return getClientAccountLaneRegistry()
+		.get({ provider: 'mail', accountId: identifier('connection ID', connectionId) })
+		.run('interactive', async () => getMailOperationalQueryConnectClient().query(
+			create(MailOperationalQueryV1Schema, { query: queryInput }),
+		))
 }
 
 function identifier(label: string, value: string): string {

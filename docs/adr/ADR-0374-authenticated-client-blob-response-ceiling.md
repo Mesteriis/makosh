@@ -6,7 +6,9 @@
 
 Состояние реализации: implemented in protocol validation, Kernel Control Store
 schema v49 and Gateway route admission. Managed Attachment Preview proof remains
-part of the separate `attachment_preview_v1` gate.
+part of the separate `attachment_preview_v1` gate. ADR-0413 сохраняет этот
+32 MiB ceiling как предел inline buffered response, но вводит отдельный 4 GiB
+object ceiling для session-bound bounded range delivery и schema v50.
 
 Зависит от:
 
@@ -14,6 +16,7 @@ part of the separate `attachment_preview_v1` gate.
 - [ADR-0230](ADR-0230-blob-platform-opaque-references-and-owner-local-metadata.md);
 - [ADR-0318](ADR-0318-communications-evidence-export-workflow.md);
 - [ADR-0373](ADR-0373-bounded-attachment-preview-workflow.md).
+- [ADR-0413](ADR-0413-chunked-blob-storage-and-session-bound-client-range-delivery.md).
 
 ## Контекст
 
@@ -30,8 +33,9 @@ security причины. Выдача bytes через JSON, base64 или provi
 
 ## Решение
 
-Platform-wide hard ceiling одного authenticated `client_blob` ответа
-повышается с `24 MiB` до `32 MiB`.
+Platform-wide hard ceiling одного inline authenticated `client_blob` ответа
+повышается с `24 MiB` до `32 MiB`. ADR-0413 позднее отделяет этот memory bound
+от descriptor object ceiling для range transport.
 
 Изменение применяется атомарно в четырёх authority:
 
@@ -53,9 +57,9 @@ authorization; internal Blob reference, receipt и grant клиенту не в�
 
 Не меняются:
 
-- Blob protocol hard limit `64 MiB`;
+- inline response buffering limit `32 MiB`;
 - module Blob quota и custody scope;
-- response buffering semantics;
+- buffering semantics существующих inline routes;
 - route-specific bounds существующих modules;
 - запрет generic Blob route и provider URLs.
 
@@ -81,4 +85,3 @@ streaming transport является отдельным будущим реше�
 
 Отклонено: owner-controlled descriptor не должен определять platform memory
 bound без Kernel/Gateway maximum.
-

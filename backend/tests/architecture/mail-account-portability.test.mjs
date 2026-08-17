@@ -151,7 +151,7 @@ test('Mail account portability is one typed desktop app composition with explici
   assert.match(workflowTests, /without provisioning twice/);
   assert.match(workflowTests, /separate receipts/);
   assert.match(ui, /Import receipts/);
-  assert.match(ui, /Complete Gmail OAuth/);
+  assert.match(ui, /Continue with Google/);
   assert.match(settingsPanel, /MailPortabilityPanel/);
   assert.match(vaultClient, /OwnerVaultProvisioningService/);
   assert.match(androidHost, /AndroidOwnerVaultProvisioningHostV1/);

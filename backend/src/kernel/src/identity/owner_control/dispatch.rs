@@ -729,18 +729,25 @@ fn bind_managed_release(
     request: BindBundledManagedReleaseRequestV1,
 ) -> Result<OwnerResult, String> {
     sessions.authorize(store, &request.owner_session_id)?;
+    let previous = store
+        .effective_bundled_managed_launch_binding(&request.registration_id)
+        .map_err(|error| format!("{error:?}"))?;
     let binding = macos_bundled_release_binding::bind_current_installed_release(
         store,
         &request.registration_id,
         &request.artifact_id,
     )?;
-    supervisor.stop_if_active(binding.registration_id())?;
+    let replayed = previous.as_ref() == Some(&binding);
+    if !replayed {
+        supervisor.stop_if_active(binding.registration_id())?;
+    }
     Ok(OwnerResult::BindBundledManagedRelease(
         BindBundledManagedReleaseResponseV1 {
             registration_id: binding.registration_id().to_owned(),
             binding_revision: binding.binding_revision(),
             distribution_id: binding.distribution_id().to_owned(),
             artifact_id: binding.artifact_id().to_owned(),
+            replayed,
         },
     ))
 }

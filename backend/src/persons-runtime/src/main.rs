@@ -6,6 +6,7 @@ use std::{
         unix::net::UnixStream,
     },
     path::{Path, PathBuf},
+    time::Duration,
 };
 
 use makosh_persons_persistence::{PersonsPersistenceErrorV1, persons_storage_bundle_v1};
@@ -14,6 +15,7 @@ use makosh_persons_runtime::{
     persons_module_descriptor_v1, persons_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -96,6 +98,9 @@ where
             configuration.event_credential_revision,
         ))
         .map_err(runtime_error)?;
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Persons runtime polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -103,20 +108,26 @@ where
             .as_millis()
             .try_into()
             .map_err(|_| "Persons clock is invalid".to_owned())?;
-        if !retry_runtime(executor.block_on(runtime.service_once(now)))? {
+        let Some(progressed) = retry_runtime(executor.block_on(runtime.service_once(now)))? else {
             return Ok(());
+        };
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
         }
     }
 }
 
-fn retry_runtime(result: Result<bool, PersonsManagedRuntimeErrorV1>) -> Result<bool, String> {
+fn retry_runtime(
+    result: Result<bool, PersonsManagedRuntimeErrorV1>,
+) -> Result<Option<bool>, String> {
     match result {
-        Ok(_)
-        | Err(PersonsManagedRuntimeErrorV1::EventUnavailable)
+        Ok(progressed) => Ok(Some(progressed)),
+        Err(PersonsManagedRuntimeErrorV1::EventUnavailable)
         | Err(PersonsManagedRuntimeErrorV1::Persistence(
             PersonsPersistenceErrorV1::StorageUnavailable,
-        )) => Ok(true),
-        Err(PersonsManagedRuntimeErrorV1::ControlClosed) => Ok(false),
+        )) => Ok(Some(false)),
+        Err(PersonsManagedRuntimeErrorV1::ControlClosed) => Ok(None),
         Err(error) => Err(runtime_error(error)),
     }
 }
@@ -213,4 +224,22 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
         return Err("Persons contract is invalid".to_owned());
     }
     Ok(bytes)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn idle_success_remains_running_without_claiming_progress() {
+        assert_eq!(retry_runtime(Ok(false)), Ok(Some(false)));
+    }
+
+    #[test]
+    fn control_close_stops_the_runtime() {
+        assert_eq!(
+            retry_runtime(Err(PersonsManagedRuntimeErrorV1::ControlClosed)),
+            Ok(None)
+        );
+    }
 }

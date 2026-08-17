@@ -63,6 +63,44 @@ impl SqliteControlStore {
                 .map_err(StoreError::from)
         })
     }
+
+    pub fn migrate_legacy_platform_storage_bundle_namespace(
+        &self,
+        predecessor: &PlatformStorageBundleV1,
+        successor: &PlatformStorageBundleV1,
+    ) -> Result<(), StoreError> {
+        if predecessor.owner_id() != successor.owner_id()
+            || predecessor.revision() != successor.revision()
+            || predecessor.digest() == successor.digest()
+            || predecessor.canonical_bytes() == successor.canonical_bytes()
+        {
+            return Err(StoreError::LegacyNamespaceConflict);
+        }
+        let predecessor = predecessor.clone();
+        let successor = successor.clone();
+        self.with_connection(move |connection| {
+            let transaction = connection.transaction()?;
+            let changed = transaction.execute(
+                "UPDATE makosh_kernel_platform_storage_bundle
+                 SET sha256 = ?1, canonical_bytes = ?2
+                 WHERE owner_id = ?3 AND revision = ?4
+                   AND sha256 = ?5 AND canonical_bytes = ?6",
+                params![
+                    successor.digest().as_slice(),
+                    successor.canonical_bytes(),
+                    predecessor.owner_id(),
+                    as_sql(predecessor.revision())?,
+                    predecessor.digest().as_slice(),
+                    predecessor.canonical_bytes(),
+                ],
+            )?;
+            if changed != 1 {
+                return Err(StoreError::LegacyNamespaceConflict);
+            }
+            transaction.commit()?;
+            Ok(())
+        })
+    }
 }
 
 fn decode_bundle(

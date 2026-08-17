@@ -33,7 +33,7 @@ export async function requestTelegramParticipants(
 			case: 'listParticipants',
 			value: {
 				...normalizeTarget(target),
-				filter: '',
+				filter: 'recent',
 				offset: 0,
 				limit: PAGE_LIMIT,
 			},

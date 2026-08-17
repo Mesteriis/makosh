@@ -13,11 +13,11 @@ pub(super) fn ensure_initialized_vault(
     instance_id: &str,
 ) -> Result<(), String> {
     let vault_dir = data_dir.join("vault");
-    match initialization_state(&vault_dir)? {
-        VaultInitializationState::Initialized => return Ok(()),
+    let state = match initialization_state(&vault_dir)? {
+        VaultInitializationState::Initialized => VaultInitializationState::Initialized,
         VaultInitializationState::Partial => return Err("Vault recovery is required".to_owned()),
-        VaultInitializationState::Missing => {}
-    }
+        VaultInitializationState::Missing => VaultInitializationState::Missing,
+    };
     let kernel =
         std::env::current_exe().map_err(|_| "Kernel executable path is unavailable".to_owned())?;
     let prepared = native_launch::prepare_bound_platform_process(
@@ -27,12 +27,17 @@ pub(super) fn ensure_initialized_vault(
             .join("developer-bootstrap")
             .join("vault-initialize"),
     )?;
-    initialize_from_artifact(
-        prepared.into_staged_executable(),
-        &vault_dir,
-        instance_id,
-        &data_dir.join("developer-platform-credentials"),
-    )
+    let artifact = prepared.into_staged_executable();
+    let credential_dir = data_dir.join("developer-platform-credentials");
+    match state {
+        VaultInitializationState::Missing => {
+            initialize_from_artifact(artifact, &vault_dir, instance_id, &credential_dir)
+        }
+        VaultInitializationState::Initialized => {
+            reconcile_from_artifact(artifact, &vault_dir, &credential_dir)
+        }
+        VaultInitializationState::Partial => unreachable!("partial Vault state returned early"),
+    }
 }
 
 fn initialize_from_artifact(
@@ -53,6 +58,26 @@ fn initialize_from_artifact(
     match status {
         Ok(status) if status.success() => Ok(()),
         Ok(_) => Err("Vault initialization failed".to_owned()),
+        Err(error) => Err(error),
+    }
+}
+
+fn reconcile_from_artifact(
+    artifact: StagedNativeArtifact,
+    vault_dir: &Path,
+    platform_credential_dir: &Path,
+) -> Result<(), String> {
+    let status = Command::new(artifact.path())
+        .args(["import-platform-credentials", "--data-dir"])
+        .arg(vault_dir)
+        .args(["--platform-credential-dir"])
+        .arg(platform_credential_dir)
+        .status()
+        .map_err(|_| "Vault platform credential reconciliation is unavailable".to_owned());
+    let _ = artifact.remove();
+    match status {
+        Ok(status) if status.success() => Ok(()),
+        Ok(_) => Err("Vault platform credential reconciliation failed".to_owned()),
         Err(error) => Err(error),
     }
 }

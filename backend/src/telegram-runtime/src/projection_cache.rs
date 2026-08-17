@@ -173,6 +173,31 @@ impl TelegramRuntimeProjectionCache {
         self.messages.insert(message.message_id.clone(), message);
     }
 
+    pub fn update_sender_display_name(
+        &mut self,
+        account_id: &str,
+        provider_chat_id: &str,
+        provider_sender_id: &str,
+        display_name: &str,
+    ) -> usize {
+        let mut updated = 0;
+        for message in self.messages.values_mut().filter(|message| {
+            message.account_id == account_id
+                && message.provider_chat_id == provider_chat_id
+                && message.sender_id == provider_sender_id
+                && message.sender_display_name.as_deref().is_none_or(|name| {
+                    matches!(
+                        name.trim(),
+                        "" | "Telegram user" | "Telegram chat" | "Telegram participant"
+                    )
+                })
+        }) {
+            message.sender_display_name = Some(display_name.to_owned());
+            updated += 1;
+        }
+        updated
+    }
+
     pub fn apply_message_text_edit(&mut self, message_id: &str, text: &str) -> bool {
         let Some(message) = self.messages.get_mut(message_id) else {
             return false;
@@ -665,6 +690,17 @@ impl TelegramRuntimeProjectionCache {
         }) {
             attachment.state = state;
             attachment.size_bytes = file.size_bytes.or(file.downloaded_size_bytes);
+            attachment.blob_ref = file.blob_reference_id.as_ref().and_then(|reference_id| {
+                (reference_id.len() == 16).then(|| {
+                    format!(
+                        "blob-content:{}",
+                        reference_id
+                            .iter()
+                            .map(|byte| format!("{byte:02x}"))
+                            .collect::<String>()
+                    )
+                })
+            });
             updated += 1;
         }
         updated
@@ -984,6 +1020,9 @@ mod tests {
                 downloaded_size_bytes: Some(42),
                 is_downloading: false,
                 is_downloaded: true,
+                blob_reference_id: None,
+                blob_plaintext_sha256: None,
+                blob_backup_class: None,
             },
         );
         assert_eq!(updated, 1);
@@ -1020,5 +1059,55 @@ mod tests {
         assert_eq!(reactions.len(), 1);
         assert_eq!(reactions[0].sender_id, "user-1");
         assert_eq!(reactions[0].emoji, ":thumbsup:");
+    }
+
+    #[test]
+    fn resolved_sender_name_updates_only_matching_generic_cached_messages() {
+        let mut persistence = TelegramRuntimeProjectionCache::new();
+        for (message_id, chat_id, sender_id, sender_name) in [
+            ("one", "chat", "42", Some("Telegram user")),
+            ("two", "chat", "42", None),
+            ("three", "other-chat", "42", Some("Telegram user")),
+            ("four", "chat", "7", Some("Known sender")),
+        ] {
+            persistence.put_message(TelegramMessageProjection {
+                message_id: message_id.to_owned(),
+                account_id: "account".to_owned(),
+                provider_chat_id: chat_id.to_owned(),
+                provider_message_id: message_id.to_owned(),
+                provider_topic_id: None,
+                sender_id: sender_id.to_owned(),
+                sender_display_name: sender_name.map(ToOwned::to_owned),
+                sender_source_identity: None,
+                text: None,
+                media: None,
+                references: TelegramMessageReferences::default(),
+                observed_at_unix_seconds: 0,
+                delivery_state: TelegramDeliveryState::Received,
+            });
+        }
+
+        assert_eq!(
+            persistence.update_sender_display_name("account", "chat", "42", "Resolved sender"),
+            2
+        );
+        assert_eq!(
+            persistence
+                .message("one")
+                .and_then(|message| message.sender_display_name.as_deref()),
+            Some("Resolved sender")
+        );
+        assert_eq!(
+            persistence
+                .message("three")
+                .and_then(|message| message.sender_display_name.as_deref()),
+            Some("Telegram user")
+        );
+        assert_eq!(
+            persistence
+                .message("four")
+                .and_then(|message| message.sender_display_name.as_deref()),
+            Some("Known sender")
+        );
     }
 }

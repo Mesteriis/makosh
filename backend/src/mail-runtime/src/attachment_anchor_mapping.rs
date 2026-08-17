@@ -83,17 +83,39 @@ pub async fn consume_next_attachment_anchor_recorded_v1(
     let delivery = receive_runtime_pull_delivery(connection, permit)
         .await
         .map_err(|_| MailAttachmentAnchorMappingErrorV1::Unavailable)?;
-    let outcome = map_attachment_anchor_recorded_v1(
+    let outcome = match map_attachment_anchor_recorded_v1(
         durable,
         delivery.exact_bytes(),
         consumed_at_unix_seconds,
     )
-    .await?;
+    .await
+    {
+        Ok(outcome) => outcome,
+        Err(error) => {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                if error == MailAttachmentAnchorMappingErrorV1::SourceObservationMismatch {
+                    eprintln!("developer_mail_attachment_anchor_ignored=foreign_source");
+                }
+            }
+            terminal_mapping_outcome(error)?
+        }
+    };
     delivery
         .acknowledge()
         .await
         .map_err(|_| MailAttachmentAnchorMappingErrorV1::Unavailable)?;
     Ok(outcome)
+}
+
+fn terminal_mapping_outcome(
+    error: MailAttachmentAnchorMappingErrorV1,
+) -> Result<MailAttachmentAnchorMappingOutcomeV1, MailAttachmentAnchorMappingErrorV1> {
+    match error {
+        MailAttachmentAnchorMappingErrorV1::SourceObservationMismatch => {
+            Ok(MailAttachmentAnchorMappingOutcomeV1::IgnoredForeignSource)
+        }
+        error => Err(error),
+    }
 }
 
 fn decode_handoff(
@@ -216,6 +238,18 @@ mod tests {
         assert_eq!(
             decode_handoff(&envelope),
             Err(MailAttachmentAnchorMappingErrorV1::InvalidPayload)
+        );
+    }
+
+    #[test]
+    fn foreign_source_is_terminal_on_the_shared_anchor_stream() {
+        assert_eq!(
+            terminal_mapping_outcome(MailAttachmentAnchorMappingErrorV1::SourceObservationMismatch,),
+            Ok(MailAttachmentAnchorMappingOutcomeV1::IgnoredForeignSource),
+        );
+        assert_eq!(
+            terminal_mapping_outcome(MailAttachmentAnchorMappingErrorV1::Unavailable),
+            Err(MailAttachmentAnchorMappingErrorV1::Unavailable),
         );
     }
 

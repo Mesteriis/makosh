@@ -4,7 +4,7 @@ use makosh_runtime_protocol::v1::{
     ContractReferenceV1, ModuleClientRequestV1, ModuleClientResponseV1,
 };
 use makosh_telegram_api::{
-    MAX_PAGE_SIZE, TelegramClientRequest, TelegramClientResponse,
+    MAX_PAGE_SIZE, TelegramClientRequest, TelegramClientResponse, TelegramMediaKind,
     client_contract::{
         TELEGRAM_CLIENT_CONTRACT_MAJOR, TELEGRAM_CLIENT_CONTRACT_REVISION,
         TELEGRAM_CLIENT_DESCRIPTOR_SET_V1, TELEGRAM_MODULE_ID, TELEGRAM_OWNER_ID,
@@ -18,6 +18,16 @@ use prost::Message;
 use sha2::{Digest, Sha256};
 
 use crate::{TelegramDurableLifecycleError, TelegramRuntime};
+
+const LEGACY_MESSAGE_REPAIR_SCAN_LIMIT: i64 = 500;
+const LEGACY_MESSAGE_REPAIR_BATCH_LIMIT: usize = 16;
+
+fn message_requires_provider_content_repair(
+    text: Option<&str>,
+    video_preview_metadata_loaded: Option<bool>,
+) -> bool {
+    text.is_none_or(|value| value.trim().is_empty()) || video_preview_metadata_loaded == Some(false)
+}
 
 #[derive(Debug)]
 pub enum TelegramClientPortError {
@@ -671,6 +681,8 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
                         .await
                         .map_err(TelegramClientPortError::Persistence)?;
                 }
+                self.repair_legacy_message_content(durable, &account_id, &provider_chat_id)
+                    .await?;
                 TelegramClientResponse::Query(
                     makosh_telegram_api::TelegramProviderQueryResponse::HistoryPage(page),
                 )
@@ -862,6 +874,68 @@ impl<'a, T: TdlibTransport> TelegramClientPort<'a, T> {
         encode_module_response(contract, request_id, &response)
     }
 
+    async fn repair_legacy_message_content(
+        &mut self,
+        durable: &TelegramDurablePersistence,
+        account_id: &str,
+        provider_chat_id: &str,
+    ) -> Result<(), TelegramClientPortError> {
+        let candidates = durable
+            .list_messages(
+                account_id,
+                provider_chat_id,
+                LEGACY_MESSAGE_REPAIR_SCAN_LIMIT,
+            )
+            .await
+            .map_err(TelegramClientPortError::Persistence)?;
+        let candidates = candidates
+            .into_iter()
+            .filter(|message| {
+                message_requires_provider_content_repair(
+                    message.text.as_deref(),
+                    message
+                        .media
+                        .as_ref()
+                        .filter(|media| media.kind == TelegramMediaKind::Video)
+                        .map(|media| media.preview_metadata_loaded),
+                )
+            })
+            .take(LEGACY_MESSAGE_REPAIR_BATCH_LIMIT)
+            .collect::<Vec<_>>();
+        let requested = candidates.len();
+        let mut repaired = 0_usize;
+        let mut unavailable = 0_usize;
+        for candidate in candidates {
+            let observation = match self.runtime.load_message(
+                account_id,
+                provider_chat_id,
+                &candidate.provider_message_id,
+            ) {
+                Ok(observation) => observation,
+                Err(_) => {
+                    unavailable += 1;
+                    continue;
+                }
+            };
+            let projection = project_message(&observation).map_err(|_| {
+                TelegramClientPortError::Protocol(
+                    "Telegram repaired message projection is invalid".to_owned(),
+                )
+            })?;
+            durable
+                .upsert_message(&projection)
+                .await
+                .map_err(TelegramClientPortError::Persistence)?;
+            repaired += 1;
+        }
+        if requested > 0 && std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+            eprintln!(
+                "developer_telegram_history_repair requested={requested} repaired={repaired} unavailable={unavailable}"
+            );
+        }
+        Ok(())
+    }
+
     pub async fn replay_durable(
         &self,
         durable: &TelegramDurablePersistence,
@@ -943,6 +1017,20 @@ mod tests {
     }
 
     #[test]
+    fn legacy_message_repair_targets_contentless_or_unmigrated_video_projections() {
+        assert!(message_requires_provider_content_repair(None, None));
+        assert!(message_requires_provider_content_repair(Some("  "), None));
+        assert!(message_requires_provider_content_repair(
+            Some("Video"),
+            Some(false)
+        ));
+        assert!(!message_requires_provider_content_repair(
+            Some("message body"),
+            Some(true)
+        ));
+    }
+
+    #[test]
     fn query_request_uses_exact_route_contract_and_schema_digest() {
         let encoded = encode_module_request(41, &load_chats_request()).expect("encode query");
         let envelope = ModuleClientRequestV1::decode(encoded.as_slice()).expect("decode envelope");
@@ -951,7 +1039,7 @@ mod tests {
         assert_eq!(contract.owner, "telegram");
         assert_eq!(contract.name, "telegram.query.v1");
         assert_eq!(contract.major, 1);
-        assert_eq!(contract.revision, 6);
+        assert_eq!(contract.revision, TELEGRAM_CLIENT_CONTRACT_REVISION);
         assert_eq!(contract.schema_sha256.len(), 32);
     }
 

@@ -65,6 +65,8 @@ describe('Telegram operational active route boundary', () => {
 			expect(source).not.toMatch(/integrations\/(mail|whatsapp|zulip)/)
 		}
 		expect(gateway).toContain('getTelegramOperationalConnectClient')
+		expect(controller).not.toContain('setInterval')
+		expect(controller).not.toContain('replayTelegramRealtime')
 		expect(authorizationGateway).toContain('getTelegramAuthorizationConnectClient')
 		expect(lifecycleGateway).toContain('getTelegramLifecycleConnectClient')
 		expect(lifecycleGateway).toContain('getTelegramReconfigurationConnectClient')
@@ -115,6 +117,7 @@ describe('Telegram operational active route boundary', () => {
 		expect(appLayout).toContain("'telegram.reconfiguration.v1'")
 		expect(appLayout).toContain("'telegram.query.v1'")
 		expect(appLayout).toContain("'telegram.command.v1'")
+		expect(appLayout).toContain("'telegram.operational.realtime.shared.v1'")
 		expect(capabilityComposition).toContain('module.sectionsEnabled')
 		expect(compiledAdapters).toContain("'telegram-integration'")
 		expect(toolbarPresentation).toContain("@click=\"emit('compose')\"")
@@ -122,6 +125,12 @@ describe('Telegram operational active route boundary', () => {
 		expect(newMessagePresentation).toContain('<ChatInput')
 		expect(newMessagePresentation).toContain("emit('selectChat'")
 		expect(accountPresentation).toContain("model.authorizationState === 'waiting_password'")
+		const laneReconciliation = route.slice(
+			route.indexOf('async function reconcileOperationalLane'),
+			route.indexOf('async function refreshAccounts'),
+		)
+		expect(laneReconciliation.indexOf('surface.updateAccountId(accountModel.selectedAccountId)'))
+			.toBeLessThan(laneReconciliation.indexOf('if (nextLaneStateKey === operationalLaneStateKey) return'))
 	})
 })
 

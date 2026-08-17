@@ -4,14 +4,15 @@ import { existsSync, readFileSync } from 'node:fs'
 type WizardStoryExpectation = {
 	fileName: string
 	storyTitle: string
-	modelKey: string
+	modelKey?: string
+	componentName?: string
 }
 
 const wizardStories: readonly WizardStoryExpectation[] = [
 	{
 		fileName: 'GmailWizard.stories.ts',
 		storyTitle: 'Макошь App/Wizard/Gmail',
-		modelKey: 'gmail'
+		componentName: 'GmailOAuthSetupView'
 	},
 	{
 		fileName: 'ICloudMailWizard.stories.ts',
@@ -21,12 +22,12 @@ const wizardStories: readonly WizardStoryExpectation[] = [
 	{
 		fileName: 'TelegramWizard.stories.ts',
 		storyTitle: 'Макошь App/Wizard/Telegram',
-		modelKey: 'telegram'
+		componentName: 'TelegramQrPairingView'
 	},
 	{
 		fileName: 'WhatsAppWizard.stories.ts',
 		storyTitle: 'Макошь App/Wizard/WhatsApp',
-		modelKey: 'whatsapp'
+		componentName: 'WhatsAppPairingView'
 	},
 	{
 		fileName: 'AIProviderWizard.stories.ts',
@@ -43,16 +44,25 @@ describe('Макошь App wizard Storybook coverage', () => {
 
 			const source = readFileSync(storyUrl, 'utf8')
 			expect(source).toContain(`title: '${story.storyTitle}'`)
-			expect(source).toContain(`wizardStoryModels.${story.modelKey}`)
-			expect(source).toContain('createWizardStory')
+			if (story.modelKey) {
+				expect(source).toContain(`wizardStoryModels.${story.modelKey}`)
+				expect(source).toContain('createWizardStory')
+			} else {
+				expect(story.componentName).toBeTruthy()
+				expect(source).toContain(story.componentName!)
+			}
 		}
 	})
 
 	it('keeps wizard stories as Storybook fixtures without domain runtime imports', () => {
+		const genericWizardStories = wizardStories.filter((story) => story.modelKey)
 		const storySources = [
 			readFileSync(new URL('./wizardStory.ts', import.meta.url), 'utf8'),
-			...wizardStories.map((story) => readFileSync(new URL(`./${story.fileName}`, import.meta.url), 'utf8'))
+			...genericWizardStories.map((story) => readFileSync(new URL(`./${story.fileName}`, import.meta.url), 'utf8'))
 		].join('\n')
+		const telegramStory = readFileSync(new URL('./TelegramWizard.stories.ts', import.meta.url), 'utf8')
+		const gmailStory = readFileSync(new URL('./GmailWizard.stories.ts', import.meta.url), 'utf8')
+		const whatsappStory = readFileSync(new URL('./WhatsAppWizard.stories.ts', import.meta.url), 'utf8')
 
 		expect(storySources).toContain('Steps')
 		expect(storySources).toContain('Мастер подключения')
@@ -80,5 +90,18 @@ describe('Макошь App wizard Storybook coverage', () => {
 		expect(storySources).not.toContain('/queries/')
 		expect(storySources).not.toContain('@/domains/')
 		expect(storySources).not.toContain('@/integrations/')
+		expect(telegramStory).toContain("../../src/integrations/telegram/presentation/TelegramQrPairingView.vue")
+		expect(telegramStory).toContain('Telegram authorization QR code')
+		expect(telegramStory).toContain("state: 'waiting_qr_scan'")
+		expect(telegramStory).toContain("state: 'waiting_password'")
+		expect(telegramStory).not.toMatch(/phone|SMS|bot token/i)
+		expect(gmailStory).toContain('GmailOAuthSetupView')
+		expect(gmailStory).toContain("stage: 'configuration'")
+		expect(gmailStory).toContain("stage: 'authorization'")
+		expect(gmailStory).toContain('Continue with Google OAuth')
+		expect(whatsappStory).toContain('WhatsAppPairingView')
+		expect(whatsappStory).toContain('WhatsApp QR pairing')
+		expect(whatsappStory).toContain('Open WhatsApp QR')
+		expect(whatsappStory).not.toMatch(/device name|account name/i)
 	})
 })

@@ -160,7 +160,7 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   assert.match(wire, /encode_composition_command/);
   assert.match(wire, /decode_composition_query_response/);
   assert.match(wire, /encode_composition_command\(&command\)\?\s*!= bytes/);
-  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 14/);
+  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 15/);
   assert.match(contract, /mail\.composition\.command\.v1/);
   assert.match(contract, /mail\.composition\.query\.v1/);
 
@@ -210,7 +210,7 @@ test('Mail composition is owner-local, independently admitted and cut over throu
   assert.match(frontendDrafts, /upsertMailDraft/);
   assert.match(frontendTemplates, /previewMailTemplate/);
   assert.match(frontendSignatures, /upsertMailSignature/);
-  assert.match(frontendPanel, /Drafts, templates/);
+  assert.match(frontendPanel, /Templates and signatures/);
   assert.match(frontendRoute, /useMailComposition/);
   assert.match(frontendLayout, /mail\.composition\.command\.v1/);
   assert.match(frontendLayout, /mail\.composition\.query\.v1/);

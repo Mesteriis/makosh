@@ -217,9 +217,6 @@ impl ReviewedPersonMatchCandidatePromotionManagedRuntimeV1 {
                 .map_err(ReviewedPersonMatchCandidatePromotionManagedRuntimeErrorV1::Persistence)?;
             progressed = true;
         }
-        if !progressed {
-            tokio::select! {biased; control=wait_for_control(&mut self.control)=>return control, ()=tokio::time::sleep(std::time::Duration::from_millis(25))=>{}}
-        }
         Ok(progressed)
     }
 

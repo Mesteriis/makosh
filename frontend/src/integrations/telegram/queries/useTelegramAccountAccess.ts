@@ -7,6 +7,10 @@ import {
 } from '../api/telegramAuthorizationGateway'
 import type { TelegramAuthorizationStatus } from '../api/telegramAuthorizationGateway'
 import {
+	openTelegramAuthorizationRealtime,
+	type TelegramAuthorizationRealtimeBinding,
+} from '../api/telegramAuthorizationRealtime'
+import {
 	listTelegramAccounts,
 	provisionTelegramAccount,
 	replayTelegramAccount,
@@ -16,6 +20,7 @@ import {
 import {
 	authorizationView,
 	buildTelegramAccountRows,
+	isTelegramAccountOperational,
 } from '../presentation/telegramAccountAccessModel'
 import type { TelegramAccountAccessModel } from '../presentation/telegramAccountAccessModel'
 import { telegramQrDataUrl } from '../linking/telegramQrArtifact'
@@ -35,12 +40,21 @@ export function useTelegramAccountAccess(capabilities: {
 	const provisionExternalAccountId = ref('')
 	const statusMessage = ref('')
 	const pending = ref(false)
+	let authorizationRealtime: TelegramAuthorizationRealtimeBinding | undefined
 
 	const model = computed<TelegramAccountAccessModel>(() => {
 		const authorizationState = authorizationView(authorization.value)
 		return {
-			accounts: buildTelegramAccountRows(accounts.value, selectedAccountId.value),
+			accounts: buildTelegramAccountRows(
+				accounts.value,
+				selectedAccountId.value,
+				authorizationState.state,
+			),
 			selectedAccountId: selectedAccountId.value,
+			selectedAccountOperational: isTelegramAccountOperational(
+				accounts.value,
+				selectedAccountId.value,
+			),
 			authorizationState: authorizationState.state,
 			authorizationQrDataUrl: authorizationQrDataUrl.value,
 			authorizationPasswordHint: authorizationState.passwordHint,
@@ -59,28 +73,71 @@ export function useTelegramAccountAccess(capabilities: {
 	async function refresh(): Promise<void> {
 		pending.value = true
 		statusMessage.value = ''
-		try {
-			const [nextAccounts, nextAuthorization] = await Promise.all([
-				capabilities.canManageLifecycle() ? listTelegramAccounts() : Promise.resolve([]),
-				capabilities.canAuthorize() ? getTelegramAuthorizationStatus() : Promise.resolve(null),
-			])
-			accounts.value = nextAccounts
-			authorization.value = nextAuthorization
-			authorizationQrDataUrl.value = nextAuthorization?.qrLink
-				? await telegramQrDataUrl(nextAuthorization.qrLink)
-				: ''
-			if (!selectedAccountId.value && nextAccounts[0]) {
-				selectedAccountId.value = nextAccounts[0].accountId
+		let accountError: unknown
+		let authorizationError: unknown
+		if (capabilities.canManageLifecycle()) {
+			try {
+				const nextAccounts = await listTelegramAccounts()
+				accounts.value = nextAccounts
+				if (!selectedAccountId.value && nextAccounts[0]) {
+					selectedAccountId.value = nextAccounts[0].accountId
+				}
+			} catch (error) {
+				accountError = error
 			}
-			statusMessage.value = nextAccounts.length === 0
-				? 'No Telegram accounts are provisioned.'
-				: `${nextAccounts.length} Telegram account${nextAccounts.length === 1 ? '' : 's'} available.`
-		} catch (error) {
-			authorizationQrDataUrl.value = ''
-			statusMessage.value = message(error, 'Telegram account access is unavailable.')
-		} finally {
-			pending.value = false
+		} else {
+			accounts.value = []
 		}
+		if (capabilities.canAuthorize()) {
+			ensureAuthorizationRealtime()
+			try {
+				const nextAuthorization = await getTelegramAuthorizationStatus()
+				authorization.value = nextAuthorization
+				authorizationQrDataUrl.value = nextAuthorization.qrLink
+					? await telegramQrDataUrl(nextAuthorization.qrLink)
+					: ''
+			} catch (error) {
+				authorization.value = null
+				authorizationQrDataUrl.value = ''
+				authorizationError = error
+			}
+		} else {
+			authorization.value = null
+			authorizationQrDataUrl.value = ''
+		}
+		if (accountError) {
+			statusMessage.value = message(accountError, 'Telegram account access is unavailable.')
+		} else if (authorizationError) {
+			statusMessage.value = accounts.value.length > 0
+				? 'Telegram account loaded; authorization status is temporarily unavailable.'
+				: message(authorizationError, 'Telegram authorization status is unavailable.')
+		} else {
+			statusMessage.value = accounts.value.length === 0
+				? 'No Telegram accounts are provisioned.'
+				: `${accounts.value.length} Telegram account${accounts.value.length === 1 ? '' : 's'} available. Authorization: ${authorization.value?.state || 'unknown'}.`
+		}
+		pending.value = false
+	}
+
+	function ensureAuthorizationRealtime(): void {
+		if (authorizationRealtime) return
+		authorizationRealtime = openTelegramAuthorizationRealtime(
+			(state) => {
+			authorization.value = {
+					...authorization.value,
+					state,
+					qrLink: state === 'waiting_qr_scan' ? authorization.value?.qrLink : undefined,
+					passwordHint: state === 'waiting_password'
+						? authorization.value?.passwordHint
+						: undefined,
+				}
+				if (state !== 'waiting_qr_scan') authorizationQrDataUrl.value = ''
+				statusMessage.value = `Telegram authorization: ${state}.`
+			},
+			() => {
+				statusMessage.value = 'Telegram authorization realtime is recovering.'
+			},
+		)
 	}
 
 	async function provision(): Promise<void> {
@@ -207,6 +264,8 @@ export function useTelegramAccountAccess(capabilities: {
 	}
 
 	onBeforeUnmount(() => {
+		authorizationRealtime?.close()
+		authorizationRealtime = undefined
 		authorizationQrDataUrl.value = ''
 		password.value = ''
 	})

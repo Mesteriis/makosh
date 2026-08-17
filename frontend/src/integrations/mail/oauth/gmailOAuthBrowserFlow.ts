@@ -69,7 +69,7 @@ export async function runGmailOAuthBrowserFlowV1(
 	environment: GmailOAuthBrowserEnvironmentV1 = defaultBrowserEnvironmentV1(),
 ): Promise<GmailOAuthBrowserResultV1> {
 	const redirectUri = gmailOAuthLoopbackRedirectUriV1(environment.location.origin)
-	const expectedState = validateAuthorizationUrlV1(authorizationUrl, redirectUri)
+	const expectedState = validateGmailOAuthAuthorizationUrlV1(authorizationUrl, redirectUri)
 	const channel = environment.createChannel(callbackChannelNameV1(expectedState))
 	let popup: GmailOAuthPopupV1 | null = null
 	let timer: unknown
@@ -106,11 +106,22 @@ export async function runGmailOAuthBrowserFlowV1(
 			() => finish(undefined, new Error('gmail_oauth_callback_timeout')),
 			GMAIL_OAUTH_TIMEOUT_MILLIS_V1,
 		)
-		popup = environment.open(
-			authorizationUrl,
-			'makosh-gmail-oauth',
-			'popup,width=720,height=760,resizable=yes,scrollbars=yes',
-		)
+		try {
+			popup = environment.open(
+				authorizationUrl,
+				'makosh-gmail-oauth',
+				'popup,width=720,height=760,resizable=yes,scrollbars=yes',
+			)
+		} catch {
+			popup = null
+		}
+		if (!popup) {
+			try {
+				popup = environment.open(authorizationUrl, '_blank', '')
+			} catch {
+				popup = null
+			}
+		}
 		if (!popup) finish(undefined, new Error('gmail_oauth_popup_blocked'))
 	})
 }
@@ -119,7 +130,7 @@ export function completeGmailOAuthBrowserCallbackV1(
 	environment: GmailOAuthBrowserEnvironmentV1 = defaultBrowserEnvironmentV1(),
 ): GmailOAuthCallbackPageStateV1 {
 	if (environment.location.pathname !== GMAIL_OAUTH_CALLBACK_PATH_V1) return 'not_callback'
-	const callback = callbackMessageFromSearchV1(environment.location.search)
+	const callback = gmailOAuthCallbackFromSearchV1(environment.location.search)
 	environment.history.replaceState(null, '', GMAIL_OAUTH_CALLBACK_PATH_V1)
 	if (!callback.message.state) return callback.pageState
 	const channel = environment.createChannel(callbackChannelNameV1(callback.message.state))
@@ -145,11 +156,17 @@ export function mountGmailOAuthCallbackPageV1(state: Exclude<
 	message.textContent = state === 'accepted'
 		? 'Return to Макошь. This window can now be closed.'
 		: 'Return to Макошь and start a new OAuth attempt.'
-	main.append(heading, message)
+	const returnLink = document.createElement('a')
+	returnLink.href = '/'
+	returnLink.textContent = 'Return to Макошь'
+	main.append(heading, message, returnLink)
 	document.querySelector('#app')?.replaceChildren(main)
 }
 
-function validateAuthorizationUrlV1(authorizationUrl: string, redirectUri: string): string {
+export function validateGmailOAuthAuthorizationUrlV1(
+	authorizationUrl: string,
+	redirectUri: string,
+): string {
 	if (!boundedAsciiV1(authorizationUrl, MAX_GMAIL_OAUTH_URL_BYTES_V1)) {
 		throw new Error('gmail_oauth_authorization_url_invalid')
 	}
@@ -187,7 +204,7 @@ function validateAuthorizationUrlV1(authorizationUrl: string, redirectUri: strin
 	return state
 }
 
-function callbackMessageFromSearchV1(search: string): {
+export function gmailOAuthCallbackFromSearchV1(search: string): {
 	message: GmailOAuthCallbackMessageV1
 	pageState: Exclude<GmailOAuthCallbackPageStateV1, 'not_callback'>
 } {

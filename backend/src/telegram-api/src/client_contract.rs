@@ -3,13 +3,17 @@
 pub const TELEGRAM_CLIENT_DESCRIPTOR_SET_V1: &[u8] =
     include_bytes!(concat!(env!("OUT_DIR"), "/makosh.telegram.v1.bin"));
 pub const TELEGRAM_CLIENT_CONTRACT_MAJOR: u32 = 1;
-pub const TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 6;
+pub const TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 9;
 pub const TELEGRAM_MODULE_ID: &str = "makosh-telegram-runtime";
 pub const TELEGRAM_OWNER_ID: &str = "telegram";
 pub const TELEGRAM_AUTHORIZATION_REALTIME_CAPABILITY_ID_V1: &str =
     "telegram.authorization.realtime.v1";
 pub const TELEGRAM_AUTHORIZATION_STATUS_CHANGED_CONTRACT_NAME_V1: &str =
     "telegram.authorization.status_changed.v1";
+pub const TELEGRAM_OPERATIONAL_REALTIME_CAPABILITY_ID_V1: &str =
+    "telegram.operational.realtime.shared.v1";
+pub const TELEGRAM_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1: &str =
+    "telegram.operational.projection_changed.v1";
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum TelegramClientContractV1 {

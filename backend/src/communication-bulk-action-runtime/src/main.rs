@@ -16,6 +16,7 @@ use makosh_communication_bulk_action_runtime::{
     },
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -113,6 +114,9 @@ where
             storage,
         ))
         .map_err(runtime_error)?;
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Bulk Delivery runtime polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -120,20 +124,25 @@ where
             .as_secs()
             .try_into()
             .map_err(|_| "Bulk Delivery clock is invalid".to_owned())?;
-        executor
+        let mut progressed = executor
             .block_on(runtime.pump_control_once(now))
             .map_err(runtime_error)?;
-        match executor.block_on(runtime.process_next_target(&worker_id, now)) {
-            Ok(_) | Err(BulkDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(BulkDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
+        progressed |= match executor.block_on(runtime.process_next_target(&worker_id, now)) {
+            Ok(progressed) => progressed,
+            Err(BulkDeliveryManagedRuntimeErrorV1::Unavailable)
+            | Err(BulkDeliveryManagedRuntimeErrorV1::Persistence(_)) => false,
             Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.pump_client_realtime_once()) {
-            Ok(_) | Err(BulkDeliveryManagedRuntimeErrorV1::Unavailable) => {}
-            Err(BulkDeliveryManagedRuntimeErrorV1::Persistence(_)) => {}
+        };
+        progressed |= match executor.block_on(runtime.pump_client_realtime_once()) {
+            Ok(progressed) => progressed,
+            Err(BulkDeliveryManagedRuntimeErrorV1::Unavailable)
+            | Err(BulkDeliveryManagedRuntimeErrorV1::Persistence(_)) => false,
             Err(error) => return Err(runtime_error(error)),
+        };
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
         }
-        std::thread::sleep(Duration::from_millis(25));
     }
 }
 

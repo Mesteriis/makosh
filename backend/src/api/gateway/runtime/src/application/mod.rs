@@ -275,7 +275,7 @@ where
         if let Some(router) = self
             .client_blob_routes
             .iter()
-            .find(|router| router.path() == path)
+            .find(|router| router.admits_path(path))
         {
             return router.route(request).await;
         }
@@ -375,7 +375,12 @@ where
         path if path.starts_with(PAIRING_PREFIX) => "browser_pairing",
         path if OwnerVaultProvisioningRouter::<A>::admits_path(path) => "owner_vault_provisioning",
         path if OwnerModuleSettingsRouter::<A>::admits_path(path) => "owner_module_settings",
-        path if client_blob_routes.iter().any(|route| route.path() == path) => "client_blob",
+        path if client_blob_routes
+            .iter()
+            .any(|route| route.admits_path(path)) =>
+        {
+            "client_blob"
+        }
         path if client_rpc_routes.iter().any(|route| route.path() == path) => "client_rpc",
         _ => "unknown",
     }

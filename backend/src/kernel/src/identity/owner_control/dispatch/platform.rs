@@ -376,10 +376,6 @@ fn get_managed_storage_binding_status(
     (|| {
         sessions.authorize(store, &request.owner_session_id)?;
         store
-            .effective_bundled_managed_launch_binding(&request.registration_id)
-            .map_err(|_| "Managed launch binding status is unavailable".to_owned())?
-            .ok_or_else(|| "Managed launch binding status is unavailable".to_owned())?;
-        store
             .platform_storage_binding(&request.registration_id, &request.capability_id)
             .map_err(|_| "Storage binding status is unavailable".to_owned())?
             .ok_or_else(|| "Storage binding status is unavailable".to_owned())
@@ -396,6 +392,11 @@ fn get_managed_storage_binding_status(
                 PlatformStorageBindingStateV1::Revoking => "revoking",
             }
             .to_owned(),
+            runtime_instance_id: binding.runtime_instance_id().to_owned(),
+            runtime_generation: binding.runtime_generation(),
+            grant_epoch: binding.grant_epoch(),
+            storage_bundle_revision: binding.storage_bundle_revision(),
+            storage_bundle_digest: binding.storage_bundle_digest().to_vec(),
         })
     })
 }

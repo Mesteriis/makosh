@@ -1,6 +1,7 @@
 //! Runtime lifecycle and recovery Protobuf contract.
 
 pub mod managed_control;
+pub mod managed_runtime_poll;
 pub mod platform_control;
 pub mod validation;
 pub mod vault_request_id;

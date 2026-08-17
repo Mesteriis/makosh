@@ -1313,7 +1313,7 @@ test('signs distinct task note Persons and Mail-Persons runtime and Storage entr
         package: 'makosh-review-obligation-candidate-assembly',
         runtimeName: 'makosh-review-obligation-candidate-runtime',
         fragmentName: 'review-obligation-candidate.release-artifacts.json',
-        owner: 'review',
+        owner: 'review_obligation_candidate',
         ids: ['review.obligation-candidate.runtime.v1', 'review.obligation-candidate.storage.v1'],
       },
       {

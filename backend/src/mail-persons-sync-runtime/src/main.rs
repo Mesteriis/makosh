@@ -17,6 +17,7 @@ use makosh_mail_persons_sync_runtime::{
     mail_persons_sync_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::{
@@ -105,6 +106,11 @@ where
         ))
         .map_err(runtime_error)?;
     let mut retry_backoff = RuntimeRetryBackoffV1::default();
+    let mut poll_backoff = ManagedRuntimePollBackoffV1::new(
+        std::time::Duration::from_millis(25),
+        std::time::Duration::from_millis(100),
+    )
+    .map_err(|_| "Mail Persons Sync polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -116,7 +122,16 @@ where
             &mut retry_backoff,
             executor.block_on(runtime.service_once(now)),
         )? {
-            RetryActionV1::Continue => {}
+            RetryActionV1::Continue(progressed) => {
+                let delay = poll_backoff.observe(progressed);
+                if !delay.is_zero()
+                    && !executor
+                        .block_on(runtime.wait_retry_delay(delay))
+                        .map_err(runtime_error)?
+                {
+                    return Ok(());
+                }
+            }
             RetryActionV1::Stop => return Ok(()),
             RetryActionV1::Wait(delay) => {
                 if !executor
@@ -132,7 +147,7 @@ where
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RetryActionV1 {
-    Continue,
+    Continue(bool),
     Wait(std::time::Duration),
     Stop,
 }
@@ -147,9 +162,9 @@ fn retry_action_v1(
     result: Result<bool, MailPersonsSyncManagedRuntimeErrorV1>,
 ) -> Result<RetryActionV1, String> {
     match result {
-        Ok(_) => {
+        Ok(progressed) => {
             backoff.consecutive_failures = 0;
-            Ok(RetryActionV1::Continue)
+            Ok(RetryActionV1::Continue(progressed))
         }
         Err(MailPersonsSyncManagedRuntimeErrorV1::EventUnavailable)
         | Err(MailPersonsSyncManagedRuntimeErrorV1::Persistence(
@@ -373,7 +388,11 @@ mod tests {
         );
         assert_eq!(
             retry_action_v1(&mut backoff, Ok(true)),
-            Ok(RetryActionV1::Continue)
+            Ok(RetryActionV1::Continue(true))
+        );
+        assert_eq!(
+            retry_action_v1(&mut backoff, Ok(false)),
+            Ok(RetryActionV1::Continue(false))
         );
         assert_eq!(
             retry_action_v1(&mut backoff, transient),

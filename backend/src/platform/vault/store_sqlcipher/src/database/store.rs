@@ -60,17 +60,7 @@ impl VaultStore {
         }
         let (instance_id, root) = vault_anchor::open_anchor(anchor_path, wrapping_key)
             .map_err(|_| VaultStoreError::Anchor)?;
-        let sqlcipher_key = root
-            .derive_sqlcipher_key(&instance_id)
-            .map_err(|_| VaultStoreError::Anchor)?;
-        let record_key = root
-            .derive_record_key(&instance_id, secret_record::CURRENT_KEY_EPOCH)
-            .map_err(|_| VaultStoreError::Anchor)?;
-        let mut connection = open_keyed_connection(&path, &sqlcipher_key)?;
-        configure(&connection)?;
-        migrate_schema(&mut connection)?;
-        validate_metadata(&connection, &instance_id)?;
-        Self::from_connection(path, instance_id, connection, record_key)
+        open_existing_store(path, instance_id, &root)
     }
 
     pub fn open_with_recovery(
@@ -86,17 +76,7 @@ impl VaultStore {
         let (instance_id, root) =
             vault_anchor::open_anchor_with_recovery(anchor_path, recovery_key)
                 .map_err(|_| VaultStoreError::Anchor)?;
-        let sqlcipher_key = root
-            .derive_sqlcipher_key(&instance_id)
-            .map_err(|_| VaultStoreError::Anchor)?;
-        let record_key = root
-            .derive_record_key(&instance_id, secret_record::CURRENT_KEY_EPOCH)
-            .map_err(|_| VaultStoreError::Anchor)?;
-        let mut connection = open_keyed_connection(&path, &sqlcipher_key)?;
-        configure(&connection)?;
-        migrate_schema(&mut connection)?;
-        validate_metadata(&connection, &instance_id)?;
-        Self::from_connection(path, instance_id, connection, record_key)
+        open_existing_store(path, instance_id, &root)
     }
 
     pub fn add_recovery_slot(
@@ -169,6 +149,13 @@ impl VaultStore {
         self.handle.store_secrets_atomically(secrets)
     }
 
+    pub fn reconcile_bootstrap_secrets_atomically(
+        &self,
+        secrets: Vec<(SecretRecordScope, Zeroizing<Vec<u8>>)>,
+    ) -> Result<Vec<SecretRecordId>, VaultStoreError> {
+        self.handle.reconcile_bootstrap_secrets_atomically(secrets)
+    }
+
     pub fn resolve_scoped_secret(
         &self,
         record_id: &SecretRecordId,
@@ -233,6 +220,56 @@ impl VaultStore {
     }
 }
 
+fn open_existing_store(
+    path: PathBuf,
+    instance_id: String,
+    root: &vault_anchor::VaultRootKey,
+) -> Result<VaultStore, VaultStoreError> {
+    let current_sqlcipher_key = root
+        .derive_sqlcipher_key(&instance_id)
+        .map_err(|_| VaultStoreError::Anchor)?;
+    let current_connection = open_keyed_connection(&path, &current_sqlcipher_key)?;
+    let (mut connection, record_key) = match validate_encrypted_connection(&current_connection) {
+        Ok(()) => {
+            let record_key = root
+                .derive_record_key(&instance_id, secret_record::CURRENT_KEY_EPOCH)
+                .map_err(|_| VaultStoreError::Anchor)?;
+            (current_connection, record_key)
+        }
+        Err(error) if is_not_a_database(&error) => {
+            drop(current_connection);
+            let legacy_sqlcipher_key = root
+                .derive_legacy_sqlcipher_key(&instance_id)
+                .map_err(|_| VaultStoreError::Anchor)?;
+            let legacy_connection = open_keyed_connection(&path, &legacy_sqlcipher_key)?;
+            validate_encrypted_connection(&legacy_connection)?;
+            let record_key = root
+                .derive_legacy_record_key(&instance_id, secret_record::CURRENT_KEY_EPOCH)
+                .map_err(|_| VaultStoreError::Anchor)?;
+            (legacy_connection, record_key)
+        }
+        Err(error) => return Err(error),
+    };
+    configure(&connection)?;
+    migrate_schema(&mut connection)?;
+    validate_metadata(&connection, &instance_id)?;
+    VaultStore::from_connection(path, instance_id, connection, record_key)
+}
+
+fn validate_encrypted_connection(connection: &Connection) -> Result<(), VaultStoreError> {
+    connection
+        .query_row("SELECT COUNT(*) FROM sqlite_master", [], |_| Ok(()))
+        .map_err(VaultStoreError::Sqlite)
+}
+
+fn is_not_a_database(error: &VaultStoreError) -> bool {
+    matches!(
+        error,
+        VaultStoreError::Sqlite(rusqlite::Error::SqliteFailure(sqlite, _))
+            if sqlite.code == rusqlite::ErrorCode::NotADatabase
+    )
+}
+
 fn initialize_database(
     path: &Path,
     instance_id: &str,
@@ -244,7 +281,16 @@ fn initialize_database(
     let record_key = root
         .derive_record_key(instance_id, secret_record::CURRENT_KEY_EPOCH)
         .map_err(|_| VaultStoreError::Anchor)?;
-    let connection = create_keyed_connection(path, &sqlcipher_key)?;
+    initialize_database_with_keys(path, instance_id, &sqlcipher_key, record_key)
+}
+
+fn initialize_database_with_keys(
+    path: &Path,
+    instance_id: &str,
+    sqlcipher_key: &[u8; 32],
+    record_key: Zeroizing<[u8; 32]>,
+) -> Result<VaultStore, VaultStoreError> {
+    let connection = create_keyed_connection(path, sqlcipher_key)?;
     configure(&connection)?;
     connection
         .execute_batch(
@@ -548,5 +594,68 @@ impl VaultStoreError {
     #[must_use]
     pub const fn is_record_not_found(&self) -> bool {
         matches!(self, Self::RecordNotFound)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::os::unix::fs::PermissionsExt;
+
+    use super::*;
+
+    struct TestDirectory(PathBuf);
+
+    impl TestDirectory {
+        fn create() -> Self {
+            for attempt in 0..16 {
+                let path = std::env::temp_dir().join(format!(
+                    "makosh-vault-legacy-derivation-{}-{attempt}",
+                    std::process::id()
+                ));
+                match std::fs::create_dir(&path) {
+                    Ok(()) => {
+                        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700))
+                            .expect("make test directory private");
+                        return Self(path);
+                    }
+                    Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+                    Err(error) => panic!("create test directory: {error}"),
+                }
+            }
+            panic!("create unique test directory")
+        }
+    }
+
+    impl Drop for TestDirectory {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+
+    #[test]
+    fn opens_store_created_with_legacy_key_derivation() {
+        let directory = TestDirectory::create();
+        let database = canonical_store_path(&directory.0.join("vault.db"))
+            .expect("canonical test database path");
+        let anchor = directory.0.join("vault.anchor");
+        let instance_id = "legacy-vault-instance";
+        let wrapping_key = WrappingKey::from_bytes([7; 32]);
+        let root = vault_anchor::create_anchor(&anchor, instance_id, &wrapping_key)
+            .expect("create anchor");
+        let sqlcipher_key = root
+            .derive_legacy_sqlcipher_key(instance_id)
+            .expect("legacy sqlcipher key");
+        let record_key = root
+            .derive_legacy_record_key(instance_id, secret_record::CURRENT_KEY_EPOCH)
+            .expect("legacy record key");
+        let legacy_store =
+            initialize_database_with_keys(&database, instance_id, &sqlcipher_key, record_key)
+                .expect("create legacy-derived store");
+        drop(legacy_store);
+
+        let reopened =
+            VaultStore::open(&database, &anchor, &wrapping_key).expect("open legacy-derived store");
+
+        assert_eq!(reopened.instance_id, instance_id);
     }
 }

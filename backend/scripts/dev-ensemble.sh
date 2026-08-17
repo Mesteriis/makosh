@@ -7,6 +7,8 @@ project_root="$(cd "$backend_root/.." && pwd)"
 frontend_root="$project_root/frontend"
 compose_file="$backend_root/development/authenticated/compose.yaml"
 legacy_compose_file="$backend_root/development/compose.yaml"
+authenticated_compose_project_name="${MAKOSH_DEV_AUTHENTICATED_COMPOSE_PROJECT_NAME:-makosh-storage-authenticated-development}"
+legacy_compose_project_name="makosh-platform-development"
 gateway_address="127.0.0.1:9444"
 gateway_target="http://$gateway_address"
 owner_vault_host_address="127.0.0.1:9445"
@@ -86,7 +88,7 @@ run_compose() {
 		MAKOSH_STORAGE_PGBOUNCER_DATABASES_DIRECTORY="$runtime_dir/storage/pgbouncer" \
 		MAKOSH_STORAGE_PGBOUNCER_AUTH_DIRECTORY="$runtime_dir/storage/pgbouncer/auth" \
 		MAKOSH_STORAGE_PGBOUNCER_RUNTIME_UID="$(id -u)" \
-		docker compose -f "$compose_file" "$@"
+		docker compose --project-name "$authenticated_compose_project_name" -f "$compose_file" "$@"
 }
 
 cleanup() {
@@ -260,10 +262,47 @@ runtime_dir="$("$development_assembly_bin" --data-dir "$data_dir" runtime-direct
 require_absolute_directory_path "development runtime directory" "$runtime_dir"
 
 printf '%s\n' 'Starting authenticated PostgreSQL, PgBouncer, NATS and ClamAV infrastructure...'
-if test -n "$(docker compose -f "$legacy_compose_file" ps --all --quiet 2>/dev/null)"; then
-	docker compose -f "$legacy_compose_file" down --remove-orphans >/dev/null 2>&1 || true
+if test -n "$(docker compose --project-name "$legacy_compose_project_name" -f "$legacy_compose_file" ps --all --quiet 2>/dev/null)"; then
+	docker compose --project-name "$legacy_compose_project_name" -f "$legacy_compose_file" down --remove-orphans >/dev/null 2>&1 || true
 fi
 run_compose up --detach --wait
+expected_postgres_hash="$(
+	tr -d '\r\n' < "$data_dir/developer-platform-credentials/postgres-admin-password" \
+		| sha256sum \
+		| awk '{print $1}'
+)"
+current_postgres_hash="$(
+	run_compose exec --no-TTY postgres sh -c "cat /run/secrets/storage_postgres_admin_password | tr -d '\r\n' | sha256sum | awk '{print \$1}'" \
+		|| true
+)"
+if ! test "$expected_postgres_hash" = "$current_postgres_hash"; then
+	run_compose up --detach --no-deps --force-recreate --wait postgres
+fi
+
+# PostgreSQL applies POSTGRES_PASSWORD_FILE only when its data directory is
+# created. Reconcile the fixed development admin role on every restart so a
+# preserved volume and the file-backed Vault bootstrap cannot silently drift.
+# The SQL reads the Docker secret inside the container; no credential is put in
+# host arguments, environment variables or logs.
+run_compose exec --no-TTY --user postgres postgres \
+	psql --no-psqlrc --set=ON_ERROR_STOP=1 --quiet \
+	--username makosh_postgres_admin \
+	--dbname makosh_storage_authenticated \
+	--file - \
+	< "$backend_root/development/authenticated/reconcile-postgres-admin.sql" \
+	>/dev/null \
+	|| fail "development PostgreSQL admin reconciliation failed"
+# A preserved provider database can outlive a development Storage instance
+# identity cutover. Advance only the owner-scope role prefix for the exact
+# enrolled development owner; provider data and human ownership are unchanged.
+run_compose exec --no-TTY --user postgres postgres \
+	psql --no-psqlrc --set=ON_ERROR_STOP=1 --quiet \
+	--username makosh_postgres_admin \
+	--dbname makosh_storage_authenticated \
+	--file - \
+	< "$backend_root/development/authenticated/reconcile-provider-owner-scopes.sql" \
+	>/dev/null \
+	|| fail "development provider owner-scope reconciliation failed"
 # PgBouncer is stateless and binds the OS-cache runtime directory. Docker
 # Desktop can retain a mount to a removed/recreated cache-directory inode while
 # keeping the long-lived data services alive. Recreate only a pooler whose
@@ -276,6 +315,19 @@ if ! run_compose exec --no-TTY pgbouncer \
 		-a -r /etc/makosh/runtime/databases.ini \
 		-a -r /etc/makosh/auth/users.txt; then
 	run_compose up --detach --no-deps --force-recreate --wait pgbouncer
+else
+	expected_pgbouncer_hash="$(
+		tr -d '\r\n' < "$data_dir/developer-platform-credentials/pgbouncer-admin-password" \
+			| sha256sum \
+			| awk '{print $1}'
+	)"
+	current_pgbouncer_hash="$(
+		run_compose exec --no-TTY pgbouncer sh -c \
+			"sed -n '1p' /etc/makosh/auth/users.txt | sed -E 's/\\\"[^\\\"]*\\\" \\\"([^\\\"]*)\\\"/\\1/' | tr -d '\r\n' | sha256sum | awk '{print \$1}'"
+	)"
+	if ! test "$expected_pgbouncer_hash" = "$current_pgbouncer_hash"; then
+		run_compose up --detach --no-deps --force-recreate --wait pgbouncer
+	fi
 fi
 
 temporary_dir="$(mktemp -d "${TMPDIR:-/tmp}/makosh-dev-assembly.XXXXXX")"
@@ -337,6 +389,18 @@ start_kernel() {
 	kernel_pid=$!
 }
 
+start_kernel_for_admission() {
+	env MAKOSH_DEVELOPER_VERBOSE=1 "$kernel_bin" \
+		--data-dir "$data_dir" \
+		serve \
+		--browser-gateway-listen-address "$gateway_address" \
+		--browser-gateway-origin "$browser_origin" \
+		--browser-gateway-rp-id 127.0.0.1 \
+		--browser-gateway-development-proxy-proof-file "$proof_file" \
+		--browser-gateway-development-admission-mode &
+	kernel_pid=$!
+}
+
 wait_for_gateway() {
 	deadline=$(( $(date +%s) + startup_timeout_seconds ))
 	while :; do
@@ -354,9 +418,6 @@ stop_kernel() {
 	wait "$kernel_pid" || true
 	kernel_pid=""
 }
-
-start_kernel
-wait_for_gateway
 
 assembly_status="$(
 	"$development_assembly_bin" \
@@ -376,6 +437,11 @@ case "$assembly_status" in
 	*) fail "development assembly state is unavailable" ;;
 esac
 if test "$assembly_status" != "development_assembly=current"; then
+	# Admission needs the authenticated Vault/Storage foundation to fence stale
+	# bindings, but it must not run Scheduler against each intermediate catalog.
+	# The full Kernel starts once from the completed catalog below.
+	start_kernel_for_admission
+	wait_for_gateway
 	reconcile_output="$(
 		"$development_assembly_bin" \
 			--data-dir "$data_dir" \
@@ -388,9 +454,10 @@ if test "$assembly_status" != "development_assembly=current"; then
 		*) fail "development assembly reconciliation did not complete" ;;
 	esac
 	stop_kernel
-	start_kernel
-	wait_for_gateway
 fi
+
+start_kernel
+wait_for_gateway
 
 "$development_assembly_bin" \
 	--data-dir "$data_dir" \

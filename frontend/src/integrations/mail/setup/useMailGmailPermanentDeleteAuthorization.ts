@@ -9,7 +9,7 @@ import {
 } from '../../../gen/makosh/mail/v1/client_pb'
 import { MailGmailOAuthClientV1 } from '../api/mailGmailOAuthClient'
 import { listMailAccounts } from '../api/mailAccountQueryClient'
-import { runGmailOAuthBrowserFlowV1 } from '../oauth/gmailOAuthBrowserFlow'
+import { redirectGmailOAuthInSameTabV1 } from '../oauth/gmailOAuthRedirectFlow'
 
 export function useMailGmailPermanentDeleteAuthorization() {
 	const client = new MailGmailOAuthClientV1()
@@ -65,16 +65,12 @@ export function useMailGmailPermanentDeleteAuthorization() {
 				return
 			}
 			if (completionSubmitted.value) return
-			const callback = await runGmailOAuthBrowserFlowV1(started.value.authorizationUrl)
-			completionSubmitted.value = true
-			await client.complete({
+			redirectGmailOAuthInSameTabV1(started.value.authorizationUrl, {
 				operationId: operationId.value,
 				connectionId: requiredConnectionId(connectionId.value),
 				setupId: started.value.setupId,
-				state: callback.returnedState,
-				authorizationCode: callback.authorizationCode,
 			})
-			message.value = 'Authorization accepted; refresh status after provider exchange.'
+			message.value = 'Redirecting to Google. Макошь will resume authorization after the callback.'
 		} catch (error) {
 			failed.value = true
 			message.value = completionSubmitted.value

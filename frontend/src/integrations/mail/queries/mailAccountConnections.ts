@@ -58,6 +58,14 @@ export function mailAccountConnectionFingerprint(
 		.join('|')
 }
 
+export function mailConnectionCredentialRequired(
+	connections: readonly MailAccountConnection[],
+	connectionId: string,
+): boolean {
+	const connection = connections.find(candidate => candidate.connectionId === connectionId)
+	return connection !== undefined && !connection.syncReady
+}
+
 function activeAccount(readiness: MailAccountReadinessV1): boolean {
 	return readiness === MailAccountReadinessV1.MAIL_ACCOUNT_READINESS_CONFIGURATION_ONLY
 		|| readiness === MailAccountReadinessV1.MAIL_ACCOUNT_READINESS_PENDING_RESTART

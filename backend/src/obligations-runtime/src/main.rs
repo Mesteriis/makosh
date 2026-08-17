@@ -17,6 +17,7 @@ use makosh_obligations_runtime::{
     obligations_module_descriptor_v1, obligations_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -100,6 +101,9 @@ where
             configuration.event_credential_revision,
         ))
         .map_err(runtime_error)?;
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Obligations runtime polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -107,22 +111,25 @@ where
             .as_millis()
             .try_into()
             .map_err(|_| "Obligations clock is invalid".to_owned())?;
-        retry_runtime(executor.block_on(runtime.pump_control_once(now)))?;
-        retry_runtime(executor.block_on(runtime.recover_command_once(now)))?;
-        retry_runtime(executor.block_on(runtime.consume_command_once(now)))?;
-        retry_runtime(executor.block_on(runtime.relay_outbox_once(now)))?;
-        std::thread::sleep(Duration::from_millis(25));
+        let mut progressed = retry_runtime(executor.block_on(runtime.pump_control_once(now)))?;
+        progressed |= retry_runtime(executor.block_on(runtime.recover_command_once(now)))?;
+        progressed |= retry_runtime(executor.block_on(runtime.consume_command_once(now)))?;
+        progressed |= retry_runtime(executor.block_on(runtime.relay_outbox_once(now)))?;
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
+        }
     }
 }
 
-fn retry_runtime(result: Result<bool, ObligationsManagedRuntimeErrorV1>) -> Result<(), String> {
+fn retry_runtime(result: Result<bool, ObligationsManagedRuntimeErrorV1>) -> Result<bool, String> {
     match result {
-        Ok(_)
-        | Err(ObligationsManagedRuntimeErrorV1::EventUnavailable)
+        Ok(progressed) => Ok(progressed),
+        Err(ObligationsManagedRuntimeErrorV1::EventUnavailable)
         | Err(ObligationsManagedRuntimeErrorV1::Unavailable)
         | Err(ObligationsManagedRuntimeErrorV1::Persistence(
             ObligationsPersistenceErrorV1::StorageUnavailable,
-        )) => Ok(()),
+        )) => Ok(false),
         Err(error) => Err(runtime_error(error)),
     }
 }
@@ -212,4 +219,19 @@ fn read_contract(path: &Path) -> Result<Vec<u8>, String> {
         return Err("Obligations contract is invalid".to_owned());
     }
     Ok(bytes)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn idle_and_retryable_steps_do_not_claim_progress() {
+        assert_eq!(retry_runtime(Ok(false)), Ok(false));
+        assert_eq!(
+            retry_runtime(Err(ObligationsManagedRuntimeErrorV1::Unavailable)),
+            Ok(false)
+        );
+        assert!(retry_runtime(Err(ObligationsManagedRuntimeErrorV1::Admission)).is_err());
+    }
 }

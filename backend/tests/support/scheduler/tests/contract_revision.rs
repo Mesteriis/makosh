@@ -14,7 +14,7 @@ fn scheduler_persists_an_exact_nonzero_owner_job_contract_revision() {
     assert_eq!(binding.contract_revision(), 3);
 
     let bundle = scheduler_storage_bundle_v1();
-    assert_eq!(bundle.revision, 9);
+    assert_eq!(bundle.revision, 10);
     let step = bundle
         .steps
         .iter()
@@ -43,4 +43,12 @@ fn scheduler_persists_an_exact_nonzero_owner_job_contract_revision() {
         String::from_utf8_lossy(&authority.forward_sql_utf8)
             .contains("scheduler_schedule_control_authorities")
     );
+    let pending_fire_schedule = bundle
+        .steps
+        .iter()
+        .find(|step| step.revision == 10)
+        .expect("pending-fire schedule index migration");
+    let sql = String::from_utf8_lossy(&pending_fire_schedule.forward_sql_utf8);
+    assert!(sql.contains("scheduler_pending_fires_schedule_id_idx"));
+    assert!(sql.contains("scheduler_pending_fires (schedule_id)"));
 }

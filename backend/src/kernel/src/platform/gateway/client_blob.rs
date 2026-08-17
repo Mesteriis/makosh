@@ -6,8 +6,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 use makosh_blob_client::BlobDataClient;
 use makosh_gateway_runtime::{
-    ClientBlobContractVersionV1, ClientBlobRouteErrorV1, ClientBlobRouteHandler, ClientBlobRouteV1,
-    ClientBlobRouter, ClientBlobTransportV1, SharedBrowserGatewaySessionService,
+    ClientBlobContractVersionV1, ClientBlobReadV1, ClientBlobRouteErrorV1, ClientBlobRouteHandler,
+    ClientBlobRouteV1, ClientBlobRouter, ClientBlobTransportV1, SharedBrowserGatewaySessionService,
 };
 use makosh_kernel_control_store_sqlite::SqliteControlStore;
 use makosh_runtime_protocol::v1::{
@@ -32,6 +32,7 @@ const MODULE_CLIENT_PROTOCOL_MAJOR: u32 = 1;
 pub(crate) fn compose_client_blob_routers(
     store: Arc<SqliteControlStore>,
     data_dir: &Path,
+    runtime_dir: &Path,
     supervisor: ManagedRuntimeSupervisor,
     session: SharedBrowserGatewaySessionService<ControlStoreBrowserAuthority>,
     request_id_sequence: Arc<AtomicU64>,
@@ -42,6 +43,7 @@ pub(crate) fn compose_client_blob_routers(
     let adapter = Arc::new(KernelClientBlobAdapterV1::new(
         store,
         data_dir,
+        runtime_dir,
         supervisor,
         request_id_sequence,
     ));
@@ -50,13 +52,15 @@ pub(crate) fn compose_client_blob_routers(
               logical_owner_id,
               authenticated_device_id,
               authenticated_client_session_id,
-              payload| {
+              payload,
+              range| {
             adapter.authorize_and_read(
                 route,
                 logical_owner_id,
                 authenticated_device_id,
                 authenticated_client_session_id,
                 payload,
+                range,
             )
         },
     );
@@ -96,6 +100,7 @@ impl KernelClientBlobAdapterV1 {
     fn new(
         store: Arc<SqliteControlStore>,
         data_dir: &Path,
+        runtime_dir: &Path,
         supervisor: ManagedRuntimeSupervisor,
         request_id_sequence: Arc<AtomicU64>,
     ) -> Self {
@@ -103,6 +108,7 @@ impl KernelClientBlobAdapterV1 {
             Arc::clone(&store),
             supervisor.relay_port(),
             data_dir.to_path_buf(),
+            runtime_dir.to_path_buf(),
         );
         Self {
             store,
@@ -119,7 +125,8 @@ impl KernelClientBlobAdapterV1 {
         authenticated_device_id: &str,
         authenticated_client_session_id: &str,
         request_payload: &[u8],
-    ) -> Result<Vec<u8>, ClientBlobRouteErrorV1> {
+        range: Option<(u64, u64)>,
+    ) -> Result<ClientBlobReadV1, ClientBlobRouteErrorV1> {
         let (runtime, authorization) = self.authorize_module_read(
             route,
             logical_owner_id,
@@ -127,11 +134,17 @@ impl KernelClientBlobAdapterV1 {
             authenticated_client_session_id,
             request_payload,
         )?;
-        let content = self.read_blob(route, &runtime, authorization)?;
-        if u64::try_from(content.len()).ok() != Some(runtime.declared_size) {
+        let expected_bytes = range
+            .map(|(start, end)| end.saturating_sub(start))
+            .unwrap_or(runtime.declared_size);
+        let content = self.read_blob(route, &runtime, authorization, range)?;
+        if u64::try_from(content.len()).ok() != Some(expected_bytes) {
             return Err(ClientBlobRouteErrorV1::Internal);
         }
-        Ok(content)
+        Ok(ClientBlobReadV1 {
+            content,
+            declared_size: runtime.declared_size,
+        })
     }
 
     fn authorize_module_read(
@@ -228,6 +241,7 @@ impl KernelClientBlobAdapterV1 {
         route: &ClientBlobRouteV1,
         runtime: &AuthorizedRuntimeReadV1,
         authorization: ModuleClientBlobAuthorizationV1,
+        range: Option<(u64, u64)>,
     ) -> Result<Vec<u8>, ClientBlobRouteErrorV1> {
         let mut session_request_id = [0_u8; 16];
         let mut channel_binding = [0_u8; 32];
@@ -263,14 +277,13 @@ impl KernelClientBlobAdapterV1 {
             )
             .map_err(|_| ClientBlobRouteErrorV1::Unavailable)?;
         let grant = delivery.grant.ok_or(ClientBlobRouteErrorV1::Internal)?;
+        let (start, end_exclusive) = range.unwrap_or((0, authorization.declared_size));
+        if start >= end_exclusive || end_exclusive > authorization.declared_size {
+            return Err(ClientBlobRouteErrorV1::InvalidArgument);
+        }
         BlobDataClient::new(delivery.data_socket_path)
             .and_then(|client| {
-                client.read_range(
-                    grant,
-                    channel_binding.to_vec(),
-                    0,
-                    authorization.declared_size,
-                )
+                client.read_range(grant, channel_binding.to_vec(), start, end_exclusive)
             })
             .map_err(|_| ClientBlobRouteErrorV1::Unavailable)
     }
@@ -349,7 +362,26 @@ fn map_managed_route_error(error: String) -> ClientBlobRouteErrorV1 {
 fn map_module_response_error(error_code: &str) -> ClientBlobRouteErrorV1 {
     match error_code {
         "REJECTED" | "NOT_FOUND" => ClientBlobRouteErrorV1::NotFound,
-        "UNAVAILABLE" => ClientBlobRouteErrorV1::Unavailable,
+        "RUNTIME_BUSY" | "RUNTIME_UNAVAILABLE" | "UNAVAILABLE" => {
+            ClientBlobRouteErrorV1::Unavailable
+        }
         _ => ClientBlobRouteErrorV1::Internal,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{ClientBlobRouteErrorV1, map_module_response_error};
+
+    #[test]
+    fn maps_runtime_contention_to_a_retryable_client_blob_error() {
+        assert!(matches!(
+            map_module_response_error("RUNTIME_BUSY"),
+            ClientBlobRouteErrorV1::Unavailable
+        ));
+        assert!(matches!(
+            map_module_response_error("RUNTIME_UNAVAILABLE"),
+            ClientBlobRouteErrorV1::Unavailable
+        ));
     }
 }

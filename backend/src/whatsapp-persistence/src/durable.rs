@@ -97,6 +97,7 @@ impl WhatsAppDurablePersistence {
         let port = u16::try_from(pgbouncer_port)
             .map_err(|_| WhatsAppDurablePersistenceError::InvalidRow)?;
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(pgbouncer_host)
             .port(port)
             .username(binding.access().runtime_principal())

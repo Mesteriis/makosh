@@ -12,10 +12,10 @@ use crate::{
     TelegramMediaKind, TelegramMessageMedia, TelegramMessageMutation, TelegramMessageObservation,
     TelegramMessageProjection, TelegramMessageReferences, TelegramMessageTombstone,
     TelegramMessageVersion, TelegramMessageVersionSource, TelegramOperation, TelegramParticipant,
-    TelegramParticipantFilter, TelegramParticipantPage, TelegramProviderCommand,
-    TelegramProviderEvent, TelegramProviderQuery, TelegramProviderQueryResponse,
-    TelegramReactionObservation, TelegramReactionSummary, TelegramRealtimeFrame,
-    TelegramRealtimeReplayPage, TelegramRuntimeReconfiguration,
+    TelegramParticipantFilter, TelegramParticipantPage, TelegramPersonSourceIdentity,
+    TelegramProviderCommand, TelegramProviderEvent, TelegramProviderQuery,
+    TelegramProviderQueryResponse, TelegramReactionObservation, TelegramReactionSummary,
+    TelegramRealtimeFrame, TelegramRealtimeReplayPage, TelegramRuntimeReconfiguration,
     TelegramRuntimeReconfigurationRequest, TelegramRuntimeReconfigurationState, TelegramSendMedia,
     TelegramSendMessage, TelegramTombstoneReason, TelegramTopic, TelegramTypingState,
     wire::{
@@ -1067,6 +1067,10 @@ fn message_media_to_wire(value: &TelegramMessageMedia) -> wire::TelegramMessageM
         caption: value.caption.clone(),
         filename: value.filename.clone(),
         content_type: value.content_type.clone(),
+        preview_provider_file_id: value.preview_provider_file_id.clone(),
+        preview_content_type: value.preview_content_type.clone(),
+        preview_inline_data: value.preview_inline_data.clone(),
+        preview_metadata_loaded: value.preview_metadata_loaded,
     }
 }
 
@@ -1093,6 +1097,35 @@ fn message_references_to_wire(
     }
 }
 
+fn person_source_identity_to_wire(
+    value: &TelegramPersonSourceIdentity,
+) -> wire::TelegramPersonSourceIdentityProjection {
+    wire::TelegramPersonSourceIdentityProjection {
+        integration_public_id: value.integration_public_id.to_vec(),
+        account_public_id: value.account_public_id.to_vec(),
+        provider_source_contact_public_id: value.provider_source_contact_public_id.to_vec(),
+    }
+}
+
+fn parse_person_source_identity(
+    value: wire::TelegramPersonSourceIdentityProjection,
+) -> Result<TelegramPersonSourceIdentity, TelegramAuthorizationWireError> {
+    Ok(TelegramPersonSourceIdentity {
+        integration_public_id: value
+            .integration_public_id
+            .try_into()
+            .map_err(|_| TelegramAuthorizationWireError::InvalidPayload)?,
+        account_public_id: value
+            .account_public_id
+            .try_into()
+            .map_err(|_| TelegramAuthorizationWireError::InvalidPayload)?,
+        provider_source_contact_public_id: value
+            .provider_source_contact_public_id
+            .try_into()
+            .map_err(|_| TelegramAuthorizationWireError::InvalidPayload)?,
+    })
+}
+
 fn message_observation_to_wire(
     value: &TelegramMessageObservation,
 ) -> wire::TelegramMessageObservationProjection {
@@ -1103,6 +1136,10 @@ fn message_observation_to_wire(
         provider_topic_id: value.provider_topic_id.clone(),
         sender_id: value.sender_id.clone(),
         sender_display_name: value.sender_display_name.clone(),
+        sender_source_identity: value
+            .sender_source_identity
+            .as_ref()
+            .map(person_source_identity_to_wire),
         is_outgoing: value.is_outgoing,
         text: value.text.clone(),
         media: value.media.as_ref().map(message_media_to_wire),
@@ -1141,6 +1178,10 @@ fn parse_message_observation(
                 caption: media.caption,
                 filename: media.filename,
                 content_type: media.content_type,
+                preview_provider_file_id: media.preview_provider_file_id,
+                preview_content_type: media.preview_content_type,
+                preview_inline_data: media.preview_inline_data,
+                preview_metadata_loaded: media.preview_metadata_loaded,
             })
         })
         .transpose()?;
@@ -1151,6 +1192,10 @@ fn parse_message_observation(
         provider_topic_id: value.provider_topic_id,
         sender_id: value.sender_id,
         sender_display_name: value.sender_display_name,
+        sender_source_identity: value
+            .sender_source_identity
+            .map(parse_person_source_identity)
+            .transpose()?,
         is_outgoing: value.is_outgoing,
         text: value.text,
         media,
@@ -1169,6 +1214,8 @@ fn chat_to_wire(value: &TelegramChat) -> wire::TelegramChatProjection {
         kind: chat_kind_name(value.kind).to_owned(),
         title: value.title.clone(),
         username: value.username.clone(),
+        avatar_provider_file_id: value.avatar_provider_file_id.clone(),
+        avatar_provider_unique_id: value.avatar_provider_unique_id.clone(),
     }
 }
 
@@ -1181,6 +1228,8 @@ fn parse_chat(
         kind: parse_chat_kind(&value.kind)?,
         title: value.title,
         username: value.username,
+        avatar_provider_file_id: value.avatar_provider_file_id,
+        avatar_provider_unique_id: value.avatar_provider_unique_id,
     })
 }
 
@@ -1326,6 +1375,10 @@ fn message_projection_to_wire(
         provider_topic_id: value.provider_topic_id.clone(),
         sender_id: value.sender_id.clone(),
         sender_display_name: value.sender_display_name.clone(),
+        sender_source_identity: value
+            .sender_source_identity
+            .as_ref()
+            .map(person_source_identity_to_wire),
         text: value.text.clone(),
         media: value.media.as_ref().map(message_media_to_wire),
         references: Some(message_references_to_wire(&value.references)),
@@ -1349,6 +1402,10 @@ fn parse_message_projection(
                 caption: media.caption,
                 filename: media.filename,
                 content_type: media.content_type,
+                preview_provider_file_id: media.preview_provider_file_id,
+                preview_content_type: media.preview_content_type,
+                preview_inline_data: media.preview_inline_data,
+                preview_metadata_loaded: media.preview_metadata_loaded,
             })
         })
         .transpose()?;
@@ -1360,6 +1417,10 @@ fn parse_message_projection(
         provider_topic_id: value.provider_topic_id,
         sender_id: value.sender_id,
         sender_display_name: value.sender_display_name,
+        sender_source_identity: value
+            .sender_source_identity
+            .map(parse_person_source_identity)
+            .transpose()?,
         text: value.text,
         media,
         references: TelegramMessageReferences {
@@ -1454,6 +1515,9 @@ fn file_to_wire(value: &TelegramFileSnapshot) -> wire::TelegramFileSnapshotProje
         downloaded_size_bytes: value.downloaded_size_bytes,
         is_downloading: value.is_downloading,
         is_downloaded: value.is_downloaded,
+        blob_reference_id: value.blob_reference_id.clone(),
+        blob_plaintext_sha256: value.blob_plaintext_sha256.clone(),
+        blob_backup_class: value.blob_backup_class,
     }
 }
 
@@ -1474,6 +1538,9 @@ fn parse_file(
         downloaded_size_bytes: value.downloaded_size_bytes,
         is_downloading: value.is_downloading,
         is_downloaded: value.is_downloaded,
+        blob_reference_id: value.blob_reference_id,
+        blob_plaintext_sha256: value.blob_plaintext_sha256,
+        blob_backup_class: value.blob_backup_class,
     })
 }
 

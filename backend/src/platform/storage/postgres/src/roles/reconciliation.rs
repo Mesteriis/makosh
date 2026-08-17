@@ -115,11 +115,7 @@ async fn set_runtime_limits(
     connector: &PostgresAdminConnectorV1,
     spec: &StorageRoleSpecV1,
 ) -> Result<(), PostgresAdapterErrorV1> {
-    let statement = format!(
-        "ALTER ROLE {} NOINHERIT NOCREATEDB NOCREATEROLE NOSUPERUSER NOBYPASSRLS CONNECTION LIMIT {}",
-        spec.runtime_principal(),
-        spec.max_connections(),
-    );
+    let statement = runtime_role_settings_sql(spec.runtime_principal(), spec.max_connections());
     query(AssertSqlSafe(statement))
         .execute(connector.pool())
         .await
@@ -156,4 +152,25 @@ fn runtime_login_sql(spec: &StorageRoleSpecV1) -> String {
         spec.runtime_principal(),
         spec.max_connections(),
     )
+}
+
+fn runtime_role_settings_sql(runtime_principal: &str, max_connections: u16) -> String {
+    format!(
+        "ALTER ROLE {runtime_principal} LOGIN NOINHERIT NOCREATEDB NOCREATEROLE NOSUPERUSER NOBYPASSRLS CONNECTION LIMIT {max_connections}"
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::runtime_role_settings_sql;
+
+    #[test]
+    fn authorized_runtime_role_settings_restore_login_after_a_restart_fence() {
+        let statement = runtime_role_settings_sql("storage_runtime_1", 4);
+
+        assert_eq!(
+            statement,
+            "ALTER ROLE storage_runtime_1 LOGIN NOINHERIT NOCREATEDB NOCREATEROLE NOSUPERUSER NOBYPASSRLS CONNECTION LIMIT 4"
+        );
+    }
 }

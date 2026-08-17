@@ -7,6 +7,7 @@ import '../../../shared/ui/settings/integrationAccountSetupCard.css'
 import '../../../shared/ui/settings/providerAccountWizard.css'
 import { useMailAccountSetup } from '../setup/useMailAccountSetup'
 import { useMailPendingSettingsActivation } from '../setup/useMailPendingSettingsActivation'
+import GmailOAuthSetupView from './GmailOAuthSetupView.vue'
 
 type MailProviderChoice = 'gmail' | 'icloud' | 'imap'
 
@@ -190,28 +191,19 @@ async function activateRecoveredAccounts(): Promise<void> {
 					<span>Local account ID</span>
 					<input v-model="setup.connectionId.value" required maxlength="128" placeholder="personal-mail">
 				</label>
-				<label>
+				<label v-if="provider !== 'gmail'">
 					<span>Email / username</span>
 					<input v-model="setup.email.value" required type="email" autocomplete="username" placeholder="you@example.com">
 				</label>
 
-				<template v-if="provider === 'gmail'">
-					<label v-if="!setup.gmailClientConfigured.value" class="wide">
-						<span>Google OAuth client ID</span>
-						<input v-model="setup.gmailClientId.value" required autocomplete="off">
-					</label>
-					<p v-else class="provider-account-wizard__notice wide">
-						The installed Google OAuth client is configured for this Макошь build.
-					</p>
-					<label class="wide">
-						<span>OAuth redirect URI</span>
-						<input :value="setup.gmailRedirectUri.value" readonly type="url">
-					</label>
-					<p class="provider-account-wizard__notice wide">
-						Google returns to a one-use loopback callback. State and authorization code
-						are validated and submitted automatically; they are never copied into this form.
-					</p>
-				</template>
+				<GmailOAuthSetupView
+					v-if="provider === 'gmail'"
+					stage="configuration"
+					:client-configured="setup.gmailClientConfigured.value"
+					:client-id="setup.gmailClientId.value"
+					:redirect-uri="setup.gmailRedirectUri.value"
+					@update:client-id="setup.gmailClientId.value = $event"
+				/>
 
 				<template v-else>
 					<label>
@@ -256,20 +248,19 @@ async function activateRecoveredAccounts(): Promise<void> {
 		</template>
 
 		<template #step-3>
+			<GmailOAuthSetupView
+				v-if="provider === 'gmail' && setup.gmailState.value"
+				stage="authorization"
+				:message="setup.message.value"
+				:busy="setup.busy.value"
+			/>
 			<div
+				v-else
 				class="provider-account-wizard__status"
 				:class="`provider-account-wizard__status--${setup.messageTone.value}`"
 			>
-				<template v-if="provider === 'gmail' && setup.gmailState.value">
-					<h4>Continue with Google OAuth</h4>
-					<p>Select “Continue with Google”. Макошь opens the provider authorization URL
-						and consumes only the exact matching loopback callback.</p>
-					<p>{{ setup.message.value }}</p>
-				</template>
-				<template v-else>
-					<h4>{{ setup.busy.value ? 'Applying account configuration…' : 'Account setup result' }}</h4>
-					<p>{{ setup.message.value || 'Waiting for the integration runtime.' }}</p>
-				</template>
+				<h4>{{ setup.busy.value ? 'Applying account configuration…' : 'Account setup result' }}</h4>
+				<p>{{ setup.message.value || 'Waiting for the integration runtime.' }}</p>
 			</div>
 		</template>
 	</Steps>

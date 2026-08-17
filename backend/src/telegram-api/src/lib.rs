@@ -1,6 +1,7 @@
 //! Telegram provider contract. No business-domain types or provider SDK types belong here.
 
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 
 pub mod client_contract;
 pub mod client_wire;
@@ -170,6 +171,10 @@ pub struct TelegramChat {
     pub kind: TelegramChatKind,
     pub title: String,
     pub username: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar_provider_file_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar_provider_unique_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -233,6 +238,46 @@ pub enum TelegramChatKind {
     Bot,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct TelegramPersonSourceIdentity {
+    pub integration_public_id: [u8; 16],
+    pub account_public_id: [u8; 16],
+    pub provider_source_contact_public_id: [u8; 16],
+}
+
+#[must_use]
+pub fn telegram_person_source_identity_v1(
+    account_id: &str,
+    provider_sender_key: &str,
+) -> TelegramPersonSourceIdentity {
+    let integration_public_id =
+        deterministic_public_id_v1(b"telegram-person-source-integration-v1", &[b"telegram"]);
+    let account_public_id = deterministic_public_id_v1(
+        b"telegram-person-source-account-v1",
+        &[account_id.as_bytes()],
+    );
+    let provider_source_contact_public_id = deterministic_public_id_v1(
+        b"telegram-person-source-contact-v1",
+        &[account_public_id.as_slice(), provider_sender_key.as_bytes()],
+    );
+    TelegramPersonSourceIdentity {
+        integration_public_id,
+        account_public_id,
+        provider_source_contact_public_id,
+    }
+}
+
+fn deterministic_public_id_v1(label: &[u8], parts: &[&[u8]]) -> [u8; 16] {
+    let mut digest = Sha256::new();
+    digest.update((label.len() as u64).to_be_bytes());
+    digest.update(label);
+    for part in parts {
+        digest.update((part.len() as u64).to_be_bytes());
+        digest.update(part);
+    }
+    digest.finalize()[..16].try_into().expect("SHA-256 prefix")
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct TelegramMessageObservation {
     pub account_id: TelegramAccountId,
@@ -242,6 +287,8 @@ pub struct TelegramMessageObservation {
     pub provider_topic_id: Option<String>,
     pub sender_id: String,
     pub sender_display_name: Option<String>,
+    #[serde(default)]
+    pub sender_source_identity: Option<TelegramPersonSourceIdentity>,
     pub is_outgoing: bool,
     pub text: Option<String>,
     pub media: Option<TelegramMessageMedia>,
@@ -279,6 +326,14 @@ pub struct TelegramMessageMedia {
     pub caption: Option<String>,
     pub filename: Option<String>,
     pub content_type: Option<String>,
+    #[serde(default)]
+    pub preview_provider_file_id: Option<String>,
+    #[serde(default)]
+    pub preview_content_type: Option<String>,
+    #[serde(default)]
+    pub preview_inline_data: Option<Vec<u8>>,
+    #[serde(default)]
+    pub preview_metadata_loaded: bool,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -291,6 +346,8 @@ pub struct TelegramMessageProjection {
     pub provider_topic_id: Option<String>,
     pub sender_id: String,
     pub sender_display_name: Option<String>,
+    #[serde(default)]
+    pub sender_source_identity: Option<TelegramPersonSourceIdentity>,
     pub text: Option<String>,
     pub media: Option<TelegramMessageMedia>,
     pub references: TelegramMessageReferences,
@@ -319,6 +376,12 @@ pub struct TelegramFileSnapshot {
     pub downloaded_size_bytes: Option<u64>,
     pub is_downloading: bool,
     pub is_downloaded: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub blob_reference_id: Option<Vec<u8>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub blob_plaintext_sha256: Option<Vec<u8>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub blob_backup_class: Option<u32>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -2002,6 +2065,33 @@ mod account_setup_tests {
         assert_eq!(
             validate_setup(&setup),
             Err(TelegramContractError::InvalidTransition)
+        );
+    }
+}
+
+#[cfg(test)]
+mod person_source_identity_tests {
+    use super::*;
+
+    #[test]
+    fn source_identity_is_stable_and_separates_accounts_and_sender_kinds() {
+        let first = telegram_person_source_identity_v1("personal", "user:42");
+        assert_eq!(
+            first,
+            telegram_person_source_identity_v1("personal", "user:42")
+        );
+        assert_ne!(first, telegram_person_source_identity_v1("work", "user:42"));
+        assert_ne!(
+            first,
+            telegram_person_source_identity_v1("personal", "chat:42")
+        );
+        assert!(first.integration_public_id.iter().any(|byte| *byte != 0));
+        assert!(first.account_public_id.iter().any(|byte| *byte != 0));
+        assert!(
+            first
+                .provider_source_contact_public_id
+                .iter()
+                .any(|byte| *byte != 0)
         );
     }
 }

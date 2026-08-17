@@ -4,7 +4,10 @@
 //! not reach Communications persistence or construct business state.
 
 use std::os::unix::net::UnixStream;
-use std::sync::{Arc, Mutex};
+use std::sync::{
+    Arc, Mutex,
+    atomic::{AtomicU64, Ordering},
+};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use makosh_blob_client::{
@@ -50,6 +53,7 @@ use makosh_storage_vault::{
 use makosh_vault_protocol::SecretClassV1;
 use makosh_zulip_api::{
     ZulipAccountV1, ZulipCommandOperationStatusV1, ZulipCommandV1, ZulipEventQueueV1,
+    ZulipPolledEventV1,
     account::{
         ZulipAccountLifecycleCommandV1, ZulipAccountLifecycleReceiptV1,
         ZulipCredentialBindingStateV1,
@@ -60,7 +64,7 @@ use makosh_zulip_api::{
 };
 use makosh_zulip_core::credential_lease_purpose;
 use makosh_zulip_delivery_intent_contract::zulip_delivery_intent_execute_contract_reference_v1;
-use makosh_zulip_http::ZulipHttpConfigV1;
+use makosh_zulip_http::{ZulipHttpConfigV1, poll_event_queue};
 use makosh_zulip_persistence::ZulipDurablePersistence;
 use prost::Message;
 use sha2::{Digest, Sha256};
@@ -97,8 +101,71 @@ pub struct ZulipAdmittedRuntimeV1 {
     delivery_intent_subscribe_permit: RuntimeSubscribePermitV1,
     identity: ZulipRuntimeIdentityV1,
     logical_owner_id: String,
+    operational_realtime_revision: u64,
+    pending_operational_realtime_revision: Option<u64>,
     blob_materializer: Mutex<Option<crate::blob::ZulipBlobMaterializer<BlobDataClient>>>,
     blob_write_materializer: Mutex<Option<crate::blob::ZulipBlobWriteMaterializer<BlobDataClient>>>,
+    command_fence_epoch: Arc<AtomicU64>,
+}
+
+pub struct ZulipCommandJobV1 {
+    fence_epoch: u64,
+    handle: tokio::task::JoinHandle<Result<bool, ZulipRuntimeErrorV1>>,
+}
+
+#[derive(Debug)]
+pub enum ZulipEventIoCompletionV1 {
+    Registered(ZulipEventQueueV1),
+    Polled {
+        queue: ZulipEventQueueV1,
+        events: Vec<ZulipPolledEventV1>,
+    },
+    Unavailable(Option<ZulipEventQueueV1>),
+}
+
+pub struct ZulipEventIoJobV1 {
+    fence_epoch: u64,
+    handle: tokio::task::JoinHandle<ZulipEventIoCompletionV1>,
+}
+
+impl ZulipEventIoJobV1 {
+    pub fn is_finished(&self) -> bool {
+        self.handle.is_finished()
+    }
+
+    pub fn is_stale(&self, current_epoch: u64) -> bool {
+        self.fence_epoch != current_epoch
+    }
+
+    pub fn abort(&self) {
+        self.handle.abort();
+    }
+
+    pub fn into_handle(self) -> tokio::task::JoinHandle<ZulipEventIoCompletionV1> {
+        self.handle
+    }
+}
+
+impl ZulipCommandJobV1 {
+    pub fn is_finished(&self) -> bool {
+        self.handle.is_finished()
+    }
+
+    pub fn fence_epoch(&self) -> u64 {
+        self.fence_epoch
+    }
+
+    pub fn is_stale(&self, current_epoch: u64) -> bool {
+        self.fence_epoch != current_epoch
+    }
+
+    pub fn abort(&self) {
+        self.handle.abort();
+    }
+
+    pub fn into_handle(self) -> tokio::task::JoinHandle<Result<bool, ZulipRuntimeErrorV1>> {
+        self.handle
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -340,8 +407,11 @@ pub async fn open_admitted_runtime(
             runtime_generation: admission.runtime_generation,
         },
         logical_owner_id: admission.logical_owner_id.clone(),
+        operational_realtime_revision: 0,
+        pending_operational_realtime_revision: None,
         blob_materializer: Mutex::new(None),
         blob_write_materializer: Mutex::new(None),
+        command_fence_epoch: Arc::new(AtomicU64::new(1)),
     })
 }
 
@@ -506,6 +576,62 @@ impl ZulipAdmittedRuntimeV1 {
         .await
     }
 
+    pub fn spawn_event_io(
+        &self,
+        handle: &tokio::runtime::Handle,
+        queue: Option<ZulipEventQueueV1>,
+    ) -> Result<Option<ZulipEventIoJobV1>, ZulipRuntimeErrorV1> {
+        let Some(http) = self.provider_http()? else {
+            return Ok(None);
+        };
+        let fence = Arc::clone(&self.command_fence_epoch);
+        let fence_epoch = fence.load(Ordering::Acquire);
+        let durable = self.durable.clone();
+        let handle = handle.spawn(async move {
+            if fence.load(Ordering::Acquire) != fence_epoch {
+                return ZulipEventIoCompletionV1::Unavailable(queue);
+            }
+            match queue {
+                Some(queue) => match poll_event_queue(&http, &queue).await {
+                    Ok(events) if fence.load(Ordering::Acquire) == fence_epoch => {
+                        ZulipEventIoCompletionV1::Polled { queue, events }
+                    }
+                    _ => ZulipEventIoCompletionV1::Unavailable(Some(queue)),
+                },
+                None => match acquire_event_queue(&durable, &http).await {
+                    Ok(queue) if fence.load(Ordering::Acquire) == fence_epoch => {
+                        ZulipEventIoCompletionV1::Registered(queue)
+                    }
+                    _ => ZulipEventIoCompletionV1::Unavailable(None),
+                },
+            }
+        });
+        Ok(Some(ZulipEventIoJobV1 {
+            fence_epoch,
+            handle,
+        }))
+    }
+
+    pub async fn accept_event_poll(
+        &mut self,
+        queue: &mut ZulipEventQueueV1,
+        events: Vec<ZulipPolledEventV1>,
+        recorded_at_unix_seconds: i64,
+        recorded_at_nanos: i32,
+    ) -> Result<usize, ZulipRuntimeErrorV1> {
+        crate::accept_polled_events(
+            &self.durable,
+            &self.identity,
+            &self.account.account_id,
+            queue,
+            events,
+            recorded_at_unix_seconds,
+            recorded_at_nanos,
+            &mut |plaintext| admit_inbound_plaintext(&mut self.control_channel, plaintext),
+        )
+        .await
+    }
+
     pub async fn submit_command(
         &self,
         command: &ZulipCommandV1,
@@ -535,7 +661,82 @@ impl ZulipAdmittedRuntimeV1 {
             .lock()
             .map_err(|_| super::ZulipRuntimeErrorV1::Credential)?
             .take();
+        self.command_fence_epoch.fetch_add(1, Ordering::AcqRel);
         Ok(receipt)
+    }
+
+    pub fn command_fence_epoch(&self) -> u64 {
+        self.command_fence_epoch.load(Ordering::Acquire)
+    }
+
+    /// Claims and prepares one command on the admitted actor, then moves only
+    /// provider/blob I/O into an abortable job. Lifecycle changes advance the
+    /// shared epoch, so a stale provider result can never become durable truth.
+    pub async fn spawn_next_command(
+        &mut self,
+        handle: &tokio::runtime::Handle,
+        dispatched_at_unix_seconds: i64,
+        completed_at_unix_seconds: i64,
+    ) -> Result<Option<ZulipCommandJobV1>, ZulipRuntimeErrorV1> {
+        let Some(http) = self.provider_http()? else {
+            return Ok(None);
+        };
+        let Some(claimed) =
+            super::claim_next_command(&self.durable, dispatched_at_unix_seconds).await?
+        else {
+            return Ok(None);
+        };
+        let blob_operation = match claimed.command() {
+            ZulipCommandV1::SendStreamWithUpload { .. }
+            | ZulipCommandV1::SendDirectWithUpload { .. } => {
+                Some(BlobDataOperationV1::BlobDataOperationReadRangeV1)
+            }
+            ZulipCommandV1::DownloadAttachment { .. } => {
+                Some(BlobDataOperationV1::BlobDataOperationWriteV1)
+            }
+            _ => None,
+        };
+        if let Some(operation) = blob_operation {
+            authorize_blob_session(
+                &mut self.control_channel,
+                &self.blob_materializer,
+                &self.blob_write_materializer,
+                claimed.command(),
+                operation,
+            )?;
+        }
+        let reader = Mutex::new(
+            self.blob_materializer
+                .lock()
+                .map_err(|_| ZulipRuntimeErrorV1::Credential)?
+                .take(),
+        );
+        let writer = Mutex::new(
+            self.blob_write_materializer
+                .lock()
+                .map_err(|_| ZulipRuntimeErrorV1::Credential)?
+                .take(),
+        );
+        let durable = self.durable.clone();
+        let fence = Arc::clone(&self.command_fence_epoch);
+        let fence_epoch = fence.load(Ordering::Acquire);
+        let handle = handle.spawn(async move {
+            super::execute_claimed_command_with_blob(
+                &durable,
+                &http,
+                claimed,
+                Some(&reader),
+                Some(&writer),
+                |_, _| Ok(()),
+                || fence.load(Ordering::Acquire) == fence_epoch,
+                completed_at_unix_seconds,
+            )
+            .await
+        });
+        Ok(Some(ZulipCommandJobV1 {
+            fence_epoch,
+            handle,
+        }))
     }
 
     pub async fn execute_next_command(
@@ -597,6 +798,42 @@ impl ZulipAdmittedRuntimeV1 {
         sync_history_page(&self.durable, &http, now_unix_seconds).await
     }
 
+    /// Starts provider history I/O without lending the runtime actor to the
+    /// network future. The returned job owns only cloneable provider/storage
+    /// handles; client control, realtime publication and outbox work remain on
+    /// the admitted actor loop.
+    pub fn spawn_history_sync(
+        &self,
+        handle: &tokio::runtime::Handle,
+        now_unix_seconds: i64,
+    ) -> Result<
+        Option<tokio::task::JoinHandle<Result<bool, ZulipRuntimeErrorV1>>>,
+        ZulipRuntimeErrorV1,
+    > {
+        let Some(http) = self.provider_http()? else {
+            return Ok(None);
+        };
+        let durable = self.durable.clone();
+        Ok(Some(handle.spawn(async move {
+            sync_history_page(&durable, &http, now_unix_seconds).await
+        })))
+    }
+
+    pub async fn mark_history_sync_degraded(
+        &self,
+        now_unix_seconds: i64,
+    ) -> Result<(), ZulipRuntimeErrorV1> {
+        self.durable
+            .mark_history_degraded(&self.account.account_id, now_unix_seconds)
+            .await
+            .map_err(ZulipRuntimeErrorV1::Persistence)
+    }
+
+    pub fn mark_operational_projection_changed(&mut self) {
+        self.operational_realtime_revision = self.operational_realtime_revision.saturating_add(1);
+        self.pending_operational_realtime_revision = Some(self.operational_realtime_revision);
+    }
+
     pub async fn relay_communications_outbox(
         &self,
         published_at_unix_seconds: i64,
@@ -618,6 +855,68 @@ impl ZulipAdmittedRuntimeV1 {
         queue: &mut Option<ZulipEventQueueV1>,
         now_unix_seconds: i64,
         recorded_at_nanos: i32,
+    ) -> Result<ZulipRuntimeTickV1, ZulipRuntimeTickErrorV1> {
+        self.run_tick_inner(queue, now_unix_seconds, recorded_at_nanos, true)
+            .await
+    }
+
+    /// Runs the actor-owned phases while provider history I/O is executing in
+    /// an independent bounded job owned by the process root.
+    pub async fn run_tick_without_history(
+        &mut self,
+        queue: &mut Option<ZulipEventQueueV1>,
+        now_unix_seconds: i64,
+        recorded_at_nanos: i32,
+    ) -> Result<ZulipRuntimeTickV1, ZulipRuntimeTickErrorV1> {
+        self.run_tick_inner(queue, now_unix_seconds, recorded_at_nanos, false)
+            .await
+    }
+
+    /// Runs the remaining tick while provider history and outbound command I/O
+    /// are scheduled independently by the process root.
+    pub async fn run_tick_without_provider_io(
+        &mut self,
+        queue: &mut Option<ZulipEventQueueV1>,
+        now_unix_seconds: i64,
+        recorded_at_nanos: i32,
+    ) -> Result<ZulipRuntimeTickV1, ZulipRuntimeTickErrorV1> {
+        self.run_tick_inner_with_provider_io(
+            queue,
+            now_unix_seconds,
+            recorded_at_nanos,
+            false,
+            false,
+            false,
+        )
+        .await
+    }
+
+    async fn run_tick_inner(
+        &mut self,
+        queue: &mut Option<ZulipEventQueueV1>,
+        now_unix_seconds: i64,
+        recorded_at_nanos: i32,
+        sync_history_inline: bool,
+    ) -> Result<ZulipRuntimeTickV1, ZulipRuntimeTickErrorV1> {
+        self.run_tick_inner_with_provider_io(
+            queue,
+            now_unix_seconds,
+            recorded_at_nanos,
+            sync_history_inline,
+            true,
+            true,
+        )
+        .await
+    }
+
+    async fn run_tick_inner_with_provider_io(
+        &mut self,
+        queue: &mut Option<ZulipEventQueueV1>,
+        now_unix_seconds: i64,
+        recorded_at_nanos: i32,
+        sync_history_inline: bool,
+        dispatch_command_inline: bool,
+        poll_inline: bool,
     ) -> Result<ZulipRuntimeTickV1, ZulipRuntimeTickErrorV1> {
         let consumed_delivery_intent = match consume_next_zulip_delivery_intent_v1(
             &self.durable.delivery_intent_store(),
@@ -641,7 +940,7 @@ impl ZulipAdmittedRuntimeV1 {
             .provider_http()
             .map_err(ZulipRuntimeTickErrorV1::Command)?
             .is_some();
-        let dispatched_command = if provider_available {
+        let dispatched_command = if provider_available && dispatch_command_inline {
             self.execute_next_command(now_unix_seconds, now_unix_seconds)
                 .await
                 .map_err(ZulipRuntimeTickErrorV1::Command)?
@@ -659,14 +958,14 @@ impl ZulipAdmittedRuntimeV1 {
         )
         .await
         .map_err(ZulipRuntimeTickErrorV1::DeliveryWorker)?;
-        let accepted_observations = match (provider_available, queue.as_mut()) {
+        let accepted_observations = match (provider_available && poll_inline, queue.as_mut()) {
             (true, Some(queue)) => self
                 .poll_once(queue, now_unix_seconds, recorded_at_nanos)
                 .await
                 .map_err(ZulipRuntimeTickErrorV1::Poll)?,
             _ => 0,
         };
-        let synced_history_page = if provider_available {
+        let synced_history_page = if provider_available && sync_history_inline {
             match self.sync_history_page(now_unix_seconds).await {
                 Ok(synced) => synced,
                 Err(ZulipRuntimeErrorV1::Http(_)) => {
@@ -703,6 +1002,19 @@ impl ZulipAdmittedRuntimeV1 {
                 return Err(ZulipRuntimeTickErrorV1::DeliveryRelay(error));
             }
         };
+        if accepted_observations > 0 || synced_history_page {
+            self.mark_operational_projection_changed();
+        }
+        let occurred_at_unix_millis = u64::try_from(now_unix_seconds)
+            .ok()
+            .and_then(|seconds| seconds.checked_mul(1_000))
+            .and_then(|millis| {
+                u64::try_from(recorded_at_nanos)
+                    .ok()
+                    .map(|nanos| millis + nanos / 1_000_000)
+            })
+            .unwrap_or(0);
+        let _ = self.publish_pending_operational_realtime(occurred_at_unix_millis);
         Ok(ZulipRuntimeTickV1 {
             dispatched_command,
             accepted_observations,
@@ -712,6 +1024,30 @@ impl ZulipAdmittedRuntimeV1 {
             processed_delivery_intent,
             relayed_delivery_results,
         })
+    }
+
+    fn publish_pending_operational_realtime(&mut self, occurred_at_unix_millis: u64) -> bool {
+        let Some(revision) = self.pending_operational_realtime_revision else {
+            return false;
+        };
+        let mut dispatcher = ZulipBusyControlDispatcher;
+        if crate::client_realtime::publish_operational_projection_changed_v1(
+            &mut self.control_channel,
+            &mut dispatcher,
+            &self.logical_owner_id,
+            self.identity.runtime_generation,
+            &self.account.account_id,
+            revision,
+            occurred_at_unix_millis,
+        )
+        .is_err()
+        {
+            return false;
+        }
+        if self.pending_operational_realtime_revision == Some(revision) {
+            self.pending_operational_realtime_revision = None;
+        }
+        true
     }
 
     fn provider_http(&self) -> Result<Option<Arc<ZulipHttpConfigV1>>, super::ZulipRuntimeErrorV1> {
@@ -908,7 +1244,7 @@ fn storage_binding(
     StorageBindingV1::new(identity, fences, access).map_err(|_| ZulipBootstrapErrorV1::Storage)
 }
 
-struct ZulipBusyControlDispatcher;
+pub(crate) struct ZulipBusyControlDispatcher;
 
 impl ManagedControlRequestDispatcherV2<UnixStream> for ZulipBusyControlDispatcher {
     fn dispatch_request(
@@ -1073,5 +1409,61 @@ mod control_dispatch_tests {
             .expect("correlated platform response");
         assert!(matches!(response.result, Some(ControlResult::Ack(_))));
         kernel.join().expect("kernel join");
+    }
+}
+
+#[cfg(test)]
+mod command_job_tests {
+    use super::{ZulipCommandJobV1, ZulipEventIoCompletionV1, ZulipEventIoJobV1};
+
+    #[test]
+    fn pending_provider_job_does_not_own_the_actor_and_is_generation_fenced() {
+        let executor = tokio::runtime::Runtime::new().expect("runtime executor");
+        let (_release, pending) = tokio::sync::oneshot::channel::<()>();
+        let job = ZulipCommandJobV1 {
+            fence_epoch: 7,
+            handle: executor.spawn(async move {
+                let _ = pending.await;
+                Ok(true)
+            }),
+        };
+
+        assert!(!job.is_finished());
+        assert!(!job.is_stale(7));
+        assert!(job.is_stale(8));
+        assert_eq!(executor.block_on(async { 41_u64 + 1 }), 42);
+
+        job.abort();
+        let error = executor
+            .block_on(job.into_handle())
+            .expect_err("aborted provider job");
+        assert!(error.is_cancelled());
+    }
+
+    #[test]
+    fn pending_long_poll_is_abortable_on_account_lifecycle_change() {
+        let executor = tokio::runtime::Runtime::new().expect("runtime executor");
+        let (_release, pending) = tokio::sync::oneshot::channel::<()>();
+        let job = ZulipEventIoJobV1 {
+            fence_epoch: 11,
+            handle: executor.spawn(async move {
+                let _ = pending.await;
+                ZulipEventIoCompletionV1::Unavailable(None)
+            }),
+        };
+
+        assert!(!job.is_finished());
+        assert!(!job.is_stale(11));
+        assert!(job.is_stale(12));
+        assert_eq!(
+            executor.block_on(async { "actor-responsive" }),
+            "actor-responsive"
+        );
+
+        job.abort();
+        let error = executor
+            .block_on(job.into_handle())
+            .expect_err("aborted long poll");
+        assert!(error.is_cancelled());
     }
 }

@@ -46,7 +46,13 @@ fn provenance(digest: [u8; 32], revision: u64) -> MailPersonSourceProvenanceV1 {
 fn descriptor_is_private_exact_and_has_no_client_surface() {
     let descriptor = mail_persons_sync_module_descriptor_v1("test");
     validate_descriptor_v1(&descriptor).expect("descriptor");
-    validate_settings_schema_v1(&mail_persons_sync_settings_schema_v1()).expect("settings");
+    let settings = mail_persons_sync_settings_schema_v1();
+    validate_settings_schema_v1(&settings).expect("settings");
+    assert_eq!(settings.revision, 2);
+    assert_eq!(
+        descriptor.settings_schema_ref.as_ref().unwrap().revision,
+        settings.revision,
+    );
     assert_eq!(descriptor.owner_id, "mail_persons_sync");
     assert_eq!(descriptor.module_id, "makosh-mail-persons-sync-runtime");
     let ids = descriptor

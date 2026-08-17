@@ -61,23 +61,42 @@ pub async fn try_receive_runtime_pull_delivery(
     connection: &RuntimeJetStreamConnection,
     permit: &RuntimeSubscribePermitV1,
 ) -> Result<Option<RuntimePullDeliveryV1>, RuntimePullDeliveryErrorV1> {
-    tokio::time::timeout(RUNTIME_PULL_CALL_DEADLINE_V1, async {
+    let deadline = tokio::time::Instant::now() + RUNTIME_PULL_CALL_DEADLINE_V1;
+    let mut messages = tokio::time::timeout_at(deadline, async {
         let consumer = connection
             .open_pull_consumer(permit)
             .await
             .map_err(|_| unavailable_at("open_consumer"))?;
-        let mut messages = consumer
+        consumer
             .fetch()
             .max_messages(1)
             .expires(RUNTIME_PULL_REQUEST_EXPIRES_V1)
             .messages()
             .await
-            .map_err(|_| unavailable_at("fetch"))?;
-        classify_next_delivery(messages.next().await)
-            .map(|delivery| delivery.map(|message| RuntimePullDeliveryV1 { message }))
+            .map_err(|_| unavailable_at("fetch"))
     })
     .await
-    .map_err(|_| unavailable_at("deadline"))?
+    .map_err(|_| unavailable_at("setup_deadline"))??;
+
+    classify_waited_delivery(
+        tokio::time::timeout_at(deadline, messages.next())
+            .await
+            .ok(),
+    )
+    .map(|delivery| delivery.map(|message| RuntimePullDeliveryV1 { message }))
+}
+
+/// A fetch request expiring without a delivery is the normal idle state. Some
+/// NATS servers leave the response stream open past the requested expiry, so
+/// the local wait deadline must preserve that state instead of reporting a
+/// broker outage. Setup and stream delivery errors remain unavailable above.
+fn classify_waited_delivery<T, E>(
+    waited: Option<Option<Result<T, E>>>,
+) -> Result<Option<T>, RuntimePullDeliveryErrorV1> {
+    match waited {
+        None => Ok(None),
+        Some(next) => classify_next_delivery(next),
+    }
 }
 
 fn classify_next_delivery<T, E>(
@@ -109,6 +128,11 @@ mod tests {
     #[test]
     fn empty_pull_is_idle_not_unavailable() {
         assert_eq!(classify_next_delivery::<u8, ()>(None), Ok(None));
+    }
+
+    #[test]
+    fn expired_idle_wait_is_idle_not_unavailable() {
+        assert_eq!(classify_waited_delivery::<u8, ()>(None), Ok(None));
     }
 
     #[test]

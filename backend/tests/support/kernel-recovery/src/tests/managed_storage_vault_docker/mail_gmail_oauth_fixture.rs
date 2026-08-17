@@ -23,7 +23,7 @@ use sha2::{Digest, Sha256};
 const MAX_HTTP_LINE_BYTES: usize = 8 * 1024;
 const MAX_REQUEST_BODY_BYTES: usize = 64 * 1024;
 const OAUTH_FIXTURE_HOST: &str = "127.0.0.1";
-const GMAIL_OAUTH_SCOPE: &str = "openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send";
+const GMAIL_OAUTH_SCOPE: &str = "openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/contacts";
 const GMAIL_PERMANENT_DELETE_OAUTH_SCOPE: &str = "openid email https://mail.google.com/";
 
 struct GmailOAuthCapturedRequestV1 {
@@ -309,10 +309,10 @@ fn serve_connection(
         thread::sleep(Duration::from_secs(3));
     }
     let response_body = match request_index {
-        0 => br#"{"access_token":"managed-mail-gmail-access-v1","refresh_token":"managed-mail-gmail-refresh-v1","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send"}"#.as_slice(),
-        1 => br#"{"access_token":"managed-mail-gmail-access-v2","refresh_token":"managed-mail-gmail-refresh-v2","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send"}"#.as_slice(),
+        0 => br#"{"access_token":"managed-mail-gmail-access-v1","refresh_token":"managed-mail-gmail-refresh-v1","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/contacts"}"#.as_slice(),
+        1 => br#"{"access_token":"managed-mail-gmail-access-v2","refresh_token":"managed-mail-gmail-refresh-v2","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/contacts"}"#.as_slice(),
         2 => br#"{"access_token":"managed-mail-gmail-access-under-scoped","refresh_token":"managed-mail-gmail-refresh-under-scoped","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send"}"#.as_slice(),
-        4 => br#"{"access_token":"managed-mail-gmail-access-v3","refresh_token":"managed-mail-gmail-refresh-v3","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send"}"#.as_slice(),
+        4 => br#"{"access_token":"managed-mail-gmail-access-v3","refresh_token":"managed-mail-gmail-refresh-v3","expires_in":3600,"token_type":"Bearer","scope":"openid email https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/contacts"}"#.as_slice(),
         _ => br#"{"error":"unexpected_request"}"#.as_slice(),
     };
     let status = if matches!(request_index, 0 | 1 | 2 | 4) {

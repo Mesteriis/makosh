@@ -12,7 +12,9 @@ use makosh_runtime_protocol::v1::{
     VaultSecretClassV1, VaultTargetScopeV1, capability_request_v1::Request,
 };
 use makosh_zulip_api::client_contract::{
-    ZULIP_CLIENT_CONTRACT_MAJOR, ZULIP_CLIENT_CONTRACT_REVISION, ZulipClientContractV1,
+    ZULIP_CLIENT_CONTRACT_MAJOR, ZULIP_CLIENT_CONTRACT_REVISION, ZULIP_CLIENT_DESCRIPTOR_SET_V1,
+    ZULIP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1,
+    ZULIP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1, ZulipClientContractV1,
 };
 pub use makosh_zulip_api::client_contract::{ZULIP_MODULE_ID, ZULIP_OWNER_ID};
 use makosh_zulip_core::ZULIP_API_KEY_PURPOSE_ID;
@@ -52,10 +54,32 @@ pub fn zulip_admission_capabilities_v1() -> Vec<CapabilityDescriptorV1> {
         zulip_delivery_intent_capability_v1(),
         zulip_events_capability_v1(),
         zulip_client_capability_v1(ZulipClientContractV1::OperationalQuery),
+        zulip_operational_shared_realtime_capability_v1(),
         zulip_client_capability_v1(ZulipClientContractV1::OperationalRealtime),
         zulip_client_capability_v1(ZulipClientContractV1::Query),
         zulip_storage_capability_v1(),
     ]
+}
+
+fn zulip_operational_shared_realtime_capability_v1() -> CapabilityDescriptorV1 {
+    CapabilityDescriptorV1 {
+        capability_id: ZULIP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1.to_owned(),
+        capability_revision: 1,
+        criticality: CapabilityCriticalityV1::Optional as i32,
+        provides: vec![ProvidedSurfaceV1 {
+            kind: ProvidedSurfaceKindV1::ClientRealtime as i32,
+            contract: Some(ContractReferenceV1 {
+                owner: ZULIP_OWNER_ID.to_owned(),
+                name: ZULIP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1.to_owned(),
+                major: ZULIP_CLIENT_CONTRACT_MAJOR,
+                revision: ZULIP_CLIENT_CONTRACT_REVISION,
+                schema_sha256: Sha256::digest(ZULIP_CLIENT_DESCRIPTOR_SET_V1).to_vec(),
+            }),
+            client_rpc_route: None,
+            client_blob_route: None,
+        }],
+        ..Default::default()
+    }
 }
 
 fn zulip_delivery_intent_capability_v1() -> CapabilityDescriptorV1 {
@@ -248,6 +272,7 @@ mod tests {
                 ZULIP_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1,
                 ZULIP_EVENTS_CAPABILITY_ID,
                 ZulipClientContractV1::OperationalQuery.capability_id(),
+                ZULIP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1,
                 ZulipClientContractV1::OperationalRealtime.capability_id(),
                 ZulipClientContractV1::Query.capability_id(),
                 ZULIP_STORAGE_CAPABILITY_ID,
@@ -278,6 +303,20 @@ mod tests {
                 contract.connect_path()
             );
         }
+
+        let shared_realtime = descriptor
+            .capabilities
+            .iter()
+            .find(|capability| {
+                capability.capability_id == ZULIP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1
+            })
+            .expect("Zulip shared realtime capability");
+        assert_eq!(shared_realtime.provides.len(), 1);
+        assert_eq!(
+            shared_realtime.provides[0].kind,
+            ProvidedSurfaceKindV1::ClientRealtime as i32
+        );
+        assert!(shared_realtime.provides[0].client_rpc_route.is_none());
 
         let credentials = descriptor
             .capabilities

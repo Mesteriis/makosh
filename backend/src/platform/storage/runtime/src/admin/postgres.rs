@@ -2,7 +2,8 @@
 
 use makosh_storage_postgres::{
     PLATFORM_ADMIN_USERNAME, PostgresAdminConnectorV1, StorageRoleSpecV1, ensure_platform_schemas,
-    ensure_storage_roles, read_readiness, set_runtime_role_password,
+    ensure_storage_roles, read_readiness, repair_legacy_storage_ledger_binding,
+    set_runtime_role_password,
 };
 use makosh_storage_protocol::{StorageBindingV1, v1::StorageRuntimeTopologyV1};
 use zeroize::Zeroizing;
@@ -20,10 +21,6 @@ impl RuntimeRoleCredentialV1 {
         (!password.is_empty())
             .then_some(Self { binding, password })
             .ok_or_else(|| "Storage runtime credential is unavailable".to_owned())
-    }
-
-    pub(crate) fn binding(&self) -> &StorageBindingV1 {
-        &self.binding
     }
 }
 
@@ -98,16 +95,47 @@ async fn reconcile_roles(
     for runtime_credential in runtime_credentials {
         let spec = StorageRoleSpecV1::platform_binding(runtime_credential.binding.clone())
             .map_err(|_| "Storage role specification is invalid".to_owned())?;
-        ensure_storage_roles(&connector, &spec)
-            .await
-            .map_err(|error| {
-                tracing::warn!(
-                    event = "storage.role.reconciliation.failed",
-                    error.class = "postgres_role_reconciliation",
-                    error.message = ?error,
-                );
-                "Storage role reconciliation is unavailable".to_owned()
-            })?;
+        match ensure_storage_roles(&connector, &spec).await {
+            Ok(()) => {}
+            Err(error) => {
+                if repair_legacy_storage_ledger_binding(&connector, &spec)
+                    .await
+                    .map_err(|_| "Storage role reconciliation is unavailable".to_owned())?
+                {
+                    tracing::warn!(
+                        event = "storage.role.reconciliation.legacy_repair_applied",
+                        error.class = "postgres_role_reconciliation",
+                        error.message = ?error,
+                        owner_id = %spec.owner_id(),
+                        runtime_instance_id = %spec.binding().identity().runtime_instance_id(),
+                        registration_id = %spec.binding().identity().registration_id(),
+                    );
+                    ensure_storage_roles(&connector, &spec)
+                        .await
+                        .map_err(|error| {
+                            tracing::warn!(
+                                event = "storage.role.reconciliation.failed_after_legacy_repair",
+                                error.class = "postgres_role_reconciliation",
+                                error.message = ?error,
+                                owner_id = %spec.owner_id(),
+                                runtime_instance_id = %spec.binding().identity().runtime_instance_id(),
+                                registration_id = %spec.binding().identity().registration_id(),
+                            );
+                            "Storage role reconciliation is unavailable".to_owned()
+                        })?;
+                } else {
+                    tracing::warn!(
+                        event = "storage.role.reconciliation.failed",
+                        error.class = "postgres_role_reconciliation",
+                        error.message = ?error,
+                        owner_id = %spec.owner_id(),
+                        runtime_instance_id = %spec.binding().identity().runtime_instance_id(),
+                        registration_id = %spec.binding().identity().registration_id(),
+                    );
+                    return Err("Storage role reconciliation is unavailable".to_owned());
+                }
+            }
+        }
         set_runtime_role_password(&connector, &spec, &runtime_credential.password)
             .await
             .map_err(|_| "Storage role credential is unavailable".to_owned())?;

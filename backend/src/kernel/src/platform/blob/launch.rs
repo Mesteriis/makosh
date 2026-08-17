@@ -22,12 +22,14 @@ use crate::runtime::managed::execution::ManagedChildExecutionPolicy;
 const BLOB_MODULE_ID: &str = "blob";
 const MAX_ATTEMPTS: u8 = 3;
 const MAX_RUNTIME: Duration = Duration::from_secs(300);
-const MAXIMUM_BLOB_BYTES: u64 = 64 * 1024 * 1024;
+const MAXIMUM_BLOB_BYTES: u64 = 4 * 1024 * 1024 * 1024;
 const CUSTODY_RELEASE_GRACE_PERIOD_MS: u64 = 24 * 60 * 60 * 1_000;
 
 #[must_use]
-pub(crate) fn data_socket_path(data_dir: &Path) -> std::path::PathBuf {
-    data_dir.join("blob").join("data.sock")
+pub(crate) fn data_socket_path(runtime_dir: &Path) -> std::path::PathBuf {
+    // Place runtime sockets under the short runtime cache path to stay below
+    // platform pathname limits.
+    runtime_dir.join("blob").join("data.sock")
 }
 
 pub fn start(
@@ -146,10 +148,8 @@ fn prepare_launch(
 > {
     let service_data_dir = data_dir.join("blob");
     prepare_owner_private_directory(&service_data_dir)?;
-    // Unix socket paths have a small kernel-defined byte limit. The
-    // OS-standard runtime cache path can exceed it on macOS, while the
-    // owner-private Kernel data directory is an already-short service boundary.
-    let data_socket_path = data_socket_path(data_dir);
+    // Unix socket paths have a small kernel-defined byte limit.
+    let data_socket_path = data_socket_path(runtime_dir);
     let prepared = native_launch::prepare_bound_platform_process(
         kernel,
         binding,

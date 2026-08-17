@@ -186,7 +186,7 @@ fn valid_provided_surface(surface: &crate::v1::ProvidedSurfaceV1) -> bool {
     }
 }
 
-const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 32 * 1024 * 1024;
+const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 4 * 1024 * 1024 * 1024;
 
 fn valid_client_blob_path(path: &str) -> bool {
     path.starts_with("/api/blobs/")

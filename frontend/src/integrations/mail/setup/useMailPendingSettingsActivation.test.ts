@@ -29,7 +29,14 @@ describe('useMailPendingSettingsActivation', () => {
 				create(ClientModuleSettingsTargetBootstrapV1Schema, {
 					configurationInstanceId: 'account-b',
 					desiredRevision: 12n,
-					applyState: ClientSettingsApplyStateV1.PENDING_VALIDATION,
+					applyState: ClientSettingsApplyStateV1.BLOCKED_CONFIG,
+					sanitizedReasonCode: 'managed_readiness_failed',
+				}),
+				create(ClientModuleSettingsTargetBootstrapV1Schema, {
+					configurationInstanceId: 'invalid-account',
+					desiredRevision: 7n,
+					applyState: ClientSettingsApplyStateV1.BLOCKED_CONFIG,
+					sanitizedReasonCode: 'settings_validation_failed',
 				}),
 			],
 		})

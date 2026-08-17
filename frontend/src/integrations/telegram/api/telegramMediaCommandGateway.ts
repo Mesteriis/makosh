@@ -1,5 +1,6 @@
 import type { TelegramOperationResponse } from '../../../gen/makosh/telegram/v1/client_pb'
 import { getTelegramOperationalConnectClient } from './telegramOperationalClient'
+import { withTelegramOperationalRuntimeV1 } from './telegramOperationalRuntimeRetry'
 
 const MAX_REFERENCE_ID_BYTES = 64
 
@@ -21,7 +22,7 @@ export async function sendTelegramMedia(input: TelegramMediaTarget & {
 	if (input.declaredSize <= 0n) {
 		throw new RangeError('Telegram media size must be positive')
 	}
-	return getTelegramOperationalConnectClient().executeCommand({
+	return withTelegramOperationalRuntimeV1(() => getTelegramOperationalConnectClient().executeCommand({
 		command: {
 			case: 'sendMedia',
 			value: {
@@ -37,7 +38,7 @@ export async function sendTelegramMedia(input: TelegramMediaTarget & {
 				filename: optionalIdentifier(input.filename),
 			},
 		},
-	})
+		}), 'interactive', input.accountId)
 }
 
 export async function downloadTelegramFile(input: {
@@ -45,8 +46,8 @@ export async function downloadTelegramFile(input: {
 	providerFileId: string
 	operationId: string
 	priority: number
-}): Promise<TelegramOperationResponse> {
-	return getTelegramOperationalConnectClient().executeCommand({
+	}, requestPriority: 'interactive' | 'media' = 'interactive'): Promise<TelegramOperationResponse> {
+	return withTelegramOperationalRuntimeV1(() => getTelegramOperationalConnectClient().executeCommand({
 		command: {
 			case: 'downloadFile',
 			value: {
@@ -56,7 +57,7 @@ export async function downloadTelegramFile(input: {
 				priority: input.priority,
 			},
 		},
-	})
+		}), requestPriority, input.accountId)
 }
 
 function normalizeTarget(target: TelegramMediaTarget): TelegramMediaTarget {

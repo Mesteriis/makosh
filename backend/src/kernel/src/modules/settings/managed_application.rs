@@ -188,9 +188,12 @@ fn validate_current_target(
         .settings_configuration_target(registration_id, configuration_instance_id)
         .map_err(store_error)?
         .ok_or_else(|| "managed module settings are unavailable".to_owned())?;
+    let retries_readiness_failure =
+        retryable_readiness_failure(settings.apply_state(), settings.sanitized_reason_code());
     if settings.desired_revision() != expected_desired_revision
         || settings.effective_revision() >= expected_desired_revision
-        || settings.apply_state() != SettingsApplyState::PendingValidation
+        || (settings.apply_state() != SettingsApplyState::PendingValidation
+            && !retries_readiness_failure)
     {
         return Err("managed module settings revision is stale".to_owned());
     }
@@ -204,7 +207,22 @@ fn validate_current_target(
     {
         return Err("managed module Storage binding is unavailable".to_owned());
     }
+    if retries_readiness_failure {
+        store
+            .transition_settings_apply_state_for_target(
+                registration_id,
+                configuration_instance_id,
+                expected_desired_revision,
+                SettingsApplyState::PendingValidation,
+                None,
+            )
+            .map_err(store_error)?;
+    }
     Ok(classify_apply_kind(settings.effective_revision(), active))
+}
+
+fn retryable_readiness_failure(state: SettingsApplyState, reason: Option<&str>) -> bool {
+    state == SettingsApplyState::BlockedConfig && reason == Some(READINESS_FAILED)
 }
 
 fn classify_apply_kind(effective_revision: u64, runtime_active: bool) -> ManagedApplyKindV1 {
@@ -301,7 +319,9 @@ fn store_error(error: StoreError) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{ManagedApplyKindV1, classify_apply_kind};
+    use makosh_kernel_control_store::SettingsApplyState;
+
+    use super::{ManagedApplyKindV1, classify_apply_kind, retryable_readiness_failure};
 
     #[test]
     fn inactive_runtime_relaunches_for_pending_successor_settings() {
@@ -317,5 +337,21 @@ mod tests {
             classify_apply_kind(3, true),
             ManagedApplyKindV1::Replacement
         );
+    }
+
+    #[test]
+    fn only_readiness_failure_is_retryable_without_a_new_settings_revision() {
+        assert!(retryable_readiness_failure(
+            SettingsApplyState::BlockedConfig,
+            Some("managed_readiness_failed"),
+        ));
+        assert!(!retryable_readiness_failure(
+            SettingsApplyState::BlockedConfig,
+            Some("settings_validation_failed"),
+        ));
+        assert!(!retryable_readiness_failure(
+            SettingsApplyState::PendingValidation,
+            None,
+        ));
     }
 }

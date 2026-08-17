@@ -1,6 +1,13 @@
 syntax = "proto3";
 package makosh.mail.v1;
 
+// Client-safe notification that an account-local Mail projection advanced.
+// Message content and provider identifiers stay behind operational queries.
+message MailOperationalProjectionChangedV1 {
+  string connection_id = 1;
+  uint64 revision = 2;
+}
+
 message SyncInboxRequestV1 {
   string operation_id = 1;
   string connection_id = 2;

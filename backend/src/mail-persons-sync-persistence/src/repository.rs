@@ -301,6 +301,7 @@ impl MailPersonsSyncPersistenceV1 {
             return Err(MailPersonsSyncPersistenceErrorV1::StorageUnavailable);
         }
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(host)
             .port(u16::try_from(port).map_err(|_| storage())?)
             .username(binding.access().runtime_principal())

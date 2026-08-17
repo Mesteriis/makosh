@@ -26,6 +26,7 @@ export function useTelegramDiscovery(input: {
 	accountId: () => string
 	canQuery: () => boolean
 	selectedChatId: () => string
+	senderPersonaNames?: () => ReadonlyMap<string, string>
 }) {
 	const query = ref('')
 	const chats = ref<readonly TelegramChatProjection[]>([])
@@ -46,8 +47,12 @@ export function useTelegramDiscovery(input: {
 			results: buildTelegramDiscoveryResults({
 				chats: chats.value,
 				messages: messages.value,
+				personaNames: input.senderPersonaNames?.(),
 			}),
-			history: buildTelegramHistoryRows(history.value?.item || []),
+			history: buildTelegramHistoryRows(
+				history.value?.item || [],
+				input.senderPersonaNames?.(),
+			),
 			participants: contextView.participants,
 			topics: contextView.topics,
 			folders: contextView.folders,

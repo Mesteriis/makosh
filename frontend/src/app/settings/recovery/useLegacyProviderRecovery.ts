@@ -2,7 +2,7 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import { MailLegacyRecoveryWorkflowV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
 import type { MailLegacyRecoveryResultV1 } from '../../../integrations/mail/recovery/mailLegacyRecoveryWorkflow'
-import { runGmailOAuthBrowserFlowV1 } from '../../../integrations/mail/oauth/gmailOAuthBrowserFlow'
+import { redirectGmailOAuthInSameTabV1 } from '../../../integrations/mail/oauth/gmailOAuthRedirectFlow'
 import {
 	TelegramLegacyRecoveryWorkflowV1,
 	type TelegramLegacyRecoveryResultV1,
@@ -118,12 +118,12 @@ export function useLegacyProviderRecovery(
 		const current = gmailResult.value
 		if (!current || current.kind !== 'gmail') return
 		await run(async () => {
-			const callback = await runGmailOAuthBrowserFlowV1(
-				current.oauth.started.authorizationUrl,
-			)
-			await mail.completeGmail(current, callback)
-			oauthAccepted.value = true
-			message.value = 'Gmail OAuth completion was accepted. Mail readiness will update after reconciliation.'
+			redirectGmailOAuthInSameTabV1(current.oauth.started.authorizationUrl, {
+				operationId: current.oauth.operationId,
+				connectionId: current.oauth.connectionId,
+				setupId: current.oauth.started.setupId,
+			})
+			message.value = 'Redirecting to Google. Макошь will resume authorization after the callback.'
 		}, 'Gmail OAuth completion was rejected.')
 	}
 

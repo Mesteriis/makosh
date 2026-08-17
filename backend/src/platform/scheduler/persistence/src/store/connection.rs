@@ -78,6 +78,7 @@ impl SchedulerPostgresStoreV1 {
             return Err(SchedulerStoreConnectionErrorV1::CredentialUnavailable);
         }
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(&endpoint.host)
             .port(endpoint.port)
             // PgBouncer admits runtime connections only through the fenced

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { Code, ConnectError } from '@connectrpc/connect'
 
 import {
 	listTelegramAccounts,
@@ -33,6 +34,7 @@ describe('Telegram lifecycle Gateway adapter', () => {
 
 	it('lists and provisions owner-local accounts', async () => {
 		execute
+			.mockRejectedValueOnce(new ConnectError('runtime busy', Code.Unavailable))
 			.mockResolvedValueOnce({
 				response: { case: 'accounts', value: { account: [{ accountId: 'account-1' }] } },
 			})
@@ -41,6 +43,7 @@ describe('Telegram lifecycle Gateway adapter', () => {
 			})
 
 		await expect(listTelegramAccounts()).resolves.toHaveLength(1)
+		expect(execute).toHaveBeenCalledTimes(2)
 		await expect(provisionTelegramAccount({
 			accountId: ' account-2 ',
 			displayName: ' Personal ',
@@ -48,7 +51,7 @@ describe('Telegram lifecycle Gateway adapter', () => {
 			credentials: [],
 		})).resolves.toMatchObject({ accountId: 'account-2' })
 
-		expect(execute).toHaveBeenNthCalledWith(2, {
+		expect(execute).toHaveBeenNthCalledWith(3, {
 			request: {
 				case: 'provision',
 				value: {

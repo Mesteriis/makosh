@@ -45,7 +45,7 @@ pub(crate) fn start_from_kernel(
         .map_err(|_| "Telemetry release binding is unavailable".to_owned())?
         .ok_or_else(|| "Telemetry release binding is unavailable".to_owned())?;
     let generation = next_generation(store)?;
-    let service_runtime_dir = prepare_service_directories(data_dir)?;
+    let service_runtime_dir = prepare_service_directories(data_dir, runtime_dir)?;
     let (artifact, contracts) = prepare(kernel, &binding, runtime_dir, generation)?;
     let arguments = match inherited_arguments(data_dir, &service_runtime_dir, &contracts) {
         Ok(arguments) => arguments,
@@ -90,12 +90,16 @@ pub(crate) fn start_from_kernel(
     }
 }
 
-fn prepare_service_directories(data_dir: &Path) -> Result<std::path::PathBuf, String> {
+fn prepare_service_directories(
+    data_dir: &Path,
+    runtime_dir: &Path,
+) -> Result<std::path::PathBuf, String> {
     let data_directory = data_dir.join("telemetry");
     prepare_owner_private_directory(&data_directory)?;
-    // The OS runtime-cache path can exceed Unix-domain socket limits on macOS.
-    // Keep the collector socket beneath the owner-private data directory.
-    let runtime_directory = data_directory.join("runtime");
+    // Use runtime_dir directly for the collector socket path:
+    // "<runtime_dir>/telemetry.sock" keeps Unix socket paths below
+    // platform pathname limits.
+    let runtime_directory = runtime_dir.to_owned();
     prepare_owner_private_directory(&runtime_directory)?;
     Ok(runtime_directory)
 }

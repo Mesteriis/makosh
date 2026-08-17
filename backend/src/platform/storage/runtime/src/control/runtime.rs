@@ -73,9 +73,13 @@ fn serve_bootstrapped(
         grant.epoch = identity.audience().grant_epoch(),
     );
     let _entered = span.enter();
+    let topology = configuration.topology.as_ref().expect("validated topology");
     tracing::debug!(
         event = "storage.configuration.loaded",
-        payload.configuration = ?configuration,
+        topology.revision = topology.topology_revision,
+        storage.generation = topology.storage_generation,
+        bindings.desired_count = configuration.desired_bindings.len(),
+        bundles.desired_count = configuration.desired_bundles.len(),
     );
     let configuration = quarantine_invalid_desired_bindings(&configuration);
     let active_bindings = bootstrap_platform_services(&mut channel, &identity, &configuration)?;
@@ -189,7 +193,7 @@ fn bootstrap_platform_services(
         configuration,
         &pgbouncer_credential,
         &postgres_credential,
-        &runtime_credentials,
+        &configuration.desired_bindings,
     )?;
     Ok(configuration.desired_bindings.clone())
 }
@@ -209,11 +213,26 @@ pub(super) fn resolve_runtime_credentials(
         .desired_bindings
         .iter()
         .cloned()
-        .map(|binding| resolve_runtime_credential(&mut vault, binding))
+        .map(|binding| resolve_runtime_credential_from_vault(&mut vault, binding))
         .collect()
 }
 
-fn resolve_runtime_credential(
+pub(super) fn resolve_runtime_credential(
+    channel: &UnixStream,
+    configuration: &StorageRuntimeConfigurationV1,
+    binding: makosh_storage_protocol::v1::StorageBindingV1,
+) -> Result<RuntimeRoleCredentialV1, String> {
+    let context = vault_route_context(configuration)?;
+    let route = InheritedVaultRoutePortV1::new(
+        channel
+            .try_clone()
+            .map_err(|_| "Storage inherited control channel is unavailable".to_owned())?,
+    );
+    let mut vault = StorageVaultLeaseAdapterV1::new(route, context);
+    resolve_runtime_credential_from_vault(&mut vault, binding)
+}
+
+fn resolve_runtime_credential_from_vault(
     vault: &mut StorageVaultLeaseAdapterV1<InheritedVaultRoutePortV1>,
     binding: makosh_storage_protocol::v1::StorageBindingV1,
 ) -> Result<RuntimeRoleCredentialV1, String> {
@@ -297,16 +316,24 @@ fn response_for(
     configuration: &mut StorageRuntimeConfigurationV1,
     active_bindings: &mut Vec<makosh_storage_protocol::v1::StorageBindingV1>,
 ) -> StorageRuntimeControlResponseV1 {
+    let (request_op, request_binding_present, request_bundle_present) =
+        storage_runtime_request_signature(&request);
     let is_status_probe = matches!(request.operation, Some(Operation::GetStatus(_)));
     if is_status_probe {
         tracing::trace!(
             event = "storage.control.status_probe.received",
-            payload.request = ?request,
+            request.operation = request_op,
+            request.binding_present = request_binding_present,
+            request.bundle_present = request_bundle_present,
+            request.payload_size = request.encoded_len(),
         );
     } else {
         tracing::debug!(
             event = "storage.control.request.received",
-            payload.request = ?request,
+            request.operation = request_op,
+            request.binding_present = request_binding_present,
+            request.bundle_present = request_bundle_present,
+            request.payload_size = request.encoded_len(),
         );
     }
     if validate_storage_runtime_control_request(&request).is_err() {
@@ -370,6 +397,23 @@ fn response_for(
             },
         ),
         None => error_response("operation_not_available"),
+    }
+}
+
+fn storage_runtime_request_signature(
+    request: &StorageRuntimeControlRequestV1,
+) -> (&'static str, bool, bool) {
+    match request.operation.as_ref() {
+        Some(Operation::GetStatus(_)) => ("get_status", false, false),
+        Some(Operation::RevokeBinding(revoke_request)) => {
+            ("revoke_binding", revoke_request.binding.is_some(), false)
+        }
+        Some(Operation::ApplyBinding(apply_request)) => (
+            "apply_binding",
+            apply_request.binding.is_some(),
+            apply_request.bundle.is_some(),
+        ),
+        None => ("none", false, false),
     }
 }
 

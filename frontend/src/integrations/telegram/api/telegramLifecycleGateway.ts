@@ -6,6 +6,7 @@ import type {
 } from '../../../gen/makosh/telegram/v1/client_pb'
 import { getTelegramLifecycleConnectClient } from './telegramLifecycleClient'
 import { getTelegramReconfigurationConnectClient } from './telegramReconfigurationClient'
+import { withTelegramConfigurationRuntimeV1 } from '../setup/telegramConfigurationRuntimeRetry'
 
 const REPLAY_LIMIT = 100
 
@@ -17,9 +18,11 @@ export type ProvisionTelegramAccountInput = {
 }
 
 export async function listTelegramAccounts(): Promise<readonly TelegramAccountResponse[]> {
-	const response = await getTelegramLifecycleConnectClient().execute({
-		request: { case: 'listAccounts', value: {} },
-	})
+	const response = await withTelegramConfigurationRuntimeV1(() =>
+		getTelegramLifecycleConnectClient().execute({
+			request: { case: 'listAccounts', value: {} },
+		}),
+	)
 	if (response.response.case !== 'accounts') {
 		throw new Error('Telegram account projection is unavailable')
 	}

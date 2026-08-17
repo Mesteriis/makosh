@@ -18,6 +18,7 @@ use makosh_communication_delivery_intent_runtime::{
     },
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedWorkflowRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -140,6 +141,9 @@ where
             configuration.event_credential_revision,
         ))
         .map_err(runtime_error)?;
+    let mut poll_backoff =
+        ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_millis(100))
+            .map_err(|_| "Communication Delivery Intent polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -147,54 +151,61 @@ where
             .as_secs()
             .try_into()
             .map_err(|_| "Communication Delivery Intent clock is invalid".to_owned())?;
-        executor
-            .block_on(runtime.pump_control_once(now))
-            .map_err(|error| match error {
-                DeliveryIntentRuntimeErrorV1::Unavailable => {
-                    "Communication Delivery Intent runtime failed: control_channel_unavailable"
-                        .to_owned()
-                }
-                error => runtime_error(error),
-            })?;
-        match executor.block_on(runtime.pump_client_realtime_once()) {
-            Ok(_) | Err(DeliveryIntentRuntimeErrorV1::Unavailable) => {}
-            Err(DeliveryIntentRuntimeErrorV1::Persistence(
-                DeliveryIntentPersistenceErrorV1::StorageUnavailable,
-            )) => {}
-            Err(error) => return Err(runtime_error(error)),
+        let mut progressed =
+            executor
+                .block_on(runtime.pump_control_once(now))
+                .map_err(|error| match error {
+                    DeliveryIntentRuntimeErrorV1::Unavailable => {
+                        "Communication Delivery Intent runtime failed: control_channel_unavailable"
+                            .to_owned()
+                    }
+                    error => runtime_error(error),
+                })?;
+        progressed |= retry_delivery_step(executor.block_on(runtime.pump_client_realtime_once()))?;
+        progressed |=
+            retry_delivery_step(executor.block_on(runtime.process_next_provider_command_v1(now)))?;
+        progressed |=
+            retry_terminal_step(executor.block_on(runtime.consume_next_terminal_result_v1(now)))?;
+        progressed |= retry_event_ingress_step(
+            executor.block_on(runtime.consume_next_event_ingress_v1(now)),
+        )?;
+        progressed |=
+            retry_delivery_step(executor.block_on(runtime.relay_ingress_result_once_v1(now)))?;
+        progressed |=
+            retry_delivery_step(executor.block_on(runtime.process_ingress_cleanup_once_v1(now)))?;
+        let delay = poll_backoff.observe(progressed);
+        if !delay.is_zero() {
+            std::thread::sleep(delay);
         }
-        match executor.block_on(runtime.process_next_provider_command_v1(now)) {
-            Ok(_) | Err(DeliveryIntentRuntimeErrorV1::Unavailable) => {}
-            Err(DeliveryIntentRuntimeErrorV1::Persistence(
-                DeliveryIntentPersistenceErrorV1::StorageUnavailable,
-            )) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.consume_next_terminal_result_v1(now)) {
-            Ok(_) => {}
-            Err(error) if retryable_terminal_result_error(error) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.consume_next_event_ingress_v1(now)) {
-            Ok(_) => {}
-            Err(error) if retryable_event_ingress_error(error) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.relay_ingress_result_once_v1(now)) {
-            Ok(_) | Err(DeliveryIntentRuntimeErrorV1::Unavailable) => {}
-            Err(DeliveryIntentRuntimeErrorV1::Persistence(
-                DeliveryIntentPersistenceErrorV1::StorageUnavailable,
-            )) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        match executor.block_on(runtime.process_ingress_cleanup_once_v1(now)) {
-            Ok(_) | Err(DeliveryIntentRuntimeErrorV1::Unavailable) => {}
-            Err(DeliveryIntentRuntimeErrorV1::Persistence(
-                DeliveryIntentPersistenceErrorV1::StorageUnavailable,
-            )) => {}
-            Err(error) => return Err(runtime_error(error)),
-        }
-        std::thread::sleep(Duration::from_millis(25));
+    }
+}
+
+fn retry_delivery_step(result: Result<bool, DeliveryIntentRuntimeErrorV1>) -> Result<bool, String> {
+    match result {
+        Ok(progressed) => Ok(progressed),
+        Err(DeliveryIntentRuntimeErrorV1::Unavailable)
+        | Err(DeliveryIntentRuntimeErrorV1::Persistence(
+            DeliveryIntentPersistenceErrorV1::StorageUnavailable,
+        )) => Ok(false),
+        Err(error) => Err(runtime_error(error)),
+    }
+}
+
+fn retry_terminal_step(result: Result<bool, DeliveryIntentRuntimeErrorV1>) -> Result<bool, String> {
+    match result {
+        Ok(progressed) => Ok(progressed),
+        Err(error) if retryable_terminal_result_error(error) => Ok(false),
+        Err(error) => Err(runtime_error(error)),
+    }
+}
+
+fn retry_event_ingress_step(
+    result: Result<bool, DeliveryIntentRuntimeErrorV1>,
+) -> Result<bool, String> {
+    match result {
+        Ok(progressed) => Ok(progressed),
+        Err(error) if retryable_event_ingress_error(error) => Ok(false),
+        Err(error) => Err(runtime_error(error)),
     }
 }
 
@@ -340,5 +351,15 @@ mod tests {
         assert!(!retryable_terminal_result_error(
             DeliveryIntentRuntimeErrorV1::EventContract,
         ));
+    }
+
+    #[test]
+    fn idle_and_retryable_steps_do_not_claim_progress() {
+        assert_eq!(retry_delivery_step(Ok(false)), Ok(false));
+        assert_eq!(
+            retry_delivery_step(Err(DeliveryIntentRuntimeErrorV1::Unavailable)),
+            Ok(false)
+        );
+        assert!(retry_delivery_step(Err(DeliveryIntentRuntimeErrorV1::EventContract)).is_err());
     }
 }

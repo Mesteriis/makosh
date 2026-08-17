@@ -18,13 +18,14 @@ use sha2::{Digest, Sha256};
 
 pub const MAIL_PERSONS_SYNC_MODULE_ID_V1: &str = "makosh-mail-persons-sync-runtime";
 pub const MAIL_PERSONS_SYNC_STORAGE_CAPABILITY_ID_V1: &str = "mail_persons_sync.storage.v1";
+pub const MAIL_PERSONS_SYNC_SETTINGS_SCHEMA_REVISION_V2: u32 = 2;
 const STORAGE_CONNECTION_BUDGET_V1: u32 = 4;
 
 #[must_use]
 pub fn mail_persons_sync_settings_schema_v1() -> SettingsSchemaV1 {
     SettingsSchemaV1 {
         major: 1,
-        revision: 1,
+        revision: MAIL_PERSONS_SYNC_SETTINGS_SCHEMA_REVISION_V2,
         definitions: Vec::new(),
     }
 }
@@ -53,7 +54,7 @@ pub fn mail_persons_sync_module_descriptor_v1(build_id: &str) -> ModuleDescripto
         capabilities: capabilities(),
         settings_schema_ref: Some(SettingsSchemaRefV1 {
             major: 1,
-            revision: 1,
+            revision: MAIL_PERSONS_SYNC_SETTINGS_SCHEMA_REVISION_V2,
             artifact_size_bytes: settings.len() as u64,
             sha256: Sha256::digest(&settings).to_vec(),
         }),

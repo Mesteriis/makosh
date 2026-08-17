@@ -45,4 +45,46 @@ describe('Telegram message inspector presentation model', () => {
 		expect(model.reactions[0]).toMatchObject({ title: '👍 · 2' })
 		expect(model.commands[0]).toMatchObject({ id: 'operation-1', detail: 'completed' })
 	})
+
+	it('describes media without square-bracket transport markers', () => {
+		const model = buildTelegramMessageInspectionView({
+			message: { messageId: 'message-1' } as never,
+			versions: [],
+			tombstones: [],
+			mutations: [],
+			references: {} as never,
+			replyChain: [{
+				messageId: 'reply-1',
+				text: 'Video',
+				media: { kind: 'video', filename: '', caption: '' },
+			} as never],
+			forwardChain: [],
+			reactions: [],
+			reactionSummary: [],
+			commands: [],
+			pinned: false,
+		} as never)
+
+		expect(model.replyChain[0]?.detail).toBe('Video')
+
+		const modelFromForward = buildTelegramMessageInspectionView({
+			message: { messageId: 'message-1' } as never,
+			versions: [],
+			tombstones: [],
+			mutations: [],
+			references: {},
+			replyChain: [],
+			forwardChain: [{
+				messageId: 'forward-1',
+				text: undefined,
+				media: { kind: 'photo', filename: '[photo]', caption: '[video]' },
+			} as never],
+			reactions: [],
+			reactionSummary: [],
+			commands: [],
+			pinned: false,
+		} as never)
+
+		expect(modelFromForward.forwardChain[0]?.detail).toBe('Photo')
+	})
 })

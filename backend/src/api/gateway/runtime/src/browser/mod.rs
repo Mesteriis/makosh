@@ -13,8 +13,8 @@ pub(crate) mod system_status;
 pub use auth::{BrowserAuthenticationRouter, SharedBrowserGatewaySessionService};
 pub use bootstrap::BrowserBootstrapRouter;
 pub use client_blob::{
-    ClientBlobContractVersionV1, ClientBlobRouteErrorV1, ClientBlobRouteHandler, ClientBlobRouteV1,
-    ClientBlobRouter, ClientBlobTransportV1,
+    ClientBlobContractVersionV1, ClientBlobReadV1, ClientBlobRouteErrorV1, ClientBlobRouteHandler,
+    ClientBlobRouteV1, ClientBlobRouter, ClientBlobTransportV1,
 };
 pub use client_bootstrap::ClientBootstrapRouter;
 pub use client_rpc::{

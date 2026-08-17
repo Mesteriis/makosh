@@ -508,6 +508,7 @@ pub type MailOperationId = String;
 pub enum MailCredentialPurpose {
     ImapPassword,
     GmailAccessToken,
+    GmailOAuthClientSecret,
     GmailRefreshCredential,
     SmtpPassword,
     IcloudCardDavPassword,
@@ -518,6 +519,7 @@ impl MailCredentialPurpose {
         match self {
             Self::ImapPassword => "mail_imap_password",
             Self::GmailAccessToken => "mail_gmail_access_token",
+            Self::GmailOAuthClientSecret => "mail_gmail_oauth_client_secret",
             Self::GmailRefreshCredential => "mail_gmail_refresh_credential",
             Self::SmtpPassword => "mail_smtp_password",
             Self::IcloudCardDavPassword => "mail_icloud_carddav_password",

@@ -388,6 +388,11 @@ impl OwnerControlClientV1 {
                     && value.binding_revision > 0
                     && value.role_epoch > 0
                     && value.credential_lease_revision > 0
+                    && !value.runtime_instance_id.is_empty()
+                    && value.runtime_generation > 0
+                    && value.grant_epoch > 0
+                    && value.storage_bundle_revision > 0
+                    && value.storage_bundle_digest.len() == 32
                     && matches!(value.binding_state.as_str(), "active" | "revoking") =>
             {
                 Ok(value)

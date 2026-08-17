@@ -16,6 +16,7 @@ const TELEGRAM_AUTHORIZATION_REALTIME_CAPABILITY_ID = 'telegram.authorization.re
 export function useTelegramQrPairing(
 	module: () => ClientModuleBootstrapV1 | null,
 	startRequest: () => number = () => 0,
+	configuredLocally: () => boolean = () => false,
 ) {
 	const state = ref('unknown')
 	const qrDataUrl = ref('')
@@ -32,12 +33,23 @@ export function useTelegramQrPairing(
 				&& capabilities.includes(TELEGRAM_AUTHORIZATION_REALTIME_CAPABILITY_ID)
 		},
 	)
-	const configured = computed(() => (module()?.settings?.effectiveRevision ?? 0n) > 0n)
+	const configured = computed(() => (
+		configuredLocally()
+		|| (module()?.settings?.effectiveRevision ?? 0n) > 0n
+	))
 	const canRefresh = computed(() => admitted.value && configured.value)
 	let pendingStartRequest = 0
 	let handledStartRequest = 0
 
 	async function refresh(): Promise<void> {
+		await refreshAuthorizationStatus(false)
+	}
+
+	async function refreshPreservingRealtimeState(): Promise<void> {
+		await refreshAuthorizationStatus(true)
+	}
+
+	async function refreshAuthorizationStatus(preserveRealtimeState: boolean): Promise<void> {
 		if (!canRefresh.value || busy.value) return
 		busy.value = true
 		try {
@@ -50,6 +62,7 @@ export function useTelegramQrPairing(
 			message.value = statusMessage(state.value)
 			messageTone.value = state.value === 'ready' ? 'success' : 'neutral'
 		} catch {
+			if (preserveRealtimeState && state.value !== 'unknown') return
 			clearQr()
 			message.value = 'Telegram authorization status is unavailable.'
 			messageTone.value = 'error'
@@ -78,12 +91,23 @@ export function useTelegramQrPairing(
 	function openRealtime(): void {
 		if (realtime) return
 		realtime = openTelegramAuthorizationRealtime(
-			() => void refresh(),
+			handleRealtimeStatus,
 			() => {
 				message.value = 'Telegram authorization realtime is unavailable. Use Refresh for recovery.'
 				messageTone.value = 'error'
 			},
 		)
+	}
+
+	function handleRealtimeStatus(nextState: string): void {
+		state.value = nextState
+		if (nextState !== 'waiting_qr_scan') clearQr()
+		if (nextState !== 'waiting_password') passwordHint.value = ''
+		message.value = statusMessage(nextState)
+		messageTone.value = nextState === 'ready' ? 'success' : 'neutral'
+		if (nextState === 'waiting_qr_scan' || nextState === 'waiting_password') {
+			void refreshPreservingRealtimeState()
+		}
 	}
 
 	function closeRealtime(): void {

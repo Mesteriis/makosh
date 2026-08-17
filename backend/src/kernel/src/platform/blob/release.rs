@@ -34,7 +34,7 @@ use crate::runtime::lifecycle::supervisor::ManagedRuntimeRelayPort;
 
 const RELEASE_GRANT_TTL_MS: u64 = 30_000;
 const MAX_SOURCE_PROOF_BYTES: usize = 2_048;
-const MAX_BLOB_BYTES: u64 = 64 * 1024 * 1024;
+const MAX_BLOB_BYTES: u64 = 4 * 1024 * 1024 * 1024;
 
 pub(crate) struct BlobCustodyReleaseHandlerV1 {
     store: Arc<SqliteControlStore>,

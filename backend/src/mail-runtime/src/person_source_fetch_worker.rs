@@ -71,15 +71,14 @@ pub async fn consume_and_process_person_source_fetch_v1(
     runtime: &mut MailAdmittedRuntime,
     now_unix_seconds: i64,
 ) -> Result<bool, MailPersonSourceFetchWorkerErrorV1> {
-    let delivery = match receive_runtime_pull_delivery(
-        &runtime.event_connection,
-        &runtime.person_source_fetch_subscribe_permit,
-    )
-    .await
-    {
-        Ok(delivery) => delivery,
-        Err(_) => return Ok(false),
+    let Some(subscribe_permit) = runtime.person_source_fetch_subscribe_permit.clone() else {
+        return Ok(false);
     };
+    let delivery =
+        match receive_runtime_pull_delivery(&runtime.event_connection, &subscribe_permit).await {
+            Ok(delivery) => delivery,
+            Err(_) => return Ok(false),
+        };
     let record = OutboxRecordV1::accept(delivery.exact_bytes().to_vec())
         .map_err(|_| MailPersonSourceFetchWorkerErrorV1::InvalidEnvelope)?;
     let admission =

@@ -1,6 +1,6 @@
 import { computed, ref, shallowRef } from 'vue'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
-import { runGmailOAuthBrowserFlowV1 } from '../oauth/gmailOAuthBrowserFlow'
+import { redirectGmailOAuthInSameTabV1 } from '../oauth/gmailOAuthRedirectFlow'
 import {
 	MailAccountPortabilityWorkflowV1,
 	type MailAccountImportStateV1,
@@ -160,12 +160,10 @@ export function useMailAccountPortability(
 			return
 		}
 		await run(async () => {
-			const callback = await runGmailOAuthBrowserFlowV1(
-				current.gmailOAuthStarted!.authorizationUrl,
-			)
-			importState.value = await workflow.completeGmailOAuth(current, {
-				state: callback.returnedState,
-				authorizationCode: callback.authorizationCode,
+			redirectGmailOAuthInSameTabV1(current.gmailOAuthStarted!.authorizationUrl, {
+				operationId: current.gmailOAuthOperationId ?? '',
+				connectionId: current.exported.configuration?.connectionId ?? '',
+				setupId: current.gmailOAuthStarted!.setupId,
 			})
 		}, 'mail_import_gmail_completion_failed')
 	}

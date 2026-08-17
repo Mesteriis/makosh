@@ -55,7 +55,7 @@ const paths = {
     BACKEND_ROOT,
   ),
   controlStoreClientBlobSchema: new URL(
-    'src/kernel/control_store/sqlite/src/schema/v48_to_v49.rs',
+    'src/kernel/control_store/sqlite/src/schema/v49_to_v50.rs',
     BACKEND_ROOT,
   ),
   gatewayClientBlob: new URL(
@@ -225,7 +225,7 @@ test('Kernel launches workflow through a distinct provider-neutral configuration
   assert.match(release, /communications_export\.release-artifacts\.json/);
 });
 
-test('export artifact stays within one exact platform client Blob ceiling', async () => {
+test('export artifact stays within inline ceiling while range objects remain separately bounded', async () => {
   const [
     runtimeDescriptorValidation,
     controlStoreClientBlob,
@@ -239,14 +239,18 @@ test('export artifact stays within one exact platform client Blob ceiling', asyn
       readFile(paths.gatewayClientBlob, 'utf8'),
       readFile(paths.workflowAdmission, 'utf8'),
     ]);
-  const exactCeiling = /const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 32 \* 1024 \* 1024;/;
-  assert.match(runtimeDescriptorValidation, exactCeiling);
-  assert.match(controlStoreClientBlob, exactCeiling);
+  const rangeObjectCeiling = /const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 4 \* 1024 \* 1024 \* 1024;/;
+  assert.match(runtimeDescriptorValidation, rangeObjectCeiling);
+  assert.match(controlStoreClientBlob, rangeObjectCeiling);
   assert.match(
     controlStoreClientBlobSchema,
-    /max_response_bytes BETWEEN 1 AND 33554432/,
+    /max_response_bytes BETWEEN 1 AND 4294967296/,
   );
-  assert.match(gatewayClientBlob, exactCeiling);
+  assert.match(gatewayClientBlob, rangeObjectCeiling);
+  assert.match(
+    gatewayClientBlob,
+    /const MAX_INLINE_BLOB_RESPONSE_BYTES: u64 = 32 \* 1024 \* 1024;/,
+  );
   assert.match(
     workflowAdmission,
     /max_response_bytes: COMMUNICATIONS_EXPORT_MAX_ARTIFACT_BYTES_V1/,

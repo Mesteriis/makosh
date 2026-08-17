@@ -403,13 +403,6 @@ impl MailPersonsSyncManagedRuntimeV1 {
                 .map_err(MailPersonsSyncManagedRuntimeErrorV1::Persistence)?;
             progressed = true;
         }
-        if !progressed {
-            tokio::select! {
-                biased;
-                control = wait_for_control(&mut self.control_channel) => return control,
-                () = tokio::time::sleep(std::time::Duration::from_millis(25)) => {}
-            }
-        }
         Ok(progressed)
     }
 

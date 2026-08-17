@@ -24,7 +24,15 @@ const emit = defineEmits<{
 	<header class="telegram-workspace-toolbar">
 		<div class="telegram-workspace-toolbar__title">
 			<h1>Communications <span>/</span> Telegram</h1>
-			<p>{{ accountAccess.authorizationState || 'Telegram runtime' }}</p>
+			<p>
+				{{ accountAccess.authorizationState || 'Telegram runtime' }}
+				<span
+					class="telegram-workspace-toolbar__realtime"
+					:class="`telegram-workspace-toolbar__realtime--${model.realtimeStatus}`"
+				>
+					{{ model.realtimeStatus === 'live' ? 'Live' : model.realtimeStatus }}
+				</span>
+			</p>
 		</div>
 
 		<form class="telegram-workspace-search" @submit.prevent="emit('openSearch')">

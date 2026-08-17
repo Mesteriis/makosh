@@ -825,3 +825,19 @@ Projects, тогда как Graph, Timeline и Search остаются projectio
 ADR-0406 снимает только development freeze с Obligations owner и разделяет
 confirmed obligation truth, Review-owned candidate state и отдельный reviewed
 promotion workflow; Decisions остаётся заблокированным.
+
+ADR-0412 фиксирует frontend account-lane isolation поверх одного shared Gateway
+SSE: provider/account WebSocket не создаётся, typed events демультиплексируются
+в bounded account controllers, а interactive, realtime, enrichment и media work
+получают независимые budgets. Telegram replay polling удалён; Mail, Telegram,
+WhatsApp и Zulip подключены к общему physical SSE и независимым logical lanes.
+Phase gate остаётся открытым до live-provider latency evidence, production
+telemetry sink, desktop acceptance после сборки и Android lifecycle/reconnect
+conformance.
+
+ADR-0413 переводит Blob large-media path на receipt-bound `HBLBENC3` chunks и
+session-bound HTTP range delivery: старый ciphertext остаётся читаемым,
+Telegram TDLib-файл больше не загружается целиком в память, inline client Blob
+ограничен 32 MiB, а video/audio получают opaque owner/device/session-fenced URL
+с bounded `206 Content-Range`. Live Telegram playback gate остаётся открытым до
+пересборки и реальной provider-проверки.

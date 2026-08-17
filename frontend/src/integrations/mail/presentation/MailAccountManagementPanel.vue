@@ -82,6 +82,15 @@ function deleteAccount(): void {
 		</label>
 
 		<template #actions>
+			<button
+				v-if="management.canAuthorizeGmail.value"
+				class="primary"
+				type="button"
+				:disabled="management.busy.value || management.gmailOAuthCompletionSubmitted.value"
+				@click="management.authorizeGmail"
+			>
+				<Icon icon="tabler:brand-google" /> {{ management.gmailAuthorizationLabel.value }}
+			</button>
 			<button type="button" :disabled="management.busy.value || !management.canQuery.value" @click="management.refresh">
 				<Icon icon="tabler:refresh" /> Refresh
 			</button>

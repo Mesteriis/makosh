@@ -244,13 +244,6 @@ impl ReviewPersonMatchCandidateManagedRuntimeV1 {
                 .map_err(ReviewPersonMatchCandidateManagedRuntimeErrorV1::Persistence)?;
             progressed = true;
         }
-        if !progressed {
-            tokio::select! {
-                biased;
-                control = wait_for_control(&mut self.control, &self.persistence, &self.admission, now_unix_millis) => return control,
-                () = tokio::time::sleep(std::time::Duration::from_millis(25)) => {}
-            }
-        }
         Ok(progressed)
     }
 

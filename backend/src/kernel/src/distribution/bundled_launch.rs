@@ -32,6 +32,13 @@ pub fn admit(
             schema_bytes,
         )?;
     }
+    if let Some(current) = store
+        .effective_bundled_managed_launch_binding(registration_id)
+        .map_err(|error| format!("{error:?}"))?
+        .filter(|binding| exact_artifact_replay(binding, bundle, artifact_id, artifact))
+    {
+        return Ok(current);
+    }
     let binding = BundledManagedLaunchBinding::new(
         registration_id,
         next_binding_revision(store, registration_id)?,
@@ -47,6 +54,37 @@ pub fn admit(
         .record_bundled_managed_launch_binding(&binding)
         .map_err(|error| format!("{error:?}"))?;
     Ok(binding)
+}
+
+fn exact_artifact_replay(
+    binding: &BundledManagedLaunchBinding,
+    bundle: &VerifiedDistributionBundle,
+    artifact_id: &str,
+    artifact: &crate::distribution::bundle_verifier::VerifiedDistributionArtifact,
+) -> bool {
+    exact_binding_matches(
+        binding,
+        &bundle.manifest().distribution_id,
+        artifact_id,
+        artifact.expected_sha256(),
+        artifact.descriptor_sha256(),
+        artifact.settings_schema_sha256(),
+    )
+}
+
+fn exact_binding_matches(
+    binding: &BundledManagedLaunchBinding,
+    distribution_id: &str,
+    artifact_id: &str,
+    executable_sha256: &[u8; 32],
+    descriptor_sha256: Option<&[u8; 32]>,
+    settings_schema_sha256: Option<&[u8; 32]>,
+) -> bool {
+    binding.distribution_id() == distribution_id
+        && binding.artifact_id() == artifact_id
+        && binding.executable_sha256() == executable_sha256
+        && descriptor_sha256 == Some(binding.descriptor_sha256())
+        && settings_schema_sha256 == binding.settings_schema_sha256()
 }
 
 fn validate_registration_contract(
@@ -74,4 +112,63 @@ fn next_binding_revision(store: &SqliteControlStore, registration_id: &str) -> R
                 .checked_add(1)
                 .ok_or_else(|| "managed launch binding revision overflowed".to_owned())
         })
+}
+
+#[cfg(test)]
+mod tests {
+    use makosh_kernel_control_store::BundledManagedLaunchBinding;
+
+    use super::exact_binding_matches;
+
+    fn binding() -> BundledManagedLaunchBinding {
+        BundledManagedLaunchBinding::new(
+            "registration-a",
+            7,
+            "distribution-a",
+            "artifact-a",
+            [1; 32],
+            [2; 32],
+            Some([3; 32]),
+        )
+    }
+
+    #[test]
+    fn exact_byte_equivalent_artifact_reuses_the_current_binding() {
+        assert!(exact_binding_matches(
+            &binding(),
+            "distribution-a",
+            "artifact-a",
+            &[1; 32],
+            Some(&[2; 32]),
+            Some(&[3; 32]),
+        ));
+    }
+
+    #[test]
+    fn any_launch_contract_change_requires_a_successor_binding() {
+        assert!(!exact_binding_matches(
+            &binding(),
+            "distribution-a",
+            "artifact-a",
+            &[9; 32],
+            Some(&[2; 32]),
+            Some(&[3; 32]),
+        ));
+        assert!(!exact_binding_matches(
+            &binding(),
+            "distribution-a",
+            "artifact-a",
+            &[1; 32],
+            Some(&[9; 32]),
+            Some(&[3; 32]),
+        ));
+        assert!(!exact_binding_matches(
+            &binding(),
+            "distribution-a",
+            "artifact-a",
+            &[1; 32],
+            Some(&[2; 32]),
+            None,
+        ));
+    }
 }

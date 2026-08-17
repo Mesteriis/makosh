@@ -288,6 +288,26 @@ impl MailAdmittedRuntime {
             .gmail_oauth
             .clone()
             .ok_or(MailGmailOAuthDispatchErrorV1::InvalidStoredOperation)?;
+        let client_secret = self
+            .resolve_credential(
+                MailCredentialPurpose::GmailOAuthClientSecret,
+                1,
+                SecretClassV1::ProviderCredential,
+            )
+            .map_err(classify_credential_resolution_error);
+        let client_secret = match client_secret {
+            Ok(secret) => Zeroizing::new(
+                String::from_utf8(secret.as_slice().to_vec())
+                    .map_err(|_| MailGmailOAuthDispatchErrorV1::InvalidStoredOperation)?,
+            ),
+            Err(MailGmailOAuthDispatchErrorV1::Rejected) => {
+                return self
+                    .persist_oauth_rejection(&queued.operation_id, rejected_at_unix_seconds)
+                    .await
+                    .map(|()| None);
+            }
+            Err(error) => return Err(error),
+        };
         let prepared = match queued.kind {
             GmailOAuthOperationKindV1::Complete => {
                 let authorization_code = queued
@@ -303,6 +323,7 @@ impl MailAdmittedRuntime {
                         configuration,
                         authorization_code: authorization_code.to_owned(),
                         code_verifier: code_verifier.to_owned(),
+                        client_secret,
                     },
                     queued,
                 }
@@ -340,6 +361,7 @@ impl MailAdmittedRuntime {
                     request: GmailRefreshTokenRequestV1 {
                         configuration,
                         refresh_token: refresh_credential.to_owned(),
+                        client_secret,
                     },
                     current,
                     queued,
@@ -459,7 +481,10 @@ impl MailAdmittedRuntime {
                 completed_at_unix_seconds,
             )
             .await
-            .map_err(map_dispatch_persistence_error)
+            .map_err(map_dispatch_persistence_error)?;
+        self.advance_current_provider_io_epoch()
+            .map_err(|_| MailGmailOAuthDispatchErrorV1::InvalidStoredOperation)?;
+        Ok(())
     }
 
     async fn store_oauth_token_pair(
@@ -834,6 +859,7 @@ fn classify_provider_error(error: GmailAdapterErrorV1) -> MailGmailOAuthDispatch
     }
     match error {
         GmailAdapterErrorV1::InvalidRequest => MailGmailOAuthDispatchErrorV1::Rejected,
+        GmailAdapterErrorV1::OAuthProviderError(_) => MailGmailOAuthDispatchErrorV1::Rejected,
         GmailAdapterErrorV1::ProviderStatus(status)
             if (400..500).contains(&status) && status != 408 && status != 429 =>
         {

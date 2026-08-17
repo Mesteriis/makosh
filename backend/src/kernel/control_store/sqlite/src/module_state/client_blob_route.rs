@@ -9,7 +9,7 @@ use rusqlite::{Connection, params};
 
 use crate::{SqliteControlStore, StoreError, valid_capability_ids, valid_identity_token};
 
-const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 32 * 1024 * 1024;
+const MAX_CLIENT_BLOB_RESPONSE_BYTES: u64 = 4 * 1024 * 1024 * 1024;
 
 impl SqliteControlStore {
     pub fn approved_module_client_blob_routes(

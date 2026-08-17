@@ -130,7 +130,7 @@ export async function loadTelegramChatContext(
 				value: {
 					accountId: normalizedAccountId,
 					providerChatId: normalizedChatId,
-					filter: '',
+					filter: 'recent',
 					offset: 0,
 					limit: PAGE_LIMIT,
 				},

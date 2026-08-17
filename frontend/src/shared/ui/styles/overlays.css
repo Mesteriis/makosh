@@ -125,12 +125,13 @@
 }
 
 .makosh-steps-dialog {
-	width: min(760px, calc(100vw - 32px));
-	max-height: min(760px, calc(100vh - 32px));
+	grid-template-rows: auto minmax(0, 1fr) auto;
+	width: min(680px, calc(100vw - 32px));
+	max-height: min(720px, calc(100vh - 32px));
 }
 
 .makosh-steps-dialog--lg {
-	width: min(1040px, calc(100vw - 32px));
+	width: min(760px, calc(100vw - 32px));
 }
 
 .makosh-steps-dialog .makosh-dialog-body {
@@ -139,9 +140,9 @@
 }
 
 .makosh-steps-dialog .makosh-dialog-header {
-	justify-items: center;
-	padding: 30px var(--h-space-6) var(--h-space-4);
-	text-align: center;
+	justify-items: start;
+	padding: var(--h-space-5) 56px var(--h-space-3) var(--h-space-5);
+	text-align: left;
 }
 
 .makosh-steps-dialog .makosh-dialog-title {
@@ -152,23 +153,21 @@
 
 .makosh-steps-dialog .makosh-dialog-description {
 	max-width: 520px;
-	text-align: center;
+	text-align: left;
 }
 
 .makosh-steps-dialog .makosh-dialog-footer {
 	align-items: center;
-	justify-content: center;
-	border-top: 0;
+	justify-content: flex-end;
+	border-top: 1px solid var(--h-color-border);
 	background: var(--h-color-surface-overlay);
-	padding: 6px var(--h-space-6) 28px;
+	padding: var(--h-space-3) var(--h-space-5);
 }
 
 .makosh-steps {
 	display: grid;
-	min-height: min(520px, calc(100vh - 230px));
-	background:
-		linear-gradient(180deg, color-mix(in srgb, var(--h-color-surface-muted) 70%, transparent), transparent 34%),
-		var(--h-color-surface-overlay);
+	min-height: 0;
+	background: var(--h-color-surface-overlay);
 }
 
 .makosh-steps__content {
@@ -181,7 +180,8 @@
 
 .makosh-steps__slide {
 	display: grid;
-	grid-template-rows: auto minmax(0, 1fr);
+	grid-template-rows: auto auto;
+	align-content: start;
 	width: 100%;
 	min-height: 0;
 	will-change: opacity, transform;
@@ -190,12 +190,12 @@
 .makosh-steps__content-header {
 	display: grid;
 	box-sizing: border-box;
-	justify-self: center;
-	justify-items: center;
+	justify-self: stretch;
+	justify-items: start;
 	gap: 6px;
-	width: min(560px, 100%);
-	padding: var(--h-space-5) var(--h-space-6) var(--h-space-3);
-	text-align: center;
+	width: 100%;
+	padding: var(--h-space-3) var(--h-space-5) var(--h-space-2);
+	text-align: left;
 }
 
 .makosh-steps__content-header h3,
@@ -219,20 +219,20 @@
 
 .makosh-steps__slot {
 	display: grid;
-	place-items: center;
+	place-items: start stretch;
 	width: 100%;
 	min-height: 0;
 	overflow: auto;
-	padding: var(--h-space-4) var(--h-space-6) var(--h-space-5);
-	text-align: center;
+	padding: var(--h-space-3) var(--h-space-5) var(--h-space-5);
+	text-align: left;
 }
 
 .makosh-steps__slot > * {
-	width: min(520px, 100%);
+	width: 100%;
 }
 
 .makosh-steps-dialog--lg .makosh-steps__slot > * {
-	width: min(680px, 100%);
+	width: 100%;
 }
 
 .makosh-steps__empty {
@@ -249,11 +249,11 @@
 	justify-content: center;
 	gap: 10px;
 	max-width: 100%;
-	border: 1px solid color-mix(in srgb, var(--h-color-border) 78%, transparent);
-	border-radius: 999px;
-	background: color-mix(in srgb, var(--h-color-surface-raised) 92%, transparent);
-	box-shadow: 0 18px 44px color-mix(in srgb, var(--h-color-shadow) 16%, transparent);
-	padding: 8px;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	padding: 0;
 }
 
 .makosh-steps__dots {
@@ -353,11 +353,11 @@
 
 @media (max-width: 720px) {
 	.makosh-steps {
-		min-height: min(600px, calc(100vh - 190px));
+		min-height: 0;
 	}
 
 	.makosh-steps-dialog .makosh-dialog-footer {
-		padding: 6px var(--h-space-4) 22px;
+		padding: var(--h-space-3) var(--h-space-4);
 	}
 
 	.makosh-steps__dock {

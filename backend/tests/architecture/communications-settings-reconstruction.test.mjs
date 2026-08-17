@@ -402,7 +402,7 @@ test('Telegram completion remains closed behind its independent capability slice
   assert.match(realtimeAdrSource, /reset_required/);
   assert.match(realtimeAdrSource, /Состояние реализации: Реализовано/);
   assert.match(clientContractSource, /TelegramClientContractV1[\s\S]*Realtime/);
-  assert.match(clientContractSource, /TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 6/);
+  assert.match(clientContractSource, /TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 9/);
   assert.match(runtimeAdmissionSource, /TelegramClientContractV1::Realtime/);
   assert.match(
     managedFlowSource,

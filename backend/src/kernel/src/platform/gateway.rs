@@ -60,6 +60,7 @@ pub(crate) struct BrowserGatewayConfigurationV1 {
     private_key_der_path: Option<PathBuf>,
     development_proxy_proof: Option<String>,
     exposure: BrowserGatewayExposureV1,
+    development_admission_mode: bool,
 }
 
 #[derive(Clone, Copy)]
@@ -152,6 +153,7 @@ impl BrowserGatewayConfigurationV1 {
             private_key_der_path: Some(private_key_der_path),
             development_proxy_proof: None,
             exposure: BrowserGatewayExposureV1::LocalEmbedded,
+            development_admission_mode: false,
         })
     }
 
@@ -175,6 +177,7 @@ impl BrowserGatewayConfigurationV1 {
             private_key_der_path: Some(private_key_der_path),
             development_proxy_proof: None,
             exposure: BrowserGatewayExposureV1::PairedRemote,
+            development_admission_mode: false,
         })
     }
 
@@ -203,6 +206,7 @@ impl BrowserGatewayConfigurationV1 {
             private_key_der_path: None,
             development_proxy_proof: None,
             exposure: BrowserGatewayExposureV1::LanDevelopment,
+            development_admission_mode: false,
         })
     }
 
@@ -240,7 +244,18 @@ impl BrowserGatewayConfigurationV1 {
             private_key_der_path: None,
             development_proxy_proof: Some(development_proxy_proof),
             exposure: BrowserGatewayExposureV1::LoopbackDevelopmentProxy,
+            development_admission_mode: false,
         })
+    }
+
+    pub(crate) fn for_development_admission(mut self) -> Result<Self, String> {
+        self.is_loopback_development_proxy()
+            .then_some(())
+            .ok_or_else(|| {
+                "development admission mode requires loopback development proxy".to_owned()
+            })?;
+        self.development_admission_mode = true;
+        Ok(self)
     }
 
     pub(crate) fn is_lan_development(&self) -> bool {
@@ -260,6 +275,14 @@ impl BrowserGatewayConfigurationV1 {
 
     pub(crate) fn starts_signed_development_foundation(&self) -> bool {
         self.uses_automatic_development_session()
+    }
+
+    pub(crate) fn starts_development_scheduler(&self) -> bool {
+        self.starts_signed_development_foundation() && !self.development_admission_mode
+    }
+
+    pub(crate) fn runs_scheduler_lifecycle(&self) -> bool {
+        !self.development_admission_mode
     }
 }
 
@@ -478,6 +501,7 @@ pub(crate) fn gateway_service(
     let client_blob_routes = client_blob::compose_client_blob_routers(
         Arc::clone(&store),
         data_dir,
+        &resolve_runtime_directory(data_dir)?,
         supervisor.clone(),
         Arc::clone(&session),
         Arc::clone(&request_id_sequence),
@@ -724,7 +748,7 @@ fn map_managed_client_rpc_route_error(error: String) -> ClientRpcRouteErrorV1 {
 
 fn map_module_client_rpc_error(error: &str) -> ClientRpcRouteErrorV1 {
     match error {
-        "RUNTIME_UNAVAILABLE" => ClientRpcRouteErrorV1::Unavailable,
+        "RUNTIME_BUSY" | "RUNTIME_UNAVAILABLE" => ClientRpcRouteErrorV1::Unavailable,
         "INVALID_ARGUMENT" => ClientRpcRouteErrorV1::InvalidArgument,
         "NOT_FOUND" => ClientRpcRouteErrorV1::NotFound,
         _ => ClientRpcRouteErrorV1::Internal,
@@ -772,6 +796,10 @@ mod client_rpc_request_tests {
 
     #[test]
     fn transient_module_unavailability_is_not_an_internal_gateway_failure() {
+        assert_eq!(
+            map_module_client_rpc_error("RUNTIME_BUSY"),
+            ClientRpcRouteErrorV1::Unavailable,
+        );
         assert_eq!(
             map_module_client_rpc_error("RUNTIME_UNAVAILABLE"),
             ClientRpcRouteErrorV1::Unavailable,

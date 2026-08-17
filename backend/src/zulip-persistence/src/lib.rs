@@ -91,6 +91,7 @@ CREATE INDEX IF NOT EXISTS zulip_command_queue_pending_idx
     WHERE dispatched_at_unix_seconds IS NULL;
 "#;
 
+#[derive(Clone)]
 pub struct ZulipDurablePersistence {
     pool: PgPool,
 }
@@ -148,6 +149,7 @@ impl ZulipDurablePersistence {
         let port =
             u16::try_from(pgbouncer_port).map_err(|_| ZulipDurablePersistenceError::InvalidRow)?;
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(pgbouncer_host)
             .port(port)
             .username(binding.access().runtime_principal())

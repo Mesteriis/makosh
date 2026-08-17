@@ -6,12 +6,14 @@ import Steps from '../../../shared/ui/Steps.vue'
 import '../../../shared/ui/settings/integrationAccountSetupCard.css'
 import '../../../shared/ui/settings/providerAccountWizard.css'
 import { useTelegramAccountSetup } from '../setup/useTelegramAccountSetup'
+import { useTelegramPendingSettingsActivation } from '../setup/useTelegramPendingSettingsActivation'
 import TelegramQrPairingPanel from './TelegramQrPairingPanel.vue'
 import './telegramAccountSetupPanel.css'
 
 const props = defineProps<{ module: ClientModuleBootstrapV1 | null }>()
 const emit = defineEmits<{ completed: [] }>()
 const setup = useTelegramAccountSetup(() => props.module)
+const pendingActivation = useTelegramPendingSettingsActivation(() => props.module)
 const open = ref(false)
 const step = ref(1)
 const qrStartRequest = ref(0)
@@ -31,7 +33,8 @@ const steps = [
 	},
 ]
 const canAdvance = computed(() => {
-	if (step.value === 1) return setup.configured.value || setup.canSubmit.value
+	if (step.value === 1) return !pendingActivation.busy.value
+		&& (setup.configured.value || setup.canSubmit.value)
 	if (step.value === 2) return authorizationState.value === 'ready'
 	return true
 })
@@ -39,6 +42,11 @@ const canAdvance = computed(() => {
 async function openWizard(): Promise<void> {
 	open.value = true
 	if (setup.configured.value) {
+		if (pendingActivation.pendingCount.value > 0
+			&& !await pendingActivation.activate()) {
+			step.value = 1
+			return
+		}
 		step.value = 2
 		qrStartRequest.value += 1
 		return
@@ -50,6 +58,11 @@ async function openWizard(): Promise<void> {
 async function handleNext(nextStep: number): Promise<void> {
 	if (nextStep !== 2) return
 	if (!setup.configured.value && !await setup.submit()) {
+		step.value = 1
+		return
+	}
+	if (pendingActivation.pendingCount.value > 0
+		&& !await pendingActivation.activate()) {
 		step.value = 1
 		return
 	}
@@ -100,7 +113,7 @@ function handleAuthorizationState(state: string): void {
 		description="Telegram user authorization is QR-only. Application credentials never authorize the user account."
 		finish-label="Done"
 		:can-advance="canAdvance"
-		:busy="setup.busy.value"
+		:busy="setup.busy.value || pendingActivation.busy.value"
 		size="lg"
 		content-class="telegram-account-wizard"
 		@next="handleNext"
@@ -110,6 +123,13 @@ function handleAuthorizationState(state: string): void {
 			<div v-if="setup.configured.value" class="provider-account-wizard__status provider-account-wizard__status--success">
 				<h4>Telegram application is configured</h4>
 				<p>The API ID is effective and both credential purposes are sealed by Vault.</p>
+				<p
+					v-if="pendingActivation.message.value"
+					:class="`provider-account-wizard__status--${pendingActivation.messageTone.value}`"
+					aria-live="polite"
+				>
+					{{ pendingActivation.message.value }}
+				</p>
 			</div>
 			<form v-else class="provider-account-wizard__form" @submit.prevent>
 				<label>
@@ -160,6 +180,7 @@ function handleAuthorizationState(state: string): void {
 				<TelegramQrPairingPanel
 					:module="module"
 					:start-request="qrStartRequest"
+					:configured="setup.configured.value"
 					embedded
 					@state-change="handleAuthorizationState"
 				/>

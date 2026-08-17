@@ -15,6 +15,7 @@ export function useTelegramMessageInspector(input: {
 	messageId: () => string
 	providerChatId: () => string
 	providerMessageId: () => string
+	senderPersonaNames?: () => ReadonlyMap<string, string>
 }) {
 	const inspection = ref<TelegramMessageInspection | null>(null)
 	const pending = ref(false)
@@ -25,7 +26,10 @@ export function useTelegramMessageInspector(input: {
 		pending: pending.value,
 		statusMessage: statusMessage.value,
 		canQuery: input.canQuery(),
-		...buildTelegramMessageInspectionView(inspection.value),
+		...buildTelegramMessageInspectionView(
+			inspection.value,
+			input.senderPersonaNames?.(),
+		),
 	}))
 
 	async function inspect(): Promise<void> {

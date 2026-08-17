@@ -1,5 +1,6 @@
 //! Mail integration process root for the exact Kernel-inherited runtime contract.
 
+use std::collections::BTreeMap;
 use std::ffi::{OsStr, OsString};
 use std::os::fd::{AsRawFd, FromRawFd};
 use std::os::unix::net::UnixStream;
@@ -11,7 +12,9 @@ use makosh_mail_runtime::managed::{
     CompletedImapSyncProviderOperationV1, ImapSyncProviderPageDeliveryV1,
     MailDeliveryDispatchErrorV1, MailMessageFlagDispatchErrorV1,
     MailMessageLocationDispatchErrorV1, MailMessagePermanentDeleteDispatchErrorV1,
-    execute_imap_sync_provider_operation,
+    execute_imap_sync_provider_operation, execute_mail_delivery_provider_operation,
+    execute_mail_message_flag_provider_operation, execute_mail_message_location_provider_operation,
+    execute_mail_message_permanent_delete_provider_operation,
 };
 use makosh_mail_runtime::{
     MailRuntimeAdmission,
@@ -57,6 +60,7 @@ struct InheritedPaths {
 }
 
 const MAX_CLIENT_DELIVERIES_PER_TICK: usize = 32;
+const MAX_SYNC_PAGES_PER_ACCOUNT_PER_TICK: usize = 1;
 const RUNTIME_TICK_INTERVAL: Duration = Duration::from_millis(100);
 
 struct ActiveGmailSyncProviderOperationV1 {
@@ -75,6 +79,26 @@ struct ActiveImapSyncProviderOperationV1 {
     operation_id: String,
     deadline_at_unix_seconds: i64,
     timed_out: bool,
+}
+
+struct ActiveMailDeliveryProviderOperationV1 {
+    completion: tokio::task::JoinHandle<Result<bool, MailDeliveryDispatchErrorV1>>,
+    fence_epoch: u64,
+}
+
+struct ActiveMailMessageFlagProviderOperationV1 {
+    completion: tokio::task::JoinHandle<Result<bool, MailMessageFlagDispatchErrorV1>>,
+    fence_epoch: u64,
+}
+
+struct ActiveMailMessageLocationProviderOperationV1 {
+    completion: tokio::task::JoinHandle<Result<bool, MailMessageLocationDispatchErrorV1>>,
+    fence_epoch: u64,
+}
+
+struct ActiveMailMessagePermanentDeleteProviderOperationV1 {
+    completion: tokio::task::JoinHandle<Result<bool, MailMessagePermanentDeleteDispatchErrorV1>>,
+    fence_epoch: u64,
 }
 
 fn main() -> Result<(), String> {
@@ -180,11 +204,20 @@ where
             developer_diagnostic(&format!("developer_mail_admission_error={error:?}"));
             "Mail runtime admission was rejected".to_owned()
         })?;
-    let mut gmail_oauth_provider_operation: Option<
-        tokio::task::JoinHandle<CompletedGmailOAuthProviderOperationV1>,
-    > = None;
-    let mut imap_sync_provider_operation: Option<ActiveImapSyncProviderOperationV1> = None;
-    let mut gmail_sync_provider_operation: Option<ActiveGmailSyncProviderOperationV1> = None;
+    let mut gmail_oauth_provider_operations =
+        BTreeMap::<String, tokio::task::JoinHandle<CompletedGmailOAuthProviderOperationV1>>::new();
+    let mut imap_sync_provider_operations =
+        BTreeMap::<String, ActiveImapSyncProviderOperationV1>::new();
+    let mut gmail_sync_provider_operations =
+        BTreeMap::<String, ActiveGmailSyncProviderOperationV1>::new();
+    let mut delivery_provider_operations =
+        BTreeMap::<String, ActiveMailDeliveryProviderOperationV1>::new();
+    let mut message_flag_provider_operations =
+        BTreeMap::<String, ActiveMailMessageFlagProviderOperationV1>::new();
+    let mut message_location_provider_operations =
+        BTreeMap::<String, ActiveMailMessageLocationProviderOperationV1>::new();
+    let mut message_permanent_delete_provider_operations =
+        BTreeMap::<String, ActiveMailMessagePermanentDeleteProviderOperationV1>::new();
     let mut replay_indexed_at_unix_seconds = 0;
     'runtime: loop {
         drain_client_deliveries(&runtime, &mut admitted)?;
@@ -207,28 +240,32 @@ where
         expire_active_gmail_sync_operation(
             &runtime,
             &mut admitted,
-            &mut gmail_sync_provider_operation,
+            &mut gmail_sync_provider_operations,
             now,
         )?;
         expire_active_imap_sync_operation(
             &runtime,
             &mut admitted,
-            &mut imap_sync_provider_operation,
+            &mut imap_sync_provider_operations,
             now,
         )?;
         drain_client_deliveries(&runtime, &mut admitted)?;
-        if gmail_oauth_provider_operation
-            .as_ref()
-            .is_some_and(tokio::task::JoinHandle::is_finished)
-        {
+        let finished_gmail_oauth = gmail_oauth_provider_operations
+            .iter()
+            .filter(|(_, operation)| operation.is_finished())
+            .map(|(connection_id, _)| connection_id.clone())
+            .collect::<Vec<_>>();
+        for active_connection_id in finished_gmail_oauth {
+            let operation = gmail_oauth_provider_operations
+                .remove(&active_connection_id)
+                .expect("finished Gmail OAuth provider operation");
             let completed = runtime
-                .block_on(
-                    gmail_oauth_provider_operation
-                        .take()
-                        .expect("finished Gmail OAuth provider operation"),
-                )
+                .block_on(operation)
                 .map_err(|_| "Mail runtime Gmail OAuth provider worker failed".to_owned())?;
             let connection_id = completed.connection_id().to_owned();
+            if connection_id != active_connection_id {
+                return Err("Mail runtime Gmail OAuth account binding is invalid".to_owned());
+            }
             admitted
                 .select_account(&connection_id)
                 .map_err(|_| "Mail runtime Gmail OAuth account selection failed".to_owned())?;
@@ -236,52 +273,65 @@ where
                 runtime.block_on(admitted.finalize_gmail_oauth_provider_operation(completed, now)),
             )?;
         }
-        if gmail_oauth_provider_operation.is_none() {
-            for connection_id in admitted.connection_ids() {
-                admitted
-                    .select_account(&connection_id)
-                    .map_err(|_| "Mail runtime Gmail OAuth account selection failed".to_owned())?;
-                match runtime
-                    .block_on(admitted.prepare_next_gmail_oauth_provider_operation(now, now))
-                {
-                    Ok(Some(prepared)) => {
-                        gmail_oauth_provider_operation =
-                            Some(runtime.spawn(execute_gmail_oauth_provider_operation(prepared)));
-                        break;
-                    }
-                    Ok(None) => {}
-                    Err(error) => handle_gmail_oauth_dispatch_result(Err(error))?,
+        for connection_id in admitted.connection_ids() {
+            if gmail_oauth_provider_operations.contains_key(&connection_id) {
+                continue;
+            }
+            admitted
+                .select_account(&connection_id)
+                .map_err(|_| "Mail runtime Gmail OAuth account selection failed".to_owned())?;
+            match runtime.block_on(admitted.prepare_next_gmail_oauth_provider_operation(now, now)) {
+                Ok(Some(prepared)) => {
+                    gmail_oauth_provider_operations.insert(
+                        connection_id,
+                        runtime.spawn(execute_gmail_oauth_provider_operation(prepared)),
+                    );
                 }
+                Ok(None) => {}
+                Err(error) => handle_gmail_oauth_dispatch_result(Err(error))?,
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
-        if let Some(operation) = imap_sync_provider_operation.as_mut()
-            && let Some(pages) = operation.pages.as_ref()
-        {
-            while let Ok(delivery) = pages.try_recv() {
+        for operation in imap_sync_provider_operations.values_mut() {
+            let Some(pages) = operation.pages.as_ref() else {
+                continue;
+            };
+            for _ in 0..MAX_SYNC_PAGES_PER_ACCOUNT_PER_TICK {
+                let Ok(delivery) = pages.try_recv() else {
+                    break;
+                };
                 let connection_id = delivery.connection_id().to_owned();
                 admitted
                     .select_account(&connection_id)
                     .map_err(|_| "Mail runtime IMAP sync account selection failed".to_owned())?;
-                if let Err(error) =
-                    runtime.block_on(admitted.finalize_imap_sync_provider_page(delivery))
-                {
-                    developer_diagnostic(&format!("developer_mail_imap_sync_page_error={error:?}"));
+                match runtime.block_on(admitted.finalize_imap_sync_provider_page(delivery)) {
+                    Ok(changed) if changed > 0 => admitted
+                        .mark_operational_projection_changed(&connection_id)
+                        .map_err(|_| "Mail operational realtime state is invalid".to_owned())?,
+                    Ok(_) => {}
+                    Err(error) => developer_diagnostic(&format!(
+                        "developer_mail_imap_sync_page_error={error:?}"
+                    )),
                 }
             }
         }
-        if imap_sync_provider_operation
-            .as_ref()
-            .is_some_and(|operation| !operation.timed_out && operation.completion.is_finished())
-        {
-            let operation = imap_sync_provider_operation
-                .take()
+        let finished_imap_sync = imap_sync_provider_operations
+            .iter()
+            .filter(|(_, operation)| !operation.timed_out && operation.completion.is_finished())
+            .map(|(connection_id, _)| connection_id.clone())
+            .collect::<Vec<_>>();
+        for active_connection_id in finished_imap_sync {
+            let operation = imap_sync_provider_operations
+                .remove(&active_connection_id)
                 .expect("finished IMAP sync provider operation");
             let completed = runtime
                 .block_on(operation.completion)
                 .map_err(|_| "Mail runtime IMAP sync provider worker failed".to_owned())?;
             if !operation.timed_out {
                 let connection_id = completed.connection_id().to_owned();
+                if connection_id != active_connection_id {
+                    return Err("Mail runtime IMAP sync account binding is invalid".to_owned());
+                }
                 admitted
                     .select_account(&connection_id)
                     .map_err(|_| "Mail runtime IMAP sync account selection failed".to_owned())?;
@@ -292,18 +342,25 @@ where
                 }
             }
         }
-        if imap_sync_provider_operation.is_none() {
-            for connection_id in admitted.connection_ids() {
-                admitted
-                    .select_account(&connection_id)
-                    .map_err(|_| "Mail runtime sync account selection failed".to_owned())?;
-                match runtime.block_on(admitted.prepare_pending_imap_sync()) {
-                    Ok(Some(prepared)) => {
-                        let connection_id = prepared.connection_id().to_owned();
-                        let operation_id = prepared.operation_id().to_owned();
-                        let deadline_at_unix_seconds = prepared.deadline_at_unix_seconds();
-                        let (page_sender, pages) = std::sync::mpsc::sync_channel(1);
-                        imap_sync_provider_operation = Some(ActiveImapSyncProviderOperationV1 {
+        for connection_id in admitted.connection_ids() {
+            if imap_sync_provider_operations.contains_key(&connection_id) {
+                continue;
+            }
+            admitted
+                .select_account(&connection_id)
+                .map_err(|_| "Mail runtime sync account selection failed".to_owned())?;
+            match runtime.block_on(admitted.prepare_pending_imap_sync()) {
+                Ok(Some(prepared)) => {
+                    let prepared_connection_id = prepared.connection_id().to_owned();
+                    if prepared_connection_id != connection_id {
+                        return Err("Mail runtime IMAP sync account binding is invalid".to_owned());
+                    }
+                    let operation_id = prepared.operation_id().to_owned();
+                    let deadline_at_unix_seconds = prepared.deadline_at_unix_seconds();
+                    let (page_sender, pages) = std::sync::mpsc::sync_channel(1);
+                    imap_sync_provider_operations.insert(
+                        connection_id.clone(),
+                        ActiveImapSyncProviderOperationV1 {
                             completion: runtime.spawn_blocking(move || {
                                 execute_imap_sync_provider_operation(prepared, page_sender)
                             }),
@@ -312,46 +369,55 @@ where
                             operation_id,
                             deadline_at_unix_seconds,
                             timed_out: false,
-                        });
-                        break;
-                    }
-                    Ok(None) => {}
-                    Err(error) => {
-                        developer_diagnostic(&format!(
-                            "developer_mail_imap_sync_prepare_error={error:?}"
-                        ));
-                        return Err("Mail runtime IMAP sync preparation failed".to_owned());
-                    }
+                        },
+                    );
+                }
+                Ok(None) => {}
+                Err(error) => {
+                    developer_diagnostic(&format!(
+                        "developer_mail_imap_sync_prepare_error={error:?}"
+                    ));
+                    return Err("Mail runtime IMAP sync preparation failed".to_owned());
                 }
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
-        if let Some(operation) = gmail_sync_provider_operation.as_mut() {
-            while let Ok(delivery) = operation.pages.try_recv() {
+        for operation in gmail_sync_provider_operations.values_mut() {
+            for _ in 0..MAX_SYNC_PAGES_PER_ACCOUNT_PER_TICK {
+                let Ok(delivery) = operation.pages.try_recv() else {
+                    break;
+                };
                 let connection_id = delivery.connection_id().to_owned();
                 admitted
                     .select_account(&connection_id)
                     .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
-                if let Err(error) =
-                    runtime.block_on(admitted.finalize_gmail_sync_provider_page(delivery))
-                {
-                    developer_diagnostic(&format!(
+                match runtime.block_on(admitted.finalize_gmail_sync_provider_page(delivery)) {
+                    Ok(changed) if changed > 0 => admitted
+                        .mark_operational_projection_changed(&connection_id)
+                        .map_err(|_| "Mail operational realtime state is invalid".to_owned())?,
+                    Ok(_) => {}
+                    Err(error) => developer_diagnostic(&format!(
                         "developer_mail_gmail_sync_page_error={error:?}"
-                    ));
+                    )),
                 }
             }
         }
-        if gmail_sync_provider_operation
-            .as_ref()
-            .is_some_and(|operation| !operation.timed_out && operation.completion.is_finished())
-        {
-            let operation = gmail_sync_provider_operation
-                .take()
+        let finished_gmail_sync = gmail_sync_provider_operations
+            .iter()
+            .filter(|(_, operation)| !operation.timed_out && operation.completion.is_finished())
+            .map(|(connection_id, _)| connection_id.clone())
+            .collect::<Vec<_>>();
+        for active_connection_id in finished_gmail_sync {
+            let operation = gmail_sync_provider_operations
+                .remove(&active_connection_id)
                 .expect("finished Gmail sync provider operation");
             let completed = runtime
                 .block_on(operation.completion)
                 .map_err(|_| "Mail runtime Gmail sync provider worker failed".to_owned())?;
             let connection_id = completed.connection_id().to_owned();
+            if connection_id != active_connection_id {
+                return Err("Mail runtime Gmail sync account binding is invalid".to_owned());
+            }
             admitted
                 .select_account(&connection_id)
                 .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
@@ -361,18 +427,25 @@ where
                 developer_diagnostic(&format!("developer_mail_gmail_sync_error={error:?}"));
             }
         }
-        if gmail_sync_provider_operation.is_none() {
-            for connection_id in admitted.connection_ids() {
-                admitted
-                    .select_account(&connection_id)
-                    .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
-                match runtime.block_on(admitted.prepare_pending_gmail_sync()) {
-                    Ok(Some(prepared)) => {
-                        let connection_id = prepared.connection_id().to_owned();
-                        let operation_id = prepared.operation_id().to_owned();
-                        let deadline_at_unix_seconds = prepared.deadline_at_unix_seconds();
-                        let (page_sender, pages) = tokio::sync::mpsc::channel(1);
-                        gmail_sync_provider_operation = Some(ActiveGmailSyncProviderOperationV1 {
+        for connection_id in admitted.connection_ids() {
+            if gmail_sync_provider_operations.contains_key(&connection_id) {
+                continue;
+            }
+            admitted
+                .select_account(&connection_id)
+                .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
+            match runtime.block_on(admitted.prepare_pending_gmail_sync()) {
+                Ok(Some(prepared)) => {
+                    let prepared_connection_id = prepared.connection_id().to_owned();
+                    if prepared_connection_id != connection_id {
+                        return Err("Mail runtime Gmail sync account binding is invalid".to_owned());
+                    }
+                    let operation_id = prepared.operation_id().to_owned();
+                    let deadline_at_unix_seconds = prepared.deadline_at_unix_seconds();
+                    let (page_sender, pages) = tokio::sync::mpsc::channel(1);
+                    gmail_sync_provider_operations.insert(
+                        connection_id.clone(),
+                        ActiveGmailSyncProviderOperationV1 {
                             completion: runtime.spawn(execute_gmail_sync_provider_operation(
                                 prepared,
                                 page_sender,
@@ -382,24 +455,127 @@ where
                             operation_id,
                             deadline_at_unix_seconds,
                             timed_out: false,
-                        });
-                        break;
-                    }
-                    Ok(None) => {}
-                    Err(error) => {
-                        developer_diagnostic(&format!(
-                            "developer_mail_gmail_sync_prepare_error={error:?}"
-                        ));
-                        return Err("Mail runtime Gmail sync preparation failed".to_owned());
-                    }
+                        },
+                    );
+                }
+                Ok(None) => {}
+                Err(error) => {
+                    developer_diagnostic(&format!(
+                        "developer_mail_gmail_sync_prepare_error={error:?}"
+                    ));
+                    return Err("Mail runtime Gmail sync preparation failed".to_owned());
                 }
             }
         }
         drain_client_deliveries(&runtime, &mut admitted)?;
+        reconcile_delivery_provider_operations(
+            &runtime,
+            &admitted,
+            &mut delivery_provider_operations,
+        )?;
+        reconcile_message_flag_provider_operations(
+            &runtime,
+            &admitted,
+            &mut message_flag_provider_operations,
+        )?;
+        reconcile_message_location_provider_operations(
+            &runtime,
+            &admitted,
+            &mut message_location_provider_operations,
+        )?;
+        reconcile_message_permanent_delete_provider_operations(
+            &runtime,
+            &admitted,
+            &mut message_permanent_delete_provider_operations,
+        )?;
         for connection_id in admitted.connection_ids() {
             admitted
                 .select_account(&connection_id)
                 .map_err(|_| "Mail runtime account selection failed".to_owned())?;
+            if !delivery_provider_operations.contains_key(&connection_id) {
+                match runtime.block_on(admitted.prepare_next_delivery_provider_operation(now, now))
+                {
+                    Ok(Some(prepared)) => {
+                        let fence_epoch = prepared.fence_epoch;
+                        delivery_provider_operations.insert(
+                            connection_id.clone(),
+                            ActiveMailDeliveryProviderOperationV1 {
+                                completion: runtime
+                                    .spawn(execute_mail_delivery_provider_operation(prepared)),
+                                fence_epoch,
+                            },
+                        );
+                    }
+                    Ok(None) => {}
+                    Err(error) => handle_mail_delivery_result(Err(error))?,
+                }
+            }
+            let message_mutation_busy = message_flag_provider_operations
+                .contains_key(&connection_id)
+                || message_location_provider_operations.contains_key(&connection_id)
+                || message_permanent_delete_provider_operations.contains_key(&connection_id);
+            let mut message_mutation_scheduled = message_mutation_busy;
+            if !message_mutation_scheduled {
+                match runtime.block_on(admitted.prepare_next_message_flag_provider_operation(now)) {
+                    Ok(Some(prepared)) => {
+                        let fence_epoch = prepared.fence_epoch;
+                        message_flag_provider_operations.insert(
+                            connection_id.clone(),
+                            ActiveMailMessageFlagProviderOperationV1 {
+                                completion: runtime
+                                    .spawn(execute_mail_message_flag_provider_operation(prepared)),
+                                fence_epoch,
+                            },
+                        );
+                        message_mutation_scheduled = true;
+                    }
+                    Ok(None) => {}
+                    Err(error) => handle_mail_message_flag_result(Err(error))?,
+                }
+            }
+            if !message_mutation_scheduled {
+                match runtime
+                    .block_on(admitted.prepare_next_message_location_provider_operation(now))
+                {
+                    Ok(Some(prepared)) => {
+                        let fence_epoch = prepared.fence_epoch;
+                        message_location_provider_operations.insert(
+                            connection_id.clone(),
+                            ActiveMailMessageLocationProviderOperationV1 {
+                                completion: runtime.spawn(
+                                    execute_mail_message_location_provider_operation(prepared),
+                                ),
+                                fence_epoch,
+                            },
+                        );
+                        message_mutation_scheduled = true;
+                    }
+                    Ok(None) => {}
+                    Err(error) => handle_mail_message_location_result(Err(error))?,
+                }
+            }
+            if !message_mutation_scheduled {
+                match runtime.block_on(
+                    admitted.prepare_next_message_permanent_delete_provider_operation(now),
+                ) {
+                    Ok(Some(prepared)) => {
+                        let fence_epoch = prepared.fence_epoch;
+                        message_permanent_delete_provider_operations.insert(
+                            connection_id.clone(),
+                            ActiveMailMessagePermanentDeleteProviderOperationV1 {
+                                completion: runtime.spawn(
+                                    execute_mail_message_permanent_delete_provider_operation(
+                                        prepared,
+                                    ),
+                                ),
+                                fence_epoch,
+                            },
+                        );
+                    }
+                    Ok(None) => {}
+                    Err(error) => handle_mail_message_permanent_delete_result(Err(error))?,
+                }
+            }
             execute_account_queues(&runtime, &mut admitted, now)?;
             drain_client_deliveries(&runtime, &mut admitted)?;
         }
@@ -527,6 +703,12 @@ where
                 return Err("Mail replay result relay failed".to_owned());
             }
         }
+        admitted
+            .publish_pending_operational_realtime(
+                u64::try_from(now_unix_millis)
+                    .map_err(|_| "Mail runtime clock is unavailable".to_owned())?,
+            )
+            .map_err(|_| "Mail operational realtime publication failed".to_owned())?;
         std::thread::sleep(RUNTIME_TICK_INTERVAL);
     }
 }
@@ -550,29 +732,35 @@ fn expire_pending_sync_operations(
 fn expire_active_gmail_sync_operation(
     runtime: &tokio::runtime::Runtime,
     admitted: &mut managed::MailAdmittedRuntime,
-    operation: &mut Option<ActiveGmailSyncProviderOperationV1>,
+    operations: &mut BTreeMap<String, ActiveGmailSyncProviderOperationV1>,
     now_unix_seconds: i64,
 ) -> Result<(), String> {
-    let Some(active) = operation.as_mut() else {
-        return Ok(());
-    };
-    if now_unix_seconds < active.deadline_at_unix_seconds {
-        return Ok(());
-    }
-    if !active.timed_out {
-        active.completion.abort();
-        active.timed_out = true;
-    }
-    admitted
-        .select_account(&active.connection_id)
-        .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
-    match runtime.block_on(
-        admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
-    ) {
-        Ok(()) => *operation = None,
-        Err(error) => developer_diagnostic(&format!(
-            "developer_mail_gmail_sync_expiration_error={error:?}"
-        )),
+    let expired = operations
+        .iter()
+        .filter(|(_, active)| now_unix_seconds >= active.deadline_at_unix_seconds)
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in expired {
+        let active = operations
+            .get_mut(&connection_id)
+            .expect("expired Gmail sync provider operation");
+        if !active.timed_out {
+            active.completion.abort();
+            active.timed_out = true;
+        }
+        admitted
+            .select_account(&active.connection_id)
+            .map_err(|_| "Mail runtime Gmail sync account selection failed".to_owned())?;
+        match runtime.block_on(
+            admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
+        ) {
+            Ok(()) => {
+                operations.remove(&connection_id);
+            }
+            Err(error) => developer_diagnostic(&format!(
+                "developer_mail_gmail_sync_expiration_error={error:?}"
+            )),
+        }
     }
     Ok(())
 }
@@ -580,29 +768,35 @@ fn expire_active_gmail_sync_operation(
 fn expire_active_imap_sync_operation(
     runtime: &tokio::runtime::Runtime,
     admitted: &mut managed::MailAdmittedRuntime,
-    operation: &mut Option<ActiveImapSyncProviderOperationV1>,
+    operations: &mut BTreeMap<String, ActiveImapSyncProviderOperationV1>,
     now_unix_seconds: i64,
 ) -> Result<(), String> {
-    let Some(active) = operation.as_mut() else {
-        return Ok(());
-    };
-    if now_unix_seconds < active.deadline_at_unix_seconds {
-        return Ok(());
-    }
-    if !active.timed_out {
-        active.pages = None;
-        active.timed_out = true;
-    }
-    admitted
-        .select_account(&active.connection_id)
-        .map_err(|_| "Mail runtime IMAP sync account selection failed".to_owned())?;
-    match runtime.block_on(
-        admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
-    ) {
-        Ok(()) => *operation = None,
-        Err(error) => developer_diagnostic(&format!(
-            "developer_mail_imap_sync_expiration_error={error:?}"
-        )),
+    let expired = operations
+        .iter()
+        .filter(|(_, active)| now_unix_seconds >= active.deadline_at_unix_seconds)
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in expired {
+        let active = operations
+            .get_mut(&connection_id)
+            .expect("expired IMAP sync provider operation");
+        if !active.timed_out {
+            active.pages = None;
+            active.timed_out = true;
+        }
+        admitted
+            .select_account(&active.connection_id)
+            .map_err(|_| "Mail runtime IMAP sync account selection failed".to_owned())?;
+        match runtime.block_on(
+            admitted.expire_sync_operation(&active.operation_id, active.deadline_at_unix_seconds),
+        ) {
+            Ok(()) => {
+                operations.remove(&connection_id);
+            }
+            Err(error) => developer_diagnostic(&format!(
+                "developer_mail_imap_sync_expiration_error={error:?}"
+            )),
+        }
     }
     Ok(())
 }
@@ -647,91 +841,269 @@ fn execute_account_queues(
             return Err("Mail delivery-intent result envelope is invalid".to_owned());
         }
     }
-    match runtime.block_on(admitted.execute_next_delivery(now, now)) {
-        Ok(_) => {}
+    Ok(())
+}
+
+fn reconcile_delivery_provider_operations(
+    runtime: &tokio::runtime::Runtime,
+    admitted: &managed::MailAdmittedRuntime,
+    active: &mut BTreeMap<String, ActiveMailDeliveryProviderOperationV1>,
+) -> Result<(), String> {
+    let stale = active
+        .iter()
+        .filter_map(|(connection_id, operation)| {
+            admitted
+                .provider_io_epoch(connection_id)
+                .ok()
+                .filter(|epoch| *epoch != operation.fence_epoch)
+                .map(|_| connection_id.clone())
+        })
+        .collect::<Vec<_>>();
+    for connection_id in stale {
+        if let Some(operation) = active.remove(&connection_id) {
+            operation.completion.abort();
+        }
+    }
+    let finished = active
+        .iter()
+        .filter(|(_, operation)| operation.completion.is_finished())
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in finished {
+        let operation = active
+            .remove(&connection_id)
+            .expect("finished Mail delivery provider operation");
+        let result = runtime
+            .block_on(operation.completion)
+            .map_err(|_| "Mail delivery provider worker failed".to_owned())?;
+        handle_mail_delivery_result(result)?;
+    }
+    Ok(())
+}
+
+fn handle_mail_delivery_result(
+    result: Result<bool, MailDeliveryDispatchErrorV1>,
+) -> Result<(), String> {
+    match result {
+        Ok(_) => Ok(()),
         Err(MailDeliveryDispatchErrorV1::ProviderRejected) => {
             developer_diagnostic("developer_mail_delivery_rejected");
+            Ok(())
         }
         Err(MailDeliveryDispatchErrorV1::AttachmentRejected) => {
             developer_diagnostic("developer_mail_delivery_attachment_rejected");
+            Ok(())
         }
         Err(MailDeliveryDispatchErrorV1::ProviderOutcomeUnknown) => {
             developer_diagnostic("developer_mail_delivery_outcome_unknown");
+            Ok(())
         }
         Err(MailDeliveryDispatchErrorV1::InvalidStoredCommand) => {
             developer_diagnostic("developer_mail_delivery_command_invalid");
-            return Err("Mail runtime delivery command is invalid".to_owned());
+            Err("Mail runtime delivery command is invalid".to_owned())
         }
         Err(MailDeliveryDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_delivery_persistence_failed");
-            return Ok(());
+            Ok(())
         }
     }
-    match runtime.block_on(admitted.execute_next_message_flag_command(now)) {
-        Ok(_) => {}
+}
+
+fn reconcile_message_flag_provider_operations(
+    runtime: &tokio::runtime::Runtime,
+    admitted: &managed::MailAdmittedRuntime,
+    active: &mut BTreeMap<String, ActiveMailMessageFlagProviderOperationV1>,
+) -> Result<(), String> {
+    let stale = active
+        .iter()
+        .filter_map(|(connection_id, operation)| {
+            admitted
+                .provider_io_epoch(connection_id)
+                .ok()
+                .filter(|epoch| *epoch != operation.fence_epoch)
+                .map(|_| connection_id.clone())
+        })
+        .collect::<Vec<_>>();
+    for connection_id in stale {
+        if let Some(operation) = active.remove(&connection_id) {
+            operation.completion.abort();
+        }
+    }
+    let finished = active
+        .iter()
+        .filter(|(_, operation)| operation.completion.is_finished())
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in finished {
+        let operation = active
+            .remove(&connection_id)
+            .expect("finished Mail message flag provider operation");
+        let result = runtime
+            .block_on(operation.completion)
+            .map_err(|_| "Mail message flag provider worker failed".to_owned())?;
+        handle_mail_message_flag_result(result)?;
+    }
+    Ok(())
+}
+
+fn handle_mail_message_flag_result(
+    result: Result<bool, MailMessageFlagDispatchErrorV1>,
+) -> Result<(), String> {
+    match result {
+        Ok(_) => Ok(()),
         Err(MailMessageFlagDispatchErrorV1::ProviderRejected) => {
             developer_diagnostic("developer_mail_message_flag_rejected");
+            Ok(())
         }
         Err(MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown) => {
             developer_diagnostic("developer_mail_message_flag_outcome_unknown");
+            Ok(())
         }
         Err(MailMessageFlagDispatchErrorV1::InvalidStoredCommand) => {
             developer_diagnostic("developer_mail_message_flag_command_invalid");
-            return Err("Mail runtime message flag command is invalid".to_owned());
+            Err("Mail runtime message flag command is invalid".to_owned())
         }
         Err(MailMessageFlagDispatchErrorV1::Persistence) => {
-            // A transient storage outage must not terminate the managed runtime;
-            // the durable operation remains pending for a later worker pass.
             developer_diagnostic("developer_mail_message_flag_persistence_failed");
-            return Ok(());
+            Ok(())
         }
     }
-    match runtime.block_on(admitted.execute_next_message_location_command(now)) {
-        Ok(_) => {}
+}
+
+fn reconcile_message_location_provider_operations(
+    runtime: &tokio::runtime::Runtime,
+    admitted: &managed::MailAdmittedRuntime,
+    active: &mut BTreeMap<String, ActiveMailMessageLocationProviderOperationV1>,
+) -> Result<(), String> {
+    let stale = active
+        .iter()
+        .filter_map(|(connection_id, operation)| {
+            admitted
+                .provider_io_epoch(connection_id)
+                .ok()
+                .filter(|epoch| *epoch != operation.fence_epoch)
+                .map(|_| connection_id.clone())
+        })
+        .collect::<Vec<_>>();
+    for connection_id in stale {
+        if let Some(operation) = active.remove(&connection_id) {
+            operation.completion.abort();
+        }
+    }
+    let finished = active
+        .iter()
+        .filter(|(_, operation)| operation.completion.is_finished())
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in finished {
+        let operation = active
+            .remove(&connection_id)
+            .expect("finished Mail message location provider operation");
+        let result = runtime
+            .block_on(operation.completion)
+            .map_err(|_| "Mail message location provider worker failed".to_owned())?;
+        handle_mail_message_location_result(result)?;
+    }
+    Ok(())
+}
+
+fn handle_mail_message_location_result(
+    result: Result<bool, MailMessageLocationDispatchErrorV1>,
+) -> Result<(), String> {
+    match result {
+        Ok(_) => Ok(()),
         Err(MailMessageLocationDispatchErrorV1::ProviderRejected) => {
             developer_diagnostic("developer_mail_message_location_rejected");
+            Ok(())
         }
         Err(MailMessageLocationDispatchErrorV1::ProviderUnsupported) => {
             developer_diagnostic("developer_mail_message_location_unsupported");
+            Ok(())
         }
         Err(MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown) => {
             developer_diagnostic("developer_mail_message_location_outcome_unknown");
+            Ok(())
         }
         Err(MailMessageLocationDispatchErrorV1::InvalidStoredCommand) => {
             developer_diagnostic("developer_mail_message_location_command_invalid");
-            return Err("Mail runtime message location command is invalid".to_owned());
+            Err("Mail runtime message location command is invalid".to_owned())
         }
         Err(MailMessageLocationDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_message_location_persistence_failed");
-            return Ok(());
+            Ok(())
         }
     }
-    match runtime.block_on(admitted.execute_next_message_permanent_delete_command(now)) {
-        Ok(_) => {}
+}
+
+fn reconcile_message_permanent_delete_provider_operations(
+    runtime: &tokio::runtime::Runtime,
+    admitted: &managed::MailAdmittedRuntime,
+    active: &mut BTreeMap<String, ActiveMailMessagePermanentDeleteProviderOperationV1>,
+) -> Result<(), String> {
+    let stale = active
+        .iter()
+        .filter_map(|(connection_id, operation)| {
+            admitted
+                .provider_io_epoch(connection_id)
+                .ok()
+                .filter(|epoch| *epoch != operation.fence_epoch)
+                .map(|_| connection_id.clone())
+        })
+        .collect::<Vec<_>>();
+    for connection_id in stale {
+        if let Some(operation) = active.remove(&connection_id) {
+            operation.completion.abort();
+        }
+    }
+    let finished = active
+        .iter()
+        .filter(|(_, operation)| operation.completion.is_finished())
+        .map(|(connection_id, _)| connection_id.clone())
+        .collect::<Vec<_>>();
+    for connection_id in finished {
+        let operation = active
+            .remove(&connection_id)
+            .expect("finished Mail permanent delete provider operation");
+        let result = runtime
+            .block_on(operation.completion)
+            .map_err(|_| "Mail permanent delete provider worker failed".to_owned())?;
+        handle_mail_message_permanent_delete_result(result)?;
+    }
+    Ok(())
+}
+
+fn handle_mail_message_permanent_delete_result(
+    result: Result<bool, MailMessagePermanentDeleteDispatchErrorV1>,
+) -> Result<(), String> {
+    match result {
+        Ok(_) => Ok(()),
         Err(MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected) => {
             developer_diagnostic("developer_mail_message_permanent_delete_rejected");
+            Ok(())
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::ProviderUnsupported) => {
             developer_diagnostic("developer_mail_message_permanent_delete_unsupported");
+            Ok(())
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::ReauthorizationRequired) => {
             developer_diagnostic(
                 "developer_mail_message_permanent_delete_reauthorization_required",
             );
+            Ok(())
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown) => {
             developer_diagnostic("developer_mail_message_permanent_delete_outcome_unknown");
+            Ok(())
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand) => {
             developer_diagnostic("developer_mail_message_permanent_delete_command_invalid");
-            return Err("Mail runtime permanent delete command is invalid".to_owned());
+            Err("Mail runtime permanent delete command is invalid".to_owned())
         }
         Err(MailMessagePermanentDeleteDispatchErrorV1::Persistence) => {
             developer_diagnostic("developer_mail_message_permanent_delete_persistence_failed");
-            return Ok(());
+            Ok(())
         }
     }
-    Ok(())
 }
 
 fn defer_runtime_tick() {
@@ -815,6 +1187,86 @@ fn inherited_control_channel() -> Result<UnixStream, String> {
         return Err("Mail runtime inherited control channel is unavailable".to_owned());
     }
     Ok(unsafe { UnixStream::from_raw_fd(duplicated) })
+}
+
+#[cfg(test)]
+mod provider_job_tests {
+    use super::*;
+
+    #[test]
+    fn pending_provider_jobs_for_two_accounts_do_not_own_the_catalog_actor() {
+        let runtime = tokio::runtime::Runtime::new().expect("runtime executor");
+        let (_release_delivery, pending_delivery) = tokio::sync::oneshot::channel::<()>();
+        let (_release_flag, pending_flag) = tokio::sync::oneshot::channel::<()>();
+        let (_release_location, pending_location) = tokio::sync::oneshot::channel::<()>();
+        let (_release_delete, pending_delete) = tokio::sync::oneshot::channel::<()>();
+        let delivery = ActiveMailDeliveryProviderOperationV1 {
+            completion: runtime.spawn(async move {
+                let _ = pending_delivery.await;
+                Ok(true)
+            }),
+            fence_epoch: 3,
+        };
+        let flag = ActiveMailMessageFlagProviderOperationV1 {
+            completion: runtime.spawn(async move {
+                let _ = pending_flag.await;
+                Ok(true)
+            }),
+            fence_epoch: 9,
+        };
+        let location = ActiveMailMessageLocationProviderOperationV1 {
+            completion: runtime.spawn(async move {
+                let _ = pending_location.await;
+                Ok(true)
+            }),
+            fence_epoch: 5,
+        };
+        let delete = ActiveMailMessagePermanentDeleteProviderOperationV1 {
+            completion: runtime.spawn(async move {
+                let _ = pending_delete.await;
+                Ok(true)
+            }),
+            fence_epoch: 7,
+        };
+
+        assert!(!delivery.completion.is_finished());
+        assert!(!flag.completion.is_finished());
+        assert!(!location.completion.is_finished());
+        assert!(!delete.completion.is_finished());
+        assert_eq!(
+            runtime.block_on(async { "client-query-served" }),
+            "client-query-served"
+        );
+
+        delivery.completion.abort();
+        flag.completion.abort();
+        location.completion.abort();
+        delete.completion.abort();
+        assert!(
+            runtime
+                .block_on(delivery.completion)
+                .expect_err("delivery abort")
+                .is_cancelled()
+        );
+        assert!(
+            runtime
+                .block_on(location.completion)
+                .expect_err("location abort")
+                .is_cancelled()
+        );
+        assert!(
+            runtime
+                .block_on(delete.completion)
+                .expect_err("delete abort")
+                .is_cancelled()
+        );
+        assert!(
+            runtime
+                .block_on(flag.completion)
+                .expect_err("flag abort")
+                .is_cancelled()
+        );
+    }
 }
 
 fn read_contract(path: &Path) -> Result<Vec<u8>, String> {

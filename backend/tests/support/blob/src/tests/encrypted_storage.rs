@@ -6,6 +6,7 @@ use makosh_blob_protocol::{
 };
 use makosh_blob_runtime::lease::BlobKeyLeaseV1;
 use makosh_blob_runtime::storage::{BlobStorageError, EncryptedBlobStore};
+use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
 
 fn reference() -> BlobRefV1 {
@@ -109,6 +110,87 @@ fn encrypted_store_writes_no_plaintext_and_returns_only_bounded_ranges() {
             )
             .expect("bounded read"),
         b"bytes",
+    );
+}
+
+#[test]
+fn chunked_store_publishes_only_after_receipt_verification_and_reads_cross_chunk_ranges() {
+    const CHUNK_BYTES: usize = 1024 * 1024;
+    let directory = private_directory();
+    let declared_size = CHUNK_BYTES + 37;
+    let store = EncryptedBlobStore::open(
+        directory.path(),
+        u64::try_from(declared_size).expect("declared size"),
+    )
+    .expect("store");
+    let reference = BlobRefV1::new(
+        [8; 16],
+        "owner_notes",
+        u64::try_from(declared_size).expect("declared size"),
+        Some(2_000),
+        BlobBackupClassV1::Required,
+    )
+    .expect("chunked reference");
+    let fence = fence();
+    let lease = lease(&reference, fence.clone());
+    let mut plaintext = vec![b'a'; CHUNK_BYTES];
+    plaintext.extend_from_slice(&[b'b'; 37]);
+    let expected: [u8; 32] = Sha256::digest(&plaintext).into();
+
+    assert_eq!(
+        store
+            .write_chunk(
+                &reference,
+                &fence,
+                &custody(),
+                &lease,
+                0,
+                &plaintext[..CHUNK_BYTES],
+                false,
+                &expected,
+                2,
+            )
+            .expect("first chunk"),
+        false,
+    );
+    let target = directory
+        .path()
+        .join("content/08080808080808080808080808080808.blob");
+    assert!(!target.exists(), "partial content must not be published");
+    assert_eq!(
+        store
+            .write_chunk(
+                &reference,
+                &fence,
+                &custody(),
+                &lease,
+                u64::try_from(CHUNK_BYTES).expect("chunk offset"),
+                &plaintext[CHUNK_BYTES..],
+                true,
+                &expected,
+                2,
+            )
+            .expect("final chunk"),
+        true,
+    );
+    assert_eq!(&fs::read(&target).expect("ciphertext")[..8], b"HBLBENC3");
+    assert_eq!(
+        store
+            .read_range(
+                &reference,
+                &fence,
+                &custody(),
+                &lease,
+                BlobRangeV1::new(
+                    u64::try_from(CHUNK_BYTES - 3).expect("range start"),
+                    u64::try_from(CHUNK_BYTES + 4).expect("range end"),
+                    reference.declared_size(),
+                )
+                .expect("cross-chunk range"),
+                3,
+            )
+            .expect("bounded chunked read"),
+        b"aaabbbb",
     );
 }
 

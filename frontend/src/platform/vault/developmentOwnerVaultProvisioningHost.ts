@@ -79,6 +79,25 @@ export class DevelopmentOwnerVaultProvisioningHostV1 implements OwnerVaultProvis
 		}
 	}
 
+	async sealGmailOAuthClientSecret(
+		input: Omit<SealProvisioningHostInputV1, 'secretPayload'>,
+	): Promise<SealedProvisioningHostCommandV1> {
+		const response = await this.post('/seal-gmail-oauth-client-secret', {
+			secretPurpose: 'mail_gmail_oauth_client_secret',
+			hostSessionId: input.hostSessionId,
+			operationId: Array.from(input.operationId),
+			action: input.action,
+			secretClass: input.secretClass,
+			authorized: authorizedBody(input.authorized),
+		})
+		return {
+			operationDigestSha256: bytes(response.operationDigestSha256, 32),
+			hpkeEncappedKey: bytes(response.hpkeEncappedKey, 32),
+			ciphertext: bytes(response.ciphertext),
+			hpkeAuthenticationTag: bytes(response.hpkeAuthenticationTag, 16),
+		}
+	}
+
 	async openReceipt(
 		hostSessionId: string,
 		committed: CommittedProvisioningHostInputV1,

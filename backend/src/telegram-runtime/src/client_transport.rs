@@ -124,6 +124,22 @@ pub async fn handle_durable_request<T: TdlibTransport>(
     calls: &TelegramCallsPersistence,
     request: &[u8],
 ) -> Result<Vec<u8>, TelegramClientTransportError> {
+    if let Some(response) = crate::media_blob_client_port::try_handle(
+        request,
+        |account_id| runtime.owns_account_id(account_id),
+        durable,
+    )
+    .await
+    .map_err(|error| match error {
+        crate::media_blob_client_port::MediaBlobClientPortErrorV1::Protocol => {
+            TelegramClientTransportError::Frame("Telegram media read request is invalid".to_owned())
+        }
+        crate::media_blob_client_port::MediaBlobClientPortErrorV1::Unavailable => {
+            TelegramClientTransportError::RuntimeUnavailable
+        }
+    })? {
+        return Ok(response);
+    }
     if crate::calls_client_port::calls_route(request)
         .map_err(TelegramClientTransportError::Port)?
         .is_some()

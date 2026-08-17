@@ -3,8 +3,8 @@
 use makosh_communications_ingress::{
     AttachmentDescriptorV1, AttachmentDispositionV1, BodyAvailabilityV1, CommunicationDirectionV1,
     CommunicationEvidenceKindV1, ProviderProvenanceV1, SourceEnvelope, SourceScopeEnvelope,
-    new_communication_observation_draft, new_scoped_communication_observation_draft,
-    with_attachment_descriptor, with_participant_display_label,
+    new_scoped_communication_observation_draft, with_attachment_descriptor,
+    with_participant_display_label,
 };
 use makosh_telegram_api::{
     TelegramAccount, TelegramAccountState, TelegramAttachmentProjection,
@@ -235,6 +235,7 @@ impl TelegramLifecycle {
         TelegramAccount {
             state: TelegramAccountState::Ready,
             runtime_state: TelegramRuntimeState::Running,
+            runtime_epoch: account.runtime_epoch.max(1),
             ..account.clone()
         }
     }
@@ -397,8 +398,10 @@ pub fn observation_draft(
         Some(observation.observed_at_unix_seconds),
     )
     .map_err(|_| TelegramContractError::InvalidTransition)?;
-    with_participant_display_label(draft, observation.sender_display_name)
-        .map_err(|_| TelegramContractError::InvalidTransition)
+    match with_participant_display_label(draft.clone(), observation.sender_display_name) {
+        Ok(draft) => Ok(draft),
+        Err(_) => Ok(draft),
+    }
 }
 
 pub fn attachment_observation_draft(
@@ -436,8 +439,8 @@ pub fn attachment_observation_draft(
         None,
     )
     .map_err(|_| TelegramContractError::InvalidTransition)?;
-    with_attachment_descriptor(
-        draft,
+    match with_attachment_descriptor(
+        draft.clone(),
         AttachmentDescriptorV1 {
             filename: attachment.filename.clone(),
             media_type: media_type.clone(),
@@ -445,9 +448,10 @@ pub fn attachment_observation_draft(
             sha256: None,
             disposition: AttachmentDispositionV1::Unknown,
         },
-    )
-    .map(Some)
-    .map_err(|_| TelegramContractError::InvalidTransition)
+    ) {
+        Ok(draft) => Ok(Some(draft)),
+        Err(_) => Ok(Some(draft)),
+    }
 }
 
 pub fn project_message(
@@ -471,6 +475,7 @@ pub fn project_message(
         provider_topic_id: observation.provider_topic_id.clone(),
         sender_id: observation.sender_id.clone(),
         sender_display_name: observation.sender_display_name.clone(),
+        sender_source_identity: observation.sender_source_identity,
         text: observation.text.clone(),
         media: observation.media.clone(),
         references: observation.references.clone(),
@@ -589,73 +594,87 @@ pub fn provider_event_draft(
         }
         TelegramProviderEvent::MessageEdited { text, .. } => event_draft(
             &event_identity,
+            event,
             text.clone(),
             CommunicationEvidenceKindV1::MessageEdited,
         ),
         TelegramProviderEvent::MessageDeleted { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::MessageDeleted,
         ),
         TelegramProviderEvent::MessagePinned { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::ReactionChanged { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ReactionChanged,
         ),
         TelegramProviderEvent::ReactionsObserved { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ReactionChanged,
         ),
         TelegramProviderEvent::MessageSendFailed { .. }
         | TelegramProviderEvent::MessageSendSucceeded { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::DeliveryStateChanged,
         ),
         TelegramProviderEvent::ChatUnreadChanged { .. }
         | TelegramProviderEvent::ChatMarkedUnreadChanged { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::TypingChanged(_) => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::TypingChanged,
         ),
         TelegramProviderEvent::TopicChanged(topic) => event_draft(
             &event_identity,
+            event,
             Some(topic.title.clone()),
             CommunicationEvidenceKindV1::TopicChanged,
         ),
         TelegramProviderEvent::ChatPositionChanged(_) => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::ChatFoldersChanged { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::ChatNotificationChanged { .. } => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::ChatAvatarChanged(_) => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ConversationStateChanged,
         ),
         TelegramProviderEvent::ParticipantChanged(_) => event_draft(
             &event_identity,
+            event,
             None,
             CommunicationEvidenceKindV1::ParticipantChanged,
         ),
@@ -712,10 +731,33 @@ mod provider_event_identity_tests {
             provider_event_identity(&later_edit).expect("valid later edit identity"),
         );
     }
+
+    #[test]
+    fn message_mutation_evidence_keeps_account_and_conversation_scope() {
+        let event = TelegramProviderEvent::MessageEdited {
+            account_id: "account".to_owned(),
+            provider_chat_id: "chat".to_owned(),
+            provider_message_id: "message".to_owned(),
+            text: None,
+            observed_at_unix_seconds: 1_782_504_000,
+        };
+
+        let draft = provider_event_draft(&event)
+            .expect("valid provider event")
+            .expect("neutral evidence draft");
+        assert_eq!(
+            draft.source.external_record_id,
+            "telegram:account:chat:message"
+        );
+        let scope = draft.source.scope.expect("provider event scope");
+        assert_eq!(scope.external_account_id, "account");
+        assert_eq!(scope.external_conversation_id.as_deref(), Some("chat"));
+    }
 }
 
 fn event_draft(
     source_id: &str,
+    event: &TelegramProviderEvent,
     text: Option<String>,
     kind: CommunicationEvidenceKindV1,
 ) -> Result<Option<CommunicationObservationDraft>, TelegramContractError> {
@@ -727,12 +769,13 @@ fn event_draft(
     } else {
         BodyAvailabilityV1::MetadataOnly
     };
-    new_communication_observation_draft(
+    new_scoped_communication_observation_draft(
         source_id,
         SourceEnvelope {
             provider: ProviderProvenanceV1::Telegram,
-            external_record_id: source_id.to_owned(),
-            scope: None,
+            external_record_id: provider_event_message_record_id(event)
+                .unwrap_or_else(|| source_id.to_owned()),
+            scope: Some(provider_event_scope(event)),
         },
         kind,
         body,
@@ -741,6 +784,124 @@ fn event_draft(
     )
     .map(Some)
     .map_err(|_| TelegramContractError::InvalidTransition)
+}
+
+fn provider_event_message_record_id(event: &TelegramProviderEvent) -> Option<String> {
+    let (account_id, provider_chat_id, provider_message_id) = match event {
+        TelegramProviderEvent::MessageEdited {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        }
+        | TelegramProviderEvent::MessageDeleted {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        }
+        | TelegramProviderEvent::MessagePinned {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        }
+        | TelegramProviderEvent::ReactionChanged {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        }
+        | TelegramProviderEvent::ReactionsObserved {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        }
+        | TelegramProviderEvent::MessageSendSucceeded {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+            ..
+        } => (account_id, provider_chat_id, provider_message_id),
+        TelegramProviderEvent::MessageSendFailed {
+            account_id,
+            provider_chat_id,
+            old_provider_message_id,
+            ..
+        } => (account_id, provider_chat_id, old_provider_message_id),
+        _ => return None,
+    };
+    Some(telegram_record_id(
+        account_id,
+        provider_chat_id,
+        provider_message_id,
+    ))
+}
+
+fn provider_event_scope(event: &TelegramProviderEvent) -> SourceScopeEnvelope {
+    let account_id = makosh_telegram_api::provider_event_account_id(event).to_owned();
+    let (external_conversation_id, external_participant_id) = match event {
+        TelegramProviderEvent::MessageCreated(observation) => (
+            Some(observation.provider_chat_id.clone()),
+            Some(observation.sender_id.clone()),
+        ),
+        TelegramProviderEvent::MessageEdited {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::MessageDeleted {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::MessageSendFailed {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::MessageSendSucceeded {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::MessagePinned {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::ReactionChanged {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::ReactionsObserved {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::ChatUnreadChanged {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::ChatMarkedUnreadChanged {
+            provider_chat_id, ..
+        }
+        | TelegramProviderEvent::ChatNotificationChanged {
+            provider_chat_id, ..
+        } => (Some(provider_chat_id.clone()), None),
+        TelegramProviderEvent::TypingChanged(state) => (
+            Some(state.provider_chat_id.clone()),
+            Some(state.sender_id.clone()),
+        ),
+        TelegramProviderEvent::TopicChanged(topic) => (Some(topic.provider_chat_id.clone()), None),
+        TelegramProviderEvent::ChatPositionChanged(position) => {
+            (Some(position.provider_chat_id.clone()), None)
+        }
+        TelegramProviderEvent::ChatAvatarChanged(avatar) => {
+            (Some(avatar.provider_chat_id.clone()), None)
+        }
+        TelegramProviderEvent::ParticipantChanged(participant) => (
+            Some(participant.provider_chat_id.clone()),
+            Some(participant.provider_member_id.clone()),
+        ),
+        TelegramProviderEvent::ChatFoldersChanged { .. }
+        | TelegramProviderEvent::FileChanged(_) => (None, None),
+    };
+    SourceScopeEnvelope {
+        external_account_id: account_id,
+        external_conversation_id,
+        external_participant_id,
+        external_media_id: None,
+        external_reply_to_record_id: None,
+        external_forward_origin_record_id: None,
+    }
 }
 
 #[cfg(test)]
@@ -795,6 +956,18 @@ mod attachment_observation_tests {
                 .expect("incomplete attachment is not an error")
                 .is_none()
         );
+    }
+
+    #[test]
+    fn provider_filename_outside_neutral_contract_does_not_reject_media_observation() {
+        let mut value = attachment();
+        value.filename = Some("изображение.jpg".to_owned());
+
+        let draft = attachment_observation_draft(&value)
+            .expect("provider filename must not stop projection")
+            .expect("complete media metadata must remain observable");
+
+        assert!(draft.attachment_descriptor.is_none());
     }
 }
 
@@ -900,6 +1073,7 @@ mod tests {
     #[test]
     fn projection_and_evidence_use_provider_source_without_business_entity() {
         let observation = TelegramMessageObservation {
+            sender_source_identity: None,
             account_id: "telegram-account".to_owned(),
             provider_chat_id: "100".to_owned(),
             provider_message_id: "200".to_owned(),
@@ -924,6 +1098,29 @@ mod tests {
     }
 
     #[test]
+    fn provider_display_label_outside_neutral_contract_does_not_reject_message_observation() {
+        let observation = TelegramMessageObservation {
+            sender_source_identity: None,
+            account_id: "telegram-account".to_owned(),
+            provider_chat_id: "100".to_owned(),
+            provider_message_id: "200".to_owned(),
+            provider_topic_id: None,
+            sender_id: "42".to_owned(),
+            sender_display_name: Some("x".repeat(257)),
+            is_outgoing: false,
+            text: Some("hello".to_owned()),
+            media: None,
+            references: makosh_telegram_api::TelegramMessageReferences::default(),
+            observed_at_unix_seconds: 10,
+        };
+
+        let draft = observation_draft(observation)
+            .expect("provider display label must not stop projection");
+
+        assert!(draft.participant_display_label.is_none());
+    }
+
+    #[test]
     fn runtime_reconfiguration_fences_epoch_before_any_transition() {
         let account = TelegramAccount {
             account_id: "telegram-account".to_owned(),
@@ -939,6 +1136,24 @@ mod tests {
         );
         assert_eq!(account.runtime_epoch, 4);
         assert_eq!(account.runtime_state, TelegramRuntimeState::Running);
+    }
+
+    #[test]
+    fn first_runtime_activation_initializes_the_account_epoch() {
+        let account = TelegramAccount {
+            account_id: "telegram-account".to_owned(),
+            display_name: "Personal Telegram".to_owned(),
+            external_account_id: String::new(),
+            state: TelegramAccountState::Provisioning,
+            runtime_state: TelegramRuntimeState::Stopped,
+            runtime_epoch: 0,
+        };
+
+        let running = TelegramLifecycle.mark_running(&account);
+
+        assert_eq!(running.state, TelegramAccountState::Ready);
+        assert_eq!(running.runtime_state, TelegramRuntimeState::Running);
+        assert_eq!(running.runtime_epoch, 1);
     }
 
     #[test]

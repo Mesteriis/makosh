@@ -10,7 +10,7 @@ defineProps<{ model: TelegramDiscoveryModel }>()
 const emit = defineEmits<{
 	refreshContext: []
 	search: []
-	selectChat: [chatId: string]
+	selectResult: [result: TelegramDiscoveryModel['results'][number]]
 	updateQuery: [value: string]
 }>()
 
@@ -65,8 +65,7 @@ function title(items: readonly TelegramDiscoveryDetailRow[], label: string): str
 					v-for="result in model.results"
 					:key="`${result.kind}:${result.id}`"
 					type="button"
-					:disabled="result.kind !== 'chat'"
-					@click="result.kind === 'chat' && emit('selectChat', result.id)"
+					@click="emit('selectResult', result)"
 				>
 					<strong>{{ result.title }}</strong>
 					<small>{{ result.detail }}</small>

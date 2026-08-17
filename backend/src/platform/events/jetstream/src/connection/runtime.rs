@@ -1,5 +1,7 @@
 //! Runtime publish connection and exact-byte outbox relay.
 
+use std::collections::BTreeMap;
+use std::sync::Mutex;
 use std::time::Duration;
 
 use async_nats::connection::State;
@@ -20,6 +22,7 @@ const PUBLISH_TIMEOUT: Duration = Duration::from_secs(2);
 pub struct RuntimeJetStreamConnection {
     context: async_nats::jetstream::Context,
     identity: RuntimeNatsIdentity,
+    pull_consumers: Mutex<BTreeMap<String, PullConsumer>>,
 }
 
 impl RuntimeJetStreamConnection {
@@ -27,7 +30,11 @@ impl RuntimeJetStreamConnection {
         context: async_nats::jetstream::Context,
         identity: RuntimeNatsIdentity,
     ) -> Self {
-        Self { context, identity }
+        Self {
+            context,
+            identity,
+            pull_consumers: Mutex::new(BTreeMap::new()),
+        }
     }
 
     #[must_use]
@@ -88,6 +95,22 @@ impl RuntimeJetStreamConnection {
                 "durable consumer exceeds the current runtime subscribe permit".to_owned()
             })?;
         let specification = permit.consumer();
+        let expected = canonical_consumer_config(specification);
+        let cache_key = pull_consumer_cache_key(specification);
+        if let Some(consumer) = self
+            .pull_consumers
+            .lock()
+            .map_err(|_| "JetStream durable consumer cache is unavailable".to_owned())?
+            .get(&cache_key)
+            .cloned()
+        {
+            return canonical_consumer_matches(&consumer.cached_info().config, &expected)
+                .then_some(consumer)
+                .ok_or_else(|| {
+                    "JetStream durable consumer conflicts with the runtime subscribe permit"
+                        .to_owned()
+                });
+        }
         let stream = self
             .context
             .get_stream(specification.stream_kind().stream_name())
@@ -97,13 +120,25 @@ impl RuntimeJetStreamConnection {
             .get_consumer(specification.durable_name())
             .await
             .map_err(|_| "JetStream durable consumer is unavailable".to_owned())?;
-        let expected = canonical_consumer_config(specification);
-        canonical_consumer_matches(&consumer.cached_info().config, &expected)
-            .then_some(consumer)
-            .ok_or_else(|| {
-                "JetStream durable consumer conflicts with the runtime subscribe permit".to_owned()
-            })
+        if !canonical_consumer_matches(&consumer.cached_info().config, &expected) {
+            return Err(
+                "JetStream durable consumer conflicts with the runtime subscribe permit".to_owned(),
+            );
+        }
+        self.pull_consumers
+            .lock()
+            .map_err(|_| "JetStream durable consumer cache is unavailable".to_owned())?
+            .insert(cache_key, consumer.clone());
+        Ok(consumer)
     }
+}
+
+fn pull_consumer_cache_key(specification: &crate::topology::ConsumerSpecV1) -> String {
+    format!(
+        "{}\0{}",
+        specification.stream_kind().stream_name(),
+        specification.durable_name()
+    )
 }
 
 /// Binds an owner-local outbox relay to one exact runtime publish permit.
@@ -189,4 +224,38 @@ pub fn canonical_message_id(value: &[u8]) -> String {
         value[14],
         value[15],
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::topology::{ConsumerBudgetV1, ConsumerSpecV1, StreamKindV1};
+
+    #[test]
+    fn pull_consumer_cache_key_is_stream_and_durable_specific() {
+        let budget = ConsumerBudgetV1::new(32, 4, Duration::from_secs(5)).expect("budget");
+        let command = ConsumerSpecV1::new(
+            StreamKindV1::Command,
+            "persons-command-v1",
+            "makosh.command.v1.persons.command-v1",
+            budget,
+        )
+        .expect("command consumer");
+        let result = ConsumerSpecV1::new(
+            StreamKindV1::Result,
+            "persons-command-v1",
+            "makosh.result.v1.persons.command-v1",
+            budget,
+        )
+        .expect("result consumer");
+
+        assert_eq!(
+            pull_consumer_cache_key(&command),
+            "MAKOSH_COMMAND_V1\0persons-command-v1"
+        );
+        assert_ne!(
+            pull_consumer_cache_key(&command),
+            pull_consumer_cache_key(&result)
+        );
+    }
 }

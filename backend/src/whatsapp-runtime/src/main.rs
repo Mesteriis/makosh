@@ -17,6 +17,9 @@ use makosh_runtime_protocol::{
         managed_integration_runtime::validate_managed_integration_runtime_configuration,
     },
 };
+use makosh_whatsapp_runtime::host_bridge_transport::{
+    WhatsAppHostBridgeSession, WhatsAppHostBridgeSessionProgress,
+};
 use makosh_whatsapp_runtime::{WhatsAppRuntimeAdmission, managed, settings};
 use prost::Message;
 
@@ -102,6 +105,7 @@ where
     listener
         .set_nonblocking(true)
         .map_err(|_| "WhatsApp host bridge listener is unavailable".to_owned())?;
+    let mut host_bridge_session: Option<WhatsAppHostBridgeSession> = None;
 
     loop {
         let now = unix_seconds()?;
@@ -119,9 +123,20 @@ where
         executor
             .block_on(admitted.process_next_delivery_intent(now))
             .map_err(|_| "WhatsApp delivery-intent worker failed".to_owned())?;
+        if host_bridge_session.is_none() {
+            host_bridge_session = admitted
+                .try_accept_host_bridge_session(&listener)
+                .map_err(|_| "WhatsApp host bridge delivery failed".to_owned())?;
+        }
+        if host_bridge_session.as_mut().is_some_and(|session| {
+            session.try_handle_once(&mut admitted, executor.handle())
+                == WhatsAppHostBridgeSessionProgress::Closed
+        }) {
+            host_bridge_session = None;
+        }
         admitted
-            .try_serve_host_bridge_once(&listener, executor.handle())
-            .map_err(|_| "WhatsApp host bridge delivery failed".to_owned())?;
+            .publish_pending_operational_realtime(unix_millis()?)
+            .map_err(|_| "WhatsApp operational realtime publication failed".to_owned())?;
         match executor.block_on(admitted.relay_communications_outbox(now)) {
             Ok(_)
             | Err(makosh_whatsapp_runtime::WhatsAppCommunicationsOutboxRelayError::Unavailable) => {
@@ -147,6 +162,16 @@ where
         }
         std::thread::sleep(Duration::from_millis(100));
     }
+}
+
+fn unix_millis() -> Result<u64, String> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|_| "system time is before the Unix epoch".to_owned())
+        .and_then(|duration| {
+            u64::try_from(duration.as_millis())
+                .map_err(|_| "system time exceeds the realtime timestamp range".to_owned())
+        })
 }
 
 fn parse_paths<I>(arguments: &mut std::iter::Peekable<I>) -> Result<InheritedPaths, String>

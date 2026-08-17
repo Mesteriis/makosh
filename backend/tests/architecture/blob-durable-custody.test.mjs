@@ -61,8 +61,10 @@ test('Blob authority separates ephemeral operations from durable custody', async
     scopeFunction,
     /registration_id|runtime_instance_id|runtime_generation|grant_epoch|capability_id/,
   );
-  assert.match(contentFormat, /const MAGIC: &\[u8; 8\] = b"HBLBENC2"/);
+  assert.match(contentFormat, /const LEGACY_MAGIC: &\[u8; 8\] = b"HBLBENC2"/);
+  assert.match(contentFormat, /const CHUNKED_MAGIC: &\[u8; 8\] = b"HBLBENC3"/);
   assert.match(contentFormat, /associated_data\(reference, custody, key_revision\)/);
+  assert.match(contentFormat, /chunk_associated_data[\s\S]*offset[\s\S]*plaintext_len/);
   assert.doesNotMatch(contentFormat, /BlobAccessFenceV1|registration_id|runtime_instance_id|grant_epoch/);
   assert.match(metadataCodec, /const MAGIC: &\[u8; 8\] = b"HBLBM002"/);
   assert.match(metadataCodec, /custody\.custody_scope_id\(\)/);

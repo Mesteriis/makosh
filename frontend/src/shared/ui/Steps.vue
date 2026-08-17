@@ -150,7 +150,7 @@ function nextStep(): void {
 		:description="description"
 		:close-label="closeLabel"
 		:content-class="dialogContentClass"
-		:show-close="false"
+		:show-close="true"
 		@update:open="(value) => emit('update:open', value)"
 	>
 		<template v-if="$slots.trigger" #trigger>

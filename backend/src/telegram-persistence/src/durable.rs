@@ -291,6 +291,7 @@ impl TelegramDurablePersistence {
         let port = u16::try_from(pgbouncer_port)
             .map_err(|_| TelegramDurablePersistenceError::InvalidRow)?;
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(pgbouncer_host)
             .port(port)
             .username(binding.access().runtime_principal())
@@ -1713,6 +1714,17 @@ impl TelegramDurablePersistence {
                 .map_err(|_| TelegramDurablePersistenceError::Codec)?;
             attachment.state = state;
             attachment.size_bytes = file.size_bytes.or(file.downloaded_size_bytes);
+            attachment.blob_ref = file.blob_reference_id.as_ref().and_then(|reference_id| {
+                (reference_id.len() == 16).then(|| {
+                    format!(
+                        "blob-content:{}",
+                        reference_id
+                            .iter()
+                            .map(|byte| format!("{byte:02x}"))
+                            .collect::<String>()
+                    )
+                })
+            });
             let payload = serde_json::to_value(&attachment)
                 .map_err(|_| TelegramDurablePersistenceError::Codec)?;
             sqlx::query(

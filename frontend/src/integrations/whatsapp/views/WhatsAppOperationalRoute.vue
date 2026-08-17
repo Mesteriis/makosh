@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { onBeforeUnmount, watch } from 'vue'
 
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import WhatsAppOperationalPage from '../presentation/WhatsAppOperationalPage.vue'
@@ -13,12 +13,14 @@ import { useWhatsAppOperationalReplay } from '../queries/useWhatsAppOperationalR
 const props = defineProps<{
 	canQuery: boolean
 	canReplay: boolean
+	canRealtime: boolean
 	canSend: boolean
 	modules: readonly ClientModuleBootstrapV1[]
 }>()
 const surface = useWhatsAppOperationalPage(() => props.canSend)
 const read = useWhatsAppOperationalRead({
 	canQuery: () => props.canQuery,
+	canRealtime: () => props.canRealtime,
 	modules: () => props.modules,
 })
 const replay = useWhatsAppOperationalReplay({
@@ -34,6 +36,8 @@ watch(
 	},
 	{ immediate: true },
 )
+
+onBeforeUnmount(read.stopRealtime)
 </script>
 
 <template>

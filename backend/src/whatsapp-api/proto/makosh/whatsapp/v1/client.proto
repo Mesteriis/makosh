@@ -2,6 +2,13 @@ syntax = "proto3";
 
 package makosh.whatsapp.v1;
 
+// Client-safe notification that the account-local operational projection
+// advanced. Provider message/chat identifiers and content are excluded.
+message WhatsAppOperationalProjectionChangedV1 {
+  string account_id = 1;
+  uint64 revision = 2;
+}
+
 message WhatsAppHostObservationV1 {
   uint32 protocol_major = 1;
   uint32 protocol_revision = 2;

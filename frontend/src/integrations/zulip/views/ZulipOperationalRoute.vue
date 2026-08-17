@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { onBeforeUnmount, watch } from 'vue'
 
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
 import ZulipOperationalPage from '../presentation/ZulipOperationalPage.vue'
@@ -14,11 +14,13 @@ const props = defineProps<{
 	canCommand: boolean
 	canQuery: boolean
 	canReplay: boolean
+	canRealtime: boolean
 	modules: readonly ClientModuleBootstrapV1[]
 }>()
 const surface = useZulipOperationalPage(() => props.canCommand)
 const read = useZulipOperationalRead({
 	canQuery: () => props.canQuery,
+	canRealtime: () => props.canRealtime,
 	modules: () => props.modules,
 })
 const replay = useZulipOperationalReplay({
@@ -34,6 +36,8 @@ watch(
 	},
 	{ immediate: true },
 )
+
+onBeforeUnmount(read.stopRealtime)
 </script>
 
 <template>

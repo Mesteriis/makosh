@@ -17,7 +17,8 @@ use makosh_mail_address_book_contract::{
 };
 use makosh_mail_api::client_contract::{
     MAIL_CLIENT_CONTRACT_MAJOR, MAIL_CLIENT_CONTRACT_REVISION, MAIL_CLIENT_DESCRIPTOR_SET_V1,
-    MailClientContractV1,
+    MAIL_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1,
+    MAIL_OPERATIONAL_REALTIME_CAPABILITY_ID_V1, MailClientContractV1,
 };
 pub use makosh_mail_api::client_contract::{MAIL_MODULE_ID, MAIL_OWNER_ID};
 pub use makosh_mail_delivery_intent_contract::MAIL_DELIVERY_INTENT_TARGET_CAPABILITY_ID_V1;
@@ -31,11 +32,11 @@ use makosh_mail_retained_evidence_replay_contract::{
 };
 use makosh_runtime_protocol::v1::{
     BlobQuotaOperationV1, BlobQuotaRequestV1, CapabilityCriticalityV1, CapabilityDescriptorV1,
-    CapabilityRequestV1, ClientRpcRouteV1, DurableEnvelopeKindV1, EventRouteDirectionV1,
-    EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1, ModuleKindV1,
-    ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1, RuntimeBudgetRequestV1,
-    SettingsSchemaRefV1, StorageNamespaceRequestV1, VaultActionV1, VaultPurposeRequestV1,
-    VaultSecretClassV1, VaultTargetScopeV1, capability_request_v1::Request,
+    CapabilityRequestV1, ClientRpcRouteV1, ContractReferenceV1, DurableEnvelopeKindV1,
+    EventRouteDirectionV1, EventRouteRequestV1, EventSubscriptionRequirementV1, ModuleDescriptorV1,
+    ModuleKindV1, ProtocolRangeV1, ProvidedSurfaceKindV1, ProvidedSurfaceV1,
+    RuntimeBudgetRequestV1, SettingsSchemaRefV1, StorageNamespaceRequestV1, VaultActionV1,
+    VaultPurposeRequestV1, VaultSecretClassV1, VaultTargetScopeV1, capability_request_v1::Request,
 };
 use sha2::{Digest, Sha256};
 
@@ -63,6 +64,8 @@ pub const MAIL_GMAIL_OAUTH_REFRESH_CREDENTIALS_CAPABILITY_ID: &str =
     "mail.gmail.oauth-refresh.credentials.v1";
 pub const MAIL_GMAIL_OAUTH_SETUP_CREDENTIALS_CAPABILITY_ID: &str =
     "mail.gmail.oauth-setup.credentials.v1";
+pub const MAIL_GMAIL_OAUTH_CLIENT_SECRET_PROVISIONING_CAPABILITY_ID: &str =
+    "mail.gmail.oauth-client-secret.credential-provisioning.v1";
 pub const MAIL_IMAP_CREDENTIALS_CAPABILITY_ID: &str = "mail.imap.credentials.v1";
 pub const MAIL_IMAP_CREDENTIAL_LIFECYCLE_CAPABILITY_ID: &str = "mail.imap.credential-lifecycle.v1";
 pub const MAIL_IMAP_CREDENTIAL_PROVISIONING_CAPABILITY_ID: &str =
@@ -113,6 +116,11 @@ pub fn mail_admission_capabilities_v1() -> Vec<CapabilityDescriptorV1> {
             MAIL_GMAIL_CREDENTIALS_CAPABILITY_ID,
             "mail_gmail_access_token",
         ),
+        mail_provider_credential_provisioning_capability_v1(
+            MAIL_GMAIL_OAUTH_CLIENT_SECRET_PROVISIONING_CAPABILITY_ID,
+            "mail_gmail_oauth_client_secret",
+            VaultSecretClassV1::ProviderCredential,
+        ),
         mail_gmail_oauth_refresh_credential_capability_v1(),
         mail_gmail_oauth_setup_credential_capability_v1(),
         mail_provider_credential_lifecycle_capability_v1(
@@ -145,6 +153,7 @@ pub fn mail_admission_capabilities_v1() -> Vec<CapabilityDescriptorV1> {
         mail_client_capability_v1(MailClientContractV1::GmailOAuthRefresh),
         mail_client_capability_v1(MailClientContractV1::GmailOAuthStart),
         mail_client_capability_v1(MailClientContractV1::OperationalQuery),
+        mail_operational_realtime_capability_v1(),
         mail_person_source_provider_capability_v1(),
         mail_retained_evidence_replay_capability_v1(),
         mail_provider_credential_lifecycle_capability_v1(
@@ -184,6 +193,27 @@ fn mail_person_source_provider_capability_v1() -> CapabilityDescriptorV1 {
             MailPersonSourceContractV1::PageRejected.publish_request(),
             provider_credential_request_v1("mail_icloud_carddav_password"),
         ],
+        ..Default::default()
+    }
+}
+
+fn mail_operational_realtime_capability_v1() -> CapabilityDescriptorV1 {
+    CapabilityDescriptorV1 {
+        capability_id: MAIL_OPERATIONAL_REALTIME_CAPABILITY_ID_V1.to_owned(),
+        capability_revision: 1,
+        criticality: CapabilityCriticalityV1::Optional as i32,
+        provides: vec![ProvidedSurfaceV1 {
+            kind: ProvidedSurfaceKindV1::ClientRealtime as i32,
+            contract: Some(ContractReferenceV1 {
+                owner: MAIL_OWNER_ID.to_owned(),
+                name: MAIL_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1.to_owned(),
+                major: MAIL_CLIENT_CONTRACT_MAJOR,
+                revision: MAIL_CLIENT_CONTRACT_REVISION,
+                schema_sha256: Sha256::digest(MAIL_CLIENT_DESCRIPTOR_SET_V1).to_vec(),
+            }),
+            client_rpc_route: None,
+            client_blob_route: None,
+        }],
         ..Default::default()
     }
 }
@@ -353,6 +383,11 @@ fn mail_gmail_oauth_setup_credential_capability_v1() -> CapabilityDescriptorV1 {
         criticality: CapabilityCriticalityV1::Optional as i32,
         requests: vec![
             vault_purpose_request_v1(
+                "mail_gmail_oauth_client_secret",
+                &[VaultSecretClassV1::ProviderCredential],
+                &[VaultActionV1::Resolve],
+            ),
+            vault_purpose_request_v1(
                 "mail_gmail_access_token",
                 &[VaultSecretClassV1::ProviderCredential],
                 &[VaultActionV1::Create, VaultActionV1::ReplaceCas],
@@ -374,6 +409,11 @@ fn mail_gmail_oauth_refresh_credential_capability_v1() -> CapabilityDescriptorV1
         capability_revision: 1,
         criticality: CapabilityCriticalityV1::Optional as i32,
         requests: vec![
+            vault_purpose_request_v1(
+                "mail_gmail_oauth_client_secret",
+                &[VaultSecretClassV1::ProviderCredential],
+                &[VaultActionV1::Resolve],
+            ),
             vault_purpose_request_v1(
                 "mail_gmail_access_token",
                 &[VaultSecretClassV1::ProviderCredential],
@@ -565,6 +605,7 @@ mod tests {
                 MailClientContractV1::Delivery.capability_id(),
                 MAIL_GMAIL_CREDENTIAL_LIFECYCLE_CAPABILITY_ID,
                 MAIL_GMAIL_CREDENTIALS_CAPABILITY_ID,
+                MAIL_GMAIL_OAUTH_CLIENT_SECRET_PROVISIONING_CAPABILITY_ID,
                 MAIL_GMAIL_OAUTH_REFRESH_CREDENTIALS_CAPABILITY_ID,
                 MAIL_GMAIL_OAUTH_SETUP_CREDENTIALS_CAPABILITY_ID,
                 MAIL_GMAIL_REFRESH_CREDENTIAL_LIFECYCLE_CAPABILITY_ID,
@@ -582,6 +623,7 @@ mod tests {
                 MailClientContractV1::GmailOAuthRefresh.capability_id(),
                 MailClientContractV1::GmailOAuthStart.capability_id(),
                 MailClientContractV1::OperationalQuery.capability_id(),
+                MAIL_OPERATIONAL_REALTIME_CAPABILITY_ID_V1,
                 MAIL_PERSON_SOURCE_CAPABILITY_ID_V1,
                 MAIL_RETAINED_EVIDENCE_REPLAY_CAPABILITY_ID,
                 MAIL_SMTP_CREDENTIAL_LIFECYCLE_CAPABILITY_ID,
@@ -783,16 +825,29 @@ mod tests {
                 capability.capability_id == MAIL_GMAIL_OAUTH_SETUP_CREDENTIALS_CAPABILITY_ID
             })
             .expect("Gmail OAuth setup credential capability");
-        assert_eq!(setup.requests.len(), 2);
-        assert!(setup.requests.iter().all(|request| matches!(
+        assert_eq!(setup.requests.len(), 3);
+        assert!(setup.requests.iter().any(|request| matches!(
             request.request.as_ref(),
             Some(Request::VaultPurpose(request))
-                if request.actions
-                    == [
-                        VaultActionV1::Create as i32,
-                        VaultActionV1::ReplaceCas as i32,
-                    ]
+                if request.purpose_id == "mail_gmail_oauth_client_secret"
+                    && request.actions == [VaultActionV1::Resolve as i32]
         )));
+        assert!(
+            setup
+                .requests
+                .iter()
+                .filter(|request| matches!(
+                    request.request.as_ref(),
+                    Some(Request::VaultPurpose(request))
+                        if request.actions
+                            == [
+                                VaultActionV1::Create as i32,
+                                VaultActionV1::ReplaceCas as i32,
+                            ]
+                ))
+                .count()
+                == 2
+        );
 
         let refresh = descriptor
             .capabilities
@@ -801,7 +856,13 @@ mod tests {
                 capability.capability_id == MAIL_GMAIL_OAUTH_REFRESH_CREDENTIALS_CAPABILITY_ID
             })
             .expect("Gmail OAuth refresh credential capability");
-        assert_eq!(refresh.requests.len(), 2);
+        assert_eq!(refresh.requests.len(), 3);
+        assert!(refresh.requests.iter().any(|request| matches!(
+            request.request.as_ref(),
+            Some(Request::VaultPurpose(request))
+                if request.purpose_id == "mail_gmail_oauth_client_secret"
+                    && request.actions == [VaultActionV1::Resolve as i32]
+        )));
         assert!(refresh.requests.iter().any(|request| matches!(
             request.request.as_ref(),
             Some(Request::VaultPurpose(request))

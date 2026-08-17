@@ -1,6 +1,6 @@
 //! TDLib adapter boundary. The provider wire is isolated from Telegram policy and storage.
 
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 use std::ffi::{CStr, CString};
 use std::fmt;
 use std::os::raw::{c_char, c_void};
@@ -17,7 +17,8 @@ use makosh_telegram_api::{
     TelegramMessageMedia, TelegramMessageObservation, TelegramMessageReferences,
     TelegramParticipant, TelegramParticipantFilter, TelegramParticipantPage,
     TelegramProviderCommand, TelegramProviderEvent, TelegramReplyReference, TelegramSendMessage,
-    TelegramTopic, TelegramTypingState, provider_command_operation_id, validate_provider_command,
+    TelegramTopic, TelegramTypingState, provider_command_operation_id,
+    telegram_person_source_identity_v1, validate_provider_command,
 };
 use makosh_telegram_api::{TelegramChatKind, validate_page_size, validate_text};
 use makosh_telegram_call_media_contract::{
@@ -33,6 +34,122 @@ pub mod authorization;
 pub use authorization::{TdlibAuthorizationDriver, TdlibAuthorizationEvent};
 
 pub const PACKAGE: &str = "makosh-telegram-tdlib";
+const MAX_TDLIB_UPDATE_PAYLOADS_PER_POLL: usize = 16;
+const MAX_TDLIB_MINITHUMBNAIL_BYTES: usize = 64 * 1024;
+// Keep this compatibility inventory aligned with the bundled TDLib schema and
+// current td/generate/scheme/td_api.tl. It intentionally includes formats from
+// both ends of that supported range. The generic fallback remains
+// forward-compatible, while this list prevents a known format from silently
+// turning into an empty projection.
+#[cfg(test)]
+const CURRENT_TDLIB_MESSAGE_CONTENT_TYPES: &[&str] = &[
+    "messageAnimatedEmoji",
+    "messageAnimation",
+    "messageAudio",
+    "messageBasicGroupChatCreate",
+    "messageBotWriteAccessAllowed",
+    "messageCall",
+    "messageChatAddedToCommunity",
+    "messageChatAddMembers",
+    "messageChatBoost",
+    "messageChatChangePhoto",
+    "messageChatChangeTitle",
+    "messageChatDeleteMember",
+    "messageChatDeletePhoto",
+    "messageChatHasProtectedContentDisableRequested",
+    "messageChatHasProtectedContentToggled",
+    "messageChatJoinByLink",
+    "messageChatJoinByRequest",
+    "messageChatOwnerChanged",
+    "messageChatOwnerLeft",
+    "messageChatRemovedFromCommunity",
+    "messageChatSetBackground",
+    "messageChatSetMessageAutoDeleteTime",
+    "messageChatSetTheme",
+    "messageChatSetTtl",
+    "messageChatShared",
+    "messageChatUpgradeFrom",
+    "messageChatUpgradeTo",
+    "messageChecklist",
+    "messageChecklistTasksAdded",
+    "messageChecklistTasksDone",
+    "messageContact",
+    "messageContactRegistered",
+    "messageCustomServiceAction",
+    "messageDice",
+    "messageDirectMessagePriceChanged",
+    "messageDocument",
+    "messageExpiredPhoto",
+    "messageExpiredVideo",
+    "messageExpiredVideoNote",
+    "messageExpiredVoiceNote",
+    "messageForumTopicCreated",
+    "messageForumTopicEdited",
+    "messageForumTopicIsClosedToggled",
+    "messageForumTopicIsHiddenToggled",
+    "messageGame",
+    "messageGameScore",
+    "messageGift",
+    "messageGiftedPremium",
+    "messageGiftedStars",
+    "messageGiftedTon",
+    "messageGiveaway",
+    "messageGiveawayCompleted",
+    "messageGiveawayCreated",
+    "messageGiveawayPrizeStars",
+    "messageGiveawayWinners",
+    "messageGroupCall",
+    "messageInviteVideoChatParticipants",
+    "messageInvoice",
+    "messageLiveLocation",
+    "messageLocation",
+    "messageManagedBotCreated",
+    "messagePaidMedia",
+    "messagePaidMessagePriceChanged",
+    "messagePaidMessagesRefunded",
+    "messagePassportDataReceived",
+    "messagePassportDataSent",
+    "messagePaymentRefunded",
+    "messagePaymentSuccessful",
+    "messagePaymentSuccessfulBot",
+    "messagePhoto",
+    "messagePinMessage",
+    "messagePoll",
+    "messagePollOptionAdded",
+    "messagePollOptionDeleted",
+    "messagePremiumGiftCode",
+    "messageProximityAlertTriggered",
+    "messageRefundedUpgradedGift",
+    "messageRichMessage",
+    "messageScreenshotTaken",
+    "messageStakeDice",
+    "messageSticker",
+    "messageStory",
+    "messageSuggestBirthdate",
+    "messageSuggestedPostApprovalFailed",
+    "messageSuggestedPostApproved",
+    "messageSuggestedPostDeclined",
+    "messageSuggestedPostPaid",
+    "messageSuggestedPostRefunded",
+    "messageSuggestProfilePhoto",
+    "messageSupergroupChatCreate",
+    "messageText",
+    "messageUpgradedGift",
+    "messageUpgradedGiftPurchaseOffer",
+    "messageUpgradedGiftPurchaseOfferRejected",
+    "messageUnsupported",
+    "messageUsersShared",
+    "messageVenue",
+    "messageVideo",
+    "messageVideoChatEnded",
+    "messageVideoChatScheduled",
+    "messageVideoChatStarted",
+    "messageVideoNote",
+    "messageVoiceNote",
+    "messageWebAppDataReceived",
+    "messageWebAppDataSent",
+    "messageWebsiteConnected",
+];
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TdlibCallDirection {
@@ -85,6 +202,7 @@ pub struct TdlibCallObservation {
 #[derive(Debug)]
 pub enum TdlibProviderUpdate {
     Operational(Box<TelegramProviderEvent>),
+    DownloadedFile(TdlibDownloadedFile),
     Call(TdlibCallObservation),
     CallReady {
         observation: TdlibCallObservation,
@@ -95,6 +213,22 @@ pub enum TdlibProviderUpdate {
         tdlib_call_id: i32,
         data: TelegramCallSecretBytesV1,
     },
+}
+
+#[derive(Clone, Eq, PartialEq)]
+pub struct TdlibDownloadedFile {
+    pub snapshot: TelegramFileSnapshot,
+    pub local_path: PathBuf,
+}
+
+impl fmt::Debug for TdlibDownloadedFile {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("TdlibDownloadedFile")
+            .field("snapshot", &self.snapshot)
+            .field("local_path", &"[redacted]")
+            .finish()
+    }
 }
 
 /// Runtime-owned port for converting an authorized opaque BlobRef into a
@@ -321,6 +455,10 @@ pub enum TdlibRequest {
     GetOwnUser {
         correlation_id: String,
     },
+    ResolveSender {
+        correlation_id: String,
+        provider_sender_id: String,
+    },
     CreateCall {
         operation_id: String,
         provider_user_id: String,
@@ -353,6 +491,11 @@ pub enum TdlibRequest {
         from_message_id: Option<i64>,
         mode: makosh_telegram_api::TelegramHistorySyncMode,
         limit: u32,
+    },
+    GetMessage {
+        account_id: String,
+        provider_chat_id: String,
+        provider_message_id: String,
     },
     SendMessage(TelegramSendMessage),
     SendMedia(makosh_telegram_api::TelegramSendMedia),
@@ -390,12 +533,17 @@ pub enum TdlibResponse {
     OwnUser {
         provider_user_id: String,
     },
+    SenderName {
+        provider_sender_id: String,
+        display_name: Option<String>,
+    },
     CallCreated {
         operation_id: String,
         tdlib_call_id: i32,
     },
     Chats(Vec<TelegramChat>),
     History(Vec<TelegramMessageObservation>),
+    Message(TelegramMessageObservation),
     Sent {
         provider_message_id: String,
     },
@@ -468,6 +616,23 @@ pub fn get_history_request_with_options(
     })
 }
 
+pub fn get_message_request(
+    account_id: &str,
+    provider_chat_id: &str,
+    provider_message_id: &str,
+) -> Result<TdlibRequest, TdlibError> {
+    if account_id.trim().is_empty() {
+        return Err(TdlibError::Protocol("account id is empty".to_owned()));
+    }
+    signed_chat_id(provider_chat_id)?;
+    provider_id(provider_message_id)?;
+    Ok(TdlibRequest::GetMessage {
+        account_id: account_id.to_owned(),
+        provider_chat_id: provider_chat_id.to_owned(),
+        provider_message_id: provider_message_id.to_owned(),
+    })
+}
+
 pub fn send_message_request(command: TelegramSendMessage) -> Result<TdlibRequest, TdlibError> {
     validate_text(&command.text)
         .map_err(|_| TdlibError::Protocol("message text is invalid".to_owned()))?;
@@ -484,6 +649,25 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
             "@type": "getMe",
             "@extra": correlation_id,
         })),
+        TdlibRequest::ResolveSender {
+            correlation_id,
+            provider_sender_id,
+        } => {
+            let provider_sender_id = signed_chat_id(provider_sender_id)?;
+            Ok(if provider_sender_id > 0 {
+                json!({
+                    "@type": "getUser",
+                    "user_id": provider_sender_id,
+                    "@extra": correlation_id,
+                })
+            } else {
+                json!({
+                    "@type": "getChat",
+                    "chat_id": provider_sender_id,
+                    "@extra": correlation_id,
+                })
+            })
+        }
         TdlibRequest::CreateCall {
             operation_id,
             provider_user_id,
@@ -554,7 +738,7 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
         }
         TdlibRequest::LoadChats { account_id, limit } => Ok(json!({
             "@type": "getChats",
-            "chat_list": {"@type": "chatListMain"},
+            "chat_list": null,
             "limit": limit,
             "@extra": account_id,
         })),
@@ -566,16 +750,26 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
             ..
         } => Ok(json!({
             "@type": "getChatHistory",
-            "chat_id": provider_chat_id.parse::<i64>().map_err(|_| TdlibError::Protocol("provider chat id is not an integer".to_owned()))?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "from_message_id": from_message_id.unwrap_or_default(),
             "offset": 0,
             "limit": limit,
             "only_local": false,
             "@extra": account_id,
         })),
+        TdlibRequest::GetMessage {
+            account_id,
+            provider_chat_id,
+            provider_message_id,
+        } => Ok(json!({
+            "@type": "getMessage",
+            "chat_id": signed_chat_id(provider_chat_id)?,
+            "message_id": provider_id(provider_message_id)?,
+            "@extra": format!("{account_id}:message:{provider_message_id}"),
+        })),
         TdlibRequest::SendMessage(command) => Ok(json!({
             "@type": "sendMessage",
-            "chat_id": command.provider_chat_id.parse::<i64>().map_err(|_| TdlibError::Protocol("provider chat id is not an integer".to_owned()))?,
+            "chat_id": signed_chat_id(&command.provider_chat_id)?,
             "reply_to": {"@type": "inputMessageReplyToMessage", "message_id": 0},
             "options": null,
             "reply_markup": null,
@@ -613,8 +807,8 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
             "@type": "getSupergroupMembers",
             "supergroup_id": provider_id(provider_chat_id)?,
             "filter": {"@type": match filter {
-                TelegramParticipantFilter::Recent => "chatMembersFilterMembers",
-                TelegramParticipantFilter::Administrators => "chatMembersFilterAdministrators",
+                TelegramParticipantFilter::Recent => "supergroupMembersFilterRecent",
+                TelegramParticipantFilter::Administrators => "supergroupMembersFilterAdministrators",
             }},
             "offset": offset,
             "limit": limit,
@@ -635,7 +829,7 @@ pub fn encode_request(request: &TdlibRequest) -> Result<Value, TdlibError> {
             limit,
         } => Ok(json!({
             "@type": "getForumTopics",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "query": "",
             "offset_date": 0,
             "offset_message_id": 0,
@@ -705,7 +899,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "createForumTopic",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "name": title,
             "icon": {"@type": "messageForumTopicIcon", "color": 7322096, "custom_emoji_id": ""},
             "@extra": operation_id,
@@ -718,7 +912,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "toggleForumTopicIsClosed",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "message_thread_id": provider_id(provider_topic_id)?,
             "is_closed": is_closed,
             "@extra": operation_id,
@@ -744,8 +938,8 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "forwardMessages",
-            "chat_id": provider_id(provider_chat_id)?,
-            "from_chat_id": provider_id(from_provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
+            "from_chat_id": signed_chat_id(from_provider_chat_id)?,
             "message_ids": [provider_id(from_provider_message_id)?],
             "options": null,
             "send_copy": false,
@@ -760,7 +954,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "editMessageText",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "message_id": provider_id(provider_message_id)?,
             "input_message_content": formatted_text_content(text, false),
             "@extra": operation_id,
@@ -773,7 +967,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "deleteMessages",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "message_ids": [provider_id(provider_message_id)?],
             "revoke": revoke,
             "@extra": operation_id,
@@ -790,7 +984,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": if *active { "addMessageReaction" } else { "removeMessageReaction" },
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "message_id": provider_id(provider_message_id)?,
             "reaction_type": {"@type": "reactionTypeEmoji", "emoji": emoji},
             "is_big": false,
@@ -805,13 +999,13 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(if *active {
             json!({
-                "@type": "pinChatMessage", "chat_id": provider_id(provider_chat_id)?,
+                "@type": "pinChatMessage", "chat_id": signed_chat_id(provider_chat_id)?,
                 "message_id": provider_id(provider_message_id)?, "disable_notification": false,
                 "only_for_self": false, "@extra": operation_id
             })
         } else {
             json!({
-                "@type": "unpinChatMessage", "chat_id": provider_id(provider_chat_id)?,
+                "@type": "unpinChatMessage", "chat_id": signed_chat_id(provider_chat_id)?,
                 "message_id": provider_id(provider_message_id)?, "@extra": operation_id
             })
         }),
@@ -824,13 +1018,13 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
         } => {
             if !unread && let Some(message_id) = read_through_provider_message_id {
                 return Ok(json!({
-                    "@type": "viewMessages", "chat_id": provider_id(provider_chat_id)?,
+                    "@type": "viewMessages", "chat_id": signed_chat_id(provider_chat_id)?,
                     "message_ids": [provider_id(message_id)?], "source": null,
                     "force_read": true, "@extra": operation_id
                 }));
             }
             Ok(json!({
-                "@type": "toggleChatIsMarkedAsUnread", "chat_id": provider_id(provider_chat_id)?,
+                "@type": "toggleChatIsMarkedAsUnread", "chat_id": signed_chat_id(provider_chat_id)?,
                 "is_marked_as_unread": unread, "@extra": operation_id
             }))
         }
@@ -840,7 +1034,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             archived,
             ..
         } => Ok(json!({
-            "@type": "addChatToList", "chat_id": provider_id(provider_chat_id)?,
+            "@type": "addChatToList", "chat_id": signed_chat_id(provider_chat_id)?,
             "chat_list": {"@type": if *archived { "chatListArchive" } else { "chatListMain" }},
             "@extra": operation_id
         })),
@@ -850,7 +1044,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             muted,
             ..
         } => Ok(json!({
-            "@type": "setChatNotificationSettings", "chat_id": provider_id(provider_chat_id)?,
+            "@type": "setChatNotificationSettings", "chat_id": signed_chat_id(provider_chat_id)?,
             "notification_settings": {"@type": "chatNotificationSettings", "use_default_mute_for": !muted,
                 "mute_for": if *muted { 31_708_800 } else { 0 }, "use_default_sound": true,
                 "sound_id": 0, "use_default_show_preview": true, "show_preview": true,
@@ -868,14 +1062,14 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             provider_chat_id,
             ..
         } => Ok(json!({
-            "@type": "joinChat", "chat_id": provider_id(provider_chat_id)?, "@extra": operation_id
+            "@type": "joinChat", "chat_id": signed_chat_id(provider_chat_id)?, "@extra": operation_id
         })),
         TelegramProviderCommand::Leave {
             operation_id,
             provider_chat_id,
             ..
         } => Ok(json!({
-            "@type": "leaveChat", "chat_id": provider_id(provider_chat_id)?, "@extra": operation_id
+            "@type": "leaveChat", "chat_id": signed_chat_id(provider_chat_id)?, "@extra": operation_id
         })),
         TelegramProviderCommand::AddChatToFolder {
             operation_id,
@@ -884,7 +1078,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "addChatToList",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "chat_list": {"@type": "chatListFolder", "chat_folder_id": provider_folder_id},
             "@extra": operation_id
         })),
@@ -903,7 +1097,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             ..
         } => Ok(json!({
             "@type": "getChat",
-            "chat_id": provider_id(provider_chat_id)?,
+            "chat_id": signed_chat_id(provider_chat_id)?,
             "@extra": format!("{operation_id}:get-chat")
         })),
         TelegramProviderCommand::SearchMessages {
@@ -916,7 +1110,7 @@ pub fn encode_provider_command(command: &TelegramProviderCommand) -> Result<Valu
             let query = query.trim();
             if let Some(chat_id) = provider_chat_id {
                 Ok(json!({
-                    "@type": "searchChatMessages", "chat_id": provider_id(chat_id)?,
+                    "@type": "searchChatMessages", "chat_id": signed_chat_id(chat_id)?,
                     "query": query, "sender_id": null, "from_message_id": 0, "offset": 0,
                     "limit": limit, "filter": {"@type": "searchMessagesFilterEmpty"},
                     "@extra": operation_id
@@ -985,7 +1179,7 @@ pub fn encode_send_media_materialized(
     content[file_field] = json!({"@type": "inputFileLocal", "path": materialized_path});
     Ok(json!({
         "@type": "sendMessage",
-        "chat_id": provider_id(&command.provider_chat_id)?,
+        "chat_id": signed_chat_id(&command.provider_chat_id)?,
         "reply_to": {"@type": "inputMessageReplyToMessage", "message_id": 0},
         "options": null,
         "reply_markup": null,
@@ -1003,7 +1197,7 @@ fn text_command(
 ) -> Result<Value, TdlibError> {
     let mut request = json!({
         "@type": command_type,
-        "chat_id": provider_id(provider_chat_id)?,
+        "chat_id": signed_chat_id(provider_chat_id)?,
         "input_message_content": formatted_text_content(text, true),
         "@extra": operation_id,
     });
@@ -1033,6 +1227,14 @@ fn provider_id(value: &str) -> Result<i64, TdlibError> {
         .ok_or_else(|| TdlibError::Protocol("Telegram provider id is invalid".to_owned()))
 }
 
+fn signed_chat_id(value: &str) -> Result<i64, TdlibError> {
+    value
+        .parse::<i64>()
+        .ok()
+        .filter(|value| *value != 0)
+        .ok_or_else(|| TdlibError::Protocol("Telegram provider chat id is invalid".to_owned()))
+}
+
 pub fn parse_chat(account_id: &str, payload: &Value) -> Result<TelegramChat, TdlibError> {
     let provider_chat_id = required_string(payload, "id")?;
     let title = required_string(payload, "title")?;
@@ -1047,13 +1249,62 @@ pub fn parse_chat(account_id: &str, payload: &Value) -> Result<TelegramChat, Tdl
         .and_then(|value| value.get("editable_username"))
         .and_then(Value::as_str)
         .map(ToOwned::to_owned);
+    let avatar = payload
+        .get("photo")
+        .filter(|value| !value.is_null())
+        .and_then(|value| value.get("small").or_else(|| value.get("big")));
     Ok(TelegramChat {
         account_id: account_id.to_owned(),
         provider_chat_id,
         kind,
         title,
         username,
+        avatar_provider_file_id: avatar
+            .and_then(|value| value.get("id"))
+            .and_then(value_id_optional),
+        avatar_provider_unique_id: avatar
+            .and_then(|value| value.get("remote"))
+            .and_then(|value| value.get("unique_id"))
+            .and_then(Value::as_str)
+            .map(ToOwned::to_owned),
     })
+}
+
+fn parse_new_chat_update(
+    account_id: &str,
+    payload: &Value,
+) -> Result<Option<TelegramChat>, TdlibError> {
+    let chat_payload = match payload.get("@type").and_then(Value::as_str) {
+        Some("updateNewChat") => payload
+            .get("chat")
+            .ok_or_else(|| TdlibError::Protocol("updateNewChat has no chat".to_owned()))?,
+        // getChat returns a plain `chat` object. Sender resolution for
+        // channel posts and anonymous administrators uses messageSenderChat,
+        // so the correlated response must populate the same title cache as
+        // updateNewChat or those messages degrade to an opaque sender.
+        Some("chat") => payload,
+        _ => return Ok(None),
+    };
+    if chat_payload
+        .get("title")
+        .and_then(Value::as_str)
+        .is_none_or(|title| title.trim().is_empty())
+    {
+        return Ok(None);
+    }
+    parse_chat(account_id, chat_payload).map(Some)
+}
+
+fn private_chat_provider_user_id(payload: &Value) -> Option<String> {
+    let chat = match payload.get("@type").and_then(Value::as_str) {
+        Some("updateNewChat") => payload.get("chat")?,
+        Some("chat") => payload,
+        _ => return None,
+    };
+    let chat_type = chat.get("type")?;
+    (chat_type.get("@type").and_then(Value::as_str) == Some("chatTypePrivate"))
+        .then(|| chat_type.get("user_id").and_then(value_id_optional))
+        .flatten()
 }
 
 fn parse_chat_avatar(account_id: &str, payload: &Value) -> Result<TelegramChatAvatar, TdlibError> {
@@ -1079,10 +1330,7 @@ pub fn parse_message_observation(
 ) -> Result<TelegramMessageObservation, TdlibError> {
     let provider_chat_id = required_string(payload, "chat_id")?;
     let provider_message_id = required_string(payload, "id")?;
-    let sender = payload
-        .get("sender_id")
-        .and_then(|value| value.get("user_id").or_else(|| value.get("chat_id")))
-        .and_then(Value::as_i64)
+    let sender = message_sender_key(payload)
         .ok_or_else(|| TdlibError::Protocol("TDLib message sender is missing".to_owned()))?;
     let text = message_text(payload.get("content"));
     let media = parse_message_media(payload.get("content"));
@@ -1092,8 +1340,21 @@ pub fn parse_message_observation(
         provider_chat_id,
         provider_message_id,
         provider_topic_id: payload.get("message_thread_id").and_then(value_id_optional),
-        sender_id: sender.to_string(),
-        sender_display_name: None,
+        sender_id: sender.provider_id().to_owned(),
+        sender_display_name: match &sender {
+            TdlibMessageSenderKey::Chat(_) => {
+                bounded_sender_display_name(payload.get("author_signature"))
+                    .or_else(|| bounded_sender_display_name(payload.get("sender_display_name")))
+            }
+            TdlibMessageSenderKey::User(_) => {
+                bounded_sender_display_name(payload.get("sender_display_name"))
+            }
+        }
+        .or_else(|| Some(sender.fallback_display_name().to_owned())),
+        sender_source_identity: Some(telegram_person_source_identity_v1(
+            account_id,
+            &sender.provider_source_key(),
+        )),
         is_outgoing: payload
             .get("is_outgoing")
             .and_then(Value::as_bool)
@@ -1133,13 +1394,25 @@ fn parse_message_references(payload: &Value) -> Result<TelegramMessageReferences
                 TdlibError::Protocol("TDLib forward origin type is missing".to_owned())
             })?;
             let provider_sender_id = match origin_type {
-                "messageOriginUser" => Some(value_id(origin.get("sender_user_id").ok_or_else(
-                    || TdlibError::Protocol("TDLib forward user origin is missing".to_owned()),
-                )?)?),
-                "messageOriginChat" => Some(value_id(origin.get("sender_chat_id").ok_or_else(
-                    || TdlibError::Protocol("TDLib forward chat origin is missing".to_owned()),
-                )?)?),
-                "messageOriginHiddenUser" | "messageOriginMessageImport" => None,
+                "messageOriginUser" | "messageForwardOriginUser" => {
+                    Some(value_id(origin.get("sender_user_id").ok_or_else(
+                        || TdlibError::Protocol("TDLib forward user origin is missing".to_owned()),
+                    )?)?)
+                }
+                "messageOriginChat" | "messageForwardOriginChat" => {
+                    Some(value_id(origin.get("sender_chat_id").ok_or_else(
+                        || TdlibError::Protocol("TDLib forward chat origin is missing".to_owned()),
+                    )?)?)
+                }
+                "messageOriginChannel" | "messageForwardOriginChannel" => {
+                    Some(value_id(origin.get("chat_id").ok_or_else(|| {
+                        TdlibError::Protocol("TDLib forward channel origin is missing".to_owned())
+                    })?)?)
+                }
+                "messageOriginHiddenUser"
+                | "messageOriginMessageImport"
+                | "messageForwardOriginHiddenUser"
+                | "messageForwardOriginMessageImport" => None,
                 other => {
                     return Err(TdlibError::Protocol(format!(
                         "TDLib forward origin type is unsupported: {other}"
@@ -1198,7 +1471,59 @@ pub fn parse_file_snapshot(
             .and_then(|value| value.get("is_downloading_completed"))
             .and_then(Value::as_bool)
             .unwrap_or(false),
+        blob_reference_id: None,
+        blob_plaintext_sha256: None,
+        blob_backup_class: None,
     })
+}
+
+fn downloaded_file(
+    account_id: &str,
+    payload: &Value,
+) -> Result<Option<TdlibDownloadedFile>, TdlibError> {
+    if payload.get("@type").and_then(Value::as_str) != Some("updateFile") {
+        return Ok(None);
+    }
+    let file = payload
+        .get("file")
+        .ok_or_else(|| TdlibError::Protocol("updateFile has no file".to_owned()))?;
+    let snapshot = parse_file_snapshot(account_id, file)?;
+    if !snapshot.is_downloaded {
+        return Ok(None);
+    }
+    let local_path = file
+        .get("local")
+        .and_then(|value| value.get("path"))
+        .and_then(Value::as_str)
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(PathBuf::from)
+        .ok_or_else(|| {
+            TdlibError::Protocol("Downloaded TDLib file has no local path".to_owned())
+        })?;
+    Ok(Some(TdlibDownloadedFile {
+        snapshot,
+        local_path,
+    }))
+}
+
+fn completed_download_response_update(
+    account_id: &str,
+    payload: &Value,
+) -> Result<Option<Value>, TdlibError> {
+    if payload.get("@type").and_then(Value::as_str) != Some("file") {
+        return Ok(None);
+    }
+    let update = json!({"@type": "updateFile", "file": payload});
+    downloaded_file(account_id, &update).map(|downloaded| downloaded.map(|_| update))
+}
+
+fn is_download_file_request(request: &TdlibRequest) -> bool {
+    matches!(
+        request,
+        TdlibRequest::DownloadFile(_)
+            | TdlibRequest::ProviderCommand(TelegramProviderCommand::DownloadFile(_))
+    )
 }
 
 pub fn parse_participant_page(
@@ -1363,7 +1688,7 @@ fn parse_typing_state(
 fn parse_chat_position(
     account_id: &str,
     payload: &Value,
-) -> Result<TelegramChatPosition, TdlibError> {
+) -> Result<Option<TelegramChatPosition>, TdlibError> {
     let position = payload
         .get("position")
         .ok_or_else(|| TdlibError::Protocol("TDLib chat position is missing".to_owned()))?;
@@ -1381,13 +1706,9 @@ fn parse_chat_position(
             "folder".to_owned(),
             list.get("chat_folder_id").and_then(Value::as_i64),
         ),
-        _ => {
-            return Err(TdlibError::Protocol(
-                "unsupported Telegram chat list".to_owned(),
-            ));
-        }
+        _ => return Ok(None),
     };
-    Ok(TelegramChatPosition {
+    Ok(Some(TelegramChatPosition {
         account_id: account_id.to_owned(),
         provider_chat_id: required_string(payload, "chat_id")?,
         list_kind,
@@ -1400,7 +1721,7 @@ fn parse_chat_position(
             .get("is_pinned")
             .and_then(Value::as_bool)
             .unwrap_or(false),
-    })
+    }))
 }
 
 fn parse_chat_folders(
@@ -1502,7 +1823,10 @@ pub fn parse_provider_events(
             }
         }
         "updateChatPosition" => {
-            TelegramProviderEvent::ChatPositionChanged(parse_chat_position(account_id, payload)?)
+            let Some(position) = parse_chat_position(account_id, payload)? else {
+                return Ok(Vec::new());
+            };
+            TelegramProviderEvent::ChatPositionChanged(position)
         }
         "updateChatFolders" => TelegramProviderEvent::ChatFoldersChanged {
             account_id: account_id.to_owned(),
@@ -1678,11 +2002,16 @@ pub fn parse_provider_updates(
         }
         return Ok(vec![TdlibProviderUpdate::Call(observation)]);
     }
+    let downloaded = downloaded_file(account_id, payload)?;
     parse_provider_events(account_id, payload).map(|events| {
-        events
+        let mut updates = events
             .into_iter()
             .map(|event| TdlibProviderUpdate::Operational(Box::new(event)))
-            .collect()
+            .collect::<Vec<_>>();
+        if let Some(downloaded) = downloaded {
+            updates.push(TdlibProviderUpdate::DownloadedFile(downloaded));
+        }
+        updates
     })
 }
 
@@ -2016,18 +2345,463 @@ fn call_failure_category(payload: &Value) -> TdlibCallFailureCategory {
 }
 
 fn message_text(content: Option<&Value>) -> Option<String> {
-    content?
+    let content = content?;
+    content
         .get("text")
-        .or_else(|| content?.get("caption"))
+        .or_else(|| content.get("caption"))
         .and_then(|value| value.get("text"))
         .and_then(Value::as_str)
+        .filter(|value| !value.trim().is_empty())
         .map(ToOwned::to_owned)
+        .or_else(|| message_content_summary(content))
+}
+
+fn message_content_summary(content: &Value) -> Option<String> {
+    let content_type = content.get("@type").and_then(Value::as_str)?;
+    match content_type {
+        "messageText" => Some("Text message".to_owned()),
+        "messageRichMessage" => Some("Rich message".to_owned()),
+        "messageAnimatedEmoji" => {
+            summary_with_detail("Animated emoji", trimmed_string(content.get("emoji")))
+        }
+        "messagePhoto" => Some("Photo".to_owned()),
+        "messageVideo" => Some("Video".to_owned()),
+        "messageAudio" => Some("Audio".to_owned()),
+        "messageDocument" => Some("File".to_owned()),
+        "messageAnimation" => Some("Animation".to_owned()),
+        "messageVoiceNote" => Some("Voice message".to_owned()),
+        "messageSticker" => content
+            .get("sticker")
+            .and_then(|sticker| trimmed_string(sticker.get("emoji")))
+            .or_else(|| Some("Sticker".to_owned())),
+        "messageVideoNote" => Some("Video message".to_owned()),
+        "messagePaidMedia" => Some("Paid media".to_owned()),
+        "messagePoll" => summary_with_detail(
+            "Poll",
+            nested_formatted_text(content, &["poll", "question"]),
+        ),
+        "messagePollOptionAdded" => Some("Poll option added".to_owned()),
+        "messagePollOptionDeleted" => Some("Poll option removed".to_owned()),
+        "messageContact" => content
+            .get("contact")
+            .and_then(contact_summary)
+            .or_else(|| Some("Contact".to_owned())),
+        "messageLocation" => content
+            .get("location")
+            .and_then(location_summary)
+            .or_else(|| Some("Location".to_owned())),
+        "messageLiveLocation" => content
+            .get("location")
+            .and_then(location_summary)
+            .map(|value| value.replacen("Location", "Live location", 1))
+            .or_else(|| Some("Live location".to_owned())),
+        "messageVenue" => content
+            .get("venue")
+            .and_then(venue_summary)
+            .or_else(|| Some("Venue".to_owned())),
+        "messageDice" | "messageStakeDice" => dice_summary(content),
+        "messageGame" => summary_with_detail(
+            "Game",
+            trimmed_string(content.get("game").and_then(|game| game.get("title"))),
+        ),
+        "messageGameScore" => Some("Game score".to_owned()),
+        "messageInvoice" => summary_with_detail(
+            "Invoice",
+            nested_formatted_text(content, &["product_info", "title"]),
+        ),
+        "messageChecklist" => summary_with_detail(
+            "Checklist",
+            nested_formatted_text(content, &["list", "title"]),
+        ),
+        "messageChecklistTasksAdded" => Some("Checklist tasks added".to_owned()),
+        "messageChecklistTasksDone" => Some("Checklist tasks updated".to_owned()),
+        "messageBasicGroupChatCreate" | "messageSupergroupChatCreate" => {
+            summary_with_detail("Group created", trimmed_string(content.get("title")))
+        }
+        "messageChatChangeTitle" => {
+            summary_with_detail("Chat title changed", trimmed_string(content.get("title")))
+        }
+        "messageCustomServiceAction" => {
+            summary_with_detail("Service message", trimmed_string(content.get("text")))
+        }
+        "messageExpiredPhoto" => Some("Expired photo".to_owned()),
+        "messageExpiredVideo" => Some("Expired video".to_owned()),
+        "messageExpiredVideoNote" => Some("Expired video message".to_owned()),
+        "messageExpiredVoiceNote" => Some("Expired voice message".to_owned()),
+        "messageStory" => Some("Story".to_owned()),
+        "messageCall" => Some("Call".to_owned()),
+        "messageGroupCall" => Some("Group call".to_owned()),
+        "messageVideoChatScheduled" => Some("Video chat scheduled".to_owned()),
+        "messageVideoChatStarted" => Some("Video chat started".to_owned()),
+        "messageVideoChatEnded" => Some("Video chat ended".to_owned()),
+        "messageChatAddMembers" => Some("Members added".to_owned()),
+        "messageChatDeleteMember" => Some("Member removed".to_owned()),
+        "messageChatJoinByLink" => Some("Joined via invite link".to_owned()),
+        "messageChatJoinByRequest" => Some("Join request approved".to_owned()),
+        "messagePinMessage" => Some("Message pinned".to_owned()),
+        "messageScreenshotTaken" => Some("Screenshot taken".to_owned()),
+        "messageChatChangePhoto" => Some("Chat photo changed".to_owned()),
+        "messageChatDeletePhoto" => Some("Chat photo removed".to_owned()),
+        "messageBotWriteAccessAllowed" => Some("Bot write access allowed".to_owned()),
+        "messageChatAddedToCommunity" => Some("Chat added to community".to_owned()),
+        "messageChatRemovedFromCommunity" => Some("Chat removed from community".to_owned()),
+        "messageChatBoost" => Some("Chat boosted".to_owned()),
+        "messageChatHasProtectedContentDisableRequested" => {
+            Some("Protected content disable requested".to_owned())
+        }
+        "messageChatHasProtectedContentToggled" => {
+            Some("Protected content setting changed".to_owned())
+        }
+        "messageChatOwnerChanged" => Some("Chat owner changed".to_owned()),
+        "messageChatOwnerLeft" => Some("Chat owner left".to_owned()),
+        "messageChatSetBackground" => Some("Chat background changed".to_owned()),
+        "messageChatSetMessageAutoDeleteTime" => {
+            Some("Message auto-delete timer changed".to_owned())
+        }
+        "messageChatSetTheme" => Some("Chat theme changed".to_owned()),
+        "messageChatSetTtl" => Some("Message auto-delete timer changed".to_owned()),
+        "messageChatShared" => Some("Chat shared".to_owned()),
+        "messageChatUpgradeFrom" | "messageChatUpgradeTo" => Some("Chat upgraded".to_owned()),
+        "messageDirectMessagePriceChanged" => Some("Direct message price changed".to_owned()),
+        "messageContactRegistered" => Some("Contact joined Telegram".to_owned()),
+        "messageForumTopicCreated" => Some("Forum topic created".to_owned()),
+        "messageForumTopicEdited" => Some("Forum topic edited".to_owned()),
+        "messageForumTopicIsClosedToggled" => Some("Forum topic state changed".to_owned()),
+        "messageForumTopicIsHiddenToggled" => Some("Forum topic visibility changed".to_owned()),
+        "messageGift" => Some("Gift".to_owned()),
+        "messageGiftedPremium" => Some("Telegram Premium gift".to_owned()),
+        "messageGiftedStars" => Some("Telegram Stars gift".to_owned()),
+        "messageGiftedTon" => Some("TON gift".to_owned()),
+        "messageGiveaway" => Some("Giveaway".to_owned()),
+        "messageGiveawayCompleted" => Some("Giveaway completed".to_owned()),
+        "messageGiveawayCreated" => Some("Giveaway created".to_owned()),
+        "messageGiveawayPrizeStars" => Some("Giveaway prize".to_owned()),
+        "messageGiveawayWinners" => Some("Giveaway winners".to_owned()),
+        "messageInviteVideoChatParticipants" => Some("Video chat participants invited".to_owned()),
+        "messageManagedBotCreated" => Some("Managed bot created".to_owned()),
+        "messagePaidMessagePriceChanged" => Some("Paid message price changed".to_owned()),
+        "messagePaidMessagesRefunded" => Some("Paid messages refunded".to_owned()),
+        "messagePassportDataReceived" => Some("Telegram Passport data received".to_owned()),
+        "messagePassportDataSent" => Some("Telegram Passport data sent".to_owned()),
+        "messagePaymentRefunded" => Some("Payment refunded".to_owned()),
+        "messagePaymentSuccessful" | "messagePaymentSuccessfulBot" => {
+            Some("Payment successful".to_owned())
+        }
+        "messagePremiumGiftCode" => Some("Premium gift code".to_owned()),
+        "messageProximityAlertTriggered" => Some("Proximity alert".to_owned()),
+        "messageRefundedUpgradedGift" => Some("Upgraded gift refunded".to_owned()),
+        "messageSuggestBirthdate" => Some("Birthdate suggested".to_owned()),
+        "messageSuggestProfilePhoto" => Some("Profile photo suggested".to_owned()),
+        "messageSuggestedPostApprovalFailed" => Some("Post approval failed".to_owned()),
+        "messageSuggestedPostApproved" => Some("Suggested post approved".to_owned()),
+        "messageSuggestedPostDeclined" => Some("Suggested post declined".to_owned()),
+        "messageSuggestedPostPaid" => Some("Suggested post paid".to_owned()),
+        "messageSuggestedPostRefunded" => Some("Suggested post refunded".to_owned()),
+        "messageUpgradedGift" => Some("Upgraded gift".to_owned()),
+        "messageUpgradedGiftPurchaseOffer" => Some("Gift purchase offer".to_owned()),
+        "messageUpgradedGiftPurchaseOfferRejected" => {
+            Some("Gift purchase offer rejected".to_owned())
+        }
+        "messageUsersShared" => Some("Users shared".to_owned()),
+        "messageWebAppDataReceived" => Some("Web app data received".to_owned()),
+        "messageWebAppDataSent" => Some("Web app data sent".to_owned()),
+        "messageWebsiteConnected" => Some("Website connected".to_owned()),
+        "messageUnsupported" => Some("Unsupported Telegram message".to_owned()),
+        _ => humanize_message_content_type(content_type),
+    }
+}
+
+fn nested_formatted_text(value: &Value, path: &[&str]) -> Option<String> {
+    let mut current = value;
+    for segment in path {
+        current = current.get(*segment)?;
+    }
+    current
+        .get("text")
+        .and_then(Value::as_str)
+        .or_else(|| current.as_str())
+        .and_then(|text| (!text.trim().is_empty()).then(|| text.trim().to_owned()))
+}
+
+fn trimmed_string(value: Option<&Value>) -> Option<String> {
+    value
+        .and_then(Value::as_str)
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(ToOwned::to_owned)
+}
+
+fn summary_with_detail(label: &str, detail: Option<String>) -> Option<String> {
+    Some(match detail {
+        Some(detail) => format!("{label}: {detail}"),
+        None => label.to_owned(),
+    })
+}
+
+fn contact_summary(contact: &Value) -> Option<String> {
+    let name = [
+        trimmed_string(contact.get("first_name")),
+        trimmed_string(contact.get("last_name")),
+    ]
+    .into_iter()
+    .flatten()
+    .collect::<Vec<_>>()
+    .join(" ");
+    let phone = trimmed_string(contact.get("phone_number"));
+    let detail = match (name.is_empty(), phone) {
+        (false, Some(phone)) => format!("{name} · {phone}"),
+        (false, None) => name,
+        (true, Some(phone)) => phone,
+        (true, None) => return Some("Contact".to_owned()),
+    };
+    Some(format!("Contact: {detail}"))
+}
+
+fn location_summary(location: &Value) -> Option<String> {
+    let latitude = location.get("latitude").and_then(Value::as_f64)?;
+    let longitude = location.get("longitude").and_then(Value::as_f64)?;
+    Some(format!("Location: {latitude:.6}, {longitude:.6}"))
+}
+
+fn venue_summary(venue: &Value) -> Option<String> {
+    let title = trimmed_string(venue.get("title"));
+    let address = trimmed_string(venue.get("address"));
+    Some(match (title, address) {
+        (Some(title), Some(address)) => format!("Venue: {title} · {address}"),
+        (Some(title), None) => format!("Venue: {title}"),
+        (None, Some(address)) => format!("Venue: {address}"),
+        (None, None) => "Venue".to_owned(),
+    })
+}
+
+fn dice_summary(content: &Value) -> Option<String> {
+    let emoji = trimmed_string(content.get("emoji")).unwrap_or_else(|| "Dice".to_owned());
+    let value = content
+        .get("value")
+        .and_then(Value::as_i64)
+        .unwrap_or_default();
+    Some(if value > 0 {
+        format!("{emoji} {value}")
+    } else {
+        emoji
+    })
+}
+
+fn humanize_message_content_type(content_type: &str) -> Option<String> {
+    let raw = content_type.strip_prefix("message")?;
+    if raw.is_empty() {
+        return None;
+    }
+    let mut label = String::with_capacity(raw.len() + 4);
+    for (index, character) in raw.chars().enumerate() {
+        if index > 0 && character.is_ascii_uppercase() {
+            label.push(' ');
+        }
+        if index > 0 && character.is_ascii_uppercase() {
+            label.push(character.to_ascii_lowercase());
+        } else {
+            label.push(character);
+        }
+    }
+    Some(label)
+}
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+enum TdlibMessageSenderKey {
+    User(String),
+    Chat(String),
+}
+
+impl TdlibMessageSenderKey {
+    fn provider_id(&self) -> &str {
+        match self {
+            Self::User(value) | Self::Chat(value) => value,
+        }
+    }
+
+    fn provider_source_key(&self) -> String {
+        match self {
+            Self::User(value) => format!("user:{value}"),
+            Self::Chat(value) => format!("chat:{value}"),
+        }
+    }
+
+    fn fallback_display_name(&self) -> &'static str {
+        match self {
+            Self::User(_) => "Telegram user",
+            Self::Chat(_) => "Telegram chat",
+        }
+    }
+}
+
+fn message_sender_key(message: &Value) -> Option<TdlibMessageSenderKey> {
+    tdlib_sender_key(message.get("sender_id")?)
+}
+
+fn participant_sender_key(member: &Value) -> Option<TdlibMessageSenderKey> {
+    tdlib_sender_key(member.get("member_id")?)
+}
+
+fn tdlib_sender_key(sender: &Value) -> Option<TdlibMessageSenderKey> {
+    match sender.get("@type").and_then(Value::as_str) {
+        Some("messageSenderUser") => sender
+            .get("user_id")
+            .and_then(value_id_optional)
+            .map(TdlibMessageSenderKey::User),
+        Some("messageSenderChat") => sender
+            .get("chat_id")
+            .and_then(value_id_optional)
+            .map(TdlibMessageSenderKey::Chat),
+        _ => sender
+            .get("user_id")
+            .and_then(value_id_optional)
+            .map(TdlibMessageSenderKey::User)
+            .or_else(|| {
+                sender
+                    .get("chat_id")
+                    .and_then(value_id_optional)
+                    .map(TdlibMessageSenderKey::Chat)
+            }),
+    }
+}
+
+fn message_sender_keys(payload: &Value) -> Vec<TdlibMessageSenderKey> {
+    // History and search use different TDLib wrapper types (`messages` and
+    // `foundMessages`), and older bundled TDLib builds may omit the wrapper
+    // discriminator while still returning the typed `messages` field. Resolve
+    // senders from the structural contract used by the response parser so no
+    // valid message list silently bypasses identity enrichment.
+    let mut keys = if let Some(messages) = payload.get("messages").and_then(Value::as_array) {
+        messages
+            .iter()
+            .filter_map(message_sender_key)
+            .collect::<Vec<_>>()
+    } else if let Some(members) = payload.get("members").and_then(Value::as_array) {
+        members
+            .iter()
+            .filter_map(participant_sender_key)
+            .collect::<Vec<_>>()
+    } else if let Some(message) = payload.get("message") {
+        message_sender_key(message).into_iter().collect()
+    } else {
+        message_sender_key(payload).into_iter().collect()
+    };
+    keys.sort();
+    keys.dedup();
+    keys
+}
+
+fn enrich_message_payloads(
+    payload: &mut Value,
+    known_user_names: &HashMap<String, String>,
+    known_chats: &HashMap<String, TelegramChat>,
+) {
+    if let Some(messages) = payload.get_mut("messages").and_then(Value::as_array_mut) {
+        for message in messages {
+            enrich_message_sender_name(message, known_user_names, known_chats);
+        }
+    } else if let Some(members) = payload.get_mut("members").and_then(Value::as_array_mut) {
+        for member in members {
+            enrich_participant_sender_name(member, known_user_names, known_chats);
+        }
+    } else if let Some(message) = payload.get_mut("message") {
+        enrich_message_sender_name(message, known_user_names, known_chats);
+    } else {
+        enrich_message_sender_name(payload, known_user_names, known_chats);
+    }
+}
+
+fn enrich_participant_sender_name(
+    member: &mut Value,
+    known_user_names: &HashMap<String, String>,
+    known_chats: &HashMap<String, TelegramChat>,
+) {
+    let Some(sender) = participant_sender_key(member) else {
+        return;
+    };
+    let display_name = cached_sender_name(&sender, known_user_names, known_chats);
+    if let (Some(display_name), Some(object)) = (display_name, member.as_object_mut()) {
+        object.insert("display_name".to_owned(), Value::String(display_name));
+    }
+}
+
+fn enrich_message_sender_name(
+    message: &mut Value,
+    known_user_names: &HashMap<String, String>,
+    known_chats: &HashMap<String, TelegramChat>,
+) {
+    let Some(sender) = message_sender_key(message) else {
+        return;
+    };
+    let display_name = cached_sender_name(&sender, known_user_names, known_chats);
+    if let (Some(display_name), Some(object)) = (display_name, message.as_object_mut()) {
+        object.insert(
+            "sender_display_name".to_owned(),
+            Value::String(display_name),
+        );
+    }
+}
+
+fn cached_sender_name(
+    sender: &TdlibMessageSenderKey,
+    known_user_names: &HashMap<String, String>,
+    known_chats: &HashMap<String, TelegramChat>,
+) -> Option<String> {
+    match sender {
+        TdlibMessageSenderKey::User(provider_user_id) => {
+            known_user_names.get(provider_user_id).cloned()
+        }
+        TdlibMessageSenderKey::Chat(provider_chat_id) => known_chats
+            .get(provider_chat_id)
+            .map(|chat| chat.title.clone()),
+    }
+}
+
+fn tdlib_user_display_name(user: &Value) -> Option<String> {
+    let personal_name = [
+        bounded_sender_display_name(user.get("first_name")),
+        bounded_sender_display_name(user.get("last_name")),
+    ]
+    .into_iter()
+    .flatten()
+    .collect::<Vec<_>>()
+    .join(" ");
+    if !personal_name.is_empty() {
+        return bounded_sender_display_name(Some(&Value::String(personal_name)));
+    }
+    let username = user
+        .get("usernames")
+        .and_then(|value| value.get("editable_username"))
+        .and_then(Value::as_str)
+        .filter(|value| !value.trim().is_empty())
+        .or_else(|| {
+            user.get("usernames")
+                .and_then(|value| value.get("active_usernames"))
+                .and_then(Value::as_array)
+                .and_then(|values| values.first())
+                .and_then(Value::as_str)
+                .filter(|value| !value.trim().is_empty())
+        })
+        .or_else(|| user.get("username").and_then(Value::as_str))?;
+    bounded_sender_display_name(Some(&Value::String(format!("@{}", username.trim()))))
+}
+
+fn bounded_sender_display_name(value: Option<&Value>) -> Option<String> {
+    let value = value?.as_str()?.trim();
+    if value.is_empty() || value.chars().any(char::is_control) {
+        return None;
+    }
+    let mut end = value.len().min(256);
+    while !value.is_char_boundary(end) {
+        end -= 1;
+    }
+    Some(value[..end].to_owned())
 }
 
 fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> {
     let content = content?;
     let content_type = content.get("@type").and_then(Value::as_str)?;
-    let (kind, metadata, file) = match content_type {
+    let (kind, metadata, file, fallback_content_type, fallback_filename) = match content_type {
         "messagePhoto" => (
             TelegramMediaKind::Photo,
             content
@@ -2042,16 +2816,22 @@ fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> 
                 .as_array()?
                 .last()?
                 .get("photo"),
+            Some("image/jpeg"),
+            Some("photo.jpg".to_owned()),
         ),
         "messageVideo" => (
             TelegramMediaKind::Video,
             content.get("video"),
             content.get("video").and_then(|value| value.get("video")),
+            Some("video/mp4"),
+            Some("video.mp4".to_owned()),
         ),
         "messageAudio" => (
             TelegramMediaKind::Audio,
             content.get("audio"),
             content.get("audio").and_then(|value| value.get("audio")),
+            Some("audio/mpeg"),
+            Some("audio.mp3".to_owned()),
         ),
         "messageDocument" => (
             TelegramMediaKind::Document,
@@ -2059,6 +2839,8 @@ fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> 
             content
                 .get("document")
                 .and_then(|value| value.get("document")),
+            Some("application/octet-stream"),
+            Some("document".to_owned()),
         ),
         "messageAnimation" => (
             TelegramMediaKind::Animation,
@@ -2066,6 +2848,8 @@ fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> 
             content
                 .get("animation")
                 .and_then(|value| value.get("animation")),
+            Some("video/mp4"),
+            Some("animation.mp4".to_owned()),
         ),
         "messageVoiceNote" => (
             TelegramMediaKind::VoiceNote,
@@ -2073,9 +2857,52 @@ fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> 
             content
                 .get("voice_note")
                 .and_then(|value| value.get("voice")),
+            Some("audio/ogg"),
+            Some("voice-note.ogg".to_owned()),
         ),
+        "messageVideoNote" => (
+            TelegramMediaKind::Video,
+            content.get("video_note"),
+            content
+                .get("video_note")
+                .and_then(|value| value.get("video")),
+            Some("video/mp4"),
+            Some("video-note.mp4".to_owned()),
+        ),
+        "messageSticker" => {
+            let metadata = content.get("sticker");
+            let format = metadata
+                .and_then(|value| value.get("format"))
+                .and_then(|value| value.get("@type"))
+                .and_then(Value::as_str);
+            let (kind, content_type, extension) = match format {
+                Some("stickerFormatTgs") => (
+                    TelegramMediaKind::Animation,
+                    "application/x-tgsticker",
+                    "tgs",
+                ),
+                Some("stickerFormatWebm") => (TelegramMediaKind::Animation, "video/webm", "webm"),
+                _ => (TelegramMediaKind::Photo, "image/webp", "webp"),
+            };
+            let emoji = metadata
+                .and_then(|value| trimmed_string(value.get("emoji")))
+                .filter(|value| {
+                    value
+                        .chars()
+                        .all(|character| character.is_ascii_alphanumeric() || character == '_')
+                })
+                .unwrap_or_else(|| "sticker".to_owned());
+            (
+                kind,
+                metadata,
+                metadata.and_then(|value| value.get("sticker")),
+                Some(content_type),
+                Some(format!("{emoji}.{extension}")),
+            )
+        }
         _ => return None,
     };
+    let (preview_provider_file_id, preview_content_type) = message_media_preview(content, metadata);
     Some(TelegramMessageMedia {
         kind,
         provider_file_id: file
@@ -2089,13 +2916,89 @@ fn parse_message_media(content: Option<&Value>) -> Option<TelegramMessageMedia> 
         filename: metadata
             .and_then(|value| value.get("file_name"))
             .and_then(Value::as_str)
-            .map(ToOwned::to_owned),
+            .map(ToOwned::to_owned)
+            .or(fallback_filename),
         content_type: metadata
             .and_then(|value| value.get("mime_type"))
             .and_then(Value::as_str)
             .filter(valid_content_type)
-            .map(ToOwned::to_owned),
+            .map(ToOwned::to_owned)
+            .or_else(|| fallback_content_type.map(ToOwned::to_owned)),
+        preview_provider_file_id,
+        preview_content_type,
+        preview_inline_data: message_media_inline_preview(content, metadata),
+        preview_metadata_loaded: true,
     })
+}
+
+fn message_media_inline_preview(content: &Value, metadata: Option<&Value>) -> Option<Vec<u8>> {
+    let encoded = metadata
+        .and_then(|value| value.get("minithumbnail"))
+        .and_then(|value| value.get("data"))
+        .and_then(Value::as_str)
+        .or_else(|| {
+            content
+                .get("cover")
+                .and_then(|value| value.get("minithumbnail"))
+                .and_then(|value| value.get("data"))
+                .and_then(Value::as_str)
+        })?;
+    let decoded = STANDARD.decode(encoded).ok()?;
+    if decoded.is_empty()
+        || decoded.len() > MAX_TDLIB_MINITHUMBNAIL_BYTES
+        || !decoded.starts_with(&[0xff, 0xd8])
+    {
+        return None;
+    }
+    Some(decoded)
+}
+
+fn message_media_preview(
+    content: &Value,
+    metadata: Option<&Value>,
+) -> (Option<String>, Option<String>) {
+    let thumbnail_file_id = metadata
+        .and_then(|value| value.get("thumbnail"))
+        .and_then(|value| value.get("file"))
+        .and_then(|value| value.get("id"))
+        .and_then(value_id_optional);
+    if thumbnail_file_id.is_some() {
+        return (
+            thumbnail_file_id,
+            thumbnail_content_type(metadata).map(ToOwned::to_owned),
+        );
+    }
+    let cover_file_id = content
+        .get("cover")
+        .and_then(|cover| cover.get("sizes"))
+        .and_then(Value::as_array)
+        .and_then(|sizes| {
+            sizes.iter().find_map(|size| {
+                size.get("photo")
+                    .and_then(|file| file.get("id"))
+                    .and_then(value_id_optional)
+            })
+        });
+    (
+        cover_file_id.clone(),
+        cover_file_id.map(|_| "image/jpeg".to_owned()),
+    )
+}
+
+fn thumbnail_content_type(metadata: Option<&Value>) -> Option<&'static str> {
+    match metadata?
+        .get("thumbnail")?
+        .get("format")?
+        .get("@type")?
+        .as_str()?
+    {
+        "thumbnailFormatJpeg" => Some("image/jpeg"),
+        "thumbnailFormatPng" => Some("image/png"),
+        "thumbnailFormatWebp" => Some("image/webp"),
+        "thumbnailFormatGif" => Some("image/gif"),
+        "thumbnailFormatMpeg4" => Some("video/mp4"),
+        _ => None,
+    }
 }
 
 fn valid_content_type(value: &&str) -> bool {
@@ -2170,12 +3073,14 @@ fn integer_field(payload: &Value, field: &str) -> Option<u64> {
 fn parse_reaction_observations(
     payload: &Value,
 ) -> Result<Vec<makosh_telegram_api::TelegramReactionObservation>, TdlibError> {
-    let values = payload
+    let Some(values) = payload
         .get("interaction_info")
         .and_then(|value| value.get("reactions"))
         .and_then(|value| value.get("recent_reactions"))
         .and_then(Value::as_array)
-        .ok_or_else(|| TdlibError::Protocol("TDLib reaction list is missing".to_owned()))?;
+    else {
+        return Ok(Vec::new());
+    };
     values
         .iter()
         .map(|reaction| {
@@ -2244,6 +3149,33 @@ fn chat_kind(value: &str) -> Result<TelegramChatKind, TdlibError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn bounds_pending_update_draining_without_dropping_payloads() {
+        let mut pending_updates = (0..20)
+            .map(|sequence| json!({"sequence": sequence}))
+            .collect::<VecDeque<_>>();
+
+        let drained =
+            drain_pending_update_payloads(&mut pending_updates, MAX_TDLIB_UPDATE_PAYLOADS_PER_POLL);
+
+        assert_eq!(drained.len(), MAX_TDLIB_UPDATE_PAYLOADS_PER_POLL);
+        assert_eq!(
+            drained.first().and_then(|value| value["sequence"].as_i64()),
+            Some(0)
+        );
+        assert_eq!(
+            drained.last().and_then(|value| value["sequence"].as_i64()),
+            Some(15)
+        );
+        assert_eq!(pending_updates.len(), 4);
+        assert_eq!(
+            pending_updates
+                .front()
+                .and_then(|value| value["sequence"].as_i64()),
+            Some(16)
+        );
+    }
 
     #[test]
     fn authorization_parameters_debug_redacts_credentials_and_session_path() {
@@ -2453,9 +3385,21 @@ mod tests {
         assert_eq!(encoded["@type"], "getSupergroupMembers");
         assert_eq!(
             encoded["filter"]["@type"],
-            "chatMembersFilterAdministrators"
+            "supergroupMembersFilterAdministrators"
         );
         assert_eq!(encoded["@extra"], "op-members");
+
+        let recent_participants = TelegramProviderCommand::ListParticipants {
+            operation_id: "op-recent-members".to_owned(),
+            account_id: "account".to_owned(),
+            provider_chat_id: "100".to_owned(),
+            filter: TelegramParticipantFilter::Recent,
+            offset: 0,
+            limit: 50,
+        };
+        let encoded = encode_provider_command(&recent_participants)
+            .expect("valid recent participant command");
+        assert_eq!(encoded["filter"]["@type"], "supergroupMembersFilterRecent");
     }
 
     #[test]
@@ -2475,6 +3419,54 @@ mod tests {
         assert_eq!(file.provider_file_id, "42");
         assert_eq!(file.provider_unique_id.as_deref(), Some("remote-42"));
         assert!(file.is_downloaded);
+    }
+
+    #[test]
+    fn captures_completed_download_response_as_private_provider_update() {
+        let completed = json!({
+            "@type": "file",
+            "id": 42,
+            "size": 100,
+            "local": {
+                "path": "/private/provider/file",
+                "downloaded_size": 100,
+                "is_downloading_completed": true
+            },
+            "remote": {"unique_id": "remote-42"}
+        });
+        let pending = json!({
+            "@type": "file",
+            "id": 43,
+            "size": 100,
+            "local": {
+                "path": "",
+                "downloaded_size": 0,
+                "is_downloading_completed": false
+            }
+        });
+
+        let update = completed_download_response_update("account", &completed)
+            .expect("completed download response")
+            .expect("completed file must become an update");
+        assert_eq!(update["@type"], "updateFile");
+        assert!(
+            completed_download_response_update("account", &pending)
+                .expect("pending download response")
+                .is_none()
+        );
+
+        let command = TelegramDownloadFile {
+            operation_id: "operation".to_owned(),
+            account_id: "account".to_owned(),
+            provider_file_id: "42".to_owned(),
+            priority: 1,
+        };
+        assert!(is_download_file_request(&TdlibRequest::DownloadFile(
+            command.clone()
+        )));
+        assert!(is_download_file_request(&TdlibRequest::ProviderCommand(
+            TelegramProviderCommand::DownloadFile(command)
+        )));
     }
 
     #[test]
@@ -2522,6 +3514,446 @@ mod tests {
         assert_eq!(media.caption.as_deref(), Some("report"));
         assert_eq!(media.filename.as_deref(), Some("report.pdf"));
         assert_eq!(message.text.as_deref(), Some("report"));
+    }
+
+    #[test]
+    fn every_current_tdlib_message_content_type_has_a_renderable_summary() {
+        for content_type in CURRENT_TDLIB_MESSAGE_CONTENT_TYPES {
+            let content = json!({"@type": content_type});
+            let summary = message_text(Some(&content));
+            assert!(
+                summary
+                    .as_deref()
+                    .is_some_and(|value| !value.trim().is_empty()),
+                "missing summary for {content_type}",
+            );
+            assert!(
+                !summary
+                    .as_deref()
+                    .is_some_and(|value| value.starts_with('[')),
+                "placeholder summary for {content_type}",
+            );
+        }
+    }
+
+    #[test]
+    fn parsed_messages_use_the_resolved_tdlib_sender_name() {
+        let message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"@type": "messageSenderUser", "user_id": 7},
+                "sender_display_name": "Ada Lovelace",
+                "content": {"@type": "messageText", "text": {"text": "hello"}}
+            }),
+        )
+        .expect("message");
+
+        assert_eq!(message.sender_id, "7");
+        assert_eq!(message.sender_display_name.as_deref(), Some("Ada Lovelace"));
+    }
+
+    #[test]
+    fn anonymous_chat_messages_prefer_the_provider_author_signature() {
+        let message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": -1007,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"@type": "messageSenderChat", "chat_id": -1007},
+                "sender_display_name": "Channel title",
+                "author_signature": "Public author",
+                "content": {"@type": "messageText", "text": {"text": "hello"}}
+            }),
+        )
+        .expect("anonymous chat message");
+
+        assert_eq!(
+            message.sender_display_name.as_deref(),
+            Some("Public author")
+        );
+    }
+
+    #[test]
+    fn parsed_messages_never_expose_an_opaque_sender_when_tdlib_has_no_name() {
+        let user_message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"@type": "messageSenderUser", "user_id": 7},
+                "content": {"@type": "messageText", "text": {"text": "hello"}}
+            }),
+        )
+        .expect("user message");
+        let chat_message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 201,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"@type": "messageSenderChat", "chat_id": -1007},
+                "content": {"@type": "messageText", "text": {"text": "hello"}}
+            }),
+        )
+        .expect("chat message");
+
+        assert_eq!(
+            user_message.sender_display_name.as_deref(),
+            Some("Telegram user")
+        );
+        assert_eq!(
+            chat_message.sender_display_name.as_deref(),
+            Some("Telegram chat")
+        );
+    }
+
+    #[test]
+    fn tdlib_user_name_prefers_personal_name_and_falls_back_to_username() {
+        assert_eq!(
+            tdlib_user_display_name(&json!({
+                "first_name": "Ada",
+                "last_name": "Lovelace",
+                "usernames": {"active_usernames": ["ada"]}
+            }))
+            .as_deref(),
+            Some("Ada Lovelace"),
+        );
+        assert_eq!(
+            tdlib_user_display_name(&json!({
+                "first_name": "",
+                "last_name": "",
+                "usernames": {"active_usernames": ["ada"]}
+            }))
+            .as_deref(),
+            Some("@ada"),
+        );
+    }
+
+    #[test]
+    fn enriches_sender_names_for_history_and_search_message_wrappers() {
+        let known_user_names = HashMap::from([("7".to_owned(), "Ada Lovelace".to_owned())]);
+        let known_chats = HashMap::new();
+        for wrapper_type in ["messages", "foundMessages"] {
+            let mut response = json!({
+                "@type": wrapper_type,
+                "messages": [{
+                    "@type": "message",
+                    "chat_id": 100,
+                    "id": 200,
+                    "date": 10,
+                    "is_outgoing": false,
+                    "sender_id": {"@type": "messageSenderUser", "user_id": 7},
+                    "content": {"@type": "messageText", "text": {"text": "hello"}}
+                }]
+            });
+
+            assert_eq!(
+                message_sender_keys(&response),
+                vec![TdlibMessageSenderKey::User("7".to_owned())],
+            );
+            enrich_message_payloads(&mut response, &known_user_names, &known_chats);
+            assert_eq!(
+                response["messages"][0]["sender_display_name"],
+                "Ada Lovelace"
+            );
+        }
+    }
+
+    #[test]
+    fn enriches_sender_names_when_an_older_tdlib_wrapper_has_no_discriminator() {
+        let known_user_names = HashMap::from([("7".to_owned(), "@ada".to_owned())]);
+        let known_chats = HashMap::new();
+        let mut response = json!({
+            "messages": [{
+                "@type": "message",
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"@type": "messageSenderUser", "user_id": 7},
+                "content": {"@type": "messageText", "text": {"text": "hello"}}
+            }]
+        });
+
+        enrich_message_payloads(&mut response, &known_user_names, &known_chats);
+
+        assert_eq!(response["messages"][0]["sender_display_name"], "@ada");
+    }
+
+    #[test]
+    fn enriches_participant_names_from_the_same_tdlib_user_directory() {
+        let known_user_names = HashMap::from([("7".to_owned(), "Ada Lovelace".to_owned())]);
+        let known_chats = HashMap::new();
+        let mut response = json!({
+            "@type": "chatMembers",
+            "total_count": 1,
+            "members": [{
+                "@type": "chatMember",
+                "member_id": {"@type": "messageSenderUser", "user_id": 7},
+                "status": {"@type": "chatMemberStatusMember"}
+            }]
+        });
+
+        assert_eq!(
+            message_sender_keys(&response),
+            vec![TdlibMessageSenderKey::User("7".to_owned())],
+        );
+        enrich_message_payloads(&mut response, &known_user_names, &known_chats);
+        let page = parse_participant_page(
+            "account",
+            "100",
+            TelegramParticipantFilter::Recent,
+            0,
+            &response,
+        )
+        .expect("participant page");
+
+        assert_eq!(page.items[0].display_name.as_deref(), Some("Ada Lovelace"));
+    }
+
+    #[test]
+    fn parses_video_thumbnail_separately_from_the_full_provider_file() {
+        let message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"user_id": 7},
+                "content": {
+                    "@type": "messageVideo",
+                    "video": {
+                        "mime_type": "video/mp4",
+                        "minithumbnail": {
+                            "width": 8,
+                            "height": 8,
+                            "data": STANDARD.encode([0xff, 0xd8, 0xff, 0xd9])
+                        },
+                        "thumbnail": {
+                            "format": {"@type": "thumbnailFormatJpeg"},
+                            "file": {"id": 41}
+                        },
+                        "video": {"id": 42}
+                    },
+                    "caption": {"text": "video"}
+                }
+            }),
+        )
+        .expect("video message");
+        let media = message.media.expect("media snapshot");
+        assert_eq!(media.kind, TelegramMediaKind::Video);
+        assert_eq!(media.provider_file_id.as_deref(), Some("42"));
+        assert_eq!(media.preview_provider_file_id.as_deref(), Some("41"));
+        assert_eq!(media.preview_content_type.as_deref(), Some("image/jpeg"));
+        assert_eq!(
+            media.preview_inline_data,
+            Some(vec![0xff, 0xd8, 0xff, 0xd9])
+        );
+        assert!(media.preview_metadata_loaded);
+    }
+
+    #[test]
+    fn uses_the_smallest_video_cover_when_the_provider_thumbnail_is_absent() {
+        let message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"user_id": 7},
+                "content": {
+                    "@type": "messageVideo",
+                    "video": {
+                        "mime_type": "video/mp4",
+                        "thumbnail": null,
+                        "video": {"id": 42}
+                    },
+                    "cover": {
+                        "minithumbnail": {
+                            "width": 8,
+                            "height": 8,
+                            "data": STANDARD.encode([0xff, 0xd8, 0xff, 0xd9])
+                        },
+                        "sizes": [
+                            {"type": "s", "photo": {"id": 40}},
+                            {"type": "x", "photo": {"id": 41}}
+                        ]
+                    },
+                    "caption": {"text": ""}
+                }
+            }),
+        )
+        .expect("covered video message");
+        let media = message.media.expect("media snapshot");
+
+        assert_eq!(media.provider_file_id.as_deref(), Some("42"));
+        assert_eq!(media.preview_provider_file_id.as_deref(), Some("40"));
+        assert_eq!(media.preview_content_type.as_deref(), Some("image/jpeg"));
+        assert_eq!(
+            media.preview_inline_data,
+            Some(vec![0xff, 0xd8, 0xff, 0xd9])
+        );
+        assert!(media.preview_metadata_loaded);
+    }
+
+    #[test]
+    fn parses_sticker_and_video_note_as_downloadable_provider_media() {
+        let sticker = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"user_id": 7},
+                "content": {
+                    "@type": "messageSticker",
+                    "sticker": {
+                        "emoji": "ok",
+                        "format": {"@type": "stickerFormatWebp"},
+                        "thumbnail": {
+                            "format": {"@type": "thumbnailFormatWebp"},
+                            "file": {"id": 41}
+                        },
+                        "sticker": {"id": 42}
+                    }
+                }
+            }),
+        )
+        .expect("sticker message");
+        let sticker_media = sticker.media.expect("sticker media");
+        assert_eq!(sticker.text.as_deref(), Some("ok"));
+        assert_eq!(sticker_media.kind, TelegramMediaKind::Photo);
+        assert_eq!(sticker_media.provider_file_id.as_deref(), Some("42"));
+        assert_eq!(
+            sticker_media.preview_provider_file_id.as_deref(),
+            Some("41")
+        );
+        assert_eq!(sticker_media.content_type.as_deref(), Some("image/webp"));
+        assert_eq!(sticker_media.filename.as_deref(), Some("ok.webp"));
+
+        let video_note = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 201,
+                "date": 11,
+                "is_outgoing": false,
+                "sender_id": {"user_id": 7},
+                "content": {
+                    "@type": "messageVideoNote",
+                    "video_note": {
+                        "thumbnail": {
+                            "format": {"@type": "thumbnailFormatJpeg"},
+                            "file": {"id": 51}
+                        },
+                        "video": {"id": 52}
+                    }
+                }
+            }),
+        )
+        .expect("video note message");
+        let video_note_media = video_note.media.expect("video note media");
+        assert_eq!(video_note.text.as_deref(), Some("Video message"));
+        assert_eq!(video_note_media.kind, TelegramMediaKind::Video);
+        assert_eq!(video_note_media.provider_file_id.as_deref(), Some("52"));
+        assert_eq!(
+            video_note_media.preview_provider_file_id.as_deref(),
+            Some("51")
+        );
+        assert_eq!(video_note_media.content_type.as_deref(), Some("video/mp4"));
+    }
+
+    #[test]
+    fn preserves_structured_and_service_message_meaning_in_display_text() {
+        let cases = [
+            (
+                json!({
+                    "@type": "messagePoll",
+                    "poll": {"question": {"text": "Choose one"}}
+                }),
+                "Poll: Choose one",
+            ),
+            (
+                json!({
+                    "@type": "messageContact",
+                    "contact": {
+                        "first_name": "Ada",
+                        "last_name": "Lovelace",
+                        "phone_number": "+34000000000"
+                    }
+                }),
+                "Contact: Ada Lovelace · +34000000000",
+            ),
+            (
+                json!({
+                    "@type": "messageVenue",
+                    "venue": {"title": "Cafe", "address": "Main street"}
+                }),
+                "Venue: Cafe · Main street",
+            ),
+            (
+                json!({"@type": "messageDice", "emoji": "🎲", "value": 6}),
+                "🎲 6",
+            ),
+            (
+                json!({"@type": "messageChatChangeTitle", "title": "Home"}),
+                "Chat title changed: Home",
+            ),
+            (
+                json!({"@type": "messageForumTopicCreated"}),
+                "Forum topic created",
+            ),
+        ];
+
+        for (index, (content, expected)) in cases.into_iter().enumerate() {
+            let message = parse_message_observation(
+                "account",
+                &json!({
+                    "chat_id": 100,
+                    "id": 300 + index,
+                    "date": 10,
+                    "is_outgoing": false,
+                    "sender_id": {"user_id": 7},
+                    "content": content
+                }),
+            )
+            .expect("structured message");
+            assert_eq!(message.text.as_deref(), Some(expected));
+        }
+    }
+
+    #[test]
+    fn preserves_media_meaning_when_the_provider_caption_is_empty() {
+        let message = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "date": 10,
+                "is_outgoing": false,
+                "sender_id": {"user_id": 7},
+                "content": {
+                    "@type": "messageDocument",
+                    "document": {"file_name": "report.pdf", "document": {"id": 42}},
+                    "caption": {"text": "   "}
+                }
+            }),
+        )
+        .expect("document message with no caption");
+
+        assert_eq!(message.text.as_deref(), Some("File"));
     }
 
     #[test]
@@ -2613,6 +4045,289 @@ mod tests {
     }
 
     #[test]
+    fn ignores_provider_chat_positions_from_unprojected_lists() {
+        let events = parse_provider_events(
+            "account",
+            &json!({
+                "@type": "updateChatPosition",
+                "chat_id": 100,
+                "position": {
+                    "list": {"@type": "chatListFilter"},
+                    "order": 9,
+                    "is_pinned": false
+                }
+            }),
+        )
+        .expect("unsupported list is a non-fatal provider update");
+
+        assert!(events.is_empty());
+    }
+
+    #[test]
+    fn accepts_provider_interaction_info_without_recent_reactions() {
+        let events = parse_provider_events(
+            "account",
+            &json!({
+                "@type": "updateMessageInteractionInfo",
+                "chat_id": 100,
+                "message_id": 42,
+                "interaction_info": {
+                    "@type": "messageInteractionInfo",
+                    "view_count": 1,
+                    "forward_count": 0,
+                    "reactions": {
+                        "@type": "messageReactions",
+                        "reactions": []
+                    }
+                }
+            }),
+        )
+        .expect("missing recent reactions are a non-fatal provider update");
+
+        assert!(matches!(
+            events.as_slice(),
+            [TelegramProviderEvent::ReactionsObserved { reactions, .. }] if reactions.is_empty()
+        ));
+    }
+
+    #[test]
+    fn loads_provider_chat_catalog_before_reading_cached_chat_ids() {
+        let request = encode_load_chats_page_request(100, "load-account-1");
+        assert_eq!(request["@type"], "loadChats");
+        assert!(request["chat_list"].is_null());
+        assert_eq!(request["limit"], 100);
+        assert_eq!(request["@extra"], "load-account-1");
+
+        let list_request = encode_request(&TdlibRequest::LoadChats {
+            account_id: "account-1".to_owned(),
+            limit: 100,
+        })
+        .expect("chat catalog query");
+        assert_eq!(list_request["@type"], "getChats");
+        assert!(list_request["chat_list"].is_null());
+
+        validate_load_chats_page_response(&json!({"@type": "ok"}))
+            .expect("loaded provider chat page");
+        validate_load_chats_page_response(&json!({"@type": "error", "code": 404}))
+            .expect("provider reports that the full chat catalog is already loaded");
+        assert!(load_chats_page_exhausted(
+            &json!({"@type": "error", "code": 404})
+        ));
+        assert!(!load_chats_page_exhausted(&json!({"@type": "ok"})));
+        assert_eq!(
+            validate_load_chats_page_response(&json!({
+                "@type": "error",
+                "code": 400,
+                "message": "private provider detail"
+            })),
+            Err(TdlibError::Protocol("TDLib error 400".to_owned())),
+        );
+        assert!(should_load_next_chat_page(0, 100, 5_000, false));
+        assert!(!should_load_next_chat_page(100, 100, 5_000, false));
+        assert!(!should_load_next_chat_page(100, 200, 5_000, true));
+        assert!(!should_load_next_chat_page(100, 200, 200, false));
+    }
+
+    #[test]
+    fn retains_new_chat_updates_for_catalogs_larger_than_get_chats() {
+        let chat = parse_new_chat_update(
+            "account-1",
+            &json!({
+                "@type": "updateNewChat",
+                "chat": {
+                    "@type": "chat",
+                    "id": -1001234567890_i64,
+                    "title": "Archive",
+                    "type": {"@type": "chatTypeSupergroup"},
+                    "photo": {
+                        "small": {"id": 77, "remote": {"unique_id": "avatar-77"}}
+                    }
+                }
+            }),
+        )
+        .expect("valid new chat update")
+        .expect("chat update");
+
+        assert_eq!(chat.provider_chat_id, "-1001234567890");
+        assert_eq!(chat.title, "Archive");
+        assert_eq!(chat.kind, TelegramChatKind::Group);
+        assert_eq!(chat.avatar_provider_file_id.as_deref(), Some("77"));
+        assert_eq!(chat.avatar_provider_unique_id.as_deref(), Some("avatar-77"));
+        assert_eq!(
+            parse_new_chat_update("account-1", &json!({"@type": "ok"})),
+            Ok(None)
+        );
+    }
+
+    #[test]
+    fn retains_plain_get_chat_responses_for_message_sender_chat_labels() {
+        let chat = parse_new_chat_update(
+            "account-1",
+            &json!({
+                "@type": "chat",
+                "id": -1001234567890_i64,
+                "title": "Channel name",
+                "type": {"@type": "chatTypeSupergroup"},
+            }),
+        )
+        .expect("valid getChat response")
+        .expect("chat snapshot");
+
+        assert_eq!(chat.provider_chat_id, "-1001234567890");
+        assert_eq!(chat.title, "Channel name");
+        assert_eq!(chat.kind, TelegramChatKind::Group);
+    }
+
+    #[test]
+    fn derives_private_sender_identity_from_chat_catalog_snapshots() {
+        let update = json!({
+            "@type": "updateNewChat",
+            "chat": {
+                "@type": "chat",
+                "id": 42,
+                "title": "Ada Lovelace",
+                "type": {"@type": "chatTypePrivate", "user_id": 7}
+            }
+        });
+        let snapshot = update["chat"].clone();
+
+        assert_eq!(private_chat_provider_user_id(&update).as_deref(), Some("7"));
+        assert_eq!(
+            private_chat_provider_user_id(&snapshot).as_deref(),
+            Some("7")
+        );
+        assert_eq!(
+            private_chat_provider_user_id(&json!({
+                "@type": "chat",
+                "id": -1007,
+                "title": "Group",
+                "type": {"@type": "chatTypeSupergroup", "supergroup_id": 7}
+            })),
+            None,
+        );
+    }
+
+    #[test]
+    fn ignores_partial_new_chat_updates_without_a_title() {
+        assert_eq!(
+            parse_new_chat_update(
+                "account-1",
+                &json!({
+                    "@type": "updateNewChat",
+                    "chat": {
+                        "@type": "chat",
+                        "id": -1001234567890_i64,
+                        "type": {"@type": "chatTypeSupergroup"}
+                    }
+                }),
+            ),
+            Ok(None),
+        );
+    }
+
+    #[test]
+    fn labels_own_private_chat_as_saved_messages() {
+        let mut chats = vec![
+            TelegramChat {
+                account_id: "account-1".to_owned(),
+                provider_chat_id: "42".to_owned(),
+                kind: TelegramChatKind::Private,
+                title: "Owner display name".to_owned(),
+                username: None,
+                avatar_provider_file_id: None,
+                avatar_provider_unique_id: None,
+            },
+            TelegramChat {
+                account_id: "account-1".to_owned(),
+                provider_chat_id: "84".to_owned(),
+                kind: TelegramChatKind::Private,
+                title: "Contact".to_owned(),
+                username: None,
+                avatar_provider_file_id: None,
+                avatar_provider_unique_id: None,
+            },
+        ];
+
+        label_saved_messages_chat(&mut chats, "42");
+
+        assert_eq!(chats[0].title, "Saved Messages");
+        assert_eq!(chats[1].title, "Contact");
+    }
+
+    #[test]
+    fn preserves_signed_tdlib_chat_ids_without_weakening_other_provider_ids() {
+        assert_eq!(signed_chat_id("-1001234567890"), Ok(-1_001_234_567_890));
+        assert_eq!(signed_chat_id("42"), Ok(42));
+        assert!(signed_chat_id("0").is_err());
+        assert!(provider_id("-1001234567890").is_err());
+
+        let request = encode_request(&TdlibRequest::LoadHistory {
+            account_id: "account-1".to_owned(),
+            provider_chat_id: "-1001234567890".to_owned(),
+            from_message_id: None,
+            mode: makosh_telegram_api::TelegramHistorySyncMode::Latest,
+            limit: 100,
+        })
+        .expect("signed chat history request");
+        assert_eq!(request["chat_id"], -1_001_234_567_890_i64);
+    }
+
+    #[test]
+    fn encodes_exact_message_repair_request_for_signed_chat_ids() {
+        let request = get_message_request("account-1", "-1001234567890", "42")
+            .and_then(|request| encode_request(&request))
+            .expect("exact message request");
+
+        assert_eq!(request["@type"], "getMessage");
+        assert_eq!(request["chat_id"], -1_001_234_567_890_i64);
+        assert_eq!(request["message_id"], 42);
+        assert_eq!(request["@extra"], "account-1:message:42");
+        assert!(get_message_request("account-1", "-1001234567890", "0").is_err());
+    }
+
+    #[test]
+    fn resolves_observed_message_senders_by_exact_tdlib_identity_kind() {
+        let user_request = TdlibRequest::ResolveSender {
+            correlation_id: "resolve-user".to_owned(),
+            provider_sender_id: "42".to_owned(),
+        };
+        let chat_request = TdlibRequest::ResolveSender {
+            correlation_id: "resolve-chat".to_owned(),
+            provider_sender_id: "-100700".to_owned(),
+        };
+
+        let encoded_user = encode_request(&user_request).expect("user sender lookup");
+        assert_eq!(encoded_user["@type"], "getUser");
+        assert_eq!(encoded_user["user_id"], 42);
+        assert_eq!(encoded_user["@extra"], "resolve-user");
+
+        let encoded_chat = encode_request(&chat_request).expect("chat sender lookup");
+        assert_eq!(encoded_chat["@type"], "getChat");
+        assert_eq!(encoded_chat["chat_id"], -100700_i64);
+        assert_eq!(encoded_chat["@extra"], "resolve-chat");
+
+        let response = parse_response_for_request(
+            "account",
+            &user_request,
+            json!({
+                "@type": "user",
+                "id": 42,
+                "first_name": "Visible",
+                "last_name": "Name",
+                "usernames": {"active_usernames": ["visible_name"]}
+            }),
+        )
+        .expect("resolved user name");
+        assert_eq!(
+            response,
+            TdlibResponse::SenderName {
+                provider_sender_id: "42".to_owned(),
+                display_name: Some("Visible Name".to_owned()),
+            }
+        );
+    }
+
+    #[test]
     fn preserves_tdlib_file_progress_as_provider_event() {
         let events = parse_provider_events(
             "account",
@@ -2632,6 +4347,40 @@ mod tests {
             TelegramProviderEvent::FileChanged(file)
                 if file.provider_file_id == "42" && file.downloaded_size_bytes == Some(40) && file.is_downloading
         ));
+    }
+
+    #[test]
+    fn keeps_downloaded_file_path_only_on_the_private_runtime_update() {
+        let updates = parse_provider_updates(
+            "account",
+            &json!({
+                "@type": "updateFile",
+                "file": {
+                    "@type": "file",
+                    "id": 42,
+                    "size": 100,
+                    "local": {
+                        "path": "/private/provider/file",
+                        "downloaded_size": 100,
+                        "is_downloading_active": false,
+                        "is_downloading_completed": true
+                    }
+                }
+            }),
+        )
+        .expect("downloaded file update");
+        assert!(matches!(
+            &updates[0],
+            TdlibProviderUpdate::Operational(event)
+                if matches!(event.as_ref(), TelegramProviderEvent::FileChanged(file) if file.is_downloaded)
+        ));
+        assert!(matches!(
+            &updates[1],
+            TdlibProviderUpdate::DownloadedFile(file)
+                if file.snapshot.provider_file_id == "42"
+                    && file.local_path == PathBuf::from("/private/provider/file")
+        ));
+        assert!(!format!("{:?}", updates[1]).contains("/private/provider/file"));
     }
 }
 
@@ -3073,6 +4822,10 @@ pub struct TdJsonTransport {
     receive_timeout_seconds: f64,
     request_timeout: Duration,
     pending_updates: VecDeque<Value>,
+    known_chats: HashMap<String, TelegramChat>,
+    known_user_names: HashMap<String, String>,
+    correlation_sequence: u64,
+    own_provider_user_id: Option<String>,
 }
 
 impl TdJsonTransport {
@@ -3089,6 +4842,10 @@ impl TdJsonTransport {
             receive_timeout_seconds: 0.25,
             request_timeout: Duration::from_secs(30),
             pending_updates: VecDeque::new(),
+            known_chats: HashMap::new(),
+            known_user_names: HashMap::new(),
+            correlation_sequence: 0,
+            own_provider_user_id: None,
         })
     }
 
@@ -3109,13 +4866,158 @@ impl TdJsonTransport {
 
     pub fn poll_updates(&mut self) -> Result<Vec<TdlibProviderUpdate>, TdlibError> {
         let mut updates = Vec::new();
-        while let Some(payload) = self.pending_updates.pop_front() {
+        let pending_payloads = drain_pending_update_payloads(
+            &mut self.pending_updates,
+            MAX_TDLIB_UPDATE_PAYLOADS_PER_POLL,
+        );
+        let mut processed_payloads = pending_payloads.len();
+        for mut payload in pending_payloads {
+            self.remember_chat_update(&payload)?;
+            self.remember_sender_update(&payload)?;
+            self.enrich_message_sender_names(&mut payload)?;
             updates.extend(parse_provider_updates(&self.account_id, &payload)?);
         }
-        while let Some(payload) = self.client.receive_json(0.0)? {
+        while processed_payloads < MAX_TDLIB_UPDATE_PAYLOADS_PER_POLL {
+            let Some(mut payload) = self.client.receive_json(0.0)? else {
+                break;
+            };
+            self.remember_chat_update(&payload)?;
+            self.remember_sender_update(&payload)?;
+            self.enrich_message_sender_names(&mut payload)?;
             updates.extend(parse_provider_updates(&self.account_id, &payload)?);
+            processed_payloads += 1;
         }
         Ok(updates)
+    }
+
+    fn remember_chat_update(&mut self, payload: &Value) -> Result<(), TdlibError> {
+        if let Some(chat) = parse_new_chat_update(&self.account_id, payload)? {
+            if let Some(provider_user_id) = private_chat_provider_user_id(payload) {
+                self.known_user_names
+                    .insert(provider_user_id, chat.title.clone());
+            }
+            self.known_chats.insert(chat.provider_chat_id.clone(), chat);
+        }
+        if payload.get("@type").and_then(Value::as_str) == Some("updateChatPhoto") {
+            let avatar = parse_chat_avatar(&self.account_id, payload)?;
+            if let Some(chat) = self.known_chats.get_mut(&avatar.provider_chat_id) {
+                chat.avatar_provider_file_id = avatar.provider_file_id;
+                chat.avatar_provider_unique_id = avatar.provider_unique_id;
+            }
+        }
+        Ok(())
+    }
+
+    fn remember_sender_update(&mut self, payload: &Value) -> Result<(), TdlibError> {
+        match payload.get("@type").and_then(Value::as_str) {
+            Some("updateUser") => {
+                if let Some(user) = payload.get("user") {
+                    self.remember_user(user)?;
+                }
+            }
+            Some("user") => self.remember_user(payload)?,
+            Some("updateChatTitle") => {
+                let provider_chat_id = required_string(payload, "chat_id")?;
+                if let Some(chat) = self.known_chats.get_mut(&provider_chat_id)
+                    && let Some(title) = bounded_sender_display_name(payload.get("title"))
+                {
+                    chat.title = title;
+                }
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+
+    fn remember_user(&mut self, user: &Value) -> Result<(), TdlibError> {
+        let provider_user_id = required_string(user, "id")?;
+        if let Some(display_name) = tdlib_user_display_name(user) {
+            self.known_user_names.insert(provider_user_id, display_name);
+        }
+        Ok(())
+    }
+
+    fn enrich_message_sender_names(&mut self, payload: &mut Value) -> Result<(), TdlibError> {
+        let sender_keys = message_sender_keys(payload);
+        let mut lookup_failures = 0usize;
+        let mut unresolved_users = 0usize;
+        let mut unresolved_chats = 0usize;
+        let mut first_failure = None;
+        for sender in &sender_keys {
+            if self.cached_sender_display_name(&sender).is_none() {
+                // Sender labels improve presentation but never make message
+                // history unavailable when TDLib can't resolve a deleted or
+                // otherwise inaccessible peer.
+                if let Err(error) = self.resolve_sender_display_name(&sender) {
+                    lookup_failures = lookup_failures.saturating_add(1);
+                    first_failure.get_or_insert(error);
+                }
+            }
+            if self.cached_sender_display_name(sender).is_none() {
+                match sender {
+                    TdlibMessageSenderKey::User(_) => {
+                        unresolved_users = unresolved_users.saturating_add(1)
+                    }
+                    TdlibMessageSenderKey::Chat(_) => {
+                        unresolved_chats = unresolved_chats.saturating_add(1)
+                    }
+                }
+            }
+        }
+        if unresolved_users > 0 || unresolved_chats > 0 {
+            eprintln!(
+                "developer_telegram_sender_resolution_unavailable total={} lookup_failures={} unresolved_users={} unresolved_chats={} first_failure={:?}",
+                sender_keys.len(),
+                lookup_failures,
+                unresolved_users,
+                unresolved_chats,
+                first_failure,
+            );
+        }
+        enrich_message_payloads(payload, &self.known_user_names, &self.known_chats);
+        Ok(())
+    }
+
+    fn cached_sender_display_name(&self, sender: &TdlibMessageSenderKey) -> Option<&str> {
+        match sender {
+            TdlibMessageSenderKey::User(provider_user_id) => self
+                .known_user_names
+                .get(provider_user_id)
+                .map(String::as_str),
+            TdlibMessageSenderKey::Chat(provider_chat_id) => self
+                .known_chats
+                .get(provider_chat_id)
+                .map(|chat| chat.title.as_str())
+                .filter(|title| !title.trim().is_empty()),
+        }
+    }
+
+    fn resolve_sender_display_name(
+        &mut self,
+        sender: &TdlibMessageSenderKey,
+    ) -> Result<(), TdlibError> {
+        let extra = self.next_correlation_extra("sender-lookup");
+        let request = match sender {
+            TdlibMessageSenderKey::User(provider_user_id) => json!({
+                "@type": "getUser",
+                "user_id": signed_chat_id(provider_user_id)?,
+                "@extra": extra,
+            }),
+            TdlibMessageSenderKey::Chat(provider_chat_id) => json!({
+                "@type": "getChat",
+                "chat_id": signed_chat_id(provider_chat_id)?,
+                "@extra": extra,
+            }),
+        };
+        self.client.send_json(&request)?;
+        let response = self.receive_correlated(&extra)?;
+        self.remember_chat_update(&response)?;
+        self.remember_sender_update(&response)
+    }
+
+    fn next_correlation_extra(&mut self, operation: &str) -> String {
+        self.correlation_sequence = self.correlation_sequence.saturating_add(1);
+        format!("telegram-{operation}-{}", self.correlation_sequence)
     }
 
     fn receive_correlated(&mut self, expected_extra: &str) -> Result<Value, TdlibError> {
@@ -3124,12 +5026,14 @@ impl TdJsonTransport {
             let Some(payload) = self.client.receive_json(self.receive_timeout_seconds)? else {
                 continue;
             };
-            if payload.get("@extra").and_then(Value::as_str) == Some(expected_extra) {
-                return Ok(payload);
-            }
             if payload.get("@type").and_then(Value::as_str) == Some("error") {
                 return Err(tdlib_error(&payload));
             }
+            if payload.get("@extra").and_then(Value::as_str) == Some(expected_extra) {
+                return Ok(payload);
+            }
+            self.remember_chat_update(&payload)?;
+            self.remember_sender_update(&payload)?;
             self.pending_updates.push_back(payload);
         }
         Err(TdlibError::Protocol(format!(
@@ -3141,8 +5045,172 @@ impl TdJsonTransport {
         let payload = encode_request(request)?;
         let expected_extra = request_extra(request);
         self.client.send_json(&payload)?;
-        let response = self.receive_correlated(&expected_extra)?;
-        parse_response_for_request(&self.account_id, request, response)
+        let mut response = self.receive_correlated(&expected_extra)?;
+        self.remember_chat_update(&response)?;
+        self.remember_sender_update(&response)?;
+        self.enrich_message_sender_names(&mut response)?;
+        let parsed = parse_response_for_request(&self.account_id, request, response.clone())?;
+        if is_download_file_request(request)
+            && let Some(update) = completed_download_response_update(&self.account_id, &response)?
+        {
+            self.pending_updates.push_back(update);
+        }
+        Ok(parsed)
+    }
+
+    fn resolve_own_provider_user_id(&mut self) -> Result<String, TdlibError> {
+        if let Some(provider_user_id) = &self.own_provider_user_id {
+            return Ok(provider_user_id.clone());
+        }
+        let request = TdlibRequest::GetOwnUser {
+            correlation_id: format!("telegram-own-user-{}", self.account_id),
+        };
+        let TdlibResponse::OwnUser { provider_user_id } = self.request_once(&request)? else {
+            return Err(TdlibError::Protocol(
+                "TDLib getMe returned an unexpected response".to_owned(),
+            ));
+        };
+        self.own_provider_user_id = Some(provider_user_id.clone());
+        Ok(provider_user_id)
+    }
+
+    fn request_participants(
+        &mut self,
+        account_id: &str,
+        provider_chat_id: &str,
+        filter: TelegramParticipantFilter,
+        offset: u32,
+        limit: u32,
+    ) -> Result<TdlibResponse, TdlibError> {
+        let chat_extra = self.next_correlation_extra("participants-chat");
+        self.client.send_json(&json!({
+            "@type": "getChat",
+            "chat_id": signed_chat_id(provider_chat_id)?,
+            "@extra": chat_extra,
+        }))?;
+        let chat = self.receive_correlated(&chat_extra)?;
+        self.remember_chat_update(&chat)?;
+        let chat_type = chat.get("type").ok_or_else(|| {
+            TdlibError::Protocol("TDLib participant chat type is missing".to_owned())
+        })?;
+        let chat_type_name = chat_type.get("@type").and_then(Value::as_str);
+        let mut response = match chat_type_name {
+            Some("chatTypeSupergroup") => {
+                let supergroup_id = chat_type
+                    .get("supergroup_id")
+                    .and_then(value_id_optional)
+                    .ok_or_else(|| {
+                        TdlibError::Protocol(
+                            "TDLib participant supergroup id is missing".to_owned(),
+                        )
+                    })?;
+                let extra = self.next_correlation_extra("participants-supergroup");
+                self.client.send_json(&json!({
+                    "@type": "getSupergroupMembers",
+                    "supergroup_id": provider_id(&supergroup_id)?,
+                    "filter": {"@type": match filter {
+                        TelegramParticipantFilter::Recent => "supergroupMembersFilterRecent",
+                        TelegramParticipantFilter::Administrators => "supergroupMembersFilterAdministrators",
+                    }},
+                    "offset": offset,
+                    "limit": limit,
+                    "@extra": extra,
+                }))?;
+                self.receive_correlated(&extra)?
+            }
+            Some("chatTypeBasicGroup") => {
+                let basic_group_id = chat_type
+                    .get("basic_group_id")
+                    .and_then(Value::as_i64)
+                    .and_then(|value| i32::try_from(value).ok())
+                    .filter(|value| *value > 0)
+                    .ok_or_else(|| {
+                        TdlibError::Protocol(
+                            "TDLib participant basic-group id is missing".to_owned(),
+                        )
+                    })?;
+                let extra = self.next_correlation_extra("participants-basic-group");
+                self.client.send_json(&json!({
+                    "@type": "getBasicGroupFullInfo",
+                    "basic_group_id": basic_group_id,
+                    "@extra": extra,
+                }))?;
+                self.receive_correlated(&extra)?
+            }
+            Some("chatTypePrivate") => {
+                let provider_user_id = chat_type
+                    .get("user_id")
+                    .and_then(value_id_optional)
+                    .ok_or_else(|| {
+                        TdlibError::Protocol(
+                            "TDLib private-chat participant id is missing".to_owned(),
+                        )
+                    })?;
+                let sender = TdlibMessageSenderKey::User(provider_user_id.clone());
+                let _ = self.resolve_sender_display_name(&sender);
+                let members = if offset == 0 && limit > 0 {
+                    vec![json!({
+                        "@type": "chatMember",
+                        "member_id": {"@type": "messageSenderUser", "user_id": provider_id(&provider_user_id)?},
+                        "status": {"@type": "chatMemberStatusMember"},
+                    })]
+                } else {
+                    Vec::new()
+                };
+                json!({"@type": "chatMembers", "total_count": members.len(), "members": members})
+            }
+            Some("chatTypeSecret") => {
+                let secret_chat_id = chat_type
+                    .get("secret_chat_id")
+                    .and_then(Value::as_i64)
+                    .and_then(|value| i32::try_from(value).ok())
+                    .filter(|value| *value > 0)
+                    .ok_or_else(|| {
+                        TdlibError::Protocol(
+                            "TDLib secret-chat participant id is missing".to_owned(),
+                        )
+                    })?;
+                let extra = self.next_correlation_extra("participants-secret-chat");
+                self.client.send_json(&json!({
+                    "@type": "getSecretChat",
+                    "secret_chat_id": secret_chat_id,
+                    "@extra": extra,
+                }))?;
+                let secret_chat = self.receive_correlated(&extra)?;
+                let provider_user_id = secret_chat
+                    .get("user_id")
+                    .and_then(value_id_optional)
+                    .ok_or_else(|| {
+                        TdlibError::Protocol("TDLib secret-chat user id is missing".to_owned())
+                    })?;
+                let sender = TdlibMessageSenderKey::User(provider_user_id.clone());
+                let _ = self.resolve_sender_display_name(&sender);
+                let members = if offset == 0 && limit > 0 {
+                    vec![json!({
+                        "@type": "chatMember",
+                        "member_id": {"@type": "messageSenderUser", "user_id": provider_id(&provider_user_id)?},
+                        "status": {"@type": "chatMemberStatusMember"},
+                    })]
+                } else {
+                    Vec::new()
+                };
+                json!({"@type": "chatMembers", "total_count": members.len(), "members": members})
+            }
+            _ => {
+                return Err(TdlibError::Protocol(
+                    "TDLib participant chat kind is unsupported".to_owned(),
+                ));
+            }
+        };
+        self.remember_sender_update(&response)?;
+        self.enrich_message_sender_names(&mut response)?;
+        Ok(TdlibResponse::Participants(parse_participant_page(
+            account_id,
+            provider_chat_id,
+            filter,
+            offset,
+            &response,
+        )?))
     }
 
     fn reassign_chat_folders(
@@ -3152,7 +5220,7 @@ impl TdJsonTransport {
         provider_chat_id: &str,
         target_provider_folder_ids: &[i64],
     ) -> Result<TdlibResponse, TdlibError> {
-        let chat_id = provider_id(provider_chat_id)?;
+        let chat_id = signed_chat_id(provider_chat_id)?;
         let target_provider_folder_ids = normalized_folder_ids(target_provider_folder_ids)?;
         let get_chat_extra = format!("{operation_id}:get-chat");
         self.client.send_json(&json!({
@@ -3215,6 +5283,14 @@ impl TdJsonTransport {
     }
 }
 
+fn drain_pending_update_payloads(
+    pending_updates: &mut VecDeque<Value>,
+    limit: usize,
+) -> Vec<Value> {
+    let drain_count = pending_updates.len().min(limit);
+    pending_updates.drain(..drain_count).collect()
+}
+
 impl TdlibTransport for TdJsonTransport {
     fn request(&mut self, request: TdlibRequest) -> Result<TdlibResponse, TdlibError> {
         if let TdlibRequest::ProviderCommand(TelegramProviderCommand::ReassignChatFolders {
@@ -3247,13 +5323,29 @@ impl TdlibTransport for TdJsonTransport {
             let folder = self.receive_correlated(&get_extra)?;
             let edit = encode_remove_chat_from_folder(
                 *provider_folder_id,
-                provider_id(provider_chat_id)?,
+                signed_chat_id(provider_chat_id)?,
                 &folder,
                 operation_id,
             )?;
             self.client.send_json(&edit)?;
             let response = self.receive_correlated(operation_id)?;
             return parse_response_for_request(&self.account_id, &request, response);
+        }
+        if let TdlibRequest::ListParticipants {
+            account_id,
+            provider_chat_id,
+            filter,
+            offset,
+            limit,
+        } = &request
+        {
+            return self.request_participants(
+                account_id,
+                provider_chat_id,
+                *filter,
+                *offset,
+                *limit,
+            );
         }
         if let TdlibRequest::ListBasicGroupParticipants {
             account_id,
@@ -3279,9 +5371,30 @@ impl TdlibTransport for TdJsonTransport {
             return parse_response_for_request(&self.account_id, &request, response);
         }
         if let TdlibRequest::LoadChats { account_id, limit } = &request {
+            let max_pages = limit.div_ceil(100);
+            let mut known_chat_count = self.known_chats.len();
+            for page in 0..max_pages {
+                let load_extra = format!("telegram-load-chats-{account_id}-{page}");
+                self.client
+                    .send_json(&encode_load_chats_page_request(100, &load_extra))?;
+                let load_response = self.receive_correlated(&load_extra)?;
+                validate_load_chats_page_response(&load_response)?;
+                let exhausted = load_chats_page_exhausted(&load_response);
+                let next_known_chat_count = self.known_chats.len();
+                if !should_load_next_chat_page(
+                    known_chat_count,
+                    next_known_chat_count,
+                    *limit as usize,
+                    exhausted,
+                ) {
+                    break;
+                }
+                known_chat_count = next_known_chat_count;
+            }
+
             let list_request = TdlibRequest::LoadChats {
                 account_id: account_id.clone(),
-                limit: *limit,
+                limit: (*limit).min(100),
             };
             let payload = encode_request(&list_request)?;
             let expected_extra = request_extra(&list_request);
@@ -3293,17 +5406,50 @@ impl TdlibTransport for TdJsonTransport {
                 .ok_or_else(|| {
                     TdlibError::Protocol("TDLib getChats response is missing chat_ids".to_owned())
                 })?;
-            let mut chats = Vec::with_capacity(ids.len());
-            for id in ids.iter().take(*limit as usize) {
+            let mut chats =
+                Vec::with_capacity((*limit as usize).min(self.known_chats.len() + ids.len()));
+            for id in ids.iter().take(100) {
                 let provider_chat_id = value_id(id)?;
+                if let Some(chat) = self.known_chats.get(&provider_chat_id).cloned() {
+                    chats.push(chat);
+                    continue;
+                }
                 let extra = format!("telegram-get-chat-{account_id}-{provider_chat_id}");
                 self.client.send_json(&json!({
                     "@type": "getChat",
-                    "chat_id": provider_id(&provider_chat_id)?,
+                    "chat_id": signed_chat_id(&provider_chat_id)?,
                     "@extra": extra,
                 }))?;
                 let chat_payload = self.receive_correlated(&extra)?;
-                chats.push(parse_chat(account_id, &chat_payload)?);
+                let chat = parse_chat(account_id, &chat_payload)?;
+                self.known_chats
+                    .insert(chat.provider_chat_id.clone(), chat.clone());
+                chats.push(chat);
+            }
+            let mut remaining = self
+                .known_chats
+                .values()
+                .filter(|chat| {
+                    !chats
+                        .iter()
+                        .any(|existing| existing.provider_chat_id == chat.provider_chat_id)
+                })
+                .cloned()
+                .collect::<Vec<_>>();
+            remaining.sort_by(|left, right| left.provider_chat_id.cmp(&right.provider_chat_id));
+            chats.extend(remaining);
+            chats.truncate(*limit as usize);
+            let own_provider_user_id = self.resolve_own_provider_user_id()?;
+            label_saved_messages_chat(&mut chats, &own_provider_user_id);
+            if let Some(chat) = self.known_chats.get_mut(&own_provider_user_id)
+                && chat.kind == TelegramChatKind::Private
+            {
+                chat.title = "Saved Messages".to_owned();
+            }
+            if chats.is_empty() && *limit > 0 {
+                return Err(TdlibError::Protocol(
+                    "TDLib did not expose any loaded chats".to_owned(),
+                ));
             }
             return Ok(TdlibResponse::Chats(chats));
         }
@@ -3313,6 +5459,50 @@ impl TdlibTransport for TdJsonTransport {
     fn poll_updates(&mut self) -> Result<Vec<TdlibProviderUpdate>, TdlibError> {
         TdJsonTransport::poll_updates(self)
     }
+}
+
+fn label_saved_messages_chat(chats: &mut [TelegramChat], own_provider_user_id: &str) {
+    if let Some(chat) = chats.iter_mut().find(|chat| {
+        chat.kind == TelegramChatKind::Private && chat.provider_chat_id == own_provider_user_id
+    }) {
+        chat.title = "Saved Messages".to_owned();
+    }
+}
+
+fn should_load_next_chat_page(
+    previous_known_chat_count: usize,
+    current_known_chat_count: usize,
+    requested_limit: usize,
+    exhausted: bool,
+) -> bool {
+    !exhausted
+        && current_known_chat_count > previous_known_chat_count
+        && current_known_chat_count < requested_limit
+}
+
+fn encode_load_chats_page_request(limit: u32, extra: &str) -> Value {
+    json!({
+        "@type": "loadChats",
+        "chat_list": null,
+        "limit": limit,
+        "@extra": extra,
+    })
+}
+
+fn validate_load_chats_page_response(response: &Value) -> Result<(), TdlibError> {
+    match response.get("@type").and_then(Value::as_str) {
+        Some("ok") => Ok(()),
+        Some("error") if response.get("code").and_then(Value::as_i64) == Some(404) => Ok(()),
+        Some("error") => Err(tdlib_error(response)),
+        _ => Err(TdlibError::Protocol(
+            "TDLib loadChats response is invalid".to_owned(),
+        )),
+    }
+}
+
+fn load_chats_page_exhausted(response: &Value) -> bool {
+    response.get("@type").and_then(Value::as_str) == Some("error")
+        && response.get("code").and_then(Value::as_i64) == Some(404)
 }
 
 fn encode_remove_chat_from_folder(
@@ -3382,7 +5572,8 @@ fn encode_remove_chat_from_folder(
 
 fn request_extra(request: &TdlibRequest) -> String {
     match request {
-        TdlibRequest::GetOwnUser { correlation_id } => correlation_id.clone(),
+        TdlibRequest::GetOwnUser { correlation_id }
+        | TdlibRequest::ResolveSender { correlation_id, .. } => correlation_id.clone(),
         TdlibRequest::CreateCall { operation_id, .. }
         | TdlibRequest::AcceptCall { operation_id, .. }
         | TdlibRequest::DiscardCall { operation_id, .. } => operation_id.clone(),
@@ -3392,6 +5583,11 @@ fn request_extra(request: &TdlibRequest) -> String {
         | TdlibRequest::ListTopics { account_id, .. }
         | TdlibRequest::ListParticipants { account_id, .. }
         | TdlibRequest::ListBasicGroupParticipants { account_id, .. } => account_id.clone(),
+        TdlibRequest::GetMessage {
+            account_id,
+            provider_message_id,
+            ..
+        } => format!("{account_id}:message:{provider_message_id}"),
         TdlibRequest::GetChatFolder {
             account_id,
             provider_folder_id,
@@ -3420,6 +5616,23 @@ fn parse_response_for_request(
                     .ok_or_else(|| TdlibError::Protocol("TDLib user is missing id".to_owned()))?,
             )?,
         }),
+        TdlibRequest::ResolveSender {
+            provider_sender_id, ..
+        } => {
+            let display_name = match response.get("@type").and_then(Value::as_str) {
+                Some("user") => tdlib_user_display_name(&response),
+                Some("chat") => bounded_sender_display_name(response.get("title")),
+                _ => {
+                    return Err(TdlibError::Protocol(
+                        "TDLib sender lookup returned an unexpected response".to_owned(),
+                    ));
+                }
+            };
+            Ok(TdlibResponse::SenderName {
+                provider_sender_id: provider_sender_id.clone(),
+                display_name,
+            })
+        }
         TdlibRequest::CreateCall { operation_id, .. } => {
             let tdlib_call_id = response
                 .get("id")
@@ -3455,6 +5668,9 @@ fn parse_response_for_request(
                     .collect::<Result<Vec<_>, _>>()?,
             ))
         }
+        TdlibRequest::GetMessage { .. } => Ok(TdlibResponse::Message(parse_message_observation(
+            account_id, &response,
+        )?)),
         TdlibRequest::ListParticipants {
             provider_chat_id,
             filter,
@@ -3595,6 +5811,38 @@ mod message_reference_tests {
                 sender_name: None,
                 observed_at_unix_seconds: Some(5),
             })
+        );
+    }
+
+    #[test]
+    fn parses_legacy_channel_forward_origin() {
+        let observation = parse_message_observation(
+            "account",
+            &json!({
+                "chat_id": 100,
+                "id": 200,
+                "sender_id": {"user_id": 42},
+                "date": 10,
+                "is_outgoing": false,
+                "forward_info": {
+                    "date": 5,
+                    "origin": {
+                        "@type": "messageForwardOriginChannel",
+                        "chat_id": -100700,
+                        "message_id": 33
+                    }
+                },
+                "content": {"@type": "messageText", "text": {"text": "forwarded"}}
+            }),
+        )
+        .expect("legacy channel forward origin");
+
+        assert_eq!(
+            observation
+                .references
+                .forward_origin
+                .and_then(|origin| origin.provider_sender_id),
+            Some("-100700".to_owned()),
         );
     }
 }

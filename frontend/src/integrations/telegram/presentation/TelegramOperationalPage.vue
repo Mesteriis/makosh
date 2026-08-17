@@ -5,7 +5,7 @@ import TelegramAccountAccessPanel from './TelegramAccountAccessPanel.vue'
 import type { TelegramAccountAccessModel } from './telegramAccountAccessModel'
 import TelegramDiscoveryPanel from './TelegramDiscoveryPanel.vue'
 import TelegramNewMessageDialog from './TelegramNewMessageDialog.vue'
-import type { TelegramDiscoveryModel } from './telegramDiscoveryModel'
+import type { TelegramDiscoveryModel, TelegramDiscoveryResultRow } from './telegramDiscoveryModel'
 import type { TelegramOperationalPageModel } from './telegramOperationalPageModel'
 import TelegramWorkspaceChatList from './TelegramWorkspaceChatList.vue'
 import TelegramWorkspaceThread from './TelegramWorkspaceThread.vue'
@@ -13,7 +13,7 @@ import TelegramWorkspaceToolbar from './TelegramWorkspaceToolbar.vue'
 import './telegramOperationalPage.css'
 import '../../../shared/ui/shell/providerOperationalWorkspace.css'
 
-defineProps<{
+const props = defineProps<{
 	accountAccess: TelegramAccountAccessModel
 	discovery: TelegramDiscoveryModel
 	model: TelegramOperationalPageModel
@@ -21,6 +21,10 @@ defineProps<{
 
 const emit = defineEmits<{
 	load: []
+	loadOlderMessages: []
+	loadMoreChats: []
+	beginReply: []
+	cancelReply: []
 	provisionAccount: []
 	refreshAccounts: []
 	refreshChatContext: []
@@ -31,6 +35,7 @@ const emit = defineEmits<{
 	selectAccount: [accountId: string]
 	selectChat: [providerChatId: string]
 	selectMessage: [messageId: string, providerMessageId: string]
+	selectSearchResult: [result: TelegramDiscoveryResultRow]
 	send: []
 	submitAuthorizationPassword: []
 	updateAuthorizationPassword: [value: string]
@@ -49,7 +54,17 @@ const inspectorVisible = useResponsiveWorkspaceInspector()
 
 function openDiscovery(): void {
 	discoveryDialogOpen.value = true
-	emit('search')
+	if (props.discovery.query.trim()) emit('search')
+}
+
+function openActions(): void {
+	inspectorVisible.value = true
+	inspectorTab.value = 'actions'
+}
+
+function selectSearchResult(result: TelegramDiscoveryResultRow): void {
+	discoveryDialogOpen.value = false
+	emit('selectSearchResult', result)
 }
 </script>
 
@@ -71,7 +86,9 @@ function openDiscovery(): void {
 			<div>
 				<button
 					type="button"
-					:disabled="model.status === 'loading' || accountAccess.authorizationState !== 'ready'"
+					:disabled="model.status === 'loading'
+						|| !accountAccess.selectedAccountOperational
+						|| accountAccess.authorizationState !== 'ready'"
 					@click="emit('load')"
 				>Sync Chats</button>
 				<button type="button" :disabled="!model.selectedChatId" @click="emit('refreshChatContext')">Sync History</button>
@@ -88,9 +105,18 @@ function openDiscovery(): void {
 		</section>
 
 		<div class="telegram-workspace-grid" :class="{ 'inspector-hidden': !inspectorVisible }" :aria-busy="model.status === 'loading'">
-			<TelegramWorkspaceChatList :model="model" @select-chat="emit('selectChat', $event)" />
+			<TelegramWorkspaceChatList
+				:model="model"
+				@load-more="emit('loadMoreChats')"
+				@select-chat="emit('selectChat', $event)"
+			/>
 			<TelegramWorkspaceThread
 				:model="model"
+				@load-older-messages="emit('loadOlderMessages')"
+				@reply-selected="emit('beginReply')"
+				@cancel-reply="emit('cancelReply')"
+				@open-actions="openActions"
+				@open-search="openDiscovery"
 				@refresh-context="emit('refreshChatContext')"
 				@select-message="(messageId, providerMessageId) => emit('selectMessage', messageId, providerMessageId)"
 				@send="emit('send')"
@@ -159,7 +185,7 @@ function openDiscovery(): void {
 					:model="discovery"
 					@refresh-context="emit('refreshChatContext')"
 					@search="emit('search')"
-					@select-chat="emit('selectChat', $event)"
+					@select-result="selectSearchResult"
 					@update-query="emit('updateSearchQuery', $event)"
 				/>
 			</section>

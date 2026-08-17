@@ -4,6 +4,8 @@
 //! provider discriminator and imports no workflow or Communications domain
 //! implementation.
 
+use std::{future::Future, time::Duration};
+
 use makosh_events_jetstream::{
     RuntimeJetStreamConnection, RuntimeSubscribePermitV1, receive_runtime_pull_delivery,
 };
@@ -37,6 +39,7 @@ use sha2::{Digest, Sha256};
 const MESSAGE_DOMAIN: &[u8] = b"makosh.telegram.delivery-intent.execute.v1";
 const REJECTED_MESSAGE_DOMAIN: &[u8] = b"makosh.telegram.delivery-intent.rejected.v1";
 const TELEGRAM_RUNTIME_MODULE_ID: &str = "makosh-telegram-runtime";
+const TELEGRAM_DELIVERY_INTENT_POLL_DEADLINE_V1: Duration = Duration::from_millis(25);
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DecodedTelegramDeliveryIntentV1 {
@@ -87,9 +90,12 @@ pub async fn consume_next_telegram_delivery_intent_v1(
     expected_logical_owner_id: &str,
     result_context: &TelegramDeliveryIntentResultContextV1,
 ) -> Result<TelegramDeliveryIntentInboxOutcomeV1, TelegramDeliveryIntentConsumeErrorV1> {
-    let delivery = receive_runtime_pull_delivery(connection, permit)
-        .await
-        .map_err(|_| TelegramDeliveryIntentConsumeErrorV1::Unavailable)?;
+    let delivery = deadline_bound_delivery_intent_poll(async {
+        receive_runtime_pull_delivery(connection, permit)
+            .await
+            .map_err(|_| TelegramDeliveryIntentConsumeErrorV1::Unavailable)
+    })
+    .await?;
     let record = OutboxRecordV1::accept(delivery.exact_bytes().to_vec()).map_err(|_| {
         TelegramDeliveryIntentConsumeErrorV1::Decode(
             TelegramDeliveryIntentDecodeErrorV1::InvalidEnvelope,
@@ -107,6 +113,17 @@ pub async fn consume_next_telegram_delivery_intent_v1(
         .await
         .map_err(|_| TelegramDeliveryIntentConsumeErrorV1::Unavailable)?;
     Ok(outcome)
+}
+
+async fn deadline_bound_delivery_intent_poll<T, F>(
+    poll: F,
+) -> Result<T, TelegramDeliveryIntentConsumeErrorV1>
+where
+    F: Future<Output = Result<T, TelegramDeliveryIntentConsumeErrorV1>>,
+{
+    tokio::time::timeout(TELEGRAM_DELIVERY_INTENT_POLL_DEADLINE_V1, poll)
+        .await
+        .unwrap_or(Err(TelegramDeliveryIntentConsumeErrorV1::Unavailable))
 }
 
 pub async fn accept_telegram_delivery_intent_v1(
@@ -346,6 +363,8 @@ fn id32(value: &[u8]) -> Result<[u8; 32], TelegramDeliveryIntentDecodeErrorV1> {
 
 #[cfg(test)]
 mod tests {
+    use std::{future::pending, time::Instant};
+
     use makosh_events_protocol::{
         delivery::OutboxRecordV1,
         v1::{
@@ -361,6 +380,24 @@ mod tests {
     use prost_types::Timestamp;
 
     use super::*;
+
+    #[test]
+    fn idle_delivery_intent_poll_keeps_the_provider_loop_responsive() {
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .enable_time()
+            .build()
+            .expect("Tokio runtime");
+        let started = Instant::now();
+        let result = runtime.block_on(deadline_bound_delivery_intent_poll(pending::<
+            Result<(), TelegramDeliveryIntentConsumeErrorV1>,
+        >()));
+
+        assert_eq!(
+            result,
+            Err(TelegramDeliveryIntentConsumeErrorV1::Unavailable)
+        );
+        assert!(started.elapsed() < Duration::from_millis(250));
+    }
 
     #[test]
     fn decoder_accepts_only_exact_telegram_contract_source_audience_and_owner() {

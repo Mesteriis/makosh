@@ -65,6 +65,42 @@ impl BlobMetadataLedger {
         Ok(BlobWriteReservationV1::new(reference))
     }
 
+    pub fn reserve_or_resume_write(
+        &self,
+        reference: &BlobRefV1,
+        access: &BlobAccessFenceV1,
+        custody: &BlobCustodyScopeV1,
+        quota: &BlobQuotaGrantV1,
+    ) -> Result<(BlobWriteReservationV1, bool), BlobMetadataError> {
+        let _guard = self.lock()?;
+        if !quota.matches(access)
+            || quota.custody() != custody
+            || reference.owner_id() != custody.owner_id()
+        {
+            return Err(BlobMetadataError::FenceMismatch);
+        }
+        if let Some(record) = self.read(reference)? {
+            if record.matches(reference, custody)
+                && record.state() == BlobMetadataStateV1::PendingWrite
+            {
+                return Ok((BlobWriteReservationV1::new(reference), false));
+            }
+            return Err(BlobMetadataError::AlreadyExists);
+        }
+        let used_bytes = self.used_bytes(custody)?;
+        let total = used_bytes
+            .checked_add(reference.declared_size())
+            .ok_or(BlobMetadataError::QuotaExceeded)?;
+        if total > quota.max_bytes() {
+            return Err(BlobMetadataError::QuotaExceeded);
+        }
+        self.write(&BlobMetadataRecordV1::pending(
+            reference.clone(),
+            custody.clone(),
+        ))?;
+        Ok((BlobWriteReservationV1::new(reference), true))
+    }
+
     pub fn commit_write(
         &self,
         reservation: &BlobWriteReservationV1,

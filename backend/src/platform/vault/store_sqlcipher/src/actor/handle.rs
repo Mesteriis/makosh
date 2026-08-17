@@ -1,5 +1,6 @@
 //! Bounded single-writer actor for all unlocked Vault SQLite operations.
 
+use std::collections::BTreeSet;
 use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender, TrySendError, sync_channel};
 use std::time::Duration;
 
@@ -76,6 +77,20 @@ impl VaultStoreHandle {
         }
         let (response, receiver) = sync_channel(1);
         self.submit(VaultStoreRequest::StoreMany { secrets, response })?;
+        receive(receiver)
+    }
+
+    pub(crate) fn reconcile_bootstrap_secrets_atomically(
+        &self,
+        secrets: Vec<(SecretRecordScope, Zeroizing<Vec<u8>>)>,
+    ) -> Result<Vec<SecretRecordId>, VaultStoreError> {
+        if secrets.is_empty() {
+            return Err(VaultStoreError::Record(
+                secret_record::SecretRecordError::InvalidPayload,
+            ));
+        }
+        let (response, receiver) = sync_channel(1);
+        self.submit(VaultStoreRequest::ReconcileBootstrapMany { secrets, response })?;
         receive(receiver)
     }
 
@@ -174,6 +189,10 @@ enum VaultStoreRequest {
         secrets: Vec<(SecretRecordScope, Zeroizing<Vec<u8>>)>,
         response: SyncSender<Result<Vec<SecretRecordId>, VaultStoreError>>,
     },
+    ReconcileBootstrapMany {
+        secrets: Vec<(SecretRecordScope, Zeroizing<Vec<u8>>)>,
+        response: SyncSender<Result<Vec<SecretRecordId>, VaultStoreError>>,
+    },
     Resolve {
         record_id: SecretRecordId,
         scope: SecretRecordScope,
@@ -230,6 +249,13 @@ fn actor_loop(
             }
             VaultStoreRequest::StoreMany { secrets, response } => {
                 let _ = response.send(store_secrets(&mut connection, &record_key, secrets));
+            }
+            VaultStoreRequest::ReconcileBootstrapMany { secrets, response } => {
+                let _ = response.send(reconcile_bootstrap_secrets(
+                    &mut connection,
+                    &record_key,
+                    secrets,
+                ));
             }
             VaultStoreRequest::Resolve {
                 record_id,
@@ -322,6 +348,63 @@ fn store_secrets(
                 record_id, logical_owner_id, configuration_instance_id, purpose_id,
                 secret_class, secret_revision, key_epoch, nonce, ciphertext
              ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+                rusqlite::params![
+                    record.record_id.as_bytes().as_slice(),
+                    owner,
+                    configuration,
+                    purpose,
+                    class,
+                    revision,
+                    i64::from(secret_record::CURRENT_KEY_EPOCH),
+                    record.nonce.as_slice(),
+                    &record.ciphertext,
+                ],
+            )
+            .map_err(VaultStoreError::Sqlite)?;
+    }
+    transaction.commit().map_err(VaultStoreError::Sqlite)?;
+    Ok(encrypted
+        .into_iter()
+        .map(|record| record.record_id)
+        .collect())
+}
+
+fn reconcile_bootstrap_secrets(
+    connection: &mut Connection,
+    record_key: &[u8; 32],
+    secrets: Vec<(SecretRecordScope, Zeroizing<Vec<u8>>)>,
+) -> Result<Vec<SecretRecordId>, VaultStoreError> {
+    let mut scopes = BTreeSet::new();
+    for (scope, _) in &secrets {
+        if !scopes.insert(scope.metadata()) {
+            return Err(VaultStoreError::ProvisioningConflict);
+        }
+    }
+    let encrypted = secrets
+        .iter()
+        .map(|(scope, payload)| {
+            secret_record::encrypt(scope, payload, record_key).map_err(VaultStoreError::Record)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let transaction = connection
+        .unchecked_transaction()
+        .map_err(VaultStoreError::Sqlite)?;
+    for ((scope, _), record) in secrets.into_iter().zip(encrypted.iter()) {
+        let (owner, configuration, purpose, class, revision) = scope.metadata();
+        transaction
+            .execute(
+                "DELETE FROM vault_secret_records
+                 WHERE logical_owner_id = ?1 AND configuration_instance_id = ?2
+                   AND purpose_id = ?3 AND secret_class = ?4 AND secret_revision = ?5",
+                rusqlite::params![owner, configuration, purpose, class, revision],
+            )
+            .map_err(VaultStoreError::Sqlite)?;
+        transaction
+            .execute(
+                "INSERT INTO vault_secret_records (
+                    record_id, logical_owner_id, configuration_instance_id, purpose_id,
+                    secret_class, secret_revision, key_epoch, nonce, ciphertext
+                 ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
                 rusqlite::params![
                     record.record_id.as_bytes().as_slice(),
                     owner,

@@ -133,12 +133,12 @@ pub(crate) fn insert_event_route_requests(
     Ok(())
 }
 
-fn read_event_route_requests(
+pub(crate) fn read_event_route_requests(
     connection: &Connection,
     registration_id: &str,
     capability_id: &str,
 ) -> Result<Vec<ModuleEventRouteRequestV1>, StoreError> {
-    let mut statement = connection.prepare(
+    let mut statement = connection.prepare_cached(
         "SELECT route.envelope_kind, route.contract_owner, route.contract_name, route.contract_major,
                 route.contract_revision, route.contract_schema_sha256, route.direction,
                 route.max_in_flight, policy.subscription_requirement, policy.max_deliver,

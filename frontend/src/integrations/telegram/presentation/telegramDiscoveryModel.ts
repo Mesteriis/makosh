@@ -7,12 +7,15 @@ import type {
 	TelegramTopicProjection,
 } from '../../../gen/makosh/telegram/v1/client_pb'
 import type { TelegramChatContext } from '../api/telegramDiscoveryGateway'
+import { resolveTelegramSenderName } from './telegramOperationalPageModel'
 
 export type TelegramDiscoveryResultRow = {
 	id: string
 	title: string
 	detail: string
 	kind: 'chat' | 'message'
+	providerChatId: string
+	providerMessageId: string
 }
 
 export type TelegramDiscoveryDetailRow = {
@@ -38,31 +41,53 @@ export type TelegramDiscoveryModel = {
 export function buildTelegramDiscoveryResults(input: {
 	chats: readonly TelegramChatProjection[]
 	messages: readonly TelegramMessageProjection[]
+	personaNames?: ReadonlyMap<string, string>
 }): readonly TelegramDiscoveryResultRow[] {
+	const personaNames = input.personaNames ?? new Map<string, string>()
 	return [
 		...input.chats.map((chat) => ({
 			id: chat.providerChatId,
 			title: chat.title || chat.username || chat.providerChatId,
 			detail: chat.username ? `@${chat.username} · ${chat.kind}` : chat.kind,
 			kind: 'chat' as const,
+			providerChatId: chat.providerChatId,
+			providerMessageId: '',
 		})),
 		...input.messages.map((message) => ({
 			id: message.messageId,
-			title: message.senderDisplayName || message.senderId || 'Unknown sender',
-			detail: message.text || message.media?.caption || `[${message.media?.kind || 'message'}]`,
+			title: resolveTelegramSenderName(message, personaNames),
+			detail: telegramMessageSummary(message),
 			kind: 'message' as const,
+			providerChatId: message.providerChatId,
+			providerMessageId: message.providerMessageId || message.messageId,
 		})),
 	]
 }
 
 export function buildTelegramHistoryRows(
 	items: readonly TelegramMessageObservationProjection[],
+	personaNames: ReadonlyMap<string, string> = new Map(),
 ): readonly TelegramDiscoveryDetailRow[] {
 	return items.map((item) => ({
 		id: item.providerMessageId,
-		title: item.senderDisplayName || item.senderId || 'Unknown sender',
-		detail: item.text || item.media?.caption || `[${item.media?.kind || 'message'}]`,
+		title: resolveTelegramSenderName(item, personaNames),
+		detail: telegramMessageSummary(item),
 	}))
+}
+
+function telegramMessageSummary(message: {
+	text?: string
+	media?: { caption?: string; filename?: string; kind?: string }
+}): string {
+	if (!message.media) return message.text?.trim() || 'Message'
+	return message.media.caption?.trim()
+		|| message.media.filename?.trim()
+		|| readableMediaKind(message.media.kind)
+}
+
+function readableMediaKind(kind?: string): string {
+	const normalized = kind?.trim().replaceAll('_', ' ') || ''
+	return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : 'Attachment'
 }
 
 export function buildTelegramParticipantRows(
@@ -70,7 +95,7 @@ export function buildTelegramParticipantRows(
 ): readonly TelegramDiscoveryDetailRow[] {
 	return items.map((item) => ({
 		id: item.providerMemberId,
-		title: item.displayName || item.username || item.providerMemberId,
+		title: item.displayName || item.username || 'Telegram participant',
 		detail: [item.role, item.status, item.isOwner ? 'owner' : '', item.isAdmin ? 'admin' : '']
 			.filter(Boolean)
 			.join(' · '),

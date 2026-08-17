@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import Toast from '../../shared/ui/Toast.vue'
 import AppSettingsPage from '../settings/AppSettingsPage.vue'
 import { useClientNavigationSurface } from '../queries/useClientNavigationSurface'
+import { useTelegramSenderPersonaNames } from '../queries/useTelegramSenderPersonaNames'
 import AppLayout from '../../shared/ui/shell/AppLayout.vue'
 import AppNavbar from '../../shared/ui/shell/AppNavbar.vue'
 import { BrowserGatewayAccessModeV1 } from '../../gen/makosh/gateway/v1/browser_session_pb'
@@ -34,6 +35,7 @@ import {
 const props = defineProps<{ gatewayAccessMode: BrowserGatewayAccessModeV1 }>()
 
 const navbar = useClientNavigationSurface()
+const telegramSenderPersonaNames = useTelegramSenderPersonaNames()
 const breadcrumbs = navbar.breadcrumbs
 const currentTheme = navbar.currentTheme
 const currentThemeFamily = navbar.currentThemeFamily
@@ -43,6 +45,7 @@ const mailAccountNavigation = ref<ProviderAccountNavigationSnapshot>()
 const telegramAccountNavigation = ref<ProviderAccountNavigationSnapshot>()
 const requestedMailAccountId = ref<string>()
 const requestedTelegramAccountId = ref<string>()
+const settingsInitialOwner = ref<'mail' | undefined>()
 const navigationLevels = computed(() => {
 	const levels = [...navbar.navigationLevels.value]
 	if (navbar.selectedRouteId.value === 'communications-mail') {
@@ -99,6 +102,9 @@ const telegramReconfigurationAvailable = computed(() =>
 const telegramQueryAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'telegram.query.v1'),
 )
+const telegramRealtimeAvailable = computed(() =>
+	hasClientModuleCapability(bootstrap.value, 'telegram.operational.realtime.shared.v1'),
+)
 const whatsAppCommandAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'whatsapp.command.v1'),
 )
@@ -107,6 +113,9 @@ const whatsAppOperationalQueryAvailable = computed(() =>
 )
 const whatsAppOperationalRealtimeAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'whatsapp.operational.realtime.v1'),
+)
+const whatsAppSharedRealtimeAvailable = computed(() =>
+	hasClientModuleCapability(bootstrap.value, 'whatsapp.operational.realtime.shared.v1'),
 )
 const mailDeliveryAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'mail.delivery.v1'),
@@ -125,6 +134,9 @@ const mailSyncAvailable = computed(() =>
 )
 const mailOperationalQueryAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'mail.operational.query.v1'),
+)
+const mailOperationalRealtimeAvailable = computed(() =>
+	hasClientModuleCapability(bootstrap.value, 'mail.operational.realtime.shared.v1'),
 )
 const mailMessageFlagCommandAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'mail.message-flags.command.v1'),
@@ -159,6 +171,9 @@ const zulipOperationalQueryAvailable = computed(() =>
 const zulipOperationalRealtimeAvailable = computed(() =>
 	hasClientModuleCapability(bootstrap.value, 'zulip.operational.realtime.v1'),
 )
+const zulipSharedRealtimeAvailable = computed(() =>
+	hasClientModuleCapability(bootstrap.value, 'zulip.operational.realtime.shared.v1'),
+)
 
 function selectNavigationItem(itemId: string): void {
 	const mailAccountId = providerAccountIdFromRoute('mail', itemId)
@@ -183,7 +198,13 @@ function selectNavigationItem(itemId: string): void {
 		}
 		return
 	}
+	if (itemId === 'settings') settingsInitialOwner.value = undefined
 	navbar.selectNavigationItem(itemId)
+}
+
+function openMailSettings(): void {
+	settingsInitialOwner.value = 'mail'
+	navbar.selectNavigationItem('settings')
 }
 
 function openMailMessageContent(evidenceId: Uint8Array | undefined): void {
@@ -194,6 +215,12 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 	document.documentElement.setAttribute('data-ui-theme', theme)
 	document.documentElement.setAttribute('data-ui-theme-family', family)
 	document.documentElement.setAttribute('data-ui-theme-mode', mode)
+}, { immediate: true })
+
+watch(selectedRouteId, (routeId) => {
+	if (routeId === 'communications-telegram') {
+		void telegramSenderPersonaNames.refresh().catch(() => undefined)
+	}
 }, { immediate: true })
 
 </script>
@@ -266,6 +293,7 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					:can-mutate-flags="mailMessageFlagCommandAvailable"
 					:can-mutate-location="mailMessageLocationCommandAvailable"
 					:can-query="mailOperationalQueryAvailable"
+					:can-realtime="mailOperationalRealtimeAvailable"
 					:can-query-accounts="mailAccountCatalogAvailable"
 					:can-query-flag-status="mailMessageFlagQueryAvailable"
 					:can-query-location-status="mailMessageLocationQueryAvailable"
@@ -277,20 +305,24 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					:navigation-account-id="requestedMailAccountId"
 					@account-navigation-change="mailAccountNavigation = $event"
 					@message-evidence-change="openMailMessageContent"
+					@open-settings="openMailSettings"
 				/>
 				<TelegramOperationalRoute
 					v-else-if="selectedRouteId === 'communications-telegram'"
 					:can-authorize="telegramAuthorizationAvailable"
 					:can-manage-lifecycle="telegramLifecycleAvailable"
 					:can-query="telegramQueryAvailable"
+					:can-replay="telegramRealtimeAvailable"
 					:can-reconfigure="telegramReconfigurationAvailable"
 					:can-send="telegramCommandAvailable"
 					:navigation-account-id="requestedTelegramAccountId"
+					:sender-persona-names="telegramSenderPersonaNames.names.value"
 					@account-navigation-change="telegramAccountNavigation = $event"
 				/>
 				<WhatsAppOperationalRoute
 					v-else-if="selectedRouteId === 'communications-whatsapp'"
 					:can-query="whatsAppOperationalQueryAvailable"
+					:can-realtime="whatsAppSharedRealtimeAvailable"
 					:can-replay="whatsAppOperationalRealtimeAvailable"
 					:can-send="whatsAppCommandAvailable"
 					:modules="bootstrap.modules"
@@ -299,6 +331,7 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					v-else-if="selectedRouteId === 'communications-zulip'"
 					:can-command="zulipCommandAvailable"
 					:can-query="zulipOperationalQueryAvailable"
+					:can-realtime="zulipSharedRealtimeAvailable"
 					:can-replay="zulipOperationalRealtimeAvailable"
 					:modules="bootstrap.modules"
 				/>
@@ -322,6 +355,7 @@ watch([currentTheme, currentThemeFamily, currentThemeMode], ([theme, family, mod
 					:current-language="navbar.currentLanguage.value"
 					:language-options="navbar.languageOptions"
 					:compiled-adapter-ids="compiledClientSurfaceAdapterIds"
+					:initial-owner="settingsInitialOwner"
 					@language-change="navbar.selectLanguage"
 					@refresh-request="navbar.refreshBootstrap(true)"
 				/>

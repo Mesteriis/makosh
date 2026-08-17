@@ -40,8 +40,9 @@ test('Zulip subjects, routes, diagnostics and health expose no provider-private 
 
   for (const diagnostic of [
     'developer_zulip_runtime_admission_error={error:?}',
-    'developer_zulip_runtime_queue_error={error:?}',
     'developer_zulip_runtime_client_delivery_error={error:?}',
+    'developer_zulip_runtime_command_schedule_error={error:?}',
+    'developer_zulip_runtime_event_accept_error={error:?}',
     'developer_zulip_runtime_tick_error={error:?}',
   ]) {
     assert.ok(runtimeMain.includes(diagnostic), `missing sanitized diagnostic ${diagnostic}`);

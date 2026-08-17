@@ -6,10 +6,25 @@ import { recoveryClientBootstrap } from '../../platform/gateway/clientBootstrap'
 import { compiledClientSurfaceAdapterIds } from '../client-surfaces/compiledClientSurfaceAdapters'
 import {
 	buildClientRouteTree,
+	clientConnectionHealth,
 	resolveClientNavigationTarget,
 } from './useClientNavigationSurface'
 
 describe('compiled client navigation', () => {
+	it('does not degrade the whole system from one successful loopback latency sample', () => {
+		expect(clientConnectionHealth(712, '')).toEqual({
+			id: 'network',
+			label: 'Connection',
+			status: 'healthy',
+			detail: '712 ms round-trip',
+			depth: 1,
+		})
+		expect(clientConnectionHealth(null, 'bootstrap_unavailable')).toMatchObject({
+			status: 'unhealthy',
+			detail: 'bootstrap_unavailable',
+		})
+	})
+
 	it('keeps every product route disabled in the recovery shell', () => {
 		const tree = buildClientRouteTree(recoveryClientBootstrap())
 		const productRoutes = flattenNavigationTree(tree).filter((item) => item.id !== 'settings')

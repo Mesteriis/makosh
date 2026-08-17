@@ -4,6 +4,7 @@ use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{self, Receiver, SyncSender};
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
+use std::{io::ErrorKind, os::fd::AsRawFd, os::unix::net::UnixStream};
 
 use crate::distribution::staged_artifact::StagedNativeArtifact;
 use crate::distribution::staged_contracts::StagedRuntimeContracts;
@@ -23,10 +24,51 @@ use super::Inner;
 
 pub(super) struct ActiveWorker {
     pub(super) join: JoinHandle<()>,
-    pub(super) relay: SyncSender<ManagedRuntimeRelayRequest>,
+    pub(super) relay: ManagedRuntimeRelaySender,
     pub(super) ready: Mutex<Option<Receiver<Result<(), String>>>>,
     pub(super) ready_state: Arc<AtomicBool>,
     pub(super) stop_requested: Arc<AtomicBool>,
+}
+
+#[derive(Clone)]
+pub(super) struct ManagedRuntimeRelaySender {
+    requests: SyncSender<ManagedRuntimeRelayRequest>,
+    wake: Arc<UnixStream>,
+}
+
+impl ManagedRuntimeRelaySender {
+    pub(super) fn try_send(&self, request: ManagedRuntimeRelayRequest) -> Result<(), String> {
+        self.requests
+            .try_send(request)
+            .map_err(|_| "managed runtime relay is unavailable".to_owned())?;
+        self.wake()
+    }
+
+    pub(super) fn wake(&self) -> Result<(), String> {
+        let byte = [1_u8];
+        // SAFETY: the byte slice and the live Unix stream fd remain valid for
+        // the call. MSG_DONTWAIT prevents a full wake buffer from blocking a
+        // gateway request, and MSG_NOSIGNAL prevents process-wide SIGPIPE.
+        let result = unsafe {
+            libc::send(
+                self.wake.as_raw_fd(),
+                byte.as_ptr().cast(),
+                byte.len(),
+                libc::MSG_DONTWAIT | libc::MSG_NOSIGNAL,
+            )
+        };
+        if result >= 0 {
+            Ok(())
+        } else {
+            let error = std::io::Error::last_os_error();
+            if error.kind() == ErrorKind::WouldBlock {
+                // A full buffer already guarantees that the worker is awake.
+                Ok(())
+            } else {
+                Err(error.to_string())
+            }
+        }
+    }
 }
 
 pub(super) struct ActiveWorkerInput {
@@ -52,7 +94,7 @@ pub(super) struct ActiveWorkerInput {
     pub(super) client_realtime_handler: Option<Arc<dyn ManagedRuntimeClientRealtimeHandler>>,
 }
 
-pub(super) fn new_active_worker(input: ActiveWorkerInput) -> ActiveWorker {
+pub(super) fn new_active_worker(input: ActiveWorkerInput) -> Result<ActiveWorker, String> {
     let ActiveWorkerInput {
         inner,
         registration_id,
@@ -78,7 +120,18 @@ pub(super) fn new_active_worker(input: ActiveWorkerInput) -> ActiveWorker {
     let worker_stop_requested = Arc::clone(&stop_requested);
     let ready_state = Arc::new(AtomicBool::new(false));
     let worker_ready_state = Arc::clone(&ready_state);
-    let (relay, relay_requests) = mpsc::sync_channel(64);
+    let (relay_requests_sender, relay_requests) = mpsc::sync_channel(64);
+    let (relay_wake_reader, relay_wake_writer) = match UnixStream::pair() {
+        Ok(pair) => pair,
+        Err(error) => {
+            remove_staged_launch(staged_executable, contracts, cleanup);
+            return Err(error.to_string());
+        }
+    };
+    let relay = ManagedRuntimeRelaySender {
+        requests: relay_requests_sender,
+        wake: Arc::new(relay_wake_writer),
+    };
     let (ready_sender, ready) = mpsc::sync_channel(1);
     let join = std::thread::spawn(move || {
         let worker_span = tracing::info_span!(
@@ -103,6 +156,7 @@ pub(super) fn new_active_worker(input: ActiveWorkerInput) -> ActiveWorker {
                     shutdown_requested: &shutdown_requested,
                     stop_requested: &worker_stop_requested,
                     relay_requests: &relay_requests,
+                    relay_wake: &relay_wake_reader,
                     control_handlers:
                         crate::runtime::lifecycle::control::ManagedRuntimeControlHandlers {
                             vault_route: vault_route_handler.as_deref(),
@@ -123,13 +177,13 @@ pub(super) fn new_active_worker(input: ActiveWorkerInput) -> ActiveWorker {
         );
         remove_staged_launch(staged_executable, contracts, cleanup);
     });
-    ActiveWorker {
+    Ok(ActiveWorker {
         join,
         relay,
         ready: Mutex::new(Some(ready)),
         ready_state,
         stop_requested,
-    }
+    })
 }
 
 pub(super) fn remove_staged_launch(

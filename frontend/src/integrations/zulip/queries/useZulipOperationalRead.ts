@@ -15,6 +15,14 @@ import {
 	searchZulipOperationalMessages,
 } from '../api/zulipOperationalReadGateway'
 import {
+	openZulipOperationalRealtime,
+	type ZulipOperationalRealtimeBinding,
+} from '../api/zulipOperationalRealtime'
+import {
+	getClientAccountLaneRegistry,
+	type ClientAccountLane,
+} from '../../../platform/gateway/clientAccountLane'
+import {
 	buildZulipOperationalReadModel,
 	type ZulipOperationalReadModel,
 	type ZulipOperationalReadState,
@@ -23,6 +31,7 @@ import { zulipOperationalQueryAccounts } from './zulipOperationalAccounts'
 
 export function useZulipOperationalRead(input: {
 	canQuery: () => boolean
+	canRealtime?: () => boolean
 	modules: () => readonly ClientModuleBootstrapV1[]
 }) {
 	const state = ref<ZulipOperationalReadState>('blocked')
@@ -40,6 +49,11 @@ export function useZulipOperationalRead(input: {
 	const eventCursor = ref('')
 	const searchCursor = ref('')
 	let generation = 0
+	let realtimeGeneration = 0
+	let realtimeBinding: ZulipOperationalRealtimeBinding | undefined
+	let realtimeLane: ClientAccountLane | undefined
+	let realtimeAccountId = ''
+	const projectionCache = new Map<string, ZulipProjectionSnapshot>()
 
 	const accounts = computed(() => zulipOperationalQueryAccounts(input.modules()))
 	const model = computed<ZulipOperationalReadModel>(() => (
@@ -78,13 +92,14 @@ export function useZulipOperationalRead(input: {
 			selectedAccountId.value = available[0]!.accountId
 		}
 		await refresh()
+		startRealtime()
 	}
 
 	async function refresh(): Promise<void> {
 		if (!readyForQuery()) return
 		const token = ++generation
 		begin('Loading Zulip operational projection…')
-		resetProjection()
+		if (!restoreProjection(selectedAccountId.value)) resetProjection()
 		try {
 			const [status, conversationPage, eventPage] = await Promise.all([
 				getZulipOperationalAccountStatus(selectedAccountId.value),
@@ -109,8 +124,102 @@ export function useZulipOperationalRead(input: {
 
 	async function selectAccount(accountId: string): Promise<void> {
 		if (!accounts.value.some((account) => account.accountId === accountId)) return
+		saveProjection()
+		stopRealtime()
 		selectedAccountId.value = accountId
 		await refresh()
+		startRealtime()
+	}
+
+	function startRealtime(): void {
+		stopRealtime()
+		if (!input.canRealtime?.() || !selectedAccountId.value) return
+		const accountId = selectedAccountId.value
+		const token = realtimeGeneration
+		realtimeAccountId = accountId
+		realtimeLane = getClientAccountLaneRegistry().get({ provider: 'zulip', accountId })
+		realtimeBinding = openZulipOperationalRealtime(accountId, {
+			onProjectionChanged: revision => {
+				realtimeLane?.invalidate(revision, async (_revision, signal) => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(accountId, token)
+				})
+		},
+			onUnavailable: () => {
+				if (token !== realtimeGeneration) return
+				realtimeLane?.recover(async signal => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(accountId, token)
+				})
+			},
+		})
+	}
+
+	function stopRealtime(): void {
+		realtimeGeneration += 1
+		realtimeBinding?.close()
+		realtimeBinding = undefined
+		if (realtimeAccountId) {
+			getClientAccountLaneRegistry().close({ provider: 'zulip', accountId: realtimeAccountId })
+		}
+		realtimeLane = undefined
+		realtimeAccountId = ''
+	}
+
+	async function refreshCurrentProjection(accountId: string, realtimeToken: number): Promise<void> {
+		const token = ++generation
+		const preferredConversationId = selectedConversationId.value
+		const query = searchQuery.value.trim()
+		try {
+			const [status, conversationPage, eventPage] = await Promise.all([
+				getZulipOperationalAccountStatus(accountId),
+				listZulipOperationalConversations({ accountId }),
+				listZulipOperationalEvents({ accountId }),
+			])
+			if (!currentRealtimeRefresh(token, accountId, realtimeToken)) return
+			const conversationId = conversationPage.item.some(
+				conversation => conversation.providerConversationId === preferredConversationId,
+			)
+				? preferredConversationId
+				: (conversationPage.item[0]?.providerConversationId ?? '')
+			const [messagePage, searchPage] = await Promise.all([
+				listZulipOperationalMessages({
+					accountId,
+					providerConversationId: conversationId || undefined,
+				}),
+				query
+					? searchZulipOperationalMessages({
+						accountId,
+						providerConversationId: conversationId || undefined,
+						searchQuery: query,
+					})
+					: Promise.resolve(undefined),
+			])
+			if (!currentRealtimeRefresh(token, accountId, realtimeToken)) return
+			accountStatus.value = status
+			conversations.value = conversationPage.item
+			conversationCursor.value = conversationPage.nextCursor ?? ''
+			events.value = eventPage.item
+			eventCursor.value = eventPage.nextCursor ?? ''
+			selectedConversationId.value = conversationId
+			messages.value = messagePage.item
+			messageCursor.value = messagePage.nextCursor ?? ''
+			searchResults.value = searchPage?.item ?? []
+			searchCursor.value = searchPage?.nextCursor ?? ''
+			finishProjection()
+		} catch (error) {
+			if (currentRealtimeRefresh(token, accountId, realtimeToken)) {
+				statusMessage.value = error instanceof Error
+					? error.message
+					: 'Zulip realtime refresh is unavailable.'
+			}
+		}
+	}
+
+	function currentRealtimeRefresh(token: number, accountId: string, realtimeToken: number): boolean {
+		return current(token)
+			&& accountId === selectedAccountId.value
+			&& realtimeToken === realtimeGeneration
 	}
 
 	async function selectConversation(providerConversationId: string): Promise<void> {
@@ -305,6 +414,7 @@ export function useZulipOperationalRead(input: {
 
 	function clear(message: string): void {
 		generation += 1
+		projectionCache.clear()
 		selectedAccountId.value = ''
 		resetProjection()
 		state.value = 'blocked'
@@ -323,6 +433,40 @@ export function useZulipOperationalRead(input: {
 		messageCursor.value = ''
 		eventCursor.value = ''
 		searchCursor.value = ''
+	}
+
+	function saveProjection(): void {
+		if (!selectedAccountId.value) return
+		projectionCache.set(selectedAccountId.value, {
+			selectedConversationId: selectedConversationId.value,
+			searchQuery: searchQuery.value,
+			accountStatus: accountStatus.value,
+			conversations: conversations.value,
+			messages: messages.value,
+			events: events.value,
+			searchResults: searchResults.value,
+			conversationCursor: conversationCursor.value,
+			messageCursor: messageCursor.value,
+			eventCursor: eventCursor.value,
+			searchCursor: searchCursor.value,
+		})
+	}
+
+	function restoreProjection(accountId: string): boolean {
+		const snapshot = projectionCache.get(accountId)
+		if (!snapshot) return false
+		selectedConversationId.value = snapshot.selectedConversationId
+		searchQuery.value = snapshot.searchQuery
+		accountStatus.value = snapshot.accountStatus
+		conversations.value = snapshot.conversations
+		messages.value = snapshot.messages
+		events.value = snapshot.events
+		searchResults.value = snapshot.searchResults
+		conversationCursor.value = snapshot.conversationCursor
+		messageCursor.value = snapshot.messageCursor
+		eventCursor.value = snapshot.eventCursor
+		searchCursor.value = snapshot.searchCursor
+		return true
 	}
 
 	function fail(error: unknown, token: number, fallback: string): void {
@@ -346,8 +490,23 @@ export function useZulipOperationalRead(input: {
 		search,
 		selectAccount,
 		selectConversation,
+		stopRealtime,
 		updateSearchQuery,
 	}
+}
+
+type ZulipProjectionSnapshot = {
+	selectedConversationId: string
+	searchQuery: string
+	accountStatus: ZulipAccountStatusV1 | undefined
+	conversations: readonly ZulipConversationV1[]
+	messages: readonly ZulipMessageV1[]
+	events: readonly ZulipOperationalEventV1[]
+	searchResults: readonly ZulipMessageV1[]
+	conversationCursor: string
+	messageCursor: string
+	eventCursor: string
+	searchCursor: string
 }
 
 function appendUnique<T>(

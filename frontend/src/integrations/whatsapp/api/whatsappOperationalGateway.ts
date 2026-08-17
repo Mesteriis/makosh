@@ -4,6 +4,7 @@ import type {
 } from '../../../gen/makosh/whatsapp/v1/client_pb'
 import { getWhatsAppCommandConnectClient } from './whatsappCommandClient'
 import { getWhatsAppQueryConnectClient } from './whatsappQueryClient'
+import { getClientAccountLaneRegistry } from '../../../platform/gateway/clientAccountLane'
 
 export async function sendWhatsAppText(input: {
 	accountId: string
@@ -15,17 +16,19 @@ export async function sendWhatsAppText(input: {
 	if (!text) {
 		throw new RangeError('WhatsApp message text is required')
 	}
-	return getWhatsAppCommandConnectClient().executeCommand({
+	const accountId = requireIdentifier('account ID', input.accountId)
+	return getClientAccountLaneRegistry().get({ provider: 'whatsapp', accountId })
+		.run('interactive', async () => getWhatsAppCommandConnectClient().executeCommand({
 		command: {
 			case: 'sendText',
 			value: {
-				accountId: requireIdentifier('account ID', input.accountId),
+				accountId,
 				providerChatId: requireIdentifier('chat ID', input.providerChatId),
 				text,
 				operationId: requireIdentifier('operation ID', input.operationId),
 			},
 		},
-	})
+	}))
 }
 
 export async function getWhatsAppOperationStatus(

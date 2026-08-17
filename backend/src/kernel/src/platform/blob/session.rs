@@ -60,7 +60,8 @@ impl CustodyProofLineageV1<'static> {
 pub(crate) struct BlobSessionHandlerV1 {
     store: Arc<SqliteControlStore>,
     relay: ManagedRuntimeRelayPort,
-    data_dir: PathBuf,
+    kernel_data_dir: PathBuf,
+    runtime_dir: PathBuf,
 }
 
 impl BlobSessionHandlerV1 {
@@ -68,12 +69,14 @@ impl BlobSessionHandlerV1 {
     pub(crate) fn new(
         store: Arc<SqliteControlStore>,
         relay: ManagedRuntimeRelayPort,
-        data_dir: PathBuf,
+        kernel_data_dir: PathBuf,
+        runtime_dir: PathBuf,
     ) -> Self {
         Self {
             store,
             relay,
-            data_dir,
+            kernel_data_dir,
+            runtime_dir,
         }
     }
 }
@@ -169,7 +172,7 @@ impl ManagedRuntimeBlobSessionHandler for BlobSessionHandlerV1 {
             expected_plaintext_sha256: request.receipt_sha256.clone(),
             custody_scope_id: entry.request().custody_scope_id().to_owned(),
         };
-        let signer = FileDeviceSigner::open_for_instance(&self.data_dir)?;
+        let signer = FileDeviceSigner::open_for_instance(&self.kernel_data_dir)?;
         let mut message = b"makosh.blob-data-session.v1\0".to_vec();
         message.extend_from_slice(&grant.encode_to_vec());
         grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
@@ -192,7 +195,7 @@ impl ManagedRuntimeBlobSessionHandler for BlobSessionHandlerV1 {
             )?
         };
         Ok(ManagedRuntimeBlobSessionDeliveryV1 {
-            data_socket_path: launch::data_socket_path(&self.data_dir)
+            data_socket_path: launch::data_socket_path(&self.runtime_dir)
                 .display()
                 .to_string(),
             grant: Some(grant),
@@ -231,7 +234,7 @@ impl ManagedRuntimeBlobSessionHandler for BlobSessionHandlerV1 {
             .ok_or_else(custody_delegation_denied)?;
         let target = resolve_delegation_target(&self.store, expectation, &request)?;
         let now = now_unix_ms()?;
-        let signer = FileDeviceSigner::open_for_instance(&self.data_dir)?;
+        let signer = FileDeviceSigner::open_for_instance(&self.kernel_data_dir)?;
         let predecessor = verify_custody_source_proof(
             &request.predecessor_custody_source_proof,
             &signer.public_key_sec1(),
@@ -325,7 +328,7 @@ impl BlobSessionHandlerV1 {
             return Err("managed runtime Blob custody transfer is denied".to_owned());
         }
         let now = now_unix_ms()?;
-        let signer = FileDeviceSigner::open_for_instance(&self.data_dir)?;
+        let signer = FileDeviceSigner::open_for_instance(&self.kernel_data_dir)?;
         let source = verify_custody_source_proof(
             &request.custody_source_proof,
             &signer.public_key_sec1(),
@@ -405,7 +408,7 @@ impl BlobSessionHandlerV1 {
         message.extend_from_slice(&grant.encode_to_vec());
         grant.kernel_authorization_signature_raw = signer.sign(&message).to_vec();
         Ok(ManagedRuntimeBlobSessionDeliveryV1 {
-            data_socket_path: launch::data_socket_path(&self.data_dir)
+            data_socket_path: launch::data_socket_path(&self.runtime_dir)
                 .display()
                 .to_string(),
             grant: None,

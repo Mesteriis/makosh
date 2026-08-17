@@ -1,12 +1,26 @@
 import { computed, ref, shallowRef } from 'vue'
 import {
 	MailAccountReadinessV1,
+	MailConnectorProfileV1,
 	MailCredentialBindingStateV1,
 	MailCredentialPurposeV1,
 	type MailAccountStatusV1,
 } from '../../../gen/makosh/mail/account/v1/client_pb'
+import type { GmailOAuthStartedV1 } from '../../../gen/makosh/mail/v1/client_pb'
 import type { ClientModuleBootstrapV1 } from '../../../gen/makosh/gateway/v1/client_bootstrap_pb'
-import { hasOwnerVaultProvisioningHostV1 } from '../../../platform/vault'
+import {
+	hasOwnerVaultProvisioningHostV1,
+} from '../../../platform/vault'
+import { MailGmailOAuthClientV1 } from '../api/mailGmailOAuthClient'
+import {
+	gmailOAuthLoopbackRedirectUriV1,
+	runGmailOAuthBrowserFlowV1,
+	type GmailOAuthBrowserResultV1,
+} from '../oauth/gmailOAuthBrowserFlow'
+import {
+	redirectGmailOAuthInSameTabV1,
+	type GmailOAuthSameTabContinuationV1,
+} from '../oauth/gmailOAuthRedirectFlow'
 import {
 	MailAccountManagementWorkflowV1,
 	type MailPasswordPurposeV1,
@@ -18,17 +32,38 @@ const MAIL_STORAGE_CAPABILITY_ID = 'mail.storage.v1'
 type MailAccountManagementWorkflow = Pick<
 	MailAccountManagementWorkflowV1,
 	'catalog' | 'status' | 'retire' | 'delete' | 'retry' | 'refreshLifecycle' | 'rotatePassword'
+	| 'normalizeGmailOAuthRedirect'
 >
+
+type GmailOAuthPortV1 = Pick<MailGmailOAuthClientV1, 'start' | 'complete'>
+type GmailOAuthBrowserFlowV1 = (authorizationUrl: string) => Promise<GmailOAuthBrowserResultV1>
+type GmailOAuthSameTabRedirectV1 = (
+	authorizationUrl: string,
+	continuation: GmailOAuthSameTabContinuationV1,
+) => void
+type GmailOAuthInstalledConfigurationV1 = () => { clientId: string; origin: string }
+type GmailOAuthPresentationV1 = 'same-tab' | 'popup'
 
 export function useMailAccountManagement(
 	module: () => ClientModuleBootstrapV1 | null,
 	workflow: MailAccountManagementWorkflow = new MailAccountManagementWorkflowV1(),
+	gmailOAuth?: GmailOAuthPortV1,
+	gmailOAuthBrowserFlow: GmailOAuthBrowserFlowV1 = runGmailOAuthBrowserFlowV1,
+	gmailOAuthSameTabRedirect: GmailOAuthSameTabRedirectV1 = redirectGmailOAuthInSameTabV1,
+	gmailOAuthInstalledConfiguration: GmailOAuthInstalledConfigurationV1 = () => ({
+		clientId: import.meta.env.VITE_MAKOSH_GMAIL_OAUTH_CLIENT_ID?.trim() ?? '',
+		origin: window.location.origin,
+	}),
+	gmailOAuthPresentation: GmailOAuthPresentationV1 = 'same-tab',
 ) {
 	const status = shallowRef<MailAccountStatusV1 | null>(null)
 	const accounts = shallowRef<MailAccountStatusV1[]>([])
 	const connectionId = ref('')
 	const imapPassword = ref('')
 	const smtpPassword = ref('')
+	const gmailOAuthOperationId = ref('')
+	const gmailOAuthStarted = shallowRef<GmailOAuthStartedV1>()
+	const gmailOAuthCompletionSubmitted = ref(false)
 	const busy = ref(false)
 	const message = ref('')
 	const messageTone = ref<'neutral' | 'success' | 'error'>('neutral')
@@ -43,6 +78,15 @@ export function useMailAccountManagement(
 		&& Boolean(status.value?.lifecycleOperationId))
 	const canRefreshLifecycle = computed(() => hasCapability('mail.account.lifecycle.query.v1')
 		&& Boolean(status.value?.lifecycleOperationId))
+	const canAuthorizeGmail = computed(() =>
+		hasCapability('mail.oauth.start.v1')
+		&& hasCapability('mail.oauth.complete.v1')
+		&& status.value?.connectorProfile === MailConnectorProfileV1.MAIL_CONNECTOR_PROFILE_GMAIL
+		&& status.value.readiness === MailAccountReadinessV1.MAIL_ACCOUNT_READINESS_CONFIGURATION_ONLY)
+	const gmailAuthorizationLabel = computed(() => {
+		if (gmailOAuthCompletionSubmitted.value) return 'OAuth submitted'
+		return gmailOAuthStarted.value ? 'Continue with Google' : 'Prepare Google OAuth'
+	})
 
 	async function refresh(): Promise<void> {
 		if (!canCatalog.value) {
@@ -68,6 +112,7 @@ export function useMailAccountManagement(
 	}
 
 	async function selectAccount(nextConnectionId: string): Promise<void> {
+		resetGmailAuthorization()
 		connectionId.value = nextConnectionId
 		status.value = accounts.value.find(
 			(account) => account.connectionId === nextConnectionId,
@@ -77,6 +122,77 @@ export function useMailAccountManagement(
 				status.value = await workflow.status(nextConnectionId)
 			}, 'Mail account status is unavailable.')
 		}
+	}
+
+	async function authorizeGmail(): Promise<void> {
+		const current = status.value
+		if (!current || !canAuthorizeGmail.value || gmailOAuthCompletionSubmitted.value) return
+		const oauth = gmailOAuth ?? new MailGmailOAuthClientV1()
+		await run(async () => {
+			if (!gmailOAuthStarted.value) {
+				// OAuth reauthorization rotates provider tokens, not the installed client
+				// credential. The client secret is provisioned once by account setup and
+				// must be reused here; attempting CREATE again conflicts with Vault's
+				// write-once revision 1 record after a browser or frontend restart.
+				gmailOAuthOperationId.value = `mail-gmail-operational-auth-${crypto.randomUUID()}`
+				gmailOAuthStarted.value = await oauth.start(
+					gmailOAuthOperationId.value,
+					current.connectionId,
+				)
+				message.value = 'Google OAuth request is ready. Continue with Google to authorize Mail.'
+				return
+			}
+			const continuation = {
+				operationId: gmailOAuthOperationId.value,
+				connectionId: current.connectionId,
+				setupId: gmailOAuthStarted.value.setupId,
+			}
+			if (gmailOAuthPresentation === 'same-tab') {
+				gmailOAuthSameTabRedirect(
+					gmailOAuthStarted.value.authorizationUrl,
+					continuation,
+				)
+				message.value = 'Redirecting to Google. Макошь will resume authorization after the callback.'
+				return
+			}
+			let callback: GmailOAuthBrowserResultV1
+			try {
+				callback = await gmailOAuthBrowserFlow(gmailOAuthStarted.value.authorizationUrl)
+			} catch (error) {
+				if (error instanceof Error && error.message === 'gmail_oauth_redirect_uri_mismatch') {
+					const currentModule = ownedModule.value
+					const installed = gmailOAuthInstalledConfiguration()
+					const clientId = installed.clientId.trim()
+					if (!currentModule || !clientId) throw error
+					await workflow.normalizeGmailOAuthRedirect({
+						registrationId: currentModule.registrationId,
+						configurationInstanceId: current.configurationInstanceId,
+						expectedDesiredRevision: current.settingsRevision,
+						connectionId: current.connectionId,
+						clientId,
+						redirectUri: gmailOAuthLoopbackRedirectUriV1(installed.origin),
+					})
+					resetGmailAuthorization()
+					message.value = 'Gmail OAuth callback configuration was updated. Prepare Google OAuth again.'
+					return
+				}
+				if (!(error instanceof Error) || error.message !== 'gmail_oauth_popup_blocked') throw error
+				gmailOAuthSameTabRedirect(gmailOAuthStarted.value.authorizationUrl, continuation)
+				message.value = 'Redirecting to Google. Макошь will resume authorization after the callback.'
+				return
+			}
+			gmailOAuthCompletionSubmitted.value = true
+			await oauth.complete({
+				operationId: gmailOAuthOperationId.value,
+				connectionId: current.connectionId,
+				setupId: gmailOAuthStarted.value.setupId,
+				state: callback.returnedState,
+				authorizationCode: callback.authorizationCode,
+			})
+			message.value = 'Gmail OAuth completion accepted. Refresh after provider exchange.'
+		}, gmailOAuthCompletionSubmitted.value
+			? 'Gmail OAuth outcome is unavailable. Refresh before starting another attempt.'
+			: 'Gmail OAuth authorization was not completed.')
 	}
 
 	async function retire(): Promise<void> {
@@ -159,8 +275,11 @@ export function useMailAccountManagement(
 		try {
 			await action()
 			messageTone.value = 'success'
-		} catch {
-			message.value = failure
+		} catch (error) {
+			const failureCode = safeDeveloperFailureCode(error)
+			message.value = import.meta.env.DEV && failureCode
+				? `${failure} (${failureCode})`
+				: failure
 			messageTone.value = 'error'
 		} finally {
 			busy.value = false
@@ -174,6 +293,12 @@ export function useMailAccountManagement(
 	function clearPassword(purpose: MailPasswordPurposeV1): void {
 		if (purpose === 'imap') imapPassword.value = ''
 		else smtpPassword.value = ''
+	}
+
+	function resetGmailAuthorization(): void {
+		gmailOAuthOperationId.value = ''
+		gmailOAuthStarted.value = undefined
+		gmailOAuthCompletionSubmitted.value = false
 	}
 
 	return {
@@ -192,6 +317,9 @@ export function useMailAccountManagement(
 		canDelete,
 		canRetry,
 		canRefreshLifecycle,
+		canAuthorizeGmail,
+		gmailAuthorizationLabel,
+		gmailOAuthCompletionSubmitted,
 		canRotateImap: computed(() => canRotate('imap')),
 		canRotateSmtp: computed(() => canRotate('smtp')),
 		refresh,
@@ -200,8 +328,14 @@ export function useMailAccountManagement(
 		deleteAccount,
 		retry,
 		refreshLifecycle,
+		authorizeGmail,
 		rotatePassword,
 	}
+}
+
+function safeDeveloperFailureCode(error: unknown): string | undefined {
+	if (!(error instanceof Error)) return undefined
+	return /^[a-z0-9_]{1,128}$/.test(error.message) ? error.message : undefined
 }
 
 function mailReadinessLabel(readiness: MailAccountReadinessV1 | undefined): string {

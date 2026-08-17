@@ -117,11 +117,12 @@ pub fn start(
     registration_id: &str,
 ) -> Result<u64, String> {
     let reservation = reserve(supervisor, store, registration_id)?;
+    cleanup_abandoned_launch_directory(&managed_launch_directory(runtime_dir, &reservation))?;
     let kernel_executable = selected_kernel_executable()?;
     let staged = native_launch::stage_bound_installed_release(
         &kernel_executable,
         reservation.binding(),
-        &runtime_dir.join("managed"),
+        &managed_launch_directory(runtime_dir, &reservation),
     )?;
     let runtime_generation = reservation.runtime_generation();
     let (registration_id, expectation, policy) = reservation.into_launch_parts();
@@ -235,6 +236,7 @@ pub(crate) fn start_reserved_integration(
     {
         return Err("managed integration runtime configuration is stale".to_owned());
     }
+    cleanup_abandoned_launch_directory(&managed_launch_directory(runtime_dir, &reservation))?;
     let prepared = prepare_integration_runtime(
         data_dir,
         runtime_dir,
@@ -312,6 +314,7 @@ pub(crate) fn start_reserved_engine(
     {
         return Err("managed engine runtime configuration is stale".to_owned());
     }
+    cleanup_abandoned_launch_directory(&managed_launch_directory(runtime_dir, &reservation))?;
     let prepared = prepare_runtime_with_artifacts(
         runtime_dir,
         &reservation,
@@ -392,6 +395,7 @@ fn start_reserved_workflow_inner(
     {
         return Err("managed workflow runtime configuration is stale".to_owned());
     }
+    cleanup_abandoned_launch_directory(&managed_launch_directory(runtime_dir, &reservation))?;
     let prepared = prepare_runtime_with_artifacts(
         runtime_dir,
         &reservation,
@@ -445,6 +449,7 @@ pub(crate) fn start_staged_with_host_bridge_configuration(
     {
         return Err("managed integration host bridge configuration is stale".to_owned());
     }
+    cleanup_abandoned_launch_directory(&managed_launch_directory(runtime_dir, &reservation))?;
     let prepared = prepare_integration_runtime(
         data_dir,
         runtime_dir,
@@ -515,12 +520,12 @@ fn start_staged_with_configuration_bytes(
     contracts: PreparedRuntimeContractInput,
 ) -> Result<u64, String> {
     let kernel_executable = selected_kernel_executable()?;
+    let launch_directory = managed_launch_directory(runtime_dir, &reservation);
+    cleanup_abandoned_launch_directory(&launch_directory)?;
     let prepared = native_launch::prepare_bound_managed_runtime(
         &kernel_executable,
         reservation.binding(),
-        &runtime_dir
-            .join("managed")
-            .join(format!("launch-{}", reservation.runtime_generation())),
+        &launch_directory,
     )?;
     start_prepared_with_configuration_bytes(
         supervisor,
@@ -551,6 +556,7 @@ fn start_prepared_with_configuration_bytes(
         settings_snapshot_bytes.as_deref(),
         host_bridge_configuration.as_ref(),
     );
+    let launch_directory = managed_launch_directory(runtime_dir, &reservation);
     let preflight = (|| {
         let descriptor = decode_descriptor_v1(prepared.descriptor_bytes())
             .map_err(|_| "managed runtime descriptor is invalid".to_owned())?;
@@ -568,10 +574,7 @@ fn start_prepared_with_configuration_bytes(
         ) {
             (Some(settings_snapshot_bytes), Some(host_bridge_configuration_bytes)) => {
                 StagedRuntimeContracts::stage_with_runtime_host_bridge_and_settings_snapshot(
-                    &runtime_dir
-                        .join("managed")
-                        .join(format!("launch-{}", reservation.runtime_generation()))
-                        .join("contracts"),
+                    &launch_directory.join("contracts"),
                     prepared.descriptor_bytes(),
                     prepared.settings_schema_bytes(),
                     Some(&settings_snapshot_bytes),
@@ -581,10 +584,7 @@ fn start_prepared_with_configuration_bytes(
             }
             (Some(settings_snapshot_bytes), None) => {
                 StagedRuntimeContracts::stage_with_runtime_configuration_and_settings_snapshot(
-                    &runtime_dir
-                        .join("managed")
-                        .join(format!("launch-{}", reservation.runtime_generation()))
-                        .join("contracts"),
+                    &launch_directory.join("contracts"),
                     prepared.descriptor_bytes(),
                     prepared.settings_schema_bytes(),
                     &settings_snapshot_bytes,
@@ -593,10 +593,7 @@ fn start_prepared_with_configuration_bytes(
             }
             (None, Some(host_bridge_configuration_bytes)) => {
                 StagedRuntimeContracts::stage_with_runtime_and_host_bridge_configuration(
-                    &runtime_dir
-                        .join("managed")
-                        .join(format!("launch-{}", reservation.runtime_generation()))
-                        .join("contracts"),
+                    &launch_directory.join("contracts"),
                     prepared.descriptor_bytes(),
                     prepared.settings_schema_bytes(),
                     Some(&runtime_configuration_bytes),
@@ -605,10 +602,7 @@ fn start_prepared_with_configuration_bytes(
             }
             (None, None) => {
                 StagedRuntimeContracts::stage_with_runtime_and_host_bridge_configuration(
-                    &runtime_dir
-                        .join("managed")
-                        .join(format!("launch-{}", reservation.runtime_generation()))
-                        .join("contracts"),
+                    &launch_directory.join("contracts"),
                     prepared.descriptor_bytes(),
                     prepared.settings_schema_bytes(),
                     Some(&runtime_configuration_bytes),
@@ -729,9 +723,7 @@ fn prepare_runtime_with_artifacts(
     let prepared = native_launch::prepare_bound_managed_runtime_with_artifacts(
         &kernel_executable,
         reservation.binding(),
-        &runtime_dir
-            .join("managed")
-            .join(format!("launch-{}", reservation.runtime_generation())),
+        &managed_launch_directory(runtime_dir, reservation),
         granted_capability_ids,
     )?;
     if prepared.state_layout_revision().is_some() {
@@ -754,9 +746,7 @@ fn prepare_integration_runtime(
     let prepared = native_launch::prepare_bound_managed_runtime_with_artifacts(
         &kernel_executable,
         reservation.binding(),
-        &runtime_dir
-            .join("managed")
-            .join(format!("launch-{}", reservation.runtime_generation())),
+        &managed_launch_directory(runtime_dir, reservation),
         granted_capability_ids,
     )?;
     configuration.runtime_artifacts = prepared.runtime_artifact_bindings().to_vec();
@@ -781,6 +771,26 @@ fn prepare_integration_runtime(
     Ok(prepared)
 }
 
+fn managed_launch_directory(runtime_dir: &Path, reservation: &ManagedLaunchReservation) -> PathBuf {
+    runtime_dir.join("managed").join(format!(
+        "launch-{}-{}",
+        reservation.runtime_generation(),
+        reservation.runtime_instance_id()
+    ))
+}
+
+fn cleanup_abandoned_launch_directory(launch_directory: &Path) -> Result<(), String> {
+    let metadata = match std::fs::symlink_metadata(launch_directory) {
+        Ok(metadata) => metadata,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(error) => return Err(error.to_string()),
+    };
+    if metadata.file_type().is_symlink() || !metadata.is_dir() {
+        return Err("managed launch cleanup requires a non-symlink directory".to_owned());
+    }
+    std::fs::remove_dir_all(launch_directory).map_err(|error| error.to_string())
+}
+
 fn staged_runtime_artifact_cleanup(
     artifacts: Vec<StagedNativeArtifact>,
 ) -> Option<Box<dyn FnOnce() + Send>> {
@@ -803,6 +813,31 @@ fn combine_cleanup(
             first();
             second();
         })),
+    }
+}
+
+#[cfg(test)]
+mod abandoned_launch_cleanup_tests {
+    use super::{cleanup_abandoned_launch_directory, new_instance_id};
+
+    #[test]
+    fn retry_removes_only_the_exact_abandoned_launch_directory() {
+        let root = std::env::temp_dir().join(format!(
+            "makosh-managed-launch-cleanup-test-{}",
+            new_instance_id().expect("test instance")
+        ));
+        let launch = root.join("managed").join("launch-7-instance");
+        std::fs::create_dir_all(launch.join("contracts")).expect("stale launch directory");
+        std::fs::write(launch.join("contracts").join("descriptor.pb"), b"stale")
+            .expect("stale contract");
+        let sibling = root.join("managed").join("keep");
+        std::fs::create_dir_all(&sibling).expect("sibling");
+
+        cleanup_abandoned_launch_directory(&launch).expect("cleanup");
+
+        assert!(!launch.exists());
+        assert!(sibling.is_dir());
+        std::fs::remove_dir_all(root).expect("test cleanup");
     }
 }
 

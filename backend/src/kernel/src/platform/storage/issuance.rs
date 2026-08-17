@@ -109,12 +109,54 @@ fn issue_authorized(
     {
         return Ok(previous.expect("checked exact Storage binding retry"));
     }
-    validate_successor(previous.as_ref(), &issue)?;
+    let legacy_predecessor = if previous.is_none() {
+        legacy_capability_predecessor(store, registration_id, &authorization, capability_id)?
+    } else {
+        None
+    };
+    validate_successor(
+        previous.as_ref().or(legacy_predecessor.as_ref()),
+        legacy_predecessor.is_some(),
+        &issue,
+    )?;
     let binding = bind(authorization, &topology, previous.as_ref(), issue)?;
     store
         .record_platform_storage_binding(&binding)
         .map_err(|_| "Storage binding cannot be recorded".to_owned())?;
     Ok(binding)
+}
+
+fn legacy_capability_predecessor(
+    store: &SqliteControlStore,
+    registration_id: &str,
+    authorization: &StorageBindingAuthorizationV1,
+    capability_id: &str,
+) -> Result<Option<PlatformStorageBindingV1>, String> {
+    let Some((legacy_owner, legacy_capability)) =
+        legacy_capability_identity(authorization.owner_id(), capability_id)
+    else {
+        return Ok(None);
+    };
+    let predecessor = store
+        .platform_storage_binding(registration_id, legacy_capability)
+        .map_err(|_| "Storage binding is unavailable".to_owned())?;
+    Ok(predecessor.filter(|binding| {
+        binding.owner_id() == legacy_owner
+            && binding.state() == PlatformStorageBindingStateV1::Revoking
+    }))
+}
+
+fn legacy_capability_identity(
+    owner_id: &str,
+    capability_id: &str,
+) -> Option<(&'static str, &'static str)> {
+    match (owner_id, capability_id) {
+        ("persons", "persons.storage.v1") => Some(("contacts", "contacts.storage.v1")),
+        ("mail_persons_sync", "mail_persons_sync.storage.v1") => {
+            Some(("mail_contacts_sync", "mail_contacts_sync.storage.v1"))
+        }
+        _ => None,
+    }
 }
 
 fn exact_retry(
@@ -156,6 +198,7 @@ fn verify_admitted_bundle(
 
 fn validate_successor(
     previous: Option<&PlatformStorageBindingV1>,
+    legacy_capability_transition: bool,
     issue: &StorageBindingIssueV1,
 ) -> Result<(), String> {
     match previous {
@@ -165,12 +208,24 @@ fn validate_successor(
                 && issue.role_epoch == increment(previous.role_epoch())?
                 && issue.credential_lease_revision
                     == increment(previous.credential_lease_revision())?
-                && issue.storage_bundle_revision >= previous.storage_bundle_revision() =>
+                && storage_bundle_revision_is_successor(
+                    previous.storage_bundle_revision(),
+                    issue.storage_bundle_revision,
+                    legacy_capability_transition,
+                ) =>
         {
             Ok(())
         }
         _ => Err("Storage binding fences are not a valid successor".to_owned()),
     }
+}
+
+const fn storage_bundle_revision_is_successor(
+    previous: u64,
+    successor: u64,
+    legacy_capability_transition: bool,
+) -> bool {
+    legacy_capability_transition || successor >= previous
 }
 
 fn bind(
@@ -232,4 +287,27 @@ fn runtime_principal(
         "storage_{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}_{role_epoch}",
         digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7],
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{legacy_capability_identity, storage_bundle_revision_is_successor};
+
+    #[test]
+    fn clean_room_capability_successors_are_exact() {
+        assert_eq!(
+            legacy_capability_identity("persons", "persons.storage.v1"),
+            Some(("contacts", "contacts.storage.v1")),
+        );
+        assert_eq!(
+            legacy_capability_identity("mail_persons_sync", "mail_persons_sync.storage.v1"),
+            Some(("mail_contacts_sync", "mail_contacts_sync.storage.v1")),
+        );
+        assert_eq!(
+            legacy_capability_identity("telegram", "telegram.storage.v1"),
+            None,
+        );
+        assert!(storage_bundle_revision_is_successor(6, 2, true));
+        assert!(!storage_bundle_revision_is_successor(6, 2, false));
+    }
 }

@@ -17,6 +17,14 @@ import {
 	searchWhatsAppOperationalMessages,
 } from '../api/whatsAppOperationalReadGateway'
 import {
+	openWhatsAppOperationalRealtime,
+	type WhatsAppOperationalRealtimeBinding,
+} from '../api/whatsAppOperationalRealtime'
+import {
+	getClientAccountLaneRegistry,
+	type ClientAccountLane,
+} from '../../../platform/gateway/clientAccountLane'
+import {
 	buildWhatsAppOperationalReadModel,
 	type WhatsAppOperationalReadModel,
 	type WhatsAppOperationalReadState,
@@ -25,6 +33,7 @@ import { whatsAppOperationalQueryAccounts } from './whatsAppOperationalAccounts'
 
 export function useWhatsAppOperationalRead(input: {
 	canQuery: () => boolean
+	canRealtime?: () => boolean
 	modules: () => readonly ClientModuleBootstrapV1[]
 }) {
 	const state = ref<WhatsAppOperationalReadState>('blocked')
@@ -44,6 +53,11 @@ export function useWhatsAppOperationalRead(input: {
 	const eventCursor = ref('')
 	const searchCursor = ref('')
 	let generation = 0
+	let realtimeGeneration = 0
+	let realtimeBinding: WhatsAppOperationalRealtimeBinding | undefined
+	let realtimeLane: ClientAccountLane | undefined
+	let realtimeAccountId = ''
+	const projectionCache = new Map<string, WhatsAppProjectionSnapshot>()
 
 	const accounts = computed(() => whatsAppOperationalQueryAccounts(input.modules()))
 	const model = computed<WhatsAppOperationalReadModel>(() => (
@@ -84,13 +98,14 @@ export function useWhatsAppOperationalRead(input: {
 			selectedAccountId.value = available[0]!.accountId
 		}
 		await refresh()
+		startRealtime()
 	}
 
 	async function refresh(): Promise<void> {
 		if (!readyForQuery()) return
 		const token = ++generation
 		begin('Loading WhatsApp operational projection…')
-		resetProjection()
+		if (!restoreProjection(selectedAccountId.value)) resetProjection()
 		try {
 			const [runtimeStatus, dialogPage, eventPage] = await Promise.all([
 				getWhatsAppOperationalRuntimeStatus(selectedAccountId.value),
@@ -114,8 +129,105 @@ export function useWhatsAppOperationalRead(input: {
 
 	async function selectAccount(accountId: string): Promise<void> {
 		if (!accounts.value.some((account) => account.accountId === accountId)) return
+		saveProjection()
+		stopRealtime()
 		selectedAccountId.value = accountId
 		await refresh()
+		startRealtime()
+	}
+
+	function startRealtime(): void {
+		stopRealtime()
+		if (!input.canRealtime?.() || !selectedAccountId.value) return
+		const accountId = selectedAccountId.value
+		const token = realtimeGeneration
+		realtimeAccountId = accountId
+		realtimeLane = getClientAccountLaneRegistry().get({ provider: 'whatsapp', accountId })
+		realtimeBinding = openWhatsAppOperationalRealtime(accountId, {
+			onProjectionChanged: revision => {
+				realtimeLane?.invalidate(revision, async (_revision, signal) => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(accountId, token)
+				})
+		},
+			onUnavailable: () => {
+				if (token !== realtimeGeneration) return
+				realtimeLane?.recover(async signal => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(accountId, token)
+				})
+			},
+		})
+	}
+
+	function stopRealtime(): void {
+		realtimeGeneration += 1
+		realtimeBinding?.close()
+		realtimeBinding = undefined
+		if (realtimeAccountId) {
+			getClientAccountLaneRegistry().close({ provider: 'whatsapp', accountId: realtimeAccountId })
+		}
+		realtimeLane = undefined
+		realtimeAccountId = ''
+	}
+
+	async function refreshCurrentProjection(accountId: string, realtimeToken: number): Promise<void> {
+		const token = ++generation
+		const preferredChatId = selectedChatId.value
+		const query = searchQuery.value.trim()
+		try {
+			const [runtimeStatus, dialogPage, eventPage] = await Promise.all([
+				getWhatsAppOperationalRuntimeStatus(accountId),
+				listWhatsAppOperationalDialogs({ accountId }),
+				listWhatsAppOperationalEvents({ accountId }),
+			])
+			if (!currentRealtimeRefresh(token, accountId, realtimeToken)) return
+			const chatId = dialogPage.item.some(dialog => dialog.providerChatId === preferredChatId)
+				? preferredChatId
+				: (dialogPage.item[0]?.providerChatId ?? '')
+			const [messagePage, participantPage, searchPage] = await Promise.all([
+				listWhatsAppOperationalMessages({
+					accountId,
+					providerChatId: chatId || undefined,
+				}),
+				chatId
+					? listWhatsAppOperationalParticipants({ accountId, providerChatId: chatId })
+					: Promise.resolve(undefined),
+				query
+					? searchWhatsAppOperationalMessages({
+						accountId,
+						providerChatId: chatId || undefined,
+						searchQuery: query,
+					})
+					: Promise.resolve(undefined),
+			])
+			if (!currentRealtimeRefresh(token, accountId, realtimeToken)) return
+			runtime.value = runtimeStatus
+			dialogs.value = dialogPage.item
+			dialogCursor.value = dialogPage.nextCursor ?? ''
+			events.value = eventPage.item
+			eventCursor.value = eventPage.nextCursor ?? ''
+			selectedChatId.value = chatId
+			messages.value = messagePage.item
+			messageCursor.value = messagePage.nextCursor ?? ''
+			participants.value = participantPage?.item ?? []
+			participantCursor.value = participantPage?.nextCursor ?? ''
+			searchResults.value = searchPage?.item ?? []
+			searchCursor.value = searchPage?.nextCursor ?? ''
+			finishProjection()
+		} catch (error) {
+			if (currentRealtimeRefresh(token, accountId, realtimeToken)) {
+				statusMessage.value = error instanceof Error
+					? error.message
+					: 'WhatsApp realtime refresh is unavailable.'
+			}
+		}
+	}
+
+	function currentRealtimeRefresh(token: number, accountId: string, realtimeToken: number): boolean {
+		return current(token)
+			&& accountId === selectedAccountId.value
+			&& realtimeToken === realtimeGeneration
 	}
 
 	async function selectDialog(providerChatId: string): Promise<void> {
@@ -334,6 +446,7 @@ export function useWhatsAppOperationalRead(input: {
 
 	function clear(message: string): void {
 		generation += 1
+		projectionCache.clear()
 		selectedAccountId.value = ''
 		resetProjection()
 		state.value = 'blocked'
@@ -354,6 +467,44 @@ export function useWhatsAppOperationalRead(input: {
 		participantCursor.value = ''
 		eventCursor.value = ''
 		searchCursor.value = ''
+	}
+
+	function saveProjection(): void {
+		if (!selectedAccountId.value) return
+		projectionCache.set(selectedAccountId.value, {
+			selectedChatId: selectedChatId.value,
+			searchQuery: searchQuery.value,
+			runtime: runtime.value,
+			dialogs: dialogs.value,
+			messages: messages.value,
+			participants: participants.value,
+			events: events.value,
+			searchResults: searchResults.value,
+			dialogCursor: dialogCursor.value,
+			messageCursor: messageCursor.value,
+			participantCursor: participantCursor.value,
+			eventCursor: eventCursor.value,
+			searchCursor: searchCursor.value,
+		})
+	}
+
+	function restoreProjection(accountId: string): boolean {
+		const snapshot = projectionCache.get(accountId)
+		if (!snapshot) return false
+		selectedChatId.value = snapshot.selectedChatId
+		searchQuery.value = snapshot.searchQuery
+		runtime.value = snapshot.runtime
+		dialogs.value = snapshot.dialogs
+		messages.value = snapshot.messages
+		participants.value = snapshot.participants
+		events.value = snapshot.events
+		searchResults.value = snapshot.searchResults
+		dialogCursor.value = snapshot.dialogCursor
+		messageCursor.value = snapshot.messageCursor
+		participantCursor.value = snapshot.participantCursor
+		eventCursor.value = snapshot.eventCursor
+		searchCursor.value = snapshot.searchCursor
+		return true
 	}
 
 	function fail(error: unknown, token: number, fallback: string): void {
@@ -378,8 +529,25 @@ export function useWhatsAppOperationalRead(input: {
 		search,
 		selectAccount,
 		selectDialog,
+		stopRealtime,
 		updateSearchQuery,
 	}
+}
+
+type WhatsAppProjectionSnapshot = {
+	selectedChatId: string
+	searchQuery: string
+	runtime: WhatsAppOperationalRuntimeStatusV1 | undefined
+	dialogs: readonly WhatsAppDialog[]
+	messages: readonly WhatsAppMessage[]
+	participants: readonly WhatsAppParticipant[]
+	events: readonly WhatsAppProviderEventV1[]
+	searchResults: readonly WhatsAppMessage[]
+	dialogCursor: string
+	messageCursor: string
+	participantCursor: string
+	eventCursor: string
+	searchCursor: string
 }
 
 function appendUnique<T>(

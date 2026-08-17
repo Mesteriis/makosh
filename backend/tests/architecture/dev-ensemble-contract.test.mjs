@@ -25,6 +25,14 @@ const sources = {
     'development/authenticated/nats-server.conf',
     BACKEND_ROOT,
   ),
+  authenticatedPostgresReconciliation: new URL(
+    'development/authenticated/reconcile-postgres-admin.sql',
+    BACKEND_ROOT,
+  ),
+  authenticatedProviderOwnerScopeReconciliation: new URL(
+    'development/authenticated/reconcile-provider-owner-scopes.sql',
+    BACKEND_ROOT,
+  ),
   release: new URL('scripts/materialize-dev-release.sh', BACKEND_ROOT),
   developmentAssembly: new URL('development/assembly/src/main.rs', BACKEND_ROOT),
   probe: new URL('scripts/probe-dev-gateway.mjs', BACKEND_ROOT),
@@ -39,6 +47,10 @@ const sources = {
     'src/api/gateway/contracts/proto/makosh/gateway/v1/owner_control.proto',
     BACKEND_ROOT,
   ),
+  ownerControlPlatformDispatch: new URL(
+    'src/kernel/src/identity/owner_control/dispatch/platform.rs',
+    BACKEND_ROOT,
+  ),
 };
 
 test('root make dev owns one loopback full-stack browser assembly', async () => {
@@ -50,6 +62,8 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
     assembly,
     authenticatedCompose,
     authenticatedNats,
+    authenticatedPostgresReconciliation,
+    authenticatedProviderOwnerScopeReconciliation,
     release,
     developmentAssembly,
     probe,
@@ -58,6 +72,7 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
     cli,
     protocol,
     ownerControl,
+    ownerControlPlatformDispatch,
   } = Object.fromEntries(
     await Promise.all(
       Object.entries(sources).map(async ([name, path]) => [
@@ -75,7 +90,27 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
 
   assert.match(assembly, /materialize-dev-release\.sh/);
   assert.match(assembly, /development\/authenticated\/compose\.yaml/);
+  assert.match(
+    assembly,
+    /MAKOSH_DEV_AUTHENTICATED_COMPOSE_PROJECT_NAME:-makosh-storage-authenticated-development/,
+  );
+  assert.match(
+    assembly,
+    /docker compose --project-name "\$authenticated_compose_project_name" -f "\$compose_file"/,
+  );
+  assert.match(
+    assembly,
+    /docker compose --project-name "\$legacy_compose_project_name" -f "\$legacy_compose_file"/,
+  );
   assert.match(assembly, /run_compose up --detach --wait/);
+  assert.match(
+    assembly,
+    /run_compose exec --no-TTY --user postgres postgres[\s\S]*--file -[\s\S]*reconcile-postgres-admin\.sql/,
+  );
+  assert.match(
+    assembly,
+    /run_compose exec --no-TTY --user postgres postgres[\s\S]*--file -[\s\S]*reconcile-provider-owner-scopes\.sql/,
+  );
   assert.match(
     assembly,
     /run_compose exec --no-TTY pgbouncer[\s\\]+test -r \/etc\/pgbouncer\/pgbouncer\.ini[\s\\]+-a -r \/etc\/makosh\/runtime\/databases\.ini[\s\\]+-a -r \/etc\/makosh\/auth\/users\.txt/,
@@ -84,7 +119,11 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
     assembly,
     /if ! run_compose exec[\s\S]*run_compose up --detach --no-deps --force-recreate --wait pgbouncer[\s\S]*fi/,
   );
-  assert.doesNotMatch(assembly, /--force-recreate[^\n]*(?:postgres|nats|clamav)/);
+  assert.match(
+    assembly,
+    /if ! test "\$expected_postgres_hash" = "\$current_postgres_hash"; then[\s\S]*--force-recreate --wait postgres[\s\S]*fi/,
+  );
+  assert.doesNotMatch(assembly, /--force-recreate[^\n]*(?:nats|clamav)/);
   assert.match(assembly, /PostgreSQL, PgBouncer, NATS and ClamAV infrastructure/);
   assert.match(authenticatedCompose, /image: clamav\/clamav:1\.5\.3-debian13-slim/);
   assert.match(
@@ -105,6 +144,30 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
     authenticatedCompose,
     /\.\/nats-server\.conf:\/etc\/nats\/makosh-development\.conf:ro/,
   );
+  assert.match(
+    authenticatedPostgresReconciliation,
+    /pg_read_file\('\/run\/secrets\/storage_postgres_admin_password'\)/,
+  );
+  assert.match(
+    authenticatedPostgresReconciliation,
+    /ALTER ROLE %I PASSWORD %L/,
+  );
+  assert.doesNotMatch(
+    authenticatedPostgresReconciliation,
+    /(?:password|credential)\s*[:=]\s*['"][^'"]+['"]/i,
+  );
+  assert.match(
+    authenticatedProviderOwnerScopeReconciliation,
+    /\('telegram', 'telegram_owner_scope'\)[\s\S]*\('whatsapp', 'whatsapp_owner_scope'\)[\s\S]*\('zulip', 'zulip_owner_scope'\)/,
+  );
+  assert.match(
+    authenticatedProviderOwnerScopeReconciliation,
+    /logical_owner_id = \$2[\s\S]*USING current_prefix, 'development-owner'/,
+  );
+  assert.doesNotMatch(
+    authenticatedProviderOwnerScopeReconciliation,
+    /DELETE|TRUNCATE|DROP|provider.*(?:message|session|payload)/i,
+  );
   assert.match(authenticatedNats, /^max_control_line: 16384$/m);
   assert.doesNotMatch(authenticatedNats, /authorization|password|token|users/i);
   assert.match(
@@ -120,6 +183,13 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(developmentAssembly, /attachment_preview\.storage\.v1/);
   assert.match(assembly, /development_assembly=stale/);
   assert.match(assembly, /--distribution-generation "\$distribution_generation"/);
+  assert.match(assembly, /start_kernel_for_admission\(\)/);
+  assert.match(
+    assembly,
+    /assembly_status=.*[\s\S]*if test "\$assembly_status" != "development_assembly=current"; then[\s\S]*start_kernel_for_admission[\s\S]*wait_for_gateway[\s\S]*admit[\s\S]*stop_kernel[\s\S]*fi[\s\S]*start_kernel[\s\S]*wait_for_gateway/,
+    'a stale development catalog must be admitted without starting Scheduler before the full Kernel contour',
+  );
+  assert.match(assembly, /--browser-gateway-development-admission-mode/);
   assert.match(assembly, /--browser-gateway-listen-address "\$gateway_address"/);
   assert.match(assembly, /--browser-gateway-development-proxy-proof-file "\$proof_file"/);
   assert.match(assembly, /MAKOSH_DEV_GATEWAY_PROOF_FILE="\$proof_file"/);
@@ -195,9 +265,27 @@ test('root make dev owns one loopback full-stack browser assembly', async () => 
   assert.match(gateway, /GatewayLoopbackListenerV1::bind/);
   assert.match(gateway, /with_loopback_development_proxy_policy/);
   assert.match(cli, /browser_gateway_development_proxy_proof_file: Option<PathBuf>/);
+  assert.match(cli, /browser_gateway_development_admission_mode: bool/);
+  assert.match(gateway, /development_admission_mode: bool/);
+  assert.match(gateway, /starts_development_scheduler/);
+  assert.match(gateway, /runs_scheduler_lifecycle/);
   assert.match(cli, /metadata\.permissions\(\)\.mode\(\) & 0o077/);
   assert.match(protocol, /BROWSER_GATEWAY_ACCESS_MODE_V1_LOCAL_DEVELOPMENT = 3/);
   assert.match(ownerControl, /message GetManagedStorageBindingStatusRequestV1/);
+  const storageStatusStart = ownerControlPlatformDispatch.indexOf(
+    'fn get_managed_storage_binding_status(',
+  );
+  const storageStatusEnd = ownerControlPlatformDispatch.indexOf(
+    '\nfn issue_external_storage_binding(',
+    storageStatusStart,
+  );
+  const storageStatus = ownerControlPlatformDispatch.slice(
+    storageStatusStart,
+    storageStatusEnd,
+  );
+  assert.match(storageStatus, /sessions\.authorize/);
+  assert.match(storageStatus, /platform_storage_binding/);
+  assert.doesNotMatch(storageStatus, /effective_bundled_managed_launch_binding/);
   assert.match(ownerControl, /uint64 credential_lease_revision = 5/);
   assert.match(ownerControl, /message UpgradeBundledManagedRegistrationRequestV1/);
 });

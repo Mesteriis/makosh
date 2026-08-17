@@ -10,7 +10,32 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file makosh/mail/v1/client.proto.
  */
 export const file_makosh_mail_v1_client: GenFile = /*@__PURE__*/
-  fileDesc("ChttYWtvc2gvbWFpbC92MS9jbGllbnQucHJvdG8SDm1ha29zaC5tYWlsLnYxIkEKElN5bmNJbmJveFJlcXVlc3RWMRIUCgxvcGVyYXRpb25faWQYASABKAkSFQoNY29ubmVjdGlvbl9pZBgCIAEoCSLkAQoRU2VuZE1haWxSZXF1ZXN0VjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEiAKGHByb3ZpZGVyX2NvbnZlcnNhdGlvbl9pZBgCIAEoCRIRCglyZWNpcGllbnQYAyADKAkSDwoHc3ViamVjdBgEIAEoCRIRCgl0ZXh0X2JvZHkYBSABKAkSHAoUYXR0YWNobWVudF9hbmNob3JfaWQYBiADKAwSFAoMY2NfcmVjaXBpZW50GAcgAygJEhUKDWJjY19yZWNpcGllbnQYCCADKAkSFQoNY29ubmVjdGlvbl9pZBgJIAEoCSJNCh5HZXRNYWlsRGVsaXZlcnlTdGF0dXNSZXF1ZXN0VjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhUKDWNvbm5lY3Rpb25faWQYAiABKAkiKwoTU3luY0luYm94QWNjZXB0ZWRWMRIUCgxvcGVyYXRpb25faWQYASABKAkiJgoOTWFpbEFjY2VwdGVkVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJIpsCCh1NYWlsRGVsaXZlcnlPcGVyYXRpb25TdGF0dXNWMRIUCgxvcGVyYXRpb25faWQYASABKAkSFQoNY29ubmVjdGlvbl9pZBgCIAEoCRI2CgdvdXRjb21lGAMgASgOMiUubWFrb3NoLm1haWwudjEuTWFpbERlbGl2ZXJ5T3V0Y29tZVYxEiEKGXJlcXVlc3RlZF9hdF91bml4X3NlY29uZHMYBCABKAMSJgoZY29tcGxldGVkX2F0X3VuaXhfc2Vjb25kcxgFIAEoA0gAiAEBEhoKDXJlc3BvbnNlX2NvZGUYBiABKA1IAYgBAUIcChpfY29tcGxldGVkX2F0X3VuaXhfc2Vjb25kc0IQCg5fcmVzcG9uc2VfY29kZSJwCh9HZXRNYWlsRGVsaXZlcnlTdGF0dXNSZXNwb25zZVYxEkIKBnN0YXR1cxgBIAEoCzItLm1ha29zaC5tYWlsLnYxLk1haWxEZWxpdmVyeU9wZXJhdGlvblN0YXR1c1YxSACIAQFCCQoHX3N0YXR1cyKBAQoYU3RhcnRHbWFpbE9BdXRoUmVxdWVzdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRI4CglhdXRob3JpdHkYAiABKA4yJS5tYWtvc2gubWFpbC52MS5HbWFpbE9BdXRoQXV0aG9yaXR5VjESFQoNY29ubmVjdGlvbl9pZBgDIAEoCSJ5ChNHbWFpbE9BdXRoU3RhcnRlZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRIQCghzZXR1cF9pZBgCIAEoCRIZChFhdXRob3JpemF0aW9uX3VybBgDIAEoCRIfChdleHBpcmVzX2F0X3VuaXhfc2Vjb25kcxgEIAEoAyKHAQobQ29tcGxldGVHbWFpbE9BdXRoUmVxdWVzdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRIQCghzZXR1cF9pZBgCIAEoCRINCgVzdGF0ZRgDIAEoCRIaChJhdXRob3JpemF0aW9uX2NvZGUYBCABKAkSFQoNY29ubmVjdGlvbl9pZBgFIAEoCSJJChpSZWZyZXNoR21haWxPQXV0aFJlcXVlc3RWMRIUCgxvcGVyYXRpb25faWQYASABKAkSFQoNY29ubmVjdGlvbl9pZBgCIAEoCSJLChxHZXRHbWFpbE9BdXRoU3RhdHVzUmVxdWVzdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRIVCg1jb25uZWN0aW9uX2lkGAIgASgJIosCChtHbWFpbE9BdXRoT3BlcmF0aW9uU3RhdHVzVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEjcKBGtpbmQYAiABKA4yKS5tYWtvc2gubWFpbC52MS5HbWFpbE9BdXRoT3BlcmF0aW9uS2luZFYxEjQKB291dGNvbWUYAyABKA4yIy5tYWtvc2gubWFpbC52MS5HbWFpbE9BdXRoT3V0Y29tZVYxEiEKGXJlcXVlc3RlZF9hdF91bml4X3NlY29uZHMYBCABKAMSJgoZY29tcGxldGVkX2F0X3VuaXhfc2Vjb25kcxgFIAEoA0gAiAEBQhwKGl9jb21wbGV0ZWRfYXRfdW5peF9zZWNvbmRzImwKHUdldEdtYWlsT0F1dGhTdGF0dXNSZXNwb25zZVYxEkAKBnN0YXR1cxgBIAEoCzIrLm1ha29zaC5tYWlsLnYxLkdtYWlsT0F1dGhPcGVyYXRpb25TdGF0dXNWMUgAiAEBQgkKB19zdGF0dXMqzAEKFU1haWxEZWxpdmVyeU91dGNvbWVWMRIlCiFNQUlMX0RFTElWRVJZX09VVENPTUVfVU5TUEVDSUZJRUQQABIhCh1NQUlMX0RFTElWRVJZX09VVENPTUVfUEVORElORxABEiIKHk1BSUxfREVMSVZFUllfT1VUQ09NRV9BQ0NFUFRFRBACEiIKHk1BSUxfREVMSVZFUllfT1VUQ09NRV9SRUpFQ1RFRBADEiEKHU1BSUxfREVMSVZFUllfT1VUQ09NRV9VTktOT1dOEAQqkQEKFUdtYWlsT0F1dGhBdXRob3JpdHlWMRIlCiFHTUFJTF9PQVVUSF9BVVRIT1JJVFlfVU5TUEVDSUZJRUQQABIlCiFHTUFJTF9PQVVUSF9BVVRIT1JJVFlfT1BFUkFUSU9OQUwQARIqCiZHTUFJTF9PQVVUSF9BVVRIT1JJVFlfUEVSTUFORU5UX0RFTEVURRACKpgBChlHbWFpbE9BdXRoT3BlcmF0aW9uS2luZFYxEioKJkdNQUlMX09BVVRIX09QRVJBVElPTl9LSU5EX1VOU1BFQ0lGSUVEEAASJwojR01BSUxfT0FVVEhfT1BFUkFUSU9OX0tJTkRfQ09NUExFVEUQARImCiJHTUFJTF9PQVVUSF9PUEVSQVRJT05fS0lORF9SRUZSRVNIEAIqwQEKE0dtYWlsT0F1dGhPdXRjb21lVjESIwofR01BSUxfT0FVVEhfT1VUQ09NRV9VTlNQRUNJRklFRBAAEh8KG0dNQUlMX09BVVRIX09VVENPTUVfUEVORElORxABEiEKHUdNQUlMX09BVVRIX09VVENPTUVfQ09NUExFVEVEEAISIAocR01BSUxfT0FVVEhfT1VUQ09NRV9SRUpFQ1RFRBADEh8KG0dNQUlMX09BVVRIX09VVENPTUVfVU5LTk9XThAEMmIKD01haWxTeW5jU2VydmljZRJPCgRTeW5jEiIubWFrb3NoLm1haWwudjEuU3luY0luYm94UmVxdWVzdFYxGiMubWFrb3NoLm1haWwudjEuU3luY0luYm94QWNjZXB0ZWRWMTJnChpNYWlsRGVsaXZlcnlDb21tYW5kU2VydmljZRJJCgRTZW5kEiEubWFrb3NoLm1haWwudjEuU2VuZE1haWxSZXF1ZXN0VjEaHi5tYWtvc2gubWFpbC52MS5NYWlsQWNjZXB0ZWRWMTKRAQoYTWFpbERlbGl2ZXJ5UXVlcnlTZXJ2aWNlEnUKEkdldE9wZXJhdGlvblN0YXR1cxIuLm1ha29zaC5tYWlsLnYxLkdldE1haWxEZWxpdmVyeVN0YXR1c1JlcXVlc3RWMRovLm1ha29zaC5tYWlsLnYxLkdldE1haWxEZWxpdmVyeVN0YXR1c1Jlc3BvbnNlVjEycAoWR21haWxPQXV0aFN0YXJ0U2VydmljZRJWCgVTdGFydBIoLm1ha29zaC5tYWlsLnYxLlN0YXJ0R21haWxPQXV0aFJlcXVlc3RWMRojLm1ha29zaC5tYWlsLnYxLkdtYWlsT0F1dGhTdGFydGVkVjEydAoZR21haWxPQXV0aENvbXBsZXRlU2VydmljZRJXCghDb21wbGV0ZRIrLm1ha29zaC5tYWlsLnYxLkNvbXBsZXRlR21haWxPQXV0aFJlcXVlc3RWMRoeLm1ha29zaC5tYWlsLnYxLk1haWxBY2NlcHRlZFYxMnEKGEdtYWlsT0F1dGhSZWZyZXNoU2VydmljZRJVCgdSZWZyZXNoEioubWFrb3NoLm1haWwudjEuUmVmcmVzaEdtYWlsT0F1dGhSZXF1ZXN0VjEaHi5tYWtvc2gubWFpbC52MS5NYWlsQWNjZXB0ZWRWMTKLAQoWR21haWxPQXV0aFF1ZXJ5U2VydmljZRJxChJHZXRPcGVyYXRpb25TdGF0dXMSLC5tYWtvc2gubWFpbC52MS5HZXRHbWFpbE9BdXRoU3RhdHVzUmVxdWVzdFYxGi0ubWFrb3NoLm1haWwudjEuR2V0R21haWxPQXV0aFN0YXR1c1Jlc3BvbnNlVjFiBnByb3RvMw");
+  fileDesc("ChttYWtvc2gvbWFpbC92MS9jbGllbnQucHJvdG8SDm1ha29zaC5tYWlsLnYxIk0KIk1haWxPcGVyYXRpb25hbFByb2plY3Rpb25DaGFuZ2VkVjESFQoNY29ubmVjdGlvbl9pZBgBIAEoCRIQCghyZXZpc2lvbhgCIAEoBCJBChJTeW5jSW5ib3hSZXF1ZXN0VjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhUKDWNvbm5lY3Rpb25faWQYAiABKAki5AEKEVNlbmRNYWlsUmVxdWVzdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRIgChhwcm92aWRlcl9jb252ZXJzYXRpb25faWQYAiABKAkSEQoJcmVjaXBpZW50GAMgAygJEg8KB3N1YmplY3QYBCABKAkSEQoJdGV4dF9ib2R5GAUgASgJEhwKFGF0dGFjaG1lbnRfYW5jaG9yX2lkGAYgAygMEhQKDGNjX3JlY2lwaWVudBgHIAMoCRIVCg1iY2NfcmVjaXBpZW50GAggAygJEhUKDWNvbm5lY3Rpb25faWQYCSABKAkiTQoeR2V0TWFpbERlbGl2ZXJ5U3RhdHVzUmVxdWVzdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRIVCg1jb25uZWN0aW9uX2lkGAIgASgJIisKE1N5bmNJbmJveEFjY2VwdGVkVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJIiYKDk1haWxBY2NlcHRlZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCSKbAgodTWFpbERlbGl2ZXJ5T3BlcmF0aW9uU3RhdHVzVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhUKDWNvbm5lY3Rpb25faWQYAiABKAkSNgoHb3V0Y29tZRgDIAEoDjIlLm1ha29zaC5tYWlsLnYxLk1haWxEZWxpdmVyeU91dGNvbWVWMRIhChlyZXF1ZXN0ZWRfYXRfdW5peF9zZWNvbmRzGAQgASgDEiYKGWNvbXBsZXRlZF9hdF91bml4X3NlY29uZHMYBSABKANIAIgBARIaCg1yZXNwb25zZV9jb2RlGAYgASgNSAGIAQFCHAoaX2NvbXBsZXRlZF9hdF91bml4X3NlY29uZHNCEAoOX3Jlc3BvbnNlX2NvZGUicAofR2V0TWFpbERlbGl2ZXJ5U3RhdHVzUmVzcG9uc2VWMRJCCgZzdGF0dXMYASABKAsyLS5tYWtvc2gubWFpbC52MS5NYWlsRGVsaXZlcnlPcGVyYXRpb25TdGF0dXNWMUgAiAEBQgkKB19zdGF0dXMigQEKGFN0YXJ0R21haWxPQXV0aFJlcXVlc3RWMRIUCgxvcGVyYXRpb25faWQYASABKAkSOAoJYXV0aG9yaXR5GAIgASgOMiUubWFrb3NoLm1haWwudjEuR21haWxPQXV0aEF1dGhvcml0eVYxEhUKDWNvbm5lY3Rpb25faWQYAyABKAkieQoTR21haWxPQXV0aFN0YXJ0ZWRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEAoIc2V0dXBfaWQYAiABKAkSGQoRYXV0aG9yaXphdGlvbl91cmwYAyABKAkSHwoXZXhwaXJlc19hdF91bml4X3NlY29uZHMYBCABKAMihwEKG0NvbXBsZXRlR21haWxPQXV0aFJlcXVlc3RWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEAoIc2V0dXBfaWQYAiABKAkSDQoFc3RhdGUYAyABKAkSGgoSYXV0aG9yaXphdGlvbl9jb2RlGAQgASgJEhUKDWNvbm5lY3Rpb25faWQYBSABKAkiSQoaUmVmcmVzaEdtYWlsT0F1dGhSZXF1ZXN0VjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhUKDWNvbm5lY3Rpb25faWQYAiABKAkiSwocR2V0R21haWxPQXV0aFN0YXR1c1JlcXVlc3RWMRIUCgxvcGVyYXRpb25faWQYASABKAkSFQoNY29ubmVjdGlvbl9pZBgCIAEoCSKLAgobR21haWxPQXV0aE9wZXJhdGlvblN0YXR1c1YxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRI3CgRraW5kGAIgASgOMikubWFrb3NoLm1haWwudjEuR21haWxPQXV0aE9wZXJhdGlvbktpbmRWMRI0CgdvdXRjb21lGAMgASgOMiMubWFrb3NoLm1haWwudjEuR21haWxPQXV0aE91dGNvbWVWMRIhChlyZXF1ZXN0ZWRfYXRfdW5peF9zZWNvbmRzGAQgASgDEiYKGWNvbXBsZXRlZF9hdF91bml4X3NlY29uZHMYBSABKANIAIgBAUIcChpfY29tcGxldGVkX2F0X3VuaXhfc2Vjb25kcyJsCh1HZXRHbWFpbE9BdXRoU3RhdHVzUmVzcG9uc2VWMRJACgZzdGF0dXMYASABKAsyKy5tYWtvc2gubWFpbC52MS5HbWFpbE9BdXRoT3BlcmF0aW9uU3RhdHVzVjFIAIgBAUIJCgdfc3RhdHVzKswBChVNYWlsRGVsaXZlcnlPdXRjb21lVjESJQohTUFJTF9ERUxJVkVSWV9PVVRDT01FX1VOU1BFQ0lGSUVEEAASIQodTUFJTF9ERUxJVkVSWV9PVVRDT01FX1BFTkRJTkcQARIiCh5NQUlMX0RFTElWRVJZX09VVENPTUVfQUNDRVBURUQQAhIiCh5NQUlMX0RFTElWRVJZX09VVENPTUVfUkVKRUNURUQQAxIhCh1NQUlMX0RFTElWRVJZX09VVENPTUVfVU5LTk9XThAEKpEBChVHbWFpbE9BdXRoQXV0aG9yaXR5VjESJQohR01BSUxfT0FVVEhfQVVUSE9SSVRZX1VOU1BFQ0lGSUVEEAASJQohR01BSUxfT0FVVEhfQVVUSE9SSVRZX09QRVJBVElPTkFMEAESKgomR01BSUxfT0FVVEhfQVVUSE9SSVRZX1BFUk1BTkVOVF9ERUxFVEUQAiqYAQoZR21haWxPQXV0aE9wZXJhdGlvbktpbmRWMRIqCiZHTUFJTF9PQVVUSF9PUEVSQVRJT05fS0lORF9VTlNQRUNJRklFRBAAEicKI0dNQUlMX09BVVRIX09QRVJBVElPTl9LSU5EX0NPTVBMRVRFEAESJgoiR01BSUxfT0FVVEhfT1BFUkFUSU9OX0tJTkRfUkVGUkVTSBACKsEBChNHbWFpbE9BdXRoT3V0Y29tZVYxEiMKH0dNQUlMX09BVVRIX09VVENPTUVfVU5TUEVDSUZJRUQQABIfChtHTUFJTF9PQVVUSF9PVVRDT01FX1BFTkRJTkcQARIhCh1HTUFJTF9PQVVUSF9PVVRDT01FX0NPTVBMRVRFRBACEiAKHEdNQUlMX09BVVRIX09VVENPTUVfUkVKRUNURUQQAxIfChtHTUFJTF9PQVVUSF9PVVRDT01FX1VOS05PV04QBDJiCg9NYWlsU3luY1NlcnZpY2USTwoEU3luYxIiLm1ha29zaC5tYWlsLnYxLlN5bmNJbmJveFJlcXVlc3RWMRojLm1ha29zaC5tYWlsLnYxLlN5bmNJbmJveEFjY2VwdGVkVjEyZwoaTWFpbERlbGl2ZXJ5Q29tbWFuZFNlcnZpY2USSQoEU2VuZBIhLm1ha29zaC5tYWlsLnYxLlNlbmRNYWlsUmVxdWVzdFYxGh4ubWFrb3NoLm1haWwudjEuTWFpbEFjY2VwdGVkVjEykQEKGE1haWxEZWxpdmVyeVF1ZXJ5U2VydmljZRJ1ChJHZXRPcGVyYXRpb25TdGF0dXMSLi5tYWtvc2gubWFpbC52MS5HZXRNYWlsRGVsaXZlcnlTdGF0dXNSZXF1ZXN0VjEaLy5tYWtvc2gubWFpbC52MS5HZXRNYWlsRGVsaXZlcnlTdGF0dXNSZXNwb25zZVYxMnAKFkdtYWlsT0F1dGhTdGFydFNlcnZpY2USVgoFU3RhcnQSKC5tYWtvc2gubWFpbC52MS5TdGFydEdtYWlsT0F1dGhSZXF1ZXN0VjEaIy5tYWtvc2gubWFpbC52MS5HbWFpbE9BdXRoU3RhcnRlZFYxMnQKGUdtYWlsT0F1dGhDb21wbGV0ZVNlcnZpY2USVwoIQ29tcGxldGUSKy5tYWtvc2gubWFpbC52MS5Db21wbGV0ZUdtYWlsT0F1dGhSZXF1ZXN0VjEaHi5tYWtvc2gubWFpbC52MS5NYWlsQWNjZXB0ZWRWMTJxChhHbWFpbE9BdXRoUmVmcmVzaFNlcnZpY2USVQoHUmVmcmVzaBIqLm1ha29zaC5tYWlsLnYxLlJlZnJlc2hHbWFpbE9BdXRoUmVxdWVzdFYxGh4ubWFrb3NoLm1haWwudjEuTWFpbEFjY2VwdGVkVjEyiwEKFkdtYWlsT0F1dGhRdWVyeVNlcnZpY2UScQoSR2V0T3BlcmF0aW9uU3RhdHVzEiwubWFrb3NoLm1haWwudjEuR2V0R21haWxPQXV0aFN0YXR1c1JlcXVlc3RWMRotLm1ha29zaC5tYWlsLnYxLkdldEdtYWlsT0F1dGhTdGF0dXNSZXNwb25zZVYxYgZwcm90bzM");
+
+/**
+ * Client-safe notification that an account-local Mail projection advanced.
+ * Message content and provider identifiers stay behind operational queries.
+ *
+ * @generated from message makosh.mail.v1.MailOperationalProjectionChangedV1
+ */
+export type MailOperationalProjectionChangedV1 = Message<"makosh.mail.v1.MailOperationalProjectionChangedV1"> & {
+  /**
+   * @generated from field: string connection_id = 1;
+   */
+  connectionId: string;
+
+  /**
+   * @generated from field: uint64 revision = 2;
+   */
+  revision: bigint;
+};
+
+/**
+ * Describes the message makosh.mail.v1.MailOperationalProjectionChangedV1.
+ * Use `create(MailOperationalProjectionChangedV1Schema)` to create a new message.
+ */
+export const MailOperationalProjectionChangedV1Schema: GenMessage<MailOperationalProjectionChangedV1> = /*@__PURE__*/
+  messageDesc(file_makosh_mail_v1_client, 0);
 
 /**
  * @generated from message makosh.mail.v1.SyncInboxRequestV1
@@ -32,7 +57,7 @@ export type SyncInboxRequestV1 = Message<"makosh.mail.v1.SyncInboxRequestV1"> & 
  * Use `create(SyncInboxRequestV1Schema)` to create a new message.
  */
 export const SyncInboxRequestV1Schema: GenMessage<SyncInboxRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 0);
+  messageDesc(file_makosh_mail_v1_client, 1);
 
 /**
  * @generated from message makosh.mail.v1.SendMailRequestV1
@@ -89,7 +114,7 @@ export type SendMailRequestV1 = Message<"makosh.mail.v1.SendMailRequestV1"> & {
  * Use `create(SendMailRequestV1Schema)` to create a new message.
  */
 export const SendMailRequestV1Schema: GenMessage<SendMailRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 1);
+  messageDesc(file_makosh_mail_v1_client, 2);
 
 /**
  * @generated from message makosh.mail.v1.GetMailDeliveryStatusRequestV1
@@ -111,7 +136,7 @@ export type GetMailDeliveryStatusRequestV1 = Message<"makosh.mail.v1.GetMailDeli
  * Use `create(GetMailDeliveryStatusRequestV1Schema)` to create a new message.
  */
 export const GetMailDeliveryStatusRequestV1Schema: GenMessage<GetMailDeliveryStatusRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 2);
+  messageDesc(file_makosh_mail_v1_client, 3);
 
 /**
  * @generated from message makosh.mail.v1.SyncInboxAcceptedV1
@@ -128,7 +153,7 @@ export type SyncInboxAcceptedV1 = Message<"makosh.mail.v1.SyncInboxAcceptedV1"> 
  * Use `create(SyncInboxAcceptedV1Schema)` to create a new message.
  */
 export const SyncInboxAcceptedV1Schema: GenMessage<SyncInboxAcceptedV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 3);
+  messageDesc(file_makosh_mail_v1_client, 4);
 
 /**
  * @generated from message makosh.mail.v1.MailAcceptedV1
@@ -145,7 +170,7 @@ export type MailAcceptedV1 = Message<"makosh.mail.v1.MailAcceptedV1"> & {
  * Use `create(MailAcceptedV1Schema)` to create a new message.
  */
 export const MailAcceptedV1Schema: GenMessage<MailAcceptedV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 4);
+  messageDesc(file_makosh_mail_v1_client, 5);
 
 /**
  * @generated from message makosh.mail.v1.MailDeliveryOperationStatusV1
@@ -187,7 +212,7 @@ export type MailDeliveryOperationStatusV1 = Message<"makosh.mail.v1.MailDelivery
  * Use `create(MailDeliveryOperationStatusV1Schema)` to create a new message.
  */
 export const MailDeliveryOperationStatusV1Schema: GenMessage<MailDeliveryOperationStatusV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 5);
+  messageDesc(file_makosh_mail_v1_client, 6);
 
 /**
  * @generated from message makosh.mail.v1.GetMailDeliveryStatusResponseV1
@@ -204,7 +229,7 @@ export type GetMailDeliveryStatusResponseV1 = Message<"makosh.mail.v1.GetMailDel
  * Use `create(GetMailDeliveryStatusResponseV1Schema)` to create a new message.
  */
 export const GetMailDeliveryStatusResponseV1Schema: GenMessage<GetMailDeliveryStatusResponseV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 6);
+  messageDesc(file_makosh_mail_v1_client, 7);
 
 /**
  * @generated from message makosh.mail.v1.StartGmailOAuthRequestV1
@@ -231,7 +256,7 @@ export type StartGmailOAuthRequestV1 = Message<"makosh.mail.v1.StartGmailOAuthRe
  * Use `create(StartGmailOAuthRequestV1Schema)` to create a new message.
  */
 export const StartGmailOAuthRequestV1Schema: GenMessage<StartGmailOAuthRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 7);
+  messageDesc(file_makosh_mail_v1_client, 8);
 
 /**
  * @generated from message makosh.mail.v1.GmailOAuthStartedV1
@@ -263,7 +288,7 @@ export type GmailOAuthStartedV1 = Message<"makosh.mail.v1.GmailOAuthStartedV1"> 
  * Use `create(GmailOAuthStartedV1Schema)` to create a new message.
  */
 export const GmailOAuthStartedV1Schema: GenMessage<GmailOAuthStartedV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 8);
+  messageDesc(file_makosh_mail_v1_client, 9);
 
 /**
  * @generated from message makosh.mail.v1.CompleteGmailOAuthRequestV1
@@ -300,7 +325,7 @@ export type CompleteGmailOAuthRequestV1 = Message<"makosh.mail.v1.CompleteGmailO
  * Use `create(CompleteGmailOAuthRequestV1Schema)` to create a new message.
  */
 export const CompleteGmailOAuthRequestV1Schema: GenMessage<CompleteGmailOAuthRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 9);
+  messageDesc(file_makosh_mail_v1_client, 10);
 
 /**
  * @generated from message makosh.mail.v1.RefreshGmailOAuthRequestV1
@@ -322,7 +347,7 @@ export type RefreshGmailOAuthRequestV1 = Message<"makosh.mail.v1.RefreshGmailOAu
  * Use `create(RefreshGmailOAuthRequestV1Schema)` to create a new message.
  */
 export const RefreshGmailOAuthRequestV1Schema: GenMessage<RefreshGmailOAuthRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 10);
+  messageDesc(file_makosh_mail_v1_client, 11);
 
 /**
  * @generated from message makosh.mail.v1.GetGmailOAuthStatusRequestV1
@@ -344,7 +369,7 @@ export type GetGmailOAuthStatusRequestV1 = Message<"makosh.mail.v1.GetGmailOAuth
  * Use `create(GetGmailOAuthStatusRequestV1Schema)` to create a new message.
  */
 export const GetGmailOAuthStatusRequestV1Schema: GenMessage<GetGmailOAuthStatusRequestV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 11);
+  messageDesc(file_makosh_mail_v1_client, 12);
 
 /**
  * @generated from message makosh.mail.v1.GmailOAuthOperationStatusV1
@@ -381,7 +406,7 @@ export type GmailOAuthOperationStatusV1 = Message<"makosh.mail.v1.GmailOAuthOper
  * Use `create(GmailOAuthOperationStatusV1Schema)` to create a new message.
  */
 export const GmailOAuthOperationStatusV1Schema: GenMessage<GmailOAuthOperationStatusV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 12);
+  messageDesc(file_makosh_mail_v1_client, 13);
 
 /**
  * @generated from message makosh.mail.v1.GetGmailOAuthStatusResponseV1
@@ -398,7 +423,7 @@ export type GetGmailOAuthStatusResponseV1 = Message<"makosh.mail.v1.GetGmailOAut
  * Use `create(GetGmailOAuthStatusResponseV1Schema)` to create a new message.
  */
 export const GetGmailOAuthStatusResponseV1Schema: GenMessage<GetGmailOAuthStatusResponseV1> = /*@__PURE__*/
-  messageDesc(file_makosh_mail_v1_client, 13);
+  messageDesc(file_makosh_mail_v1_client, 14);
 
 /**
  * @generated from enum makosh.mail.v1.MailDeliveryOutcomeV1

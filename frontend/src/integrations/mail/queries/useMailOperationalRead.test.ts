@@ -113,6 +113,42 @@ describe('Mail operational read controller', () => {
 		})
 	})
 
+	it('restores the account-local snapshot before a returning connection refresh completes', async () => {
+		const primaryFolders = deferred<never>()
+		let blockPrimaryRefresh = false
+		vi.mocked(listMailOperationalFolders).mockImplementation(({ connectionId }) => {
+			if (connectionId === 'primary' && blockPrimaryRefresh) return primaryFolders.promise
+			return Promise.resolve({
+				item: [{
+					folderId: 'inbox',
+					displayName: connectionId === 'primary' ? 'Primary inbox' : 'Secondary inbox',
+					kind: MailFolderKindV1.MAIL_FOLDER_KIND_INBOX,
+				}],
+			} as never)
+		})
+		const controller = useMailOperationalRead({
+			canQuery: () => true,
+			connections: () => [mailConnection('primary'), mailConnection('secondary')],
+		})
+		await controller.reconcile()
+		await controller.selectConnection('secondary')
+		blockPrimaryRefresh = true
+
+		const refresh = controller.selectConnection('primary')
+
+		expect(controller.model.value.selectedConnectionId).toBe('primary')
+		expect(controller.model.value.folders[0]?.label).toBe('Primary inbox')
+		primaryFolders.resolve({
+			item: [{
+				folderId: 'inbox',
+				displayName: 'Primary inbox refreshed',
+				kind: MailFolderKindV1.MAIL_FOLDER_KIND_INBOX,
+			}],
+		} as never)
+		await refresh
+		expect(controller.model.value.folders[0]?.label).toBe('Primary inbox refreshed')
+	})
+
 	it('fails closed before transport when capability or effective connection is absent', async () => {
 		const blocked = useMailOperationalRead({
 			canQuery: () => false,
@@ -131,11 +167,17 @@ describe('Mail operational read controller', () => {
 	})
 })
 
-function mailConnection() {
+function mailConnection(connectionId = 'primary') {
 	return {
-		registrationId: 'mail-primary',
-		connectionId: 'primary',
+		registrationId: `mail-${connectionId}`,
+		connectionId,
 		deliveryReady: true,
 		syncReady: true,
 	}
+}
+
+function deferred<T>() {
+	let resolve!: (value: T) => void
+	const promise = new Promise<T>((accept) => { resolve = accept })
+	return { promise, resolve }
 }

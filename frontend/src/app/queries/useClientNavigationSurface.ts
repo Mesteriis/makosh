@@ -227,7 +227,7 @@ function buildHealthChecks(
 	roundTripMs: number | null,
 ): readonly ClientNavigationHealthCheck[] {
 	const byId = new Map(statuses.map((status) => [status.componentId, status]))
-	const children: ClientNavigationHealthCheck[] = [networkHealth(roundTripMs, bootstrapError)]
+	const children: ClientNavigationHealthCheck[] = [clientConnectionHealth(roundTripMs, bootstrapError)]
 	for (const component of systemComponentCatalog) {
 		const status = byId.get(component.id)
 		children.push({
@@ -246,12 +246,15 @@ function buildHealthChecks(
 	}, ...children]
 }
 
-function networkHealth(roundTripMs: number | null, error: string): ClientNavigationHealthCheck {
+export function clientConnectionHealth(
+	roundTripMs: number | null,
+	error: string,
+): ClientNavigationHealthCheck {
 	if (roundTripMs === null) return { id: 'network', label: 'Connection', status: 'unhealthy', detail: error || 'unavailable', depth: 1 }
 	return {
 		id: 'network',
 		label: 'Connection',
-		status: roundTripMs >= 1000 ? 'unhealthy' : roundTripMs >= 250 ? 'degraded' : 'healthy',
+		status: 'healthy',
 		detail: `${roundTripMs} ms round-trip`,
 		depth: 1,
 	}

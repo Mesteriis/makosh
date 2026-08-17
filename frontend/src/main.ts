@@ -2,11 +2,22 @@ import {
 	completeGmailOAuthBrowserCallbackV1,
 	mountGmailOAuthCallbackPageV1,
 } from './integrations/mail/oauth/gmailOAuthBrowserFlow'
+import { completeGmailOAuthSameTabCallbackV1 } from './integrations/mail/oauth/gmailOAuthRedirectFlow'
 import './integrations/mail/oauth/gmailOAuthCallbackPage.css'
 
-const gmailOAuthCallback = completeGmailOAuthBrowserCallbackV1()
-if (gmailOAuthCallback !== 'not_callback') {
-	mountGmailOAuthCallbackPageV1(gmailOAuthCallback)
-} else {
-	void import('./app/bootstrap').then(({ mountClientApp }) => mountClientApp())
+async function bootstrap(): Promise<void> {
+	const sameTabCallback = await completeGmailOAuthSameTabCallbackV1()
+	if (sameTabCallback !== 'not_callback') {
+		mountGmailOAuthCallbackPageV1(sameTabCallback)
+		return
+	}
+	const popupCallback = completeGmailOAuthBrowserCallbackV1()
+	if (popupCallback !== 'not_callback') {
+		mountGmailOAuthCallbackPageV1(popupCallback)
+		return
+	}
+	const { mountClientApp } = await import('./app/bootstrap')
+	mountClientApp()
 }
+
+void bootstrap()

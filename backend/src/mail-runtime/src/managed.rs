@@ -2,6 +2,10 @@
 
 use std::collections::BTreeMap;
 use std::os::unix::net::UnixStream;
+use std::sync::{
+    Arc,
+    atomic::{AtomicU64, Ordering},
+};
 use std::time::Duration;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -231,7 +235,7 @@ pub struct MailAdmittedRuntime {
     attachment_anchor_subscribe_permit: Option<RuntimeSubscribePermitV1>,
     attachment_safety_subscribe_permit: Option<RuntimeSubscribePermitV1>,
     delivery_intent_subscribe_permit: RuntimeSubscribePermitV1,
-    pub(crate) person_source_fetch_subscribe_permit: RuntimeSubscribePermitV1,
+    pub(crate) person_source_fetch_subscribe_permit: Option<RuntimeSubscribePermitV1>,
     pub(crate) address_book_persistence:
         makosh_mail_address_book_persistence::MailAddressBookPersistenceV1,
     replay_command_subscribe_permit: RuntimeSubscribePermitV1,
@@ -247,6 +251,9 @@ pub struct MailAdmittedRuntime {
     pub(crate) provider_credential_context: ManagedProviderCredentialContextV1,
     pub(crate) settings_revision: u64,
     parked_accounts: BTreeMap<String, MailRuntimeAccountSlotV1>,
+    operational_realtime_revisions: BTreeMap<String, u64>,
+    pending_operational_realtime: BTreeMap<String, u64>,
+    provider_io_epochs: BTreeMap<String, Arc<AtomicU64>>,
     pub(crate) runtime_instance_id: String,
     pub(crate) runtime_generation: u64,
     logical_owner_id: String,
@@ -399,6 +406,102 @@ pub enum MailDeliveryDispatchErrorV1 {
     Persistence,
     ProviderRejected,
     ProviderOutcomeUnknown,
+}
+
+enum MailDeliveryProviderTransportV1 {
+    Smtp {
+        endpoint: makosh_mail_api::SmtpEndpointV1,
+        password: Zeroizing<Vec<u8>>,
+    },
+    Gmail {
+        configuration: MailGmailConfigurationV1,
+        access_token: Zeroizing<Vec<u8>>,
+    },
+}
+
+pub struct PreparedMailDeliveryProviderOperationV1 {
+    pub connection_id: String,
+    pub fence_epoch: u64,
+    fence: Arc<AtomicU64>,
+    durable: MailDurablePersistence,
+    transport: MailDeliveryProviderTransportV1,
+    message: OutgoingMailV1,
+    attachments: Vec<OutboundAttachmentV1>,
+    queued: MailQueuedDeliveryV1,
+    runtime_instance_id: String,
+    runtime_generation: u64,
+    completed_at_unix_seconds: i64,
+}
+
+enum MailMessageFlagProviderTransportV1 {
+    Imap {
+        configuration: makosh_mail_api::MailImapConfigurationV1,
+        password: Zeroizing<Vec<u8>>,
+        locator: MailImapMessageLocatorV1,
+    },
+    Gmail {
+        configuration: MailGmailConfigurationV1,
+        access_token: Zeroizing<Vec<u8>>,
+    },
+}
+
+pub struct PreparedMailMessageFlagProviderOperationV1 {
+    pub connection_id: String,
+    pub fence_epoch: u64,
+    fence: Arc<AtomicU64>,
+    durable: MailDurablePersistence,
+    transport: MailMessageFlagProviderTransportV1,
+    queued: MailQueuedMessageFlagCommandV1,
+    command: MailMessageFlagCommandV1,
+    completed_at_unix_seconds: i64,
+}
+
+enum MailMessageLocationProviderTransportV1 {
+    Imap {
+        configuration: makosh_mail_api::MailImapConfigurationV1,
+        password: Zeroizing<Vec<u8>>,
+        locator: MailImapMessageLocatorV1,
+        target: MailOperationalFolderSnapshotV1,
+    },
+    Gmail {
+        configuration: MailGmailConfigurationV1,
+        access_token: Zeroizing<Vec<u8>>,
+        target: Option<MailOperationalFolderSnapshotV1>,
+    },
+}
+
+pub struct PreparedMailMessageLocationProviderOperationV1 {
+    pub connection_id: String,
+    pub fence_epoch: u64,
+    fence: Arc<AtomicU64>,
+    durable: MailDurablePersistence,
+    transport: MailMessageLocationProviderTransportV1,
+    queued: MailQueuedMessageLocationCommandV1,
+    command: MailMessageLocationCommandV1,
+    completed_at_unix_seconds: i64,
+}
+
+enum MailMessagePermanentDeleteProviderTransportV1 {
+    Imap {
+        configuration: makosh_mail_api::MailImapConfigurationV1,
+        password: Zeroizing<Vec<u8>>,
+        locator: MailImapMessageLocatorV1,
+    },
+    Gmail {
+        configuration: MailGmailConfigurationV1,
+        access_token: Zeroizing<Vec<u8>>,
+        provider_message_id: String,
+    },
+}
+
+pub struct PreparedMailMessagePermanentDeleteProviderOperationV1 {
+    pub connection_id: String,
+    pub fence_epoch: u64,
+    fence: Arc<AtomicU64>,
+    durable: MailDurablePersistence,
+    transport: MailMessagePermanentDeleteProviderTransportV1,
+    queued: MailQueuedMessagePermanentDeleteCommandV1,
+    completed_at_unix_seconds: i64,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -556,18 +659,18 @@ pub async fn open_admitted_runtime_catalog(
         password,
     )
     .await
-    .map_err(|_| MailBootstrapError::Persistence)?;
+    .map_err(|_| mail_persistence_error("connect_runtime"))?;
     durable
         .interrupt_stale_sync_runs(admission.runtime_generation, current_unix_seconds()?)
         .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
+        .map_err(|_| mail_persistence_error("interrupt_stale_sync_runs"))?;
     let mut account_slots = Vec::with_capacity(admissions.len());
     for admission in admissions {
         let provider_context = provider_credential_context(admission, &storage_configuration)?;
         let lifecycle_quiesced = durable
             .latest_account_lifecycle(&admission.account.connection_id)
             .await
-            .map_err(|_| MailBootstrapError::Persistence)?
+            .map_err(|_| mail_persistence_error("latest_account_lifecycle"))?
             .is_some();
         let imap_password = match (&admission.account.inbound, lifecycle_quiesced) {
             (_, true) => None,
@@ -627,7 +730,7 @@ pub async fn open_admitted_runtime_catalog(
         });
     }
     let active_slot = account_slots.remove(0);
-    let parked_accounts = account_slots
+    let parked_accounts: BTreeMap<String, MailRuntimeAccountSlotV1> = account_slots
         .into_iter()
         .map(|slot| (slot.account.connection_id.clone(), slot))
         .collect();
@@ -665,6 +768,12 @@ pub async fn open_admitted_runtime_catalog(
             )
             .map_err(|_| mail_event_hub_error("subscribe_permits"))?,
     )?;
+    if admissions.iter().any(|candidate| {
+        candidate.address_book.provider != makosh_mail_api::MailAddressBookProviderV1::None
+    }) && subscribe_permits.person_source_fetch.is_none()
+    {
+        return Err(mail_event_hub_error("missing_person_source_fetch_permit"));
+    }
     let attachment_blob_admission_publish_permitted =
         attachment_blob_admission_publish_permitted(&event_publish_permit)?;
     let attachment_security_scan_candidate_publish_permitted =
@@ -687,7 +796,7 @@ pub async fn open_admitted_runtime_catalog(
     replay_persistence
         .verify_storage_ready()
         .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
+        .map_err(|_| mail_persistence_error("retained_replay_storage_ready"))?;
     let address_book_persistence =
         makosh_mail_address_book_persistence::MailAddressBookPersistenceV1::from_owner_local_pool(
             durable.owner_local_pool_handle(),
@@ -695,7 +804,7 @@ pub async fn open_admitted_runtime_catalog(
     address_book_persistence
         .verify_storage_ready()
         .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
+        .map_err(|_| mail_persistence_error("address_book_storage_ready"))?;
     let person_source_now_seconds = current_unix_seconds()?;
     let person_source_context =
         makosh_mail_address_book_contract::MailAddressBookEnvelopeContextV1 {
@@ -705,37 +814,39 @@ pub async fn open_admitted_runtime_catalog(
             recorded_at_unix_seconds: person_source_now_seconds,
             recorded_at_nanos: 0,
         };
-    let completed_lifecycle = durable
-        .latest_account_lifecycle(&active_slot.account.connection_id)
-        .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
-    if completed_lifecycle
-        .as_ref()
-        .is_some_and(requires_person_source_retired_reconciliation_v1)
-    {
-        record_public_account_retired_v1(
-            &address_book_persistence,
-            &admission.logical_human_owner_id,
-            &active_slot.account.connection_id,
-            &person_source_context,
-            person_source_now_seconds
-                .checked_mul(1_000)
-                .ok_or(MailBootstrapError::Persistence)?,
-        )
-        .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
-    } else {
-        ensure_public_account_ready_v1(
-            &address_book_persistence,
-            &admission.logical_human_owner_id,
-            &active_slot.account.connection_id,
-            &person_source_context,
-            person_source_now_seconds
-                .checked_mul(1_000)
-                .ok_or(MailBootstrapError::Persistence)?,
-        )
-        .await
-        .map_err(|_| MailBootstrapError::Persistence)?;
+    if subscribe_permits.person_source_fetch.is_some() {
+        let completed_lifecycle = durable
+            .latest_account_lifecycle(&active_slot.account.connection_id)
+            .await
+            .map_err(|_| mail_persistence_error("active_account_lifecycle"))?;
+        if completed_lifecycle
+            .as_ref()
+            .is_some_and(requires_person_source_retired_reconciliation_v1)
+        {
+            record_public_account_retired_v1(
+                &address_book_persistence,
+                &admission.logical_human_owner_id,
+                &active_slot.account.connection_id,
+                &person_source_context,
+                person_source_now_seconds
+                    .checked_mul(1_000)
+                    .ok_or_else(|| mail_persistence_error("person_source_retired_timestamp"))?,
+            )
+            .await
+            .map_err(|_| mail_persistence_error("person_source_retired_reconciliation"))?;
+        } else {
+            ensure_public_account_ready_v1(
+                &address_book_persistence,
+                &admission.logical_human_owner_id,
+                &active_slot.account.connection_id,
+                &person_source_context,
+                person_source_now_seconds
+                    .checked_mul(1_000)
+                    .ok_or_else(|| mail_persistence_error("person_source_ready_timestamp"))?,
+            )
+            .await
+            .map_err(|_| mail_persistence_error("person_source_ready_reconciliation"))?;
+        }
     }
     control_channel
         .signal_ready(ManagedRuntimeReadyRequestV1 {
@@ -764,6 +875,11 @@ pub async fn open_admitted_runtime_catalog(
         provider_credential_context,
         settings_revision,
     } = active_slot;
+    let mut provider_io_epochs = parked_accounts
+        .keys()
+        .map(|connection_id| (connection_id.clone(), Arc::new(AtomicU64::new(1))))
+        .collect::<BTreeMap<_, _>>();
+    provider_io_epochs.insert(account.connection_id.clone(), Arc::new(AtomicU64::new(1)));
     Ok(MailAdmittedRuntime {
         control_channel,
         durable,
@@ -791,6 +907,9 @@ pub async fn open_admitted_runtime_catalog(
         provider_credential_context,
         settings_revision,
         parked_accounts,
+        operational_realtime_revisions: BTreeMap::new(),
+        pending_operational_realtime: BTreeMap::new(),
+        provider_io_epochs,
         runtime_instance_id: admission.runtime_instance_id.clone(),
         runtime_generation: admission.runtime_generation,
         logical_owner_id: admission.logical_owner_id.clone(),
@@ -801,6 +920,65 @@ pub async fn open_admitted_runtime_catalog(
 }
 
 impl MailAdmittedRuntime {
+    pub fn mark_operational_projection_changed(
+        &mut self,
+        connection_id: &str,
+    ) -> Result<(), MailBootstrapError> {
+        if !self
+            .connection_ids()
+            .iter()
+            .any(|value| value == connection_id)
+        {
+            return Err(MailBootstrapError::Admission);
+        }
+        let revision = self
+            .operational_realtime_revisions
+            .entry(connection_id.to_owned())
+            .or_default();
+        *revision = revision
+            .checked_add(1)
+            .ok_or(MailBootstrapError::Admission)?;
+        self.pending_operational_realtime
+            .insert(connection_id.to_owned(), *revision);
+        Ok(())
+    }
+
+    pub fn publish_pending_operational_realtime(
+        &mut self,
+        occurred_at_unix_millis: u64,
+    ) -> Result<usize, MailBootstrapError> {
+        let pending = self
+            .pending_operational_realtime
+            .iter()
+            .map(|(connection_id, revision)| (connection_id.clone(), *revision))
+            .collect::<Vec<_>>();
+        let mut published = 0;
+        for (connection_id, revision) in pending {
+            let mut dispatcher = MailBusyControlDispatcher;
+            match crate::client_realtime::publish_operational_projection_changed_v1(
+                &mut self.control_channel,
+                &mut dispatcher,
+                &self.logical_human_owner_id,
+                self.runtime_generation,
+                &connection_id,
+                revision,
+                occurred_at_unix_millis,
+            ) {
+                Ok(()) => {
+                    if self.pending_operational_realtime.get(&connection_id) == Some(&revision) {
+                        self.pending_operational_realtime.remove(&connection_id);
+                    }
+                    published += 1;
+                }
+                Err(crate::client_realtime::MailClientRealtimeErrorV1::Unavailable) => break,
+                Err(crate::client_realtime::MailClientRealtimeErrorV1::InvalidEvent) => {
+                    return Err(MailBootstrapError::Admission);
+                }
+            }
+        }
+        Ok(published)
+    }
+
     pub(crate) fn carddav_credentials(&self) -> Option<(&str, &str)> {
         let username = self.address_book.carddav_username.as_deref()?;
         let password = std::str::from_utf8(self.carddav_password.as_deref()?).ok()?;
@@ -897,6 +1075,27 @@ impl MailAdmittedRuntime {
         self.account_lifecycle.provider_io_permitted()
     }
 
+    pub fn provider_io_epoch(&self, connection_id: &str) -> Result<u64, MailBootstrapError> {
+        self.provider_io_epochs
+            .get(connection_id)
+            .map(|epoch| epoch.load(Ordering::Acquire))
+            .ok_or(MailBootstrapError::Admission)
+    }
+
+    fn current_provider_io_fence(&self) -> Result<Arc<AtomicU64>, MailBootstrapError> {
+        self.provider_io_epochs
+            .get(&self.account.connection_id)
+            .cloned()
+            .ok_or(MailBootstrapError::Admission)
+    }
+
+    pub(crate) fn advance_current_provider_io_epoch(&self) -> Result<u64, MailBootstrapError> {
+        self.current_provider_io_fence()?
+            .fetch_add(1, Ordering::AcqRel)
+            .checked_add(1)
+            .ok_or(MailBootstrapError::Admission)
+    }
+
     pub(crate) fn with_blocking_provider_credential_request<T>(
         &mut self,
         request: impl FnOnce(
@@ -951,6 +1150,7 @@ impl MailAdmittedRuntime {
                 return Err(MailBootstrapError::Admission);
             }
         }
+        self.advance_current_provider_io_epoch()?;
         Ok(receipt)
     }
 
@@ -966,6 +1166,7 @@ impl MailAdmittedRuntime {
         self.imap_password = None;
         self.smtp_password = None;
         self.gmail_oauth_operation_in_flight = None;
+        self.advance_current_provider_io_epoch()?;
         let receipt = self
             .account_lifecycle
             .begin(
@@ -995,6 +1196,7 @@ impl MailAdmittedRuntime {
         self.imap_password = None;
         self.smtp_password = None;
         self.gmail_oauth_operation_in_flight = None;
+        self.advance_current_provider_io_epoch()?;
         let receipt = self
             .account_lifecycle
             .retry(
@@ -1017,7 +1219,9 @@ impl MailAdmittedRuntime {
         receipt: &MailAccountLifecycleReceiptV1,
         occurred_at_unix_seconds: i64,
     ) -> Result<(), MailBootstrapError> {
-        if receipt.state != MailAccountLifecycleStateV1::Completed {
+        if receipt.state != MailAccountLifecycleStateV1::Completed
+            || self.person_source_fetch_subscribe_permit.is_none()
+        {
             return Ok(());
         }
         record_public_account_retired_v1(
@@ -1388,6 +1592,7 @@ impl MailAdmittedRuntime {
                         .await
                         .map_err(|error| match error {
                             GmailAdapterErrorV1::InvalidRequest
+                            | GmailAdapterErrorV1::OAuthProviderError(_)
                             | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
                                 MailMessageFlagDispatchErrorV1::ProviderRejected
                             }
@@ -1428,6 +1633,81 @@ impl MailAdmittedRuntime {
             .await
             .map_err(|_| MailMessageFlagDispatchErrorV1::Persistence)?;
         Ok(true)
+    }
+
+    pub async fn prepare_next_message_flag_provider_operation(
+        &mut self,
+        completed_at_unix_seconds: i64,
+    ) -> Result<Option<PreparedMailMessageFlagProviderOperationV1>, MailMessageFlagDispatchErrorV1>
+    {
+        if !self.provider_io_permitted() {
+            return Ok(None);
+        }
+        let Some(queued) = self
+            .durable
+            .next_message_flag_command(&self.account.connection_id)
+            .await
+            .map_err(|_| MailMessageFlagDispatchErrorV1::Persistence)?
+        else {
+            return Ok(None);
+        };
+        let command = decode_message_flag_command(&queued.exact_command_bytes)
+            .map_err(|_| MailMessageFlagDispatchErrorV1::InvalidStoredCommand)?;
+        if !queued_matches_command(&queued, &command) {
+            return Err(MailMessageFlagDispatchErrorV1::InvalidStoredCommand);
+        }
+        let transport = match self.account.inbound.clone() {
+            MailInboundTransportV1::Imap(configuration) => {
+                let locator = self
+                    .durable
+                    .imap_message_locator(&command.connection_id, &command.message_id)
+                    .await
+                    .map_err(|_| MailMessageFlagDispatchErrorV1::Persistence)?
+                    .ok_or(MailMessageFlagDispatchErrorV1::ProviderRejected)?;
+                MailMessageFlagProviderTransportV1::Imap {
+                    configuration,
+                    password: Zeroizing::new(
+                        self.imap_password
+                            .as_deref()
+                            .ok_or(MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown)?
+                            .to_vec(),
+                    ),
+                    locator,
+                }
+            }
+            MailInboundTransportV1::Gmail(configuration) => {
+                let access_token =
+                    self.resolve_gmail_access_token()
+                        .await
+                        .map_err(|error| match error {
+                            MailBootstrapError::Persistence => {
+                                MailMessageFlagDispatchErrorV1::Persistence
+                            }
+                            MailBootstrapError::Credential => {
+                                MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown
+                            }
+                            _ => MailMessageFlagDispatchErrorV1::InvalidStoredCommand,
+                        })?;
+                MailMessageFlagProviderTransportV1::Gmail {
+                    configuration,
+                    access_token,
+                }
+            }
+        };
+        let fence = self
+            .current_provider_io_fence()
+            .map_err(|_| MailMessageFlagDispatchErrorV1::InvalidStoredCommand)?;
+        let fence_epoch = fence.load(Ordering::Acquire);
+        Ok(Some(PreparedMailMessageFlagProviderOperationV1 {
+            connection_id: self.account.connection_id.clone(),
+            fence_epoch,
+            fence,
+            durable: self.durable.clone(),
+            transport,
+            queued,
+            command,
+            completed_at_unix_seconds,
+        }))
     }
 
     pub async fn submit_message_location_command(
@@ -1653,6 +1933,105 @@ impl MailAdmittedRuntime {
         Ok(true)
     }
 
+    pub async fn prepare_next_message_location_provider_operation(
+        &mut self,
+        completed_at_unix_seconds: i64,
+    ) -> Result<
+        Option<PreparedMailMessageLocationProviderOperationV1>,
+        MailMessageLocationDispatchErrorV1,
+    > {
+        if !self.provider_io_permitted() {
+            return Ok(None);
+        }
+        let Some(queued) = self
+            .durable
+            .next_message_location_command(&self.account.connection_id)
+            .await
+            .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?
+        else {
+            return Ok(None);
+        };
+        let command = decode_message_location_command(&queued.exact_command_bytes)
+            .map_err(|_| MailMessageLocationDispatchErrorV1::InvalidStoredCommand)?;
+        if !queued_location_matches_command(&queued, &command) {
+            return Err(MailMessageLocationDispatchErrorV1::InvalidStoredCommand);
+        }
+        let transport = match self.account.inbound.clone() {
+            MailInboundTransportV1::Imap(configuration) => {
+                let locator = self
+                    .durable
+                    .imap_message_locator(&command.connection_id, &command.message_id)
+                    .await
+                    .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?
+                    .ok_or(MailMessageLocationDispatchErrorV1::ProviderRejected)?;
+                let target = self
+                    .durable
+                    .message_location_target_folder(&command)
+                    .await
+                    .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?
+                    .ok_or(MailMessageLocationDispatchErrorV1::ProviderUnsupported)?;
+                MailMessageLocationProviderTransportV1::Imap {
+                    configuration,
+                    password: Zeroizing::new(
+                        self.imap_password
+                            .as_deref()
+                            .ok_or(MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown)?
+                            .to_vec(),
+                    ),
+                    locator,
+                    target,
+                }
+            }
+            MailInboundTransportV1::Gmail(configuration) => {
+                let access_token =
+                    self.resolve_gmail_access_token()
+                        .await
+                        .map_err(|error| match error {
+                            MailBootstrapError::Persistence => {
+                                MailMessageLocationDispatchErrorV1::Persistence
+                            }
+                            MailBootstrapError::Credential => {
+                                MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown
+                            }
+                            _ => MailMessageLocationDispatchErrorV1::InvalidStoredCommand,
+                        })?;
+                let target = if matches!(
+                    command.kind,
+                    makosh_mail_api::message_location::MailMessageLocationKindV1::Move
+                ) {
+                    Some(
+                        self.durable
+                            .message_location_target_folder(&command)
+                            .await
+                            .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?
+                            .ok_or(MailMessageLocationDispatchErrorV1::ProviderUnsupported)?,
+                    )
+                } else {
+                    None
+                };
+                MailMessageLocationProviderTransportV1::Gmail {
+                    configuration,
+                    access_token,
+                    target,
+                }
+            }
+        };
+        let fence = self
+            .current_provider_io_fence()
+            .map_err(|_| MailMessageLocationDispatchErrorV1::InvalidStoredCommand)?;
+        let fence_epoch = fence.load(Ordering::Acquire);
+        Ok(Some(PreparedMailMessageLocationProviderOperationV1 {
+            connection_id: self.account.connection_id.clone(),
+            fence_epoch,
+            fence,
+            durable: self.durable.clone(),
+            transport,
+            queued,
+            command,
+            completed_at_unix_seconds,
+        }))
+    }
+
     pub async fn submit_message_permanent_delete_command(
         &self,
         command: &MailMessagePermanentDeleteCommandV1,
@@ -1845,6 +2224,110 @@ impl MailAdmittedRuntime {
             .await
             .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::Persistence)?;
         Ok(true)
+    }
+
+    pub async fn prepare_next_message_permanent_delete_provider_operation(
+        &mut self,
+        completed_at_unix_seconds: i64,
+    ) -> Result<
+        Option<PreparedMailMessagePermanentDeleteProviderOperationV1>,
+        MailMessagePermanentDeleteDispatchErrorV1,
+    > {
+        if !self.provider_io_permitted() {
+            return Ok(None);
+        }
+        let Some(queued) = self
+            .durable
+            .next_message_permanent_delete_command(&self.account.connection_id)
+            .await
+            .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::Persistence)?
+        else {
+            return Ok(None);
+        };
+        let command = decode_message_permanent_delete_command(&queued.exact_command_bytes)
+            .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand)?;
+        if !queued_permanent_delete_matches_command(&queued, &command) {
+            return Err(MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand);
+        }
+        let target = self
+            .durable
+            .message_permanent_delete_target(&queued)
+            .await
+            .map_err(|error| match error {
+                MailMessagePermanentDeletePersistenceErrorV1::Database => {
+                    MailMessagePermanentDeleteDispatchErrorV1::Persistence
+                }
+                MailMessagePermanentDeletePersistenceErrorV1::InvalidInput
+                | MailMessagePermanentDeletePersistenceErrorV1::ConflictingOperation
+                | MailMessagePermanentDeletePersistenceErrorV1::MissingMessage
+                | MailMessagePermanentDeletePersistenceErrorV1::StaleProjection
+                | MailMessagePermanentDeletePersistenceErrorV1::NotInTrash
+                | MailMessagePermanentDeletePersistenceErrorV1::InvalidRow => {
+                    MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected
+                }
+            })?;
+        let transport = match self.account.inbound.clone() {
+            MailInboundTransportV1::Imap(configuration) => {
+                let locator = target
+                    .imap_locator
+                    .ok_or(MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected)?;
+                MailMessagePermanentDeleteProviderTransportV1::Imap {
+                    configuration,
+                    password: Zeroizing::new(
+                        self.imap_password
+                            .as_deref()
+                            .ok_or(
+                                MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown,
+                            )?
+                            .to_vec(),
+                    ),
+                    locator,
+                }
+            }
+            MailInboundTransportV1::Gmail(configuration) => {
+                let binding = self
+                    .durable
+                    .gmail_oauth_credential_binding(&self.account.connection_id)
+                    .await
+                    .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::Persistence)?
+                    .ok_or(MailMessagePermanentDeleteDispatchErrorV1::ReauthorizationRequired)?;
+                if !binding.permanent_delete_authorized {
+                    return Err(MailMessagePermanentDeleteDispatchErrorV1::ReauthorizationRequired);
+                }
+                let access_token =
+                    self.resolve_gmail_access_token()
+                        .await
+                        .map_err(|error| match error {
+                            MailBootstrapError::Persistence => {
+                                MailMessagePermanentDeleteDispatchErrorV1::Persistence
+                            }
+                            MailBootstrapError::Credential => {
+                                MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown
+                            }
+                            _ => MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand,
+                        })?;
+                MailMessagePermanentDeleteProviderTransportV1::Gmail {
+                    configuration,
+                    access_token,
+                    provider_message_id: target.provider_message_id,
+                }
+            }
+        };
+        let fence = self
+            .current_provider_io_fence()
+            .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand)?;
+        let fence_epoch = fence.load(Ordering::Acquire);
+        Ok(Some(
+            PreparedMailMessagePermanentDeleteProviderOperationV1 {
+                connection_id: self.account.connection_id.clone(),
+                fence_epoch,
+                fence,
+                durable: self.durable.clone(),
+                transport,
+                queued,
+                completed_at_unix_seconds,
+            },
+        ))
     }
 
     pub async fn composition_command(
@@ -2181,6 +2664,116 @@ impl MailAdmittedRuntime {
         Ok(true)
     }
 
+    /// Claims and authorizes one delivery on the account actor. The returned
+    /// value owns no control channel or mutable catalog state and can therefore
+    /// execute on an account-scoped provider job.
+    pub async fn prepare_next_delivery_provider_operation(
+        &mut self,
+        dispatched_at_unix_seconds: i64,
+        completed_at_unix_seconds: i64,
+    ) -> Result<Option<PreparedMailDeliveryProviderOperationV1>, MailDeliveryDispatchErrorV1> {
+        if !self.provider_io_permitted() {
+            return Ok(None);
+        }
+        let provider_ready = match &self.account.inbound {
+            MailInboundTransportV1::Imap(_) => self.smtp_password.is_some(),
+            MailInboundTransportV1::Gmail(_) => self
+                .durable
+                .gmail_oauth_credential_binding(&self.account.connection_id)
+                .await
+                .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?
+                .is_some(),
+        };
+        if !provider_ready {
+            return Ok(None);
+        }
+        let Some(queued) = self
+            .durable
+            .claim_next_delivery(&self.account.connection_id, dispatched_at_unix_seconds)
+            .await
+            .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?
+        else {
+            return Ok(None);
+        };
+        let request =
+            makosh_mail_api::client_wire::decode_delivery_request(&queued.exact_command_bytes)
+                .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+        let message = self.outgoing_message(&request);
+        let request_sha256: [u8; 32] = Sha256::digest(&queued.exact_command_bytes).into();
+        if queued.operation_id != message.operation_id
+            || queued.connection_id != message.connection_id
+            || queued.request_sha256 != request_sha256
+            || request.attachment_anchor_ids
+                != queued
+                    .attachments
+                    .iter()
+                    .map(|attachment| attachment.attachment_anchor_id)
+                    .collect::<Vec<_>>()
+        {
+            return Err(MailDeliveryDispatchErrorV1::InvalidStoredCommand);
+        }
+        let attachments = match self.materialize_delivery_attachments(&queued) {
+            Ok(attachments) => attachments,
+            Err(_) => {
+                self.durable
+                    .complete_delivery_rejected(&message.operation_id, completed_at_unix_seconds)
+                    .await
+                    .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?;
+                return Err(MailDeliveryDispatchErrorV1::AttachmentRejected);
+            }
+        };
+        let transport = match self.account.inbound.clone() {
+            MailInboundTransportV1::Imap(_) => MailDeliveryProviderTransportV1::Smtp {
+                endpoint: self
+                    .account
+                    .smtp_endpoint
+                    .clone()
+                    .ok_or(MailDeliveryDispatchErrorV1::InvalidStoredCommand)?,
+                password: Zeroizing::new(
+                    self.smtp_password
+                        .as_deref()
+                        .ok_or(MailDeliveryDispatchErrorV1::InvalidStoredCommand)?
+                        .to_vec(),
+                ),
+            },
+            MailInboundTransportV1::Gmail(configuration) => {
+                let access_token =
+                    self.resolve_gmail_access_token()
+                        .await
+                        .map_err(|error| match error {
+                            MailBootstrapError::Persistence => {
+                                MailDeliveryDispatchErrorV1::Persistence
+                            }
+                            MailBootstrapError::Credential => {
+                                MailDeliveryDispatchErrorV1::ProviderOutcomeUnknown
+                            }
+                            _ => MailDeliveryDispatchErrorV1::InvalidStoredCommand,
+                        })?;
+                MailDeliveryProviderTransportV1::Gmail {
+                    configuration,
+                    access_token,
+                }
+            }
+        };
+        let fence = self
+            .current_provider_io_fence()
+            .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+        let fence_epoch = fence.load(Ordering::Acquire);
+        Ok(Some(PreparedMailDeliveryProviderOperationV1 {
+            connection_id: self.account.connection_id.clone(),
+            fence_epoch,
+            fence,
+            durable: self.durable.clone(),
+            transport,
+            message,
+            attachments,
+            queued,
+            runtime_instance_id: self.runtime_instance_id.clone(),
+            runtime_generation: self.runtime_generation,
+            completed_at_unix_seconds,
+        }))
+    }
+
     fn outgoing_message(&self, request: &MailSendMailRequestV1) -> OutgoingMailV1 {
         OutgoingMailV1 {
             operation_id: request.operation_id.clone(),
@@ -2347,7 +2940,8 @@ impl MailAdmittedRuntime {
                     .await
                     .map(|_| 200)
                     .map_err(|error| match error {
-                        GmailAdapterErrorV1::InvalidRequest => {
+                        GmailAdapterErrorV1::InvalidRequest
+                        | GmailAdapterErrorV1::OAuthProviderError(_) => {
                             MailProviderDeliveryErrorV1::Rejected
                         }
                         GmailAdapterErrorV1::Transport
@@ -2507,6 +3101,9 @@ impl MailAdmittedRuntime {
         &self,
         published_at_unix_millis: i64,
     ) -> Result<bool, MailPersonSourceFetchWorkerErrorV1> {
+        if self.person_source_fetch_subscribe_permit.is_none() {
+            return Ok(false);
+        }
         relay_person_source_fetch_outbox_once_v1(
             &self.address_book_persistence,
             &self.event_connection,
@@ -2521,6 +3118,9 @@ impl MailAdmittedRuntime {
         &self,
         now_unix_millis: i64,
     ) -> Result<bool, MailPersonSourceProducerErrorV1> {
+        if self.person_source_fetch_subscribe_permit.is_none() {
+            return Ok(false);
+        }
         relay_public_account_lifecycle_once_v1(
             &self.address_book_persistence,
             &self.logical_human_owner_id,
@@ -3686,6 +4286,500 @@ impl MailAdmittedRuntime {
     }
 }
 
+pub async fn execute_mail_message_permanent_delete_provider_operation(
+    prepared: PreparedMailMessagePermanentDeleteProviderOperationV1,
+) -> Result<bool, MailMessagePermanentDeleteDispatchErrorV1> {
+    let PreparedMailMessagePermanentDeleteProviderOperationV1 {
+        fence_epoch,
+        fence,
+        durable,
+        transport,
+        queued,
+        completed_at_unix_seconds,
+        ..
+    } = prepared;
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let provider_result = match &transport {
+        MailMessagePermanentDeleteProviderTransportV1::Imap {
+            configuration,
+            password,
+            locator,
+        } => {
+            let password = std::str::from_utf8(password)
+                .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand)?;
+            makosh_mail_imap::permanently_delete_message(
+                ImapMessageLocationAccessV1 {
+                    host: &configuration.host,
+                    port: configuration.port,
+                    username: &configuration.username,
+                    password,
+                },
+                ImapMessageLocatorV1 {
+                    mailbox_id: &locator.mailbox_id,
+                    uid_validity: locator.uid_validity,
+                    uid: locator.uid,
+                },
+            )
+            .map_err(|error| {
+                if error.is_unsupported() {
+                    MailMessagePermanentDeleteDispatchErrorV1::ProviderUnsupported
+                } else if error.is_definite_rejection() {
+                    MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected
+                } else {
+                    MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown
+                }
+            })
+        }
+        MailMessagePermanentDeleteProviderTransportV1::Gmail {
+            configuration,
+            access_token,
+            provider_message_id,
+        } => {
+            let access_token = std::str::from_utf8(access_token)
+                .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand)?;
+            let client = gmail_api_client(configuration)
+                .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected)?;
+            client
+                .permanently_delete_message(access_token, provider_message_id)
+                .await
+                .map_err(map_gmail_permanent_delete_error)
+        }
+    };
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    if let Err(error) = provider_result {
+        let outcome = match error {
+            MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected
+            | MailMessagePermanentDeleteDispatchErrorV1::InvalidStoredCommand => {
+                MailMessagePermanentDeleteOperationOutcomeV1::Rejected
+            }
+            MailMessagePermanentDeleteDispatchErrorV1::ProviderUnsupported => {
+                MailMessagePermanentDeleteOperationOutcomeV1::Unsupported
+            }
+            MailMessagePermanentDeleteDispatchErrorV1::ReauthorizationRequired => {
+                MailMessagePermanentDeleteOperationOutcomeV1::ReauthorizationRequired
+            }
+            MailMessagePermanentDeleteDispatchErrorV1::ProviderOutcomeUnknown => {
+                MailMessagePermanentDeleteOperationOutcomeV1::OutcomeUnknown
+            }
+            MailMessagePermanentDeleteDispatchErrorV1::Persistence => return Err(error),
+        };
+        durable
+            .complete_message_permanent_delete_failure(
+                &queued.operation_id,
+                &queued.connection_id,
+                outcome,
+                completed_at_unix_seconds,
+            )
+            .await
+            .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::Persistence)?;
+        return Err(error);
+    }
+    durable
+        .complete_message_permanent_delete_success(&queued, completed_at_unix_seconds)
+        .await
+        .map_err(|_| MailMessagePermanentDeleteDispatchErrorV1::Persistence)?;
+    Ok(true)
+}
+
+pub async fn execute_mail_message_location_provider_operation(
+    prepared: PreparedMailMessageLocationProviderOperationV1,
+) -> Result<bool, MailMessageLocationDispatchErrorV1> {
+    let PreparedMailMessageLocationProviderOperationV1 {
+        fence_epoch,
+        fence,
+        durable,
+        transport,
+        queued,
+        command,
+        completed_at_unix_seconds,
+        ..
+    } = prepared;
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let provider_result = match &transport {
+        MailMessageLocationProviderTransportV1::Imap {
+            configuration,
+            password,
+            locator,
+            target,
+        } => {
+            let password = std::str::from_utf8(password)
+                .map_err(|_| MailMessageLocationDispatchErrorV1::InvalidStoredCommand)?;
+            let moved = makosh_mail_imap::move_message(
+                ImapMessageLocationAccessV1 {
+                    host: &configuration.host,
+                    port: configuration.port,
+                    username: &configuration.username,
+                    password,
+                },
+                ImapMessageLocatorV1 {
+                    mailbox_id: &locator.mailbox_id,
+                    uid_validity: locator.uid_validity,
+                    uid: locator.uid,
+                },
+                &target.folder_id,
+            )
+            .map_err(|error| {
+                if error.is_unsupported() {
+                    MailMessageLocationDispatchErrorV1::ProviderUnsupported
+                } else if error.is_definite_rejection() {
+                    MailMessageLocationDispatchErrorV1::ProviderRejected
+                } else {
+                    MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown
+                }
+            })?;
+            Ok(MailMessageLocationReconciliationV1 {
+                folders: vec![target.clone()],
+                imap_locator: Some(MailImapMessageLocatorV1 {
+                    mailbox_id: moved.mailbox_id,
+                    uid_validity: moved.uid_validity,
+                    uid: moved.uid,
+                }),
+            })
+        }
+        MailMessageLocationProviderTransportV1::Gmail {
+            configuration,
+            access_token,
+            target,
+        } => {
+            let access_token = std::str::from_utf8(access_token)
+                .map_err(|_| MailMessageLocationDispatchErrorV1::InvalidStoredCommand)?;
+            let client = gmail_api_client(configuration)
+                .map_err(|_| MailMessageLocationDispatchErrorV1::ProviderRejected)?;
+            let location = match command.kind {
+                makosh_mail_api::message_location::MailMessageLocationKindV1::Archive => {
+                    client
+                        .archive_message(access_token, &command.message_id)
+                        .await
+                }
+                makosh_mail_api::message_location::MailMessageLocationKindV1::Trash => {
+                    client
+                        .trash_message(access_token, &command.message_id)
+                        .await
+                }
+                makosh_mail_api::message_location::MailMessageLocationKindV1::Restore => {
+                    client
+                        .restore_message(access_token, &command.message_id)
+                        .await
+                }
+                makosh_mail_api::message_location::MailMessageLocationKindV1::Move => {
+                    let target = target
+                        .as_ref()
+                        .ok_or(MailMessageLocationDispatchErrorV1::ProviderUnsupported)?;
+                    let target_is_inbox = match target.kind {
+                        MailFolderKindV1::Inbox => true,
+                        MailFolderKindV1::ProviderLabel => false,
+                        _ => return Err(MailMessageLocationDispatchErrorV1::ProviderUnsupported),
+                    };
+                    client
+                        .move_message(
+                            access_token,
+                            &command.message_id,
+                            &target.folder_id,
+                            target_is_inbox,
+                        )
+                        .await
+                }
+            }
+            .map_err(map_gmail_location_error)?;
+            Ok(MailMessageLocationReconciliationV1 {
+                folders: gmail_operational_folders(&location.label_ids),
+                imap_locator: None,
+            })
+        }
+    };
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let reconciliation = match provider_result {
+        Ok(reconciliation) => reconciliation,
+        Err(error) => {
+            let outcome = match error {
+                MailMessageLocationDispatchErrorV1::ProviderRejected
+                | MailMessageLocationDispatchErrorV1::InvalidStoredCommand => {
+                    MailMessageLocationOperationOutcomeV1::Rejected
+                }
+                MailMessageLocationDispatchErrorV1::ProviderUnsupported => {
+                    MailMessageLocationOperationOutcomeV1::Unsupported
+                }
+                MailMessageLocationDispatchErrorV1::ProviderOutcomeUnknown => {
+                    MailMessageLocationOperationOutcomeV1::OutcomeUnknown
+                }
+                MailMessageLocationDispatchErrorV1::Persistence => return Err(error),
+            };
+            durable
+                .complete_message_location_failure(
+                    &queued.operation_id,
+                    &queued.connection_id,
+                    outcome,
+                    completed_at_unix_seconds,
+                )
+                .await
+                .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?;
+            return Err(error);
+        }
+    };
+    durable
+        .complete_message_location_success(&queued, &reconciliation, completed_at_unix_seconds)
+        .await
+        .map_err(|_| MailMessageLocationDispatchErrorV1::Persistence)?;
+    Ok(true)
+}
+
+pub async fn execute_mail_message_flag_provider_operation(
+    prepared: PreparedMailMessageFlagProviderOperationV1,
+) -> Result<bool, MailMessageFlagDispatchErrorV1> {
+    let PreparedMailMessageFlagProviderOperationV1 {
+        fence_epoch,
+        fence,
+        durable,
+        transport,
+        queued,
+        command,
+        completed_at_unix_seconds,
+        ..
+    } = prepared;
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let provider_result = match &transport {
+        MailMessageFlagProviderTransportV1::Imap {
+            configuration,
+            password,
+            locator,
+        } => {
+            let password = std::str::from_utf8(password)
+                .map_err(|_| MailMessageFlagDispatchErrorV1::InvalidStoredCommand)?;
+            makosh_mail_imap::set_message_flag(
+                ImapMessageFlagAccessV1 {
+                    host: &configuration.host,
+                    port: configuration.port,
+                    username: &configuration.username,
+                    password,
+                },
+                ImapMessageLocatorV1 {
+                    mailbox_id: &locator.mailbox_id,
+                    uid_validity: locator.uid_validity,
+                    uid: locator.uid,
+                },
+                imap_message_flag(command.kind),
+                command.target_value,
+            )
+            .map_err(|error| {
+                if error.is_definite_rejection() {
+                    MailMessageFlagDispatchErrorV1::ProviderRejected
+                } else {
+                    MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown
+                }
+            })
+        }
+        MailMessageFlagProviderTransportV1::Gmail {
+            configuration,
+            access_token,
+        } => {
+            let access_token = std::str::from_utf8(access_token)
+                .map_err(|_| MailMessageFlagDispatchErrorV1::InvalidStoredCommand)?;
+            let client = gmail_api_client(configuration)
+                .map_err(|_| MailMessageFlagDispatchErrorV1::ProviderRejected)?;
+            client
+                .set_message_flag(
+                    access_token,
+                    &command.message_id,
+                    gmail_message_flag(command.kind),
+                    command.target_value,
+                )
+                .await
+                .map_err(|error| match error {
+                    GmailAdapterErrorV1::InvalidRequest
+                    | GmailAdapterErrorV1::OAuthProviderError(_)
+                    | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
+                        MailMessageFlagDispatchErrorV1::ProviderRejected
+                    }
+                    GmailAdapterErrorV1::Transport
+                    | GmailAdapterErrorV1::ProviderStatus(_)
+                    | GmailAdapterErrorV1::InvalidResponse => {
+                        MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown
+                    }
+                })
+        }
+    };
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    if let Err(error) = provider_result {
+        let outcome = match error {
+            MailMessageFlagDispatchErrorV1::ProviderRejected
+            | MailMessageFlagDispatchErrorV1::InvalidStoredCommand => {
+                MailMessageFlagOperationOutcomeV1::Rejected
+            }
+            MailMessageFlagDispatchErrorV1::ProviderOutcomeUnknown => {
+                MailMessageFlagOperationOutcomeV1::OutcomeUnknown
+            }
+            MailMessageFlagDispatchErrorV1::Persistence => return Err(error),
+        };
+        durable
+            .complete_message_flag_failure(
+                &queued.operation_id,
+                &queued.connection_id,
+                outcome,
+                completed_at_unix_seconds,
+            )
+            .await
+            .map_err(|_| MailMessageFlagDispatchErrorV1::Persistence)?;
+        return Err(error);
+    }
+    durable
+        .complete_message_flag_success(&queued, completed_at_unix_seconds)
+        .await
+        .map_err(|_| MailMessageFlagDispatchErrorV1::Persistence)?;
+    Ok(true)
+}
+
+pub async fn execute_mail_delivery_provider_operation(
+    prepared: PreparedMailDeliveryProviderOperationV1,
+) -> Result<bool, MailDeliveryDispatchErrorV1> {
+    let PreparedMailDeliveryProviderOperationV1 {
+        fence_epoch,
+        fence,
+        durable,
+        transport,
+        message,
+        attachments,
+        queued,
+        runtime_instance_id,
+        runtime_generation,
+        completed_at_unix_seconds,
+        ..
+    } = prepared;
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailDeliveryDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let (from_address, provider) = match &transport {
+        MailDeliveryProviderTransportV1::Smtp { endpoint, .. } => (
+            endpoint.from_address.as_str(),
+            ProviderProvenanceV1::MailSmtp,
+        ),
+        MailDeliveryProviderTransportV1::Gmail { configuration, .. } => (
+            configuration
+                .from_address
+                .as_deref()
+                .ok_or(MailDeliveryDispatchErrorV1::InvalidStoredCommand)?,
+            ProviderProvenanceV1::MailGmail,
+        ),
+    };
+    let rfc822_message = compose_rfc822_with_attachments(from_address, &message, &attachments)
+        .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+    let rfc822_sha256: [u8; 32] = Sha256::digest(rfc822_message.as_bytes()).into();
+    if queued
+        .legacy_rfc822_sha256
+        .is_some_and(|expected| expected != rfc822_sha256)
+        || queued
+            .rendered_rfc822_sha256
+            .is_some_and(|expected| expected != rfc822_sha256)
+    {
+        return Err(MailDeliveryDispatchErrorV1::InvalidStoredCommand);
+    }
+    if queued.legacy_rfc822_sha256.is_none() {
+        durable
+            .record_delivery_rendered_rfc822(
+                &message.operation_id,
+                &queued.request_sha256,
+                &rfc822_sha256,
+            )
+            .await
+            .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?;
+    }
+    let provider_result = match &transport {
+        MailDeliveryProviderTransportV1::Smtp { endpoint, password } => {
+            let password = std::str::from_utf8(password)
+                .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+            makosh_mail_smtp::send_implicit_tls(endpoint, &message, password, &rfc822_message)
+                .await
+                .map(|receipt| receipt.response_code)
+                .map_err(|error| match error {
+                    SmtpAdapterErrorV1::InvalidRequest | SmtpAdapterErrorV1::Rejected => {
+                        MailProviderDeliveryErrorV1::Rejected
+                    }
+                    SmtpAdapterErrorV1::Unavailable | SmtpAdapterErrorV1::Protocol => {
+                        MailProviderDeliveryErrorV1::OutcomeUnknown
+                    }
+                })
+        }
+        MailDeliveryProviderTransportV1::Gmail {
+            configuration,
+            access_token,
+        } => {
+            let access_token = std::str::from_utf8(access_token)
+                .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+            let client = gmail_api_client(configuration)
+                .map_err(|_| MailDeliveryDispatchErrorV1::ProviderRejected)?;
+            client
+                .send_raw_message(
+                    access_token,
+                    rfc822_message.as_bytes(),
+                    Some(&message.provider_conversation_id),
+                )
+                .await
+                .map(|_| 200)
+                .map_err(|error| match error {
+                    GmailAdapterErrorV1::InvalidRequest
+                    | GmailAdapterErrorV1::OAuthProviderError(_) => {
+                        MailProviderDeliveryErrorV1::Rejected
+                    }
+                    GmailAdapterErrorV1::Transport
+                    | GmailAdapterErrorV1::ProviderStatus(_)
+                    | GmailAdapterErrorV1::InvalidResponse => {
+                        MailProviderDeliveryErrorV1::OutcomeUnknown
+                    }
+                })
+        }
+    };
+    if fence.load(Ordering::Acquire) != fence_epoch {
+        return Err(MailDeliveryDispatchErrorV1::ProviderOutcomeUnknown);
+    }
+    let response_code = match provider_result {
+        Ok(response_code) => response_code,
+        Err(MailProviderDeliveryErrorV1::Rejected) => {
+            durable
+                .complete_delivery_rejected(&message.operation_id, completed_at_unix_seconds)
+                .await
+                .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?;
+            return Err(MailDeliveryDispatchErrorV1::ProviderRejected);
+        }
+        Err(MailProviderDeliveryErrorV1::OutcomeUnknown) => {
+            return Err(MailDeliveryDispatchErrorV1::ProviderOutcomeUnknown);
+        }
+    };
+    let observation = draft_delivery_observation(provider, &message)
+        .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+    let record = build_observation_outbox_record_v1(
+        &observation,
+        &observation_context(
+            &runtime_instance_id,
+            runtime_generation,
+            completed_at_unix_seconds,
+            0,
+        ),
+    )
+    .map_err(|_| MailDeliveryDispatchErrorV1::InvalidStoredCommand)?;
+    durable
+        .complete_delivery_accepted(
+            &message.operation_id,
+            &rfc822_sha256,
+            response_code,
+            &record,
+            completed_at_unix_seconds,
+        )
+        .await
+        .map_err(|_| MailDeliveryDispatchErrorV1::Persistence)?;
+    Ok(true)
+}
+
 fn requires_person_source_retired_reconciliation_v1(
     receipt: &MailAccountLifecycleReceiptV1,
 ) -> bool {
@@ -3876,7 +4970,9 @@ fn queued_permanent_delete_matches_command(
 
 fn map_gmail_location_error(error: GmailAdapterErrorV1) -> MailMessageLocationDispatchErrorV1 {
     match error {
-        GmailAdapterErrorV1::InvalidRequest | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
+        GmailAdapterErrorV1::InvalidRequest
+        | GmailAdapterErrorV1::OAuthProviderError(_)
+        | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
             MailMessageLocationDispatchErrorV1::ProviderRejected
         }
         GmailAdapterErrorV1::Transport
@@ -3891,7 +4987,9 @@ fn map_gmail_permanent_delete_error(
     error: GmailAdapterErrorV1,
 ) -> MailMessagePermanentDeleteDispatchErrorV1 {
     match error {
-        GmailAdapterErrorV1::InvalidRequest | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
+        GmailAdapterErrorV1::InvalidRequest
+        | GmailAdapterErrorV1::OAuthProviderError(_)
+        | GmailAdapterErrorV1::ProviderStatus(400..=499) => {
             MailMessagePermanentDeleteDispatchErrorV1::ProviderRejected
         }
         GmailAdapterErrorV1::Transport
@@ -4048,7 +5146,7 @@ fn attachment_blob_admission_publish_permitted(
         contract.name,
         contract.major,
     )
-    .map_err(|_| MailBootstrapError::EventHub)?;
+    .map_err(|_| mail_event_hub_error("attachment_blob_admission_subject"))?;
     Ok(permit.permits_subject(&subject))
 }
 
@@ -4063,7 +5161,7 @@ fn attachment_security_scan_candidate_publish_permitted(
         contract.name,
         contract.major,
     )
-    .map_err(|_| MailBootstrapError::EventHub)?;
+    .map_err(|_| mail_event_hub_error("attachment_security_scan_candidate_subject"))?;
     Ok(permit.permits_subject(&subject))
 }
 
@@ -4071,7 +5169,7 @@ struct MailEventSubscribePermitsV1 {
     anchor: Option<RuntimeSubscribePermitV1>,
     safety: Option<RuntimeSubscribePermitV1>,
     delivery_intent: RuntimeSubscribePermitV1,
-    person_source_fetch: RuntimeSubscribePermitV1,
+    person_source_fetch: Option<RuntimeSubscribePermitV1>,
     replay_command: RuntimeSubscribePermitV1,
 }
 
@@ -4094,38 +5192,40 @@ fn bind_event_subscribe_permits(
     let mut person_source_fetch = None;
     for permit in permits {
         let Some(contract) = permit.contract() else {
-            return Err(MailBootstrapError::EventHub);
+            return Err(mail_event_hub_error("subscribe_permit_contract"));
         };
         if exact_runtime_contract(contract, &expected_anchor) {
             if anchor.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
+                return Err(mail_event_hub_error("duplicate_attachment_anchor_permit"));
             }
         } else if exact_runtime_contract(contract, &expected_safety) {
             if safety.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
+                return Err(mail_event_hub_error("duplicate_attachment_safety_permit"));
             }
         } else if exact_runtime_contract(contract, &expected_delivery_intent) {
             if delivery_intent.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
+                return Err(mail_event_hub_error("duplicate_delivery_intent_permit"));
             }
         } else if exact_runtime_contract(contract, &expected_replay_command) {
             if replay_command.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
+                return Err(mail_event_hub_error("duplicate_replay_command_permit"));
             }
         } else if exact_runtime_contract(contract, &expected_person_source_fetch) {
             if person_source_fetch.replace(permit).is_some() {
-                return Err(MailBootstrapError::EventHub);
+                return Err(mail_event_hub_error("duplicate_person_source_fetch_permit"));
             }
         } else {
-            return Err(MailBootstrapError::EventHub);
+            return Err(mail_event_hub_error("unexpected_subscribe_permit"));
         }
     }
     Ok(MailEventSubscribePermitsV1 {
         anchor,
         safety,
-        delivery_intent: delivery_intent.ok_or(MailBootstrapError::EventHub)?,
-        person_source_fetch: person_source_fetch.ok_or(MailBootstrapError::EventHub)?,
-        replay_command: replay_command.ok_or(MailBootstrapError::EventHub)?,
+        delivery_intent: delivery_intent
+            .ok_or_else(|| mail_event_hub_error("missing_delivery_intent_permit"))?,
+        person_source_fetch,
+        replay_command: replay_command
+            .ok_or_else(|| mail_event_hub_error("missing_replay_command_permit"))?,
     })
 }
 
@@ -5058,4 +6158,11 @@ fn mail_event_hub_error(stage: &str) -> MailBootstrapError {
         eprintln!("developer_mail_event_hub_error={stage}");
     }
     MailBootstrapError::EventHub
+}
+
+fn mail_persistence_error(stage: &'static str) -> MailBootstrapError {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        eprintln!("developer_mail_persistence_error={stage}");
+    }
+    MailBootstrapError::Persistence
 }

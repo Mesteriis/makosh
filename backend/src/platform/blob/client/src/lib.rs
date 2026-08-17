@@ -17,10 +17,11 @@ use makosh_runtime_protocol::v1::{
     BlobCustodyReleaseOutcomeV1, BlobCustodyReleaseReasonV1, BlobCustodySourceProofKindV1,
     BlobCustodySourceProofV1, BlobCustodyTransferGrantV1, BlobDataCustodyTransferRequestV1,
     BlobDataOperationV1, BlobDataReadRangeRequestV1, BlobDataRequestV1, BlobDataResponseV1,
-    BlobDataSessionGrantV1, BlobDataWriteRequestV1, ContractReferenceV1,
-    ManagedRuntimeBlobCustodyDelegationRequestV1, ManagedRuntimeBlobCustodyReleaseRequestV1,
-    ManagedRuntimeBlobSessionRequestV1, ManagedRuntimeControlRequestV1,
-    ManagedRuntimeControlResponseV1, blob_data_request_v1::Operation,
+    BlobDataSessionGrantV1, BlobDataWriteChunkRequestV1, BlobDataWriteRequestV1,
+    ContractReferenceV1, ManagedRuntimeBlobCustodyDelegationRequestV1,
+    ManagedRuntimeBlobCustodyReleaseRequestV1, ManagedRuntimeBlobSessionRequestV1,
+    ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
+    blob_data_request_v1::Operation,
     managed_runtime_control_request_v1::Operation as ControlOperation,
     managed_runtime_control_response_v1::Result as ControlResult,
 };
@@ -900,6 +901,51 @@ impl BlobDataClient {
         })?;
         if response.accepted {
             return Ok(response.plaintext);
+        }
+        Err(BlobClientError::Rejected(response.error_code))
+    }
+
+    pub fn write_chunk(
+        &self,
+        grant: BlobDataSessionGrantV1,
+        channel_binding: Vec<u8>,
+        offset: u64,
+        plaintext: Vec<u8>,
+        complete: bool,
+    ) -> Result<(), BlobClientError> {
+        let response = self.request(BlobDataRequestV1 {
+            grant: Some(grant),
+            channel_binding,
+            operation: Some(Operation::WriteChunk(BlobDataWriteChunkRequestV1 {
+                offset,
+                plaintext,
+                complete,
+                abort: false,
+            })),
+        })?;
+        if response.accepted {
+            return Ok(());
+        }
+        Err(BlobClientError::Rejected(response.error_code))
+    }
+
+    pub fn abort_write(
+        &self,
+        grant: BlobDataSessionGrantV1,
+        channel_binding: Vec<u8>,
+    ) -> Result<(), BlobClientError> {
+        let response = self.request(BlobDataRequestV1 {
+            grant: Some(grant),
+            channel_binding,
+            operation: Some(Operation::WriteChunk(BlobDataWriteChunkRequestV1 {
+                offset: 0,
+                plaintext: Vec::new(),
+                complete: false,
+                abort: true,
+            })),
+        })?;
+        if response.accepted {
+            return Ok(());
         }
         Err(BlobClientError::Rejected(response.error_code))
     }

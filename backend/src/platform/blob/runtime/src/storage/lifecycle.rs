@@ -151,6 +151,76 @@ impl BlobContentLifecycleStore {
         }
     }
 
+    pub fn write_receipt_bound_chunk(
+        &self,
+        request: BlobContentWriteChunkRequestV1<'_>,
+    ) -> Result<bool, BlobLifecycleError> {
+        let BlobContentWriteChunkRequestV1 {
+            reference,
+            access,
+            custody,
+            quota,
+            lease,
+            offset,
+            plaintext,
+            complete,
+            expected_plaintext_sha256,
+            now_unix_ms,
+        } = request;
+        let (reservation, newly_reserved) = self
+            .metadata
+            .reserve_or_resume_write(reference, access, custody, quota)
+            .map_err(BlobLifecycleError::Metadata)?;
+        match self.encrypted.write_chunk(
+            reference,
+            access,
+            custody,
+            lease,
+            offset,
+            plaintext,
+            complete,
+            expected_plaintext_sha256,
+            now_unix_ms,
+        ) {
+            Ok(finalized) => {
+                if finalized {
+                    self.metadata
+                        .commit_write(&reservation, reference, custody)
+                        .map_err(BlobLifecycleError::Metadata)?;
+                }
+                Ok(finalized)
+            }
+            Err(error) => {
+                if newly_reserved || complete {
+                    let _ = self.encrypted.discard_uncommitted(reference);
+                    let _ = self
+                        .metadata
+                        .abandon_write(&reservation, reference, custody);
+                }
+                Err(BlobLifecycleError::Storage(error))
+            }
+        }
+    }
+
+    pub fn abort_receipt_bound_write(
+        &self,
+        reference: &BlobRefV1,
+        access: &BlobAccessFenceV1,
+        custody: &BlobCustodyScopeV1,
+        quota: &BlobQuotaGrantV1,
+    ) -> Result<(), BlobLifecycleError> {
+        let (reservation, _) = self
+            .metadata
+            .reserve_or_resume_write(reference, access, custody, quota)
+            .map_err(BlobLifecycleError::Metadata)?;
+        self.encrypted
+            .discard_uncommitted(reference)
+            .map_err(BlobLifecycleError::Storage)?;
+        self.metadata
+            .abandon_write(&reservation, reference, custody)
+            .map_err(BlobLifecycleError::Metadata)
+    }
+
     pub fn read_range(
         &self,
         reference: &BlobRefV1,
@@ -341,6 +411,20 @@ pub struct BlobCustodyTransferRequestV1<'a> {
     pub target_custody: &'a BlobCustodyScopeV1,
     pub target_quota: &'a BlobQuotaGrantV1,
     pub target_lease: &'a BlobKeyLeaseV1,
+    pub expected_plaintext_sha256: &'a [u8; 32],
+    pub now_unix_ms: u64,
+}
+
+#[derive(Clone, Copy)]
+pub struct BlobContentWriteChunkRequestV1<'a> {
+    pub reference: &'a BlobRefV1,
+    pub access: &'a BlobAccessFenceV1,
+    pub custody: &'a BlobCustodyScopeV1,
+    pub quota: &'a BlobQuotaGrantV1,
+    pub lease: &'a BlobKeyLeaseV1,
+    pub offset: u64,
+    pub plaintext: &'a [u8],
+    pub complete: bool,
     pub expected_plaintext_sha256: &'a [u8; 32],
     pub now_unix_ms: u64,
 }

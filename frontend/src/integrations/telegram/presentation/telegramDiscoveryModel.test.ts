@@ -10,21 +10,43 @@ describe('Telegram discovery presentation model', () => {
 	it('merges typed chat and message results without a provider DTO union', () => {
 		expect(buildTelegramDiscoveryResults({
 			chats: [{ providerChatId: 'chat-1', title: 'Architecture', kind: 'group' } as never],
-			messages: [{ messageId: 'message-1', senderDisplayName: 'Alex', text: 'ADR' } as never],
+			messages: [{
+				messageId: 'message-1',
+				providerMessageId: 'provider-message-1',
+				providerChatId: 'chat-1',
+				senderDisplayName: 'Alex',
+				text: 'ADR',
+			} as never],
 		})).toEqual([
 			{
 				id: 'chat-1',
 				title: 'Architecture',
 				detail: 'group',
 				kind: 'chat',
+				providerChatId: 'chat-1',
+				providerMessageId: '',
 			},
 			{
 				id: 'message-1',
 				title: 'Alex',
 				detail: 'ADR',
 				kind: 'message',
+				providerChatId: 'chat-1',
+				providerMessageId: 'provider-message-1',
 			},
 		])
+	})
+
+	it('uses readable media summaries without exposing transport markers', () => {
+		expect(buildTelegramDiscoveryResults({
+			chats: [],
+			messages: [{
+				messageId: 'message-video',
+				providerChatId: 'chat-1',
+				text: 'Video',
+				media: { kind: 'video', filename: '', caption: '' },
+			} as never],
+		})[0]?.detail).toBe('Video')
 	})
 
 	it('maps chat context and operation receipts into bounded rows', () => {

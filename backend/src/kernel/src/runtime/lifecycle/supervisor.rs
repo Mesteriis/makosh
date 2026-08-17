@@ -355,7 +355,7 @@ impl ManagedRuntimeSupervisor {
             module_query_handler,
             module_request_handler,
             client_realtime_handler,
-        });
+        })?;
         workers.insert(registration_id, worker);
         Ok(())
     }
@@ -607,6 +607,7 @@ impl ManagedRuntimeSupervisor {
             return Ok(false);
         };
         worker.stop_requested.store(true, Ordering::Release);
+        let _ = worker.relay.wake();
         Ok(true)
     }
 
@@ -624,6 +625,7 @@ impl ManagedRuntimeSupervisor {
             return Ok(false);
         };
         worker.stop_requested.store(true, Ordering::Release);
+        let _ = worker.relay.wake();
         worker
             .join
             .join()
@@ -658,7 +660,10 @@ impl ManagedRuntimeSupervisor {
             .lock()
             .map_err(|_| "managed runtime supervisor state is unavailable".to_owned())?
             .drain()
-            .map(|(_, worker)| worker.join)
+            .map(|(_, worker)| {
+                let _ = worker.relay.wake();
+                worker.join
+            })
             .collect::<Vec<_>>();
         for worker in workers {
             worker
@@ -706,9 +711,7 @@ impl ManagedRuntimeRelayPort {
             .map(|worker| worker.relay.clone())
             .ok_or_else(|| "managed runtime is unavailable".to_owned())?;
         let (response_sender, response_receiver) = mpsc::sync_channel(1);
-        sender
-            .try_send(ManagedRuntimeRelayRequest::new(payload, response_sender))
-            .map_err(|_| "managed runtime relay is unavailable".to_owned())?;
+        sender.try_send(ManagedRuntimeRelayRequest::new(payload, response_sender))?;
         response_receiver
             .recv_timeout(timeout)
             .map_err(|_| "managed runtime relay timed out".to_owned())?

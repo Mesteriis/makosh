@@ -21,6 +21,7 @@ pub mod delivery_intent_result;
 pub mod delivery_intent_worker;
 mod durable_restore;
 pub mod managed_control;
+mod media_blob_client_port;
 pub mod process;
 mod projection_cache;
 pub mod settings;
@@ -38,7 +39,7 @@ use makosh_runtime_protocol::v1::BlobDataSessionGrantV1;
 use makosh_telegram_api::{
     TelegramAccount, TelegramAccountSetup, TelegramAccountState, TelegramContractError,
     TelegramDeliveryState, TelegramDownloadFile, TelegramFileSnapshot, TelegramMessageObservation,
-    TelegramMessageTombstone, TelegramOperation, TelegramParticipantFilter,
+    TelegramMessageTombstone, TelegramOperation, TelegramParticipant, TelegramParticipantFilter,
     TelegramParticipantPage, TelegramProviderCommand, TelegramProviderQuery,
     TelegramProviderQueryResponse, TelegramRealtimeFrame, TelegramRuntimeLease,
     TelegramRuntimeLeaseState, TelegramRuntimeReconfiguration,
@@ -60,11 +61,12 @@ use makosh_telegram_core::{
 use makosh_telegram_persistence::{TelegramDurablePersistence, TelegramDurablePersistenceError};
 use makosh_telegram_tdlib::{
     TdJsonLibrary, TdJsonTransport, TdlibAuthorizationDriver, TdlibAuthorizationEvent,
-    TdlibAuthorizationParameters, TdlibCallObservation, TdlibError, TdlibProviderUpdate,
-    TdlibRequest, TdlibResponse, TdlibTransport, TelegramMediaMaterializer, get_chats_request,
-    get_history_request, get_history_request_with_options, parse_file_snapshot,
-    parse_provider_events, parse_topic_list,
+    TdlibAuthorizationParameters, TdlibCallObservation, TdlibDownloadedFile, TdlibError,
+    TdlibProviderUpdate, TdlibRequest, TdlibResponse, TdlibTransport, TelegramMediaMaterializer,
+    get_chats_request, get_history_request, get_history_request_with_options, get_message_request,
+    parse_file_snapshot, parse_provider_events, parse_topic_list,
 };
+use std::collections::BTreeSet;
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
@@ -94,6 +96,7 @@ pub enum TelegramCallProviderUpdate {
 pub struct TelegramProviderPollBatch {
     pub frames: Vec<TelegramRealtimeFrame>,
     pub call_updates: Vec<TelegramCallProviderUpdate>,
+    pub downloaded_files: Vec<TdlibDownloadedFile>,
 }
 
 #[derive(Debug)]
@@ -164,6 +167,25 @@ pub enum TelegramDurableProjectionError {
 }
 
 static NEXT_MEDIA_FILE_ID: AtomicU64 = AtomicU64::new(1);
+static NEXT_SENDER_RESOLUTION_ID: AtomicU64 = AtomicU64::new(1);
+
+fn sender_name_needs_resolution(display_name: Option<&str>) -> bool {
+    display_name.is_none_or(|display_name| {
+        matches!(
+            display_name.trim(),
+            "" | "Telegram user" | "Telegram chat" | "Telegram participant"
+        )
+    })
+}
+
+fn provider_member_id_for_message_sender(provider_sender_id: &str) -> Option<String> {
+    let provider_sender_id = provider_sender_id.trim().parse::<i64>().ok()?;
+    match provider_sender_id.cmp(&0) {
+        std::cmp::Ordering::Greater => Some(format!("user:{provider_sender_id}")),
+        std::cmp::Ordering::Less => Some(format!("chat:{provider_sender_id}")),
+        std::cmp::Ordering::Equal => None,
+    }
+}
 
 fn provider_event_matches_command(
     event: &makosh_telegram_api::TelegramProviderEvent,
@@ -612,6 +634,106 @@ mod tests {
     }
 
     #[test]
+    fn short_provider_history_page_keeps_an_advancing_cursor_pageable() {
+        assert!(provider_history_has_more(
+            makosh_telegram_api::TelegramHistorySyncMode::Latest,
+            None,
+            Some(90),
+            1,
+        ));
+        assert!(provider_history_has_more(
+            makosh_telegram_api::TelegramHistorySyncMode::Older,
+            Some(90),
+            Some(80),
+            1,
+        ));
+    }
+
+    #[test]
+    fn provider_history_page_stops_when_the_cursor_does_not_advance() {
+        assert!(!provider_history_has_more(
+            makosh_telegram_api::TelegramHistorySyncMode::Older,
+            Some(90),
+            Some(90),
+            1,
+        ));
+        assert!(!provider_history_has_more(
+            makosh_telegram_api::TelegramHistorySyncMode::Latest,
+            None,
+            None,
+            0,
+        ));
+        assert!(!provider_history_has_more(
+            makosh_telegram_api::TelegramHistorySyncMode::Full,
+            None,
+            Some(90),
+            1,
+        ));
+    }
+
+    #[test]
+    fn admitted_file_reconciles_every_duplicate_download_operation() {
+        let mut runtime = TelegramRuntime::new(PollingTransport { events: Vec::new() });
+        for (operation_id, provider_file_id) in [
+            ("download-one", "file-a"),
+            ("download-two", "file-a"),
+            ("download-other", "file-b"),
+        ] {
+            let command = TelegramProviderCommand::DownloadFile(TelegramDownloadFile {
+                operation_id: operation_id.to_owned(),
+                account_id: "account".to_owned(),
+                provider_file_id: provider_file_id.to_owned(),
+                priority: 32,
+            });
+            runtime
+                .persistence
+                .put_operation_if_absent(accept_operation(&command, 1));
+            runtime.persistence.put_command(command);
+        }
+
+        let reconciled = runtime.reconcile_download_operations("account", "file-a");
+
+        assert_eq!(reconciled.len(), 2);
+        for operation_id in ["download-one", "download-two"] {
+            assert_eq!(
+                runtime
+                    .persistence
+                    .operation(operation_id)
+                    .map(|operation| operation.state),
+                Some(makosh_telegram_api::TelegramOperationState::Completed),
+            );
+        }
+        assert_eq!(
+            runtime
+                .persistence
+                .operation("download-other")
+                .map(|operation| operation.state),
+            Some(makosh_telegram_api::TelegramOperationState::Accepted),
+        );
+    }
+
+    #[test]
+    fn unfinished_download_can_resume_when_blob_admission_is_missing() {
+        let command = TelegramProviderCommand::DownloadFile(TelegramDownloadFile {
+            operation_id: "download-resume".to_owned(),
+            account_id: "account".to_owned(),
+            provider_file_id: "file-a".to_owned(),
+            priority: 32,
+        });
+        let mut operation = accept_operation(&command, 1);
+        operation.state = makosh_telegram_api::TelegramOperationState::AwaitingProvider;
+
+        assert!(
+            TelegramRuntime::<PollingTransport>::download_operation_can_resume(&operation, None)
+        );
+
+        operation.state = makosh_telegram_api::TelegramOperationState::Completed;
+        assert!(
+            !TelegramRuntime::<PollingTransport>::download_operation_can_resume(&operation, None)
+        );
+    }
+
+    #[test]
     fn provider_polling_assigns_replay_sequence_and_cursor() {
         let mut runtime = TelegramRuntime::new(PollingTransport {
             events: vec![TelegramProviderEvent::ChatUnreadChanged {
@@ -643,6 +765,7 @@ mod tests {
         let mut runtime = TelegramRuntime::new(PollingTransport {
             events: vec![
                 TelegramProviderEvent::MessageCreated(TelegramMessageObservation {
+                    sender_source_identity: None,
                     account_id: "account".to_owned(),
                     provider_chat_id: "chat".to_owned(),
                     provider_message_id: "message".to_owned(),
@@ -688,6 +811,103 @@ mod tests {
     }
 
     #[test]
+    fn participant_page_lazily_resolves_unique_cached_history_senders() {
+        struct SenderResolvingTransport {
+            sender_resolution_count: usize,
+        }
+
+        impl TdlibTransport for SenderResolvingTransport {
+            fn request(&mut self, request: TdlibRequest) -> Result<TdlibResponse, TdlibError> {
+                match request {
+                    TdlibRequest::ListParticipants { .. } => {
+                        Err(TdlibError::Protocol("TDLib error 400".to_owned()))
+                    }
+                    TdlibRequest::ResolveSender {
+                        provider_sender_id, ..
+                    } => {
+                        self.sender_resolution_count += 1;
+                        Ok(TdlibResponse::SenderName {
+                            provider_sender_id,
+                            display_name: Some("Resolved sender".to_owned()),
+                        })
+                    }
+                    _ => Err(TdlibError::Transport(
+                        "unexpected request in sender resolution test".to_owned(),
+                    )),
+                }
+            }
+
+            fn poll_updates(&mut self) -> Result<Vec<TdlibProviderUpdate>, TdlibError> {
+                Ok(Vec::new())
+            }
+        }
+
+        let mut runtime = TelegramRuntime::new(SenderResolvingTransport {
+            sender_resolution_count: 0,
+        });
+        runtime.persistence.put_account(TelegramAccount {
+            account_id: "account".to_owned(),
+            display_name: "Telegram".to_owned(),
+            external_account_id: "telegram:1".to_owned(),
+            state: TelegramAccountState::Ready,
+            runtime_state: TelegramRuntimeState::Running,
+            runtime_epoch: 1,
+        });
+        runtime.set_admission(Some(TelegramRuntimeAdmission {
+            logical_owner_id: "telegram".to_owned(),
+            logical_human_owner_id: "owner".to_owned(),
+            configuration_instance_id: "configuration".to_owned(),
+            module_registration_id: "registration".to_owned(),
+            runtime_instance_id: "runtime".to_owned(),
+            runtime_generation: 1,
+            grant_epoch: 1,
+            vault_runtime_generation: 1,
+            api_hash_revision: 1,
+            session_encryption_key_revision: 1,
+        }));
+        runtime
+            .install_admitted_runtime_lease("account")
+            .expect("active runtime lease");
+        for provider_message_id in ["one", "two"] {
+            runtime
+                .persistence
+                .put_message(makosh_telegram_api::TelegramMessageProjection {
+                    message_id: format!("telegram:account:100:{provider_message_id}"),
+                    account_id: "account".to_owned(),
+                    provider_chat_id: "100".to_owned(),
+                    provider_message_id: provider_message_id.to_owned(),
+                    provider_topic_id: None,
+                    sender_id: "42".to_owned(),
+                    sender_display_name: Some("Telegram user".to_owned()),
+                    sender_source_identity: None,
+                    text: None,
+                    media: None,
+                    references: TelegramMessageReferences::default(),
+                    observed_at_unix_seconds: 0,
+                    delivery_state: TelegramDeliveryState::Received,
+                });
+        }
+
+        let page = runtime
+            .list_participants("account", "100", TelegramParticipantFilter::Recent, 0, 50)
+            .expect("participant page with resolved history senders");
+
+        assert_eq!(runtime.transport.sender_resolution_count, 1);
+        assert_eq!(page.items.len(), 1);
+        assert_eq!(page.items[0].provider_member_id, "user:42");
+        assert_eq!(
+            page.items[0].display_name.as_deref(),
+            Some("Resolved sender")
+        );
+        assert!(
+            runtime
+                .cached_messages("account", "100", 50)
+                .iter()
+                .all(|message| message.sender_display_name.as_deref() == Some("Resolved sender"))
+        );
+    }
+
+    #[test]
     fn admitted_runtime_lease_is_derived_from_current_runtime_identity() {
         let mut runtime = TelegramRuntime::new(PollingTransport { events: Vec::new() });
         runtime.persistence.put_account(TelegramAccount {
@@ -726,6 +946,7 @@ mod tests {
     #[test]
     fn provider_text_uses_injected_body_admission_and_records_typed_failure() {
         let observation = TelegramMessageObservation {
+            sender_source_identity: None,
             account_id: "account".to_owned(),
             provider_chat_id: "chat".to_owned(),
             provider_message_id: "message".to_owned(),
@@ -781,6 +1002,7 @@ mod tests {
             session_encryption_key_revision: 6,
         }));
         let draft = makosh_telegram_core::observation_draft(TelegramMessageObservation {
+            sender_source_identity: None,
             account_id: "account".to_owned(),
             provider_chat_id: "chat".to_owned(),
             provider_message_id: "message".to_owned(),
@@ -1013,7 +1235,7 @@ impl TelegramRuntimeComposition {
         }
         let client = self.library.create_client()?;
         self.account_setup = Some(account_setup);
-        self.authorization = Some(TdlibAuthorizationDriver::new(client, parameters));
+        self.authorization = Some(TdlibAuthorizationDriver::new(client, parameters)?);
         Ok(())
     }
 
@@ -1139,7 +1361,7 @@ impl TelegramRuntimeComposition {
         self.authorization = Some(TdlibAuthorizationDriver::new(
             client,
             authorization_parameters,
-        ));
+        )?);
         self.pending_reconfiguration = Some(reconfiguration);
         Ok(())
     }
@@ -1180,6 +1402,14 @@ where
             admission: None,
             pending_reconfiguration: None,
         }
+    }
+
+    pub(crate) fn owns_account_id(&self, account_id: &str) -> bool {
+        self.persistence.account(account_id).is_some()
+            && self
+                .persistence
+                .runtime_lease(account_id)
+                .is_some_and(|lease| lease.state == TelegramRuntimeLeaseState::Active)
     }
 
     pub fn set_admission(&mut self, admission: Option<TelegramRuntimeAdmission>) {
@@ -1534,6 +1764,30 @@ where
             .epoch;
         let operation_id = provider_command_operation_id(&command).to_owned();
         if let Some(operation) = self.persistence.operation(&operation_id).cloned() {
+            if let TelegramProviderCommand::DownloadFile(download) = &command
+                && Self::download_operation_can_resume(
+                    &operation,
+                    self.persistence
+                        .file(&download.account_id, &download.provider_file_id),
+                )
+            {
+                let now_unix_seconds = SystemTime::now()
+                    .duration_since(UNIX_EPOCH)
+                    .map_err(|_| TelegramDurableExecutionError::Provider)?
+                    .as_secs();
+                let resumed = operation_retry_scheduled(
+                    &operation,
+                    now_unix_seconds,
+                    "Telegram download retry requested",
+                );
+                durable
+                    .save_operation(&resumed)
+                    .await
+                    .map_err(TelegramDurableExecutionError::Persistence)?;
+                self.persistence.put_operation(resumed.clone());
+                self.persistence.put_command(command);
+                return Ok(resumed);
+            }
             return Ok(operation);
         }
         let accepted = accept_operation(&command, lease_epoch);
@@ -1547,6 +1801,27 @@ where
         self.persistence.put_operation_if_absent(accepted.clone());
         self.persistence.put_command(command);
         Ok(accepted)
+    }
+
+    fn download_operation_can_resume(
+        operation: &TelegramOperation,
+        file: Option<&TelegramFileSnapshot>,
+    ) -> bool {
+        matches!(
+            operation.state,
+            makosh_telegram_api::TelegramOperationState::AwaitingProvider
+                | makosh_telegram_api::TelegramOperationState::Failed
+                | makosh_telegram_api::TelegramOperationState::DeadLetter
+        ) && file.is_none_or(|file| {
+            file.blob_reference_id
+                .as_ref()
+                .is_none_or(|value| value.len() != 16)
+                || file
+                    .blob_plaintext_sha256
+                    .as_ref()
+                    .is_none_or(|value| value.len() != 32)
+                || file.blob_backup_class.is_none_or(|value| value == 0)
+        })
     }
 
     pub fn retry_operation(
@@ -2133,6 +2408,85 @@ where
         Ok(file)
     }
 
+    pub async fn persist_admitted_downloaded_file_durable(
+        &mut self,
+        durable: &TelegramDurablePersistence,
+        file: TelegramFileSnapshot,
+    ) -> Result<(), TelegramDurableProjectionError> {
+        if !file.is_downloaded
+            || file
+                .blob_reference_id
+                .as_ref()
+                .is_none_or(|value| value.len() != 16)
+            || file
+                .blob_plaintext_sha256
+                .as_ref()
+                .is_none_or(|value| value.len() != 32)
+            || file.blob_backup_class.is_none_or(|value| value == 0)
+        {
+            return Err(TelegramDurableProjectionError::Provider(
+                TdlibError::Protocol("Telegram downloaded Blob receipt is invalid".to_owned()),
+            ));
+        }
+        self.persistence.put_file(file.clone());
+        self.persistence
+            .apply_file_to_attachments(&file.account_id, &file);
+        durable
+            .upsert_file(&file)
+            .await
+            .map_err(TelegramDurableProjectionError::Persistence)?;
+        durable
+            .apply_file_to_attachments(&file.account_id, &file)
+            .await
+            .map_err(TelegramDurableProjectionError::Persistence)?;
+        for operation in
+            self.reconcile_download_operations(&file.account_id, &file.provider_file_id)
+        {
+            durable
+                .save_operation(&operation)
+                .await
+                .map_err(TelegramDurableProjectionError::Persistence)?;
+        }
+        Ok(())
+    }
+
+    fn reconcile_download_operations(
+        &mut self,
+        account_id: &str,
+        provider_file_id: &str,
+    ) -> Vec<TelegramOperation> {
+        let operation_ids = self.persistence.operation_ids_for_account(account_id);
+        let mut reconciled = Vec::new();
+        for operation_id in operation_ids {
+            let matches_file = matches!(
+                self.persistence.command(&operation_id),
+                Some(TelegramProviderCommand::DownloadFile(command))
+                    if command.provider_file_id == provider_file_id
+            );
+            if !matches_file {
+                continue;
+            }
+            let terminal = self
+                .persistence
+                .operation(&operation_id)
+                .is_some_and(|operation| {
+                    matches!(
+                        operation.state,
+                        makosh_telegram_api::TelegramOperationState::Completed
+                            | makosh_telegram_api::TelegramOperationState::Failed
+                            | makosh_telegram_api::TelegramOperationState::DeadLetter
+                    )
+                });
+            if terminal || !self.persistence.reconcile_operation(&operation_id, true) {
+                continue;
+            }
+            if let Some(operation) = self.persistence.operation(&operation_id).cloned() {
+                reconciled.push(operation);
+            }
+        }
+        reconciled
+    }
+
     pub fn load_chats(
         &mut self,
         account_id: &str,
@@ -2195,6 +2549,29 @@ where
         }
     }
 
+    pub fn load_message(
+        &mut self,
+        account_id: &str,
+        provider_chat_id: &str,
+        provider_message_id: &str,
+    ) -> Result<TelegramMessageObservation, TdlibError> {
+        let response = self.execute(
+            account_id,
+            get_message_request(account_id, provider_chat_id, provider_message_id)?,
+        )?;
+        match response {
+            TdlibResponse::Message(message) => {
+                self.ingest_message(message.clone()).map_err(|_| {
+                    TdlibError::Protocol("Telegram message projection is invalid".to_owned())
+                })?;
+                Ok(message)
+            }
+            _ => Err(TdlibError::Protocol(
+                "TDLib did not return the requested message".to_owned(),
+            )),
+        }
+    }
+
     pub fn load_history_with_options(
         &mut self,
         account_id: &str,
@@ -2246,9 +2623,12 @@ where
         let next_from_message_id = observations
             .last()
             .and_then(|message| message.provider_message_id.parse::<i64>().ok());
-        let has_more = !matches!(mode, makosh_telegram_api::TelegramHistorySyncMode::Full)
-            && observations.len() >= limit as usize
-            && next_from_message_id.is_some();
+        let has_more = provider_history_has_more(
+            mode,
+            from_message_id,
+            next_from_message_id,
+            observations.len(),
+        );
         Ok(makosh_telegram_api::TelegramHistoryPage {
             items: observations,
             next_from_message_id,
@@ -2371,15 +2751,17 @@ where
                 TelegramContractError::AccountUnknown,
             ))?
             .clone();
-        if account.state == TelegramAccountState::Retired || account.runtime_epoch == 0 {
+        if account.state == TelegramAccountState::Retired {
             return Err(TelegramDurableProjectionError::Contract(
                 TelegramContractError::RuntimeBlocked,
             ));
         }
-        if !matches!(
-            account.runtime_state,
-            TelegramRuntimeState::Running | TelegramRuntimeState::Degraded
-        ) {
+        if account.runtime_epoch == 0
+            || !matches!(
+                account.runtime_state,
+                TelegramRuntimeState::Running | TelegramRuntimeState::Degraded
+            )
+        {
             let running = self.lifecycle.mark_running(&account);
             let credentials = self
                 .persistence
@@ -2516,6 +2898,87 @@ where
         Ok(file)
     }
 
+    fn append_cached_message_sender_names(
+        &mut self,
+        account_id: &str,
+        provider_chat_id: &str,
+        page: &mut TelegramParticipantPage,
+    ) {
+        let unresolved_sender_ids = self
+            .persistence
+            .messages_for_chat(account_id, provider_chat_id, u32::MAX)
+            .into_iter()
+            .filter(|message| sender_name_needs_resolution(message.sender_display_name.as_deref()))
+            .filter_map(|message| {
+                provider_member_id_for_message_sender(&message.sender_id)
+                    .map(|provider_member_id| (message.sender_id, provider_member_id))
+            })
+            .collect::<BTreeSet<_>>();
+
+        for (provider_sender_id, provider_member_id) in unresolved_sender_ids {
+            let already_resolved = page.items.iter().any(|participant| {
+                participant.provider_member_id == provider_member_id
+                    && (!sender_name_needs_resolution(participant.display_name.as_deref())
+                        || participant
+                            .username
+                            .as_deref()
+                            .is_some_and(|username| !username.trim().is_empty()))
+            });
+            if already_resolved {
+                continue;
+            }
+
+            let correlation_id = format!(
+                "telegram-message-sender-{}",
+                NEXT_SENDER_RESOLUTION_ID.fetch_add(1, Ordering::Relaxed)
+            );
+            let Ok(TdlibResponse::SenderName {
+                display_name: Some(display_name),
+                ..
+            }) = self.execute(
+                account_id,
+                TdlibRequest::ResolveSender {
+                    correlation_id,
+                    provider_sender_id: provider_sender_id.clone(),
+                },
+            )
+            else {
+                continue;
+            };
+            let display_name = display_name.trim();
+            if display_name.is_empty() {
+                continue;
+            }
+
+            if let Some(participant) = page
+                .items
+                .iter_mut()
+                .find(|participant| participant.provider_member_id == provider_member_id)
+            {
+                participant.display_name = Some(display_name.to_owned());
+            } else {
+                page.items.push(TelegramParticipant {
+                    account_id: account_id.to_owned(),
+                    provider_chat_id: provider_chat_id.to_owned(),
+                    provider_member_id,
+                    display_name: Some(display_name.to_owned()),
+                    username: None,
+                    role: "message_sender".to_owned(),
+                    status: "observed".to_owned(),
+                    is_admin: false,
+                    is_owner: false,
+                    permissions: Vec::new(),
+                });
+            }
+            self.persistence.update_sender_display_name(
+                account_id,
+                provider_chat_id,
+                &provider_sender_id,
+                display_name,
+            );
+        }
+    }
+
     pub fn list_participants(
         &mut self,
         account_id: &str,
@@ -2533,16 +2996,34 @@ where
                 offset,
                 limit,
             },
-        )?;
-        match response {
-            TdlibResponse::Participants(page) => {
-                self.persistence.put_participants(&page);
-                Ok(page)
+        );
+        let mut page = match response {
+            Ok(TdlibResponse::Participants(page)) => page,
+            Err(TdlibError::Protocol(message))
+                if filter == TelegramParticipantFilter::Recent
+                    && offset == 0
+                    && message.starts_with("TDLib error ") =>
+            {
+                TelegramParticipantPage {
+                    account_id: account_id.to_owned(),
+                    provider_chat_id: provider_chat_id.to_owned(),
+                    filter,
+                    items: Vec::new(),
+                    next_offset: None,
+                }
             }
-            _ => Err(TdlibError::Protocol(
-                "TDLib did not return participants".to_owned(),
-            )),
+            Err(error) => return Err(error),
+            Ok(_) => {
+                return Err(TdlibError::Protocol(
+                    "TDLib did not return participants".to_owned(),
+                ));
+            }
+        };
+        if filter == TelegramParticipantFilter::Recent && offset == 0 {
+            self.append_cached_message_sender_names(account_id, provider_chat_id, &mut page);
         }
+        self.persistence.put_participants(&page);
+        Ok(page)
     }
 
     pub async fn list_participants_durable(
@@ -2743,6 +3224,7 @@ where
         let updates = self.transport.poll_updates()?;
         let mut frames = Vec::with_capacity(updates.len());
         let mut call_updates = Vec::new();
+        let mut downloaded_files = Vec::new();
         for update in updates {
             match update {
                 TdlibProviderUpdate::Operational(event) => {
@@ -2763,6 +3245,14 @@ where
                             TdlibError::Protocol("Telegram provider event is invalid".to_owned())
                         })?;
                     frames.push(frame);
+                }
+                TdlibProviderUpdate::DownloadedFile(downloaded) => {
+                    if downloaded.snapshot.account_id != account_id {
+                        return Err(TdlibError::Protocol(
+                            "Telegram downloaded file belongs to another account".to_owned(),
+                        ));
+                    }
+                    downloaded_files.push(downloaded);
                 }
                 TdlibProviderUpdate::Call(observation) => {
                     if observation.account_id != account_id {
@@ -2807,6 +3297,7 @@ where
         Ok(TelegramProviderPollBatch {
             frames,
             call_updates,
+            downloaded_files,
         })
     }
 
@@ -3487,6 +3978,18 @@ where
         self.persistence.put_qr_session(updated.clone());
         Ok(updated)
     }
+}
+
+fn provider_history_has_more(
+    mode: makosh_telegram_api::TelegramHistorySyncMode,
+    from_message_id: Option<i64>,
+    next_from_message_id: Option<i64>,
+    item_count: usize,
+) -> bool {
+    !matches!(mode, makosh_telegram_api::TelegramHistorySyncMode::Full)
+        && item_count > 0
+        && next_from_message_id.is_some()
+        && next_from_message_id != from_message_id
 }
 
 fn admit_provider_event_body<F>(

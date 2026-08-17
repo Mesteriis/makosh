@@ -10,7 +10,29 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file makosh/zulip/v1/client.proto.
  */
 export const file_makosh_zulip_v1_client: GenFile = /*@__PURE__*/
-  fileDesc("ChxtYWtvc2gvenVsaXAvdjEvY2xpZW50LnByb3RvEg9tYWtvc2guenVsaXAudjEizgQKFlp1bGlwUHJvdmlkZXJDb21tYW5kVjESOwoLc2VuZF9zdHJlYW0YASABKAsyJC5tYWtvc2guenVsaXAudjEuU2VuZFN0cmVhbUNvbW1hbmRWMUgAEjsKC3NlbmRfZGlyZWN0GAIgASgLMiQubWFrb3NoLnp1bGlwLnYxLlNlbmREaXJlY3RDb21tYW5kVjFIABJBCg51cGRhdGVfbWVzc2FnZRgDIAEoCzInLm1ha29zaC56dWxpcC52MS5VcGRhdGVNZXNzYWdlQ29tbWFuZFYxSAASQQoOZGVsZXRlX21lc3NhZ2UYBCABKAsyJy5tYWtvc2guenVsaXAudjEuRGVsZXRlTWVzc2FnZUNvbW1hbmRWMUgAEjYKCHJlYWN0aW9uGAUgASgLMiIubWFrb3NoLnp1bGlwLnYxLlJlYWN0aW9uQ29tbWFuZFYxSAASUQoXc2VuZF9zdHJlYW1fd2l0aF91cGxvYWQYBiABKAsyLi5tYWtvc2guenVsaXAudjEuU2VuZFN0cmVhbVdpdGhVcGxvYWRDb21tYW5kVjFIABJRChdzZW5kX2RpcmVjdF93aXRoX3VwbG9hZBgHIAEoCzIuLm1ha29zaC56dWxpcC52MS5TZW5kRGlyZWN0V2l0aFVwbG9hZENvbW1hbmRWMUgAEksKE2Rvd25sb2FkX2F0dGFjaG1lbnQYCCABKAsyLC5tYWtvc2guenVsaXAudjEuRG93bmxvYWRBdHRhY2htZW50Q29tbWFuZFYxSABCCQoHY29tbWFuZCJvChNTZW5kU3RyZWFtQ29tbWFuZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJEg4KBnN0cmVhbRgDIAEoCRINCgV0b3BpYxgEIAEoCRIPCgdjb250ZW50GAUgASgJImMKE1NlbmREaXJlY3RDb21tYW5kVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkSEQoJcmVjaXBpZW50GAMgAygJEg8KB2NvbnRlbnQYBCABKAkinwEKFlVwZGF0ZU1lc3NhZ2VDb21tYW5kVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkSGwoTcHJvdmlkZXJfbWVzc2FnZV9pZBgDIAEoCRIUCgdjb250ZW50GAQgASgJSACIAQESEgoFdG9waWMYBSABKAlIAYgBAUIKCghfY29udGVudEIICgZfdG9waWMiXwoWRGVsZXRlTWVzc2FnZUNvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIbChNwcm92aWRlcl9tZXNzYWdlX2lkGAMgASgJItEBChFSZWFjdGlvbkNvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIbChNwcm92aWRlcl9tZXNzYWdlX2lkGAMgASgJEhIKCmVtb2ppX25hbWUYBCABKAkSFwoKZW1vamlfY29kZRgFIAEoCUgAiAEBEhoKDXJlYWN0aW9uX3R5cGUYBiABKAlIAYgBARILCgNhZGQYByABKAhCDQoLX2Vtb2ppX2NvZGVCEAoOX3JlYWN0aW9uX3R5cGUiaAoRWnVsaXBCbG9iSW50ZW50VjESEAoIYmxvYl9yZWYYASABKAkSFAoMcmVmZXJlbmNlX2lkGAIgASgMEhUKDWRlY2xhcmVkX3NpemUYAyABKAQSFAoMYmFja3VwX2NsYXNzGAQgASgNIr0BCh1TZW5kU3RyZWFtV2l0aFVwbG9hZENvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIOCgZzdHJlYW0YAyABKAkSDQoFdG9waWMYBCABKAkSDwoHY29udGVudBgFIAEoCRIwCgRibG9iGAYgASgLMiIubWFrb3NoLnp1bGlwLnYxLlp1bGlwQmxvYkludGVudFYxEhAKCGZpbGVuYW1lGAcgASgJIrEBCh1TZW5kRGlyZWN0V2l0aFVwbG9hZENvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIRCglyZWNpcGllbnQYAyADKAkSDwoHY29udGVudBgEIAEoCRIwCgRibG9iGAUgASgLMiIubWFrb3NoLnp1bGlwLnYxLlp1bGlwQmxvYkludGVudFYxEhAKCGZpbGVuYW1lGAYgASgJIo4BChtEb3dubG9hZEF0dGFjaG1lbnRDb21tYW5kVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkSEwoLdXBsb2FkX3BhdGgYAyABKAkSMAoEYmxvYhgEIAEoCzIiLm1ha29zaC56dWxpcC52MS5adWxpcEJsb2JJbnRlbnRWMSIzChtadWxpcE9wZXJhdGlvblN0YXR1c1F1ZXJ5VjESFAoMb3BlcmF0aW9uX2lkGAEgASgJIkEKFVp1bGlwQ29tbWFuZFJlY2VpcHRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCSJwCh5adWxpcE9wZXJhdGlvblN0YXR1c1Jlc3BvbnNlVjESQwoGc3RhdHVzGAEgASgLMi4ubWFrb3NoLnp1bGlwLnYxLlp1bGlwQ29tbWFuZE9wZXJhdGlvblN0YXR1c1YxSACIAQFCCQoHX3N0YXR1cyKhAgodWnVsaXBDb21tYW5kT3BlcmF0aW9uU3RhdHVzVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkSDwoHb3V0Y29tZRgDIAEoCRIgChNwcm92aWRlcl9tZXNzYWdlX2lkGAQgASgDSACIAQESIQoZcmVxdWVzdGVkX2F0X3VuaXhfc2Vjb25kcxgFIAEoAxImChljb21wbGV0ZWRfYXRfdW5peF9zZWNvbmRzGAYgASgDSAGIAQESFQoIYmxvYl9yZWYYByABKAlIAogBAUIWChRfcHJvdmlkZXJfbWVzc2FnZV9pZEIcChpfY29tcGxldGVkX2F0X3VuaXhfc2Vjb25kc0ILCglfYmxvYl9yZWYyeAoTWnVsaXBDb21tYW5kU2VydmljZRJhCg5FeGVjdXRlQ29tbWFuZBInLm1ha29zaC56dWxpcC52MS5adWxpcFByb3ZpZGVyQ29tbWFuZFYxGiYubWFrb3NoLnp1bGlwLnYxLlp1bGlwQ29tbWFuZFJlY2VpcHRWMTKIAQoRWnVsaXBRdWVyeVNlcnZpY2UScwoSR2V0T3BlcmF0aW9uU3RhdHVzEiwubWFrb3NoLnp1bGlwLnYxLlp1bGlwT3BlcmF0aW9uU3RhdHVzUXVlcnlWMRovLm1ha29zaC56dWxpcC52MS5adWxpcE9wZXJhdGlvblN0YXR1c1Jlc3BvbnNlVjFiBnByb3RvMw");
+  fileDesc("ChxtYWtvc2gvenVsaXAvdjEvY2xpZW50LnByb3RvEg9tYWtvc2guenVsaXAudjEiSwojWnVsaXBPcGVyYXRpb25hbFByb2plY3Rpb25DaGFuZ2VkVjESEgoKYWNjb3VudF9pZBgBIAEoCRIQCghyZXZpc2lvbhgCIAEoBCLOBAoWWnVsaXBQcm92aWRlckNvbW1hbmRWMRI7CgtzZW5kX3N0cmVhbRgBIAEoCzIkLm1ha29zaC56dWxpcC52MS5TZW5kU3RyZWFtQ29tbWFuZFYxSAASOwoLc2VuZF9kaXJlY3QYAiABKAsyJC5tYWtvc2guenVsaXAudjEuU2VuZERpcmVjdENvbW1hbmRWMUgAEkEKDnVwZGF0ZV9tZXNzYWdlGAMgASgLMicubWFrb3NoLnp1bGlwLnYxLlVwZGF0ZU1lc3NhZ2VDb21tYW5kVjFIABJBCg5kZWxldGVfbWVzc2FnZRgEIAEoCzInLm1ha29zaC56dWxpcC52MS5EZWxldGVNZXNzYWdlQ29tbWFuZFYxSAASNgoIcmVhY3Rpb24YBSABKAsyIi5tYWtvc2guenVsaXAudjEuUmVhY3Rpb25Db21tYW5kVjFIABJRChdzZW5kX3N0cmVhbV93aXRoX3VwbG9hZBgGIAEoCzIuLm1ha29zaC56dWxpcC52MS5TZW5kU3RyZWFtV2l0aFVwbG9hZENvbW1hbmRWMUgAElEKF3NlbmRfZGlyZWN0X3dpdGhfdXBsb2FkGAcgASgLMi4ubWFrb3NoLnp1bGlwLnYxLlNlbmREaXJlY3RXaXRoVXBsb2FkQ29tbWFuZFYxSAASSwoTZG93bmxvYWRfYXR0YWNobWVudBgIIAEoCzIsLm1ha29zaC56dWxpcC52MS5Eb3dubG9hZEF0dGFjaG1lbnRDb21tYW5kVjFIAEIJCgdjb21tYW5kIm8KE1NlbmRTdHJlYW1Db21tYW5kVjESFAoMb3BlcmF0aW9uX2lkGAEgASgJEhIKCmFjY291bnRfaWQYAiABKAkSDgoGc3RyZWFtGAMgASgJEg0KBXRvcGljGAQgASgJEg8KB2NvbnRlbnQYBSABKAkiYwoTU2VuZERpcmVjdENvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIRCglyZWNpcGllbnQYAyADKAkSDwoHY29udGVudBgEIAEoCSKfAQoWVXBkYXRlTWVzc2FnZUNvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIbChNwcm92aWRlcl9tZXNzYWdlX2lkGAMgASgJEhQKB2NvbnRlbnQYBCABKAlIAIgBARISCgV0b3BpYxgFIAEoCUgBiAEBQgoKCF9jb250ZW50QggKBl90b3BpYyJfChZEZWxldGVNZXNzYWdlQ29tbWFuZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJEhsKE3Byb3ZpZGVyX21lc3NhZ2VfaWQYAyABKAki0QEKEVJlYWN0aW9uQ29tbWFuZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJEhsKE3Byb3ZpZGVyX21lc3NhZ2VfaWQYAyABKAkSEgoKZW1vamlfbmFtZRgEIAEoCRIXCgplbW9qaV9jb2RlGAUgASgJSACIAQESGgoNcmVhY3Rpb25fdHlwZRgGIAEoCUgBiAEBEgsKA2FkZBgHIAEoCEINCgtfZW1vamlfY29kZUIQCg5fcmVhY3Rpb25fdHlwZSJoChFadWxpcEJsb2JJbnRlbnRWMRIQCghibG9iX3JlZhgBIAEoCRIUCgxyZWZlcmVuY2VfaWQYAiABKAwSFQoNZGVjbGFyZWRfc2l6ZRgDIAEoBBIUCgxiYWNrdXBfY2xhc3MYBCABKA0ivQEKHVNlbmRTdHJlYW1XaXRoVXBsb2FkQ29tbWFuZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJEg4KBnN0cmVhbRgDIAEoCRINCgV0b3BpYxgEIAEoCRIPCgdjb250ZW50GAUgASgJEjAKBGJsb2IYBiABKAsyIi5tYWtvc2guenVsaXAudjEuWnVsaXBCbG9iSW50ZW50VjESEAoIZmlsZW5hbWUYByABKAkisQEKHVNlbmREaXJlY3RXaXRoVXBsb2FkQ29tbWFuZFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJEhEKCXJlY2lwaWVudBgDIAMoCRIPCgdjb250ZW50GAQgASgJEjAKBGJsb2IYBSABKAsyIi5tYWtvc2guenVsaXAudjEuWnVsaXBCbG9iSW50ZW50VjESEAoIZmlsZW5hbWUYBiABKAkijgEKG0Rvd25sb2FkQXR0YWNobWVudENvbW1hbmRWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRITCgt1cGxvYWRfcGF0aBgDIAEoCRIwCgRibG9iGAQgASgLMiIubWFrb3NoLnp1bGlwLnYxLlp1bGlwQmxvYkludGVudFYxIjMKG1p1bGlwT3BlcmF0aW9uU3RhdHVzUXVlcnlWMRIUCgxvcGVyYXRpb25faWQYASABKAkiQQoVWnVsaXBDb21tYW5kUmVjZWlwdFYxEhQKDG9wZXJhdGlvbl9pZBgBIAEoCRISCgphY2NvdW50X2lkGAIgASgJInAKHlp1bGlwT3BlcmF0aW9uU3RhdHVzUmVzcG9uc2VWMRJDCgZzdGF0dXMYASABKAsyLi5tYWtvc2guenVsaXAudjEuWnVsaXBDb21tYW5kT3BlcmF0aW9uU3RhdHVzVjFIAIgBAUIJCgdfc3RhdHVzIqECCh1adWxpcENvbW1hbmRPcGVyYXRpb25TdGF0dXNWMRIUCgxvcGVyYXRpb25faWQYASABKAkSEgoKYWNjb3VudF9pZBgCIAEoCRIPCgdvdXRjb21lGAMgASgJEiAKE3Byb3ZpZGVyX21lc3NhZ2VfaWQYBCABKANIAIgBARIhChlyZXF1ZXN0ZWRfYXRfdW5peF9zZWNvbmRzGAUgASgDEiYKGWNvbXBsZXRlZF9hdF91bml4X3NlY29uZHMYBiABKANIAYgBARIVCghibG9iX3JlZhgHIAEoCUgCiAEBQhYKFF9wcm92aWRlcl9tZXNzYWdlX2lkQhwKGl9jb21wbGV0ZWRfYXRfdW5peF9zZWNvbmRzQgsKCV9ibG9iX3JlZjJ4ChNadWxpcENvbW1hbmRTZXJ2aWNlEmEKDkV4ZWN1dGVDb21tYW5kEicubWFrb3NoLnp1bGlwLnYxLlp1bGlwUHJvdmlkZXJDb21tYW5kVjEaJi5tYWtvc2guenVsaXAudjEuWnVsaXBDb21tYW5kUmVjZWlwdFYxMogBChFadWxpcFF1ZXJ5U2VydmljZRJzChJHZXRPcGVyYXRpb25TdGF0dXMSLC5tYWtvc2guenVsaXAudjEuWnVsaXBPcGVyYXRpb25TdGF0dXNRdWVyeVYxGi8ubWFrb3NoLnp1bGlwLnYxLlp1bGlwT3BlcmF0aW9uU3RhdHVzUmVzcG9uc2VWMWIGcHJvdG8z");
+
+/**
+ * @generated from message makosh.zulip.v1.ZulipOperationalProjectionChangedV1
+ */
+export type ZulipOperationalProjectionChangedV1 = Message<"makosh.zulip.v1.ZulipOperationalProjectionChangedV1"> & {
+  /**
+   * @generated from field: string account_id = 1;
+   */
+  accountId: string;
+
+  /**
+   * @generated from field: uint64 revision = 2;
+   */
+  revision: bigint;
+};
+
+/**
+ * Describes the message makosh.zulip.v1.ZulipOperationalProjectionChangedV1.
+ * Use `create(ZulipOperationalProjectionChangedV1Schema)` to create a new message.
+ */
+export const ZulipOperationalProjectionChangedV1Schema: GenMessage<ZulipOperationalProjectionChangedV1> = /*@__PURE__*/
+  messageDesc(file_makosh_zulip_v1_client, 0);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipProviderCommandV1
@@ -75,7 +97,7 @@ export type ZulipProviderCommandV1 = Message<"makosh.zulip.v1.ZulipProviderComma
  * Use `create(ZulipProviderCommandV1Schema)` to create a new message.
  */
 export const ZulipProviderCommandV1Schema: GenMessage<ZulipProviderCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 0);
+  messageDesc(file_makosh_zulip_v1_client, 1);
 
 /**
  * @generated from message makosh.zulip.v1.SendStreamCommandV1
@@ -112,7 +134,7 @@ export type SendStreamCommandV1 = Message<"makosh.zulip.v1.SendStreamCommandV1">
  * Use `create(SendStreamCommandV1Schema)` to create a new message.
  */
 export const SendStreamCommandV1Schema: GenMessage<SendStreamCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 1);
+  messageDesc(file_makosh_zulip_v1_client, 2);
 
 /**
  * @generated from message makosh.zulip.v1.SendDirectCommandV1
@@ -144,7 +166,7 @@ export type SendDirectCommandV1 = Message<"makosh.zulip.v1.SendDirectCommandV1">
  * Use `create(SendDirectCommandV1Schema)` to create a new message.
  */
 export const SendDirectCommandV1Schema: GenMessage<SendDirectCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 2);
+  messageDesc(file_makosh_zulip_v1_client, 3);
 
 /**
  * @generated from message makosh.zulip.v1.UpdateMessageCommandV1
@@ -181,7 +203,7 @@ export type UpdateMessageCommandV1 = Message<"makosh.zulip.v1.UpdateMessageComma
  * Use `create(UpdateMessageCommandV1Schema)` to create a new message.
  */
 export const UpdateMessageCommandV1Schema: GenMessage<UpdateMessageCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 3);
+  messageDesc(file_makosh_zulip_v1_client, 4);
 
 /**
  * @generated from message makosh.zulip.v1.DeleteMessageCommandV1
@@ -208,7 +230,7 @@ export type DeleteMessageCommandV1 = Message<"makosh.zulip.v1.DeleteMessageComma
  * Use `create(DeleteMessageCommandV1Schema)` to create a new message.
  */
 export const DeleteMessageCommandV1Schema: GenMessage<DeleteMessageCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 4);
+  messageDesc(file_makosh_zulip_v1_client, 5);
 
 /**
  * @generated from message makosh.zulip.v1.ReactionCommandV1
@@ -255,7 +277,7 @@ export type ReactionCommandV1 = Message<"makosh.zulip.v1.ReactionCommandV1"> & {
  * Use `create(ReactionCommandV1Schema)` to create a new message.
  */
 export const ReactionCommandV1Schema: GenMessage<ReactionCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 5);
+  messageDesc(file_makosh_zulip_v1_client, 6);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipBlobIntentV1
@@ -287,7 +309,7 @@ export type ZulipBlobIntentV1 = Message<"makosh.zulip.v1.ZulipBlobIntentV1"> & {
  * Use `create(ZulipBlobIntentV1Schema)` to create a new message.
  */
 export const ZulipBlobIntentV1Schema: GenMessage<ZulipBlobIntentV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 6);
+  messageDesc(file_makosh_zulip_v1_client, 7);
 
 /**
  * @generated from message makosh.zulip.v1.SendStreamWithUploadCommandV1
@@ -334,7 +356,7 @@ export type SendStreamWithUploadCommandV1 = Message<"makosh.zulip.v1.SendStreamW
  * Use `create(SendStreamWithUploadCommandV1Schema)` to create a new message.
  */
 export const SendStreamWithUploadCommandV1Schema: GenMessage<SendStreamWithUploadCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 7);
+  messageDesc(file_makosh_zulip_v1_client, 8);
 
 /**
  * @generated from message makosh.zulip.v1.SendDirectWithUploadCommandV1
@@ -376,7 +398,7 @@ export type SendDirectWithUploadCommandV1 = Message<"makosh.zulip.v1.SendDirectW
  * Use `create(SendDirectWithUploadCommandV1Schema)` to create a new message.
  */
 export const SendDirectWithUploadCommandV1Schema: GenMessage<SendDirectWithUploadCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 8);
+  messageDesc(file_makosh_zulip_v1_client, 9);
 
 /**
  * @generated from message makosh.zulip.v1.DownloadAttachmentCommandV1
@@ -408,7 +430,7 @@ export type DownloadAttachmentCommandV1 = Message<"makosh.zulip.v1.DownloadAttac
  * Use `create(DownloadAttachmentCommandV1Schema)` to create a new message.
  */
 export const DownloadAttachmentCommandV1Schema: GenMessage<DownloadAttachmentCommandV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 9);
+  messageDesc(file_makosh_zulip_v1_client, 10);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipOperationStatusQueryV1
@@ -425,7 +447,7 @@ export type ZulipOperationStatusQueryV1 = Message<"makosh.zulip.v1.ZulipOperatio
  * Use `create(ZulipOperationStatusQueryV1Schema)` to create a new message.
  */
 export const ZulipOperationStatusQueryV1Schema: GenMessage<ZulipOperationStatusQueryV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 10);
+  messageDesc(file_makosh_zulip_v1_client, 11);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipCommandReceiptV1
@@ -447,7 +469,7 @@ export type ZulipCommandReceiptV1 = Message<"makosh.zulip.v1.ZulipCommandReceipt
  * Use `create(ZulipCommandReceiptV1Schema)` to create a new message.
  */
 export const ZulipCommandReceiptV1Schema: GenMessage<ZulipCommandReceiptV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 11);
+  messageDesc(file_makosh_zulip_v1_client, 12);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipOperationStatusResponseV1
@@ -464,7 +486,7 @@ export type ZulipOperationStatusResponseV1 = Message<"makosh.zulip.v1.ZulipOpera
  * Use `create(ZulipOperationStatusResponseV1Schema)` to create a new message.
  */
 export const ZulipOperationStatusResponseV1Schema: GenMessage<ZulipOperationStatusResponseV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 12);
+  messageDesc(file_makosh_zulip_v1_client, 13);
 
 /**
  * @generated from message makosh.zulip.v1.ZulipCommandOperationStatusV1
@@ -511,7 +533,7 @@ export type ZulipCommandOperationStatusV1 = Message<"makosh.zulip.v1.ZulipComman
  * Use `create(ZulipCommandOperationStatusV1Schema)` to create a new message.
  */
 export const ZulipCommandOperationStatusV1Schema: GenMessage<ZulipCommandOperationStatusV1> = /*@__PURE__*/
-  messageDesc(file_makosh_zulip_v1_client, 13);
+  messageDesc(file_makosh_zulip_v1_client, 14);
 
 /**
  * Provider-specific operational contracts. Core Gateway authenticates and

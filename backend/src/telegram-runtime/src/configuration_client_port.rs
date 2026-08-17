@@ -156,11 +156,48 @@ where
                     })?,
             )
         }
+        TelegramClientRequest::Query(makosh_telegram_api::TelegramProviderQuery::CachedChats {
+            account_id,
+            limit,
+        }) if !runtime_available && account_id == composition.configured_account_id() => {
+            TelegramClientResponse::Query(
+                makosh_telegram_api::TelegramProviderQueryResponse::Chats(
+                    durable
+                        .list_chats(&account_id, i64::from(limit))
+                        .await
+                        .map_err(persistence_error)?,
+                ),
+            )
+        }
+        TelegramClientRequest::Query(
+            makosh_telegram_api::TelegramProviderQuery::CachedMessages {
+                account_id,
+                provider_chat_id,
+                limit,
+            },
+        ) if !runtime_available && account_id == composition.configured_account_id() => {
+            TelegramClientResponse::Query(
+                makosh_telegram_api::TelegramProviderQueryResponse::CachedMessages(
+                    durable
+                        .list_messages(&account_id, &provider_chat_id, i64::from(limit))
+                        .await
+                        .map_err(persistence_error)?,
+                ),
+            )
+        }
         _ => return Ok(None),
     };
     encode_module_response(contract, request_id, &response)
         .map(Some)
         .map_err(TelegramClientTransportError::Port)
+}
+
+fn persistence_error(
+    error: makosh_telegram_persistence::TelegramDurablePersistenceError,
+) -> TelegramClientTransportError {
+    TelegramClientTransportError::Port(crate::client_port::TelegramClientPortError::Persistence(
+        error,
+    ))
 }
 
 fn owns_telegram_client_contract(request: &[u8]) -> Result<bool, TelegramClientTransportError> {

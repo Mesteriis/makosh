@@ -538,7 +538,12 @@ impl CommunicationsEventRuntimeV1 {
             admission.grant_epoch,
             credential_revision,
         )
-        .map_err(|_| unavailable_at("event_access"))?;
+        .map_err(|error| {
+            if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+                eprintln!("developer_communications_event_access_error={error:?}");
+            }
+            unavailable_at("event_access")
+        })?;
         let permits = access
             .subscribe_permits(
                 &admission.registration_id,

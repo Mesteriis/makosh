@@ -514,6 +514,26 @@ async fn postgres_replay_order_hash_cas_restart_and_rls_are_exact() {
         .expect("ready outbox")
         .expect("pending ready");
     assert!(!ready.retired);
+    ensure_public_account_ready_v1(
+        &mail,
+        OWNER,
+        "private-account-a",
+        &MailAddressBookEnvelopeContextV1 {
+            runtime_instance_id: "mail-runtime-successor".to_owned(),
+            runtime_generation: 2,
+            recorded_at_unix_seconds: 2,
+            ..lifecycle_context.clone()
+        },
+        2_000,
+    )
+    .await
+    .expect("successor runtime reuses the one durable AccountReady event");
+    assert_eq!(
+        mail.load_pending_person_source_lifecycle_outbox(OWNER)
+            .await
+            .expect("ready exact replay"),
+        Some(ready.clone()),
+    );
     mail.mark_person_source_lifecycle_outbox_published(
         OWNER,
         ready.record.message_id,

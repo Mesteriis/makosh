@@ -120,7 +120,7 @@ test('Mail retire and delete are exact owner-local lifecycle operations', async 
   ]) {
     assert.match(contract, new RegExp(route.replaceAll('.', '\\.')));
   }
-  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 14/);
+  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 15/);
   assert.match(clientPort, /MailClientContractV1::AccountRetire/);
   assert.match(clientPort, /MailClientContractV1::AccountDelete/);
   assert.match(clientPort, /MailClientContractV1::AccountLifecycleRetry/);

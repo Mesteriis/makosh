@@ -6,7 +6,7 @@ const BACKEND_ROOT = new URL('../..', import.meta.url);
 const PROJECT_ROOT = new URL('../../../', import.meta.url);
 
 test('module-originated Scheduler control opens only with exact protocol and managed evidence', async () => {
-  const [adr, inventorySource, proto, schedulerProtocol, validation, runtimeContract, admission, mapping, resultEnvelope, migration, authorityMigration, persistence, schedulerConnection, jetstream, runtimeWorker, schedulerRuntimeControl, delayedDeliveryRuntime, delayedDeliverySchedulerResults, delayedDeliveryDueExecution, kernelTopology, schedulerLaunch, schedulerLifecycle, eventCatalog, development, manifest] = await Promise.all([
+  const [adr, inventorySource, proto, schedulerProtocol, validation, runtimeContract, admission, mapping, resultEnvelope, migration, authorityMigration, pendingFireScheduleMigration, persistence, schedulerConnection, jetstream, runtimeWorker, schedulerRuntimeControl, delayedDeliveryRuntime, delayedDeliverySchedulerResults, delayedDeliveryDueExecution, kernelTopology, schedulerLaunch, schedulerLifecycle, eventCatalog, development, manifest] = await Promise.all([
     readFile(
       new URL(
         'docs/adr/ADR-0342-module-originated-scheduler-control-events.md',
@@ -80,6 +80,13 @@ test('module-originated Scheduler control opens only with exact protocol and man
     readFile(
       new URL(
         'src/platform/scheduler/persistence/migrations/0009_scheduler_schedule_control_authority.sql',
+        BACKEND_ROOT,
+      ),
+      'utf8',
+    ),
+    readFile(
+      new URL(
+        'src/platform/scheduler/persistence/migrations/0010_scheduler_pending_fires_schedule.sql',
         BACKEND_ROOT,
       ),
       'utf8',
@@ -220,6 +227,7 @@ test('module-originated Scheduler control opens only with exact protocol and man
   assert.match(migration, /scheduler_schedule_control_inbox/);
   assert.match(migration, /scheduler_schedule_control_results/);
   assert.match(authorityMigration, /scheduler_schedule_control_authorities/);
+  assert.match(pendingFireScheduleMigration, /scheduler_pending_fires_schedule_id_idx/);
   assert.match(persistence, /command_envelope_sha256/);
   assert.match(persistence, /exact_envelope_bytes/);
   assert.match(persistence, /SchedulerScheduleControlDecisionV1::TooLate/);

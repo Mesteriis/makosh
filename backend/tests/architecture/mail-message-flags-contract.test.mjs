@@ -154,7 +154,7 @@ test('Mail message flags stay provider-owned, durable, typed and separately admi
   assert.match(wire, /encode_message_flag_command/);
   assert.match(wire, /decode_message_flag_status_response/);
   assert.match(wire, /encode_message_flag_command\(&command\)\? != bytes/);
-  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 14/);
+  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 15/);
   assert.match(contract, /mail\.message-flags\.command\.v1/);
   assert.match(contract, /mail\.message-flags\.query\.v1/);
 

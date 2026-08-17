@@ -17,6 +17,10 @@ import {
 } from '../../../gen/makosh/whatsapp/operational/v1/client_pb'
 import type { ProviderEventKind } from '../../../gen/makosh/whatsapp/v1/client_pb'
 import { getWhatsAppOperationalReadConnectClient } from './whatsAppOperationalReadClient'
+import {
+	getClientAccountLaneRegistry,
+	type ClientAccountWorkClass,
+} from '../../../platform/gateway/clientAccountLane'
 
 const DEFAULT_PAGE_LIMIT = 50
 const MAX_PAGE_LIMIT = 200
@@ -33,7 +37,7 @@ export type WhatsAppOperationalPageInput = {
 export async function listWhatsAppOperationalMessages(
 	input: WhatsAppOperationalPageInput & { providerChatId?: string },
 ): Promise<WhatsAppMessagePageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listMessages',
 		value: create(ListMessagesQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -54,7 +58,7 @@ export async function searchWhatsAppOperationalMessages(
 		searchQuery: string
 	},
 ): Promise<WhatsAppMessagePageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'searchMessages',
 		value: create(SearchMessagesQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -73,7 +77,7 @@ export async function searchWhatsAppOperationalMessages(
 export async function listWhatsAppOperationalDialogs(
 	input: WhatsAppOperationalPageInput,
 ): Promise<WhatsAppDialogPageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listDialogs',
 		value: create(ListDialogsQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -90,7 +94,7 @@ export async function listWhatsAppOperationalDialogs(
 export async function listWhatsAppOperationalParticipants(
 	input: WhatsAppOperationalPageInput & { providerChatId: string },
 ): Promise<WhatsAppParticipantPageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listParticipants',
 		value: create(ListParticipantsQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -98,7 +102,7 @@ export async function listWhatsAppOperationalParticipants(
 			cursor: optionalCursor(input.cursor),
 			limit: pageLimit(input.limit),
 		}),
-	})
+	}, 'enrichment')
 	if (response.response.case !== 'participants') {
 		throw new Error('WhatsApp participants response is unavailable')
 	}
@@ -111,7 +115,7 @@ export async function listWhatsAppOperationalEvents(
 		providerChatId?: string
 	},
 ): Promise<WhatsAppEventPageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listEvents',
 		value: create(ListEventsQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -130,7 +134,7 @@ export async function listWhatsAppOperationalEvents(
 export async function getWhatsAppOperationalRuntimeStatus(
 	accountId: string,
 ): Promise<WhatsAppOperationalRuntimeStatusV1> {
-	const response = await query({
+	const response = await query(accountId, {
 		case: 'getRuntimeStatus',
 		value: create(GetRuntimeStatusQuerySchema, {
 			accountId: identifier('account ID', accountId),
@@ -142,10 +146,16 @@ export async function getWhatsAppOperationalRuntimeStatus(
 	return response.response.value
 }
 
-function query(queryInput: WhatsAppOperationalQueryV1['query']) {
-	return getWhatsAppOperationalReadConnectClient().query(
-		create(WhatsAppOperationalQueryV1Schema, { query: queryInput }),
-	)
+function query(
+	accountId: string,
+	queryInput: WhatsAppOperationalQueryV1['query'],
+	workClass: ClientAccountWorkClass = 'interactive',
+) {
+	return getClientAccountLaneRegistry()
+		.get({ provider: 'whatsapp', accountId: identifier('account ID', accountId) })
+		.run(workClass, async () => getWhatsAppOperationalReadConnectClient().query(
+			create(WhatsAppOperationalQueryV1Schema, { query: queryInput }),
+		))
 }
 
 function identifier(label: string, value: string): string {

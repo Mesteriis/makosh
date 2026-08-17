@@ -1,6 +1,8 @@
 syntax = "proto3";
 package makosh.zulip.v1;
 
+message ZulipOperationalProjectionChangedV1 { string account_id = 1; uint64 revision = 2; }
+
 message ZulipProviderCommandV1 { oneof command { SendStreamCommandV1 send_stream = 1; SendDirectCommandV1 send_direct = 2; UpdateMessageCommandV1 update_message = 3; DeleteMessageCommandV1 delete_message = 4; ReactionCommandV1 reaction = 5; SendStreamWithUploadCommandV1 send_stream_with_upload = 6; SendDirectWithUploadCommandV1 send_direct_with_upload = 7; DownloadAttachmentCommandV1 download_attachment = 8; } }
 message SendStreamCommandV1 { string operation_id = 1; string account_id = 2; string stream = 3; string topic = 4; string content = 5; }
 message SendDirectCommandV1 { string operation_id = 1; string account_id = 2; repeated string recipient = 3; string content = 4; }

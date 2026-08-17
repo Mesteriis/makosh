@@ -26,6 +26,7 @@ import '../../../shared/ui/shell/providerOperationalWorkspace.css'
 
 defineProps<{
 	compositionModel: MailCompositionModel
+	credentialRequired: boolean
 	bodyContentStatus: 'idle' | 'loading' | 'ready' | 'unavailable'
 	bodyContentStatusMessage: string
 	bodyText: string
@@ -69,6 +70,7 @@ const emit = defineEmits<{
 	locationRestore: []
 	locationSelectTargetFolder: [folderId: string]
 	locationTrash: []
+	openSettings: []
 	permanentDelete: []
 	permanentDeleteRefreshStatus: []
 	permanentDeleteSetConfirmed: [confirmed: boolean]
@@ -95,6 +97,13 @@ const syncHealthOpen = ref(false)
 
 <template>
 	<section class="mail-operational-page">
+		<section v-if="credentialRequired" class="mail-credential-required" role="status">
+			<div>
+				<strong>Mail account authorization required</strong>
+				<p>Connect provider credentials before folders, messages and synchronization can load.</p>
+			</div>
+			<button type="button" @click="emit('openSettings')">Open Mail settings</button>
+		</section>
 		<MailWorkspaceToolbar
 			:read-model="readModel"
 			:search-query="searchQuery"

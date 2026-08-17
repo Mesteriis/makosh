@@ -9,8 +9,9 @@ use makosh_scheduler_jetstream::{
     SchedulerJetStreamReceiptPortV1, SchedulerJetStreamScheduleControlPortV1,
 };
 use makosh_scheduler_persistence::{
-    SchedulerDispatchAdmissionV1, SchedulerMaterializationSourceV1, SchedulerPostgresStoreV1,
-    SchedulerReceiptConsumeErrorV1, SchedulerReceiptConsumerV1,
+    SchedulerDispatchAdmissionV1, SchedulerMaterializationErrorV1,
+    SchedulerMaterializationSourceV1, SchedulerPostgresStoreV1, SchedulerReceiptConsumeErrorV1,
+    SchedulerReceiptConsumerV1,
 };
 
 use super::{
@@ -97,7 +98,7 @@ async fn relay_dispatches(
                 return;
             }
         };
-        if store
+        if let Err(error) = store
             .materialize_due(
                 reading.wall_utc(),
                 u16::try_from(dispatch_batch_limit).unwrap_or(u16::MAX),
@@ -105,12 +106,11 @@ async fn relay_dispatches(
                 &admission,
             )
             .await
-            .is_err()
         {
-            report_failure(&failure, "materialize_due");
+            report_failure(&failure, materialization_failure_code("due", error));
             return;
         }
-        if store
+        if let Err(error) = store
             .materialize_retries(
                 reading.wall_utc(),
                 u16::try_from(dispatch_batch_limit).unwrap_or(u16::MAX),
@@ -118,9 +118,8 @@ async fn relay_dispatches(
                 &admission,
             )
             .await
-            .is_err()
         {
-            report_failure(&failure, "materialize_retries");
+            report_failure(&failure, materialization_failure_code("retries", error));
             return;
         }
         for _ in 0..dispatch_batch_limit {
@@ -144,6 +143,30 @@ async fn relay_dispatches(
                 }
             }
         }
+    }
+}
+
+fn materialization_failure_code(
+    stage: &'static str,
+    error: SchedulerMaterializationErrorV1,
+) -> &'static str {
+    match (stage, error) {
+        ("due", SchedulerMaterializationErrorV1::InvalidAdmission) => {
+            "materialize_due_invalid_admission"
+        }
+        ("due", SchedulerMaterializationErrorV1::InvalidSource) => "materialize_due_invalid_source",
+        ("due", SchedulerMaterializationErrorV1::InvalidLimit) => "materialize_due_invalid_limit",
+        ("due", SchedulerMaterializationErrorV1::InvalidTime) => "materialize_due_invalid_time",
+        ("due", SchedulerMaterializationErrorV1::CorruptState) => "materialize_due_corrupt_state",
+        ("due", SchedulerMaterializationErrorV1::Unavailable) => "materialize_due_unavailable",
+        (_, SchedulerMaterializationErrorV1::InvalidAdmission) => {
+            "materialize_retries_invalid_admission"
+        }
+        (_, SchedulerMaterializationErrorV1::InvalidSource) => "materialize_retries_invalid_source",
+        (_, SchedulerMaterializationErrorV1::InvalidLimit) => "materialize_retries_invalid_limit",
+        (_, SchedulerMaterializationErrorV1::InvalidTime) => "materialize_retries_invalid_time",
+        (_, SchedulerMaterializationErrorV1::CorruptState) => "materialize_retries_corrupt_state",
+        (_, SchedulerMaterializationErrorV1::Unavailable) => "materialize_retries_unavailable",
     }
 }
 
@@ -222,4 +245,21 @@ pub(super) fn report_failure(failure: &Sender<()>, code: &'static str) {
         eprintln!("developer_scheduler_worker_failure={code}");
     }
     let _ = failure.send(());
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn materialization_failures_expose_only_bounded_stage_and_error_codes() {
+        assert_eq!(
+            materialization_failure_code("due", SchedulerMaterializationErrorV1::CorruptState),
+            "materialize_due_corrupt_state"
+        );
+        assert_eq!(
+            materialization_failure_code("retries", SchedulerMaterializationErrorV1::Unavailable),
+            "materialize_retries_unavailable"
+        );
+    }
 }

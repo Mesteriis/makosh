@@ -1,19 +1,22 @@
 //! Applies only Kernel-staged, fenced bindings to the private PgBouncer include.
 
 use makosh_storage_pgbouncer::{
-    PLATFORM_ADMIN_USERNAME, PgBouncerAuthEntryV1, PgBouncerAuthFileV1,
-    PgBouncerDatabaseConfigFileV1, PgBouncerRuntimeConfigV1, PoolAliasV1,
-    TokioPostgresPgBouncerAdminPortV1, database_is_configured, reload_configuration,
+    PLATFORM_ADMIN_USERNAME, PgBouncerAdminPortV1, PgBouncerAuthEntryV1, PgBouncerAuthFileV1,
+    PgBouncerDatabaseConfigFileV1, PgBouncerRuntimeConfigV1, PoolAliasV1, PoolLifecycleCommandV1,
+    PoolLifecycleOutcomeV1, TokioPostgresPgBouncerAdminPortV1, database_is_configured,
+    reload_configuration, user_is_configured,
 };
 use makosh_storage_postgres::{StorageRoleSpecV1, read_runtime_role_scram_verifier};
 use makosh_storage_protocol::v1::{
     StorageBindingV1, StorageRuntimeConfigurationV1, StorageRuntimeTopologyV1,
 };
-use makosh_storage_protocol::validation::validate_storage_runtime_configuration;
+use makosh_storage_protocol::validation::{
+    storage_binding_from_message, validate_storage_runtime_configuration,
+};
 use std::time::Duration;
 use zeroize::Zeroizing;
 
-use super::{RuntimeRoleCredentialV1, admin_credential, admin_endpoint, connect_platform};
+use super::{admin_credential, admin_endpoint, connect_platform};
 
 // PgBouncer may briefly reject RELOAD while its private include is being
 // atomically replaced. Keep the bounded reconciliation window long enough for
@@ -25,7 +28,7 @@ pub(crate) fn apply_authorized_bindings(
     configuration: &StorageRuntimeConfigurationV1,
     pgbouncer_credential_bytes: &Zeroizing<Vec<u8>>,
     postgres_credential_bytes: &Zeroizing<Vec<u8>>,
-    runtime_credentials: &[RuntimeRoleCredentialV1],
+    runtime_bindings: &[StorageBindingV1],
 ) -> Result<(), String> {
     validate_storage_runtime_configuration(configuration)
         .map_err(|_| "Storage runtime configuration is invalid".to_owned())?;
@@ -48,7 +51,7 @@ pub(crate) fn apply_authorized_bindings(
         topology,
         postgres_credential: postgres_credential_bytes,
         pgbouncer_credential_bytes,
-        runtime_credentials,
+        runtime_bindings,
         endpoint: &endpoint,
         pgbouncer_credential: &credential,
         entries: &entries,
@@ -83,7 +86,7 @@ pub(crate) fn apply_staged_pool_configuration(
         .enable_all()
         .build()
         .map_err(|_| "Storage PgBouncer admin runtime is unavailable".to_owned())?;
-    runtime.block_on(reload_and_verify(&endpoint, &credential, &entries))
+    runtime.block_on(reload_and_verify(&endpoint, &credential, &entries, &[]))
 }
 
 struct AuthorizedPoolReplaceInputV1<'a> {
@@ -91,7 +94,7 @@ struct AuthorizedPoolReplaceInputV1<'a> {
     topology: &'a StorageRuntimeTopologyV1,
     postgres_credential: &'a Zeroizing<Vec<u8>>,
     pgbouncer_credential_bytes: &'a Zeroizing<Vec<u8>>,
-    runtime_credentials: &'a [RuntimeRoleCredentialV1],
+    runtime_bindings: &'a [StorageBindingV1],
     endpoint: &'a makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
     pgbouncer_credential: &'a makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &'a [PgBouncerRuntimeConfigV1],
@@ -102,7 +105,7 @@ async fn replace_auth_and_reload(input: AuthorizedPoolReplaceInputV1<'_>) -> Res
         input.topology,
         input.postgres_credential,
         input.pgbouncer_credential_bytes,
-        input.runtime_credentials,
+        input.runtime_bindings,
     )
     .await?;
     PgBouncerAuthFileV1::replace(
@@ -115,24 +118,37 @@ async fn replace_auth_and_reload(input: AuthorizedPoolReplaceInputV1<'_>) -> Res
         input.entries,
     )
     .map_err(|_| "Storage PgBouncer database configuration is unavailable".to_owned())?;
-    reload_and_verify(input.endpoint, input.pgbouncer_credential, input.entries).await
+    let runtime_principals = input
+        .runtime_bindings
+        .iter()
+        .map(|binding| binding.runtime_principal.as_str())
+        .collect::<Vec<_>>();
+    reload_and_verify(
+        input.endpoint,
+        input.pgbouncer_credential,
+        input.entries,
+        &runtime_principals,
+    )
+    .await
 }
 
 async fn auth_entries(
     topology: &StorageRuntimeTopologyV1,
     postgres_credential: &Zeroizing<Vec<u8>>,
     pgbouncer_credential: &Zeroizing<Vec<u8>>,
-    runtime_credentials: &[RuntimeRoleCredentialV1],
+    runtime_bindings: &[StorageBindingV1],
 ) -> Result<Vec<PgBouncerAuthEntryV1>, String> {
     let connector = connect_platform(topology, postgres_credential).await?;
-    let mut entries = Vec::with_capacity(runtime_credentials.len() + 1);
+    let mut entries = Vec::with_capacity(runtime_bindings.len() + 1);
     entries.push(
         PgBouncerAuthEntryV1::pooler_admin(PLATFORM_ADMIN_USERNAME, pgbouncer_credential).map_err(
             |_| "Storage PgBouncer authentication configuration is unavailable".to_owned(),
         )?,
     );
-    for credential in runtime_credentials {
-        let spec = StorageRoleSpecV1::platform_binding(credential.binding().clone())
+    for binding in runtime_bindings {
+        let binding = storage_binding_from_message(binding)
+            .map_err(|_| "Storage role specification is invalid".to_owned())?;
+        let spec = StorageRoleSpecV1::platform_binding(binding)
             .map_err(|_| "Storage role specification is invalid".to_owned())?;
         let verifier = read_runtime_role_scram_verifier(&connector, &spec)
             .await
@@ -183,9 +199,10 @@ async fn reload_and_verify(
     endpoint: &makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
     credential: &makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &[PgBouncerRuntimeConfigV1],
+    runtime_principals: &[&str],
 ) -> Result<(), String> {
     for attempt in 1..=RELOAD_ATTEMPTS {
-        match reload_and_verify_once(endpoint, credential, entries).await {
+        match reload_and_verify_once(endpoint, credential, entries, runtime_principals).await {
             Ok(()) => return Ok(()),
             Err(_) if attempt < RELOAD_ATTEMPTS => {
                 tokio::time::sleep(RELOAD_RETRY_DELAY).await;
@@ -200,6 +217,7 @@ async fn reload_and_verify_once(
     endpoint: &makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
     credential: &makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
     entries: &[PgBouncerRuntimeConfigV1],
+    runtime_principals: &[&str],
 ) -> Result<(), String> {
     let mut admin = TokioPostgresPgBouncerAdminPortV1::connect(endpoint, credential)
         .await
@@ -213,6 +231,40 @@ async fn reload_and_verify_once(
             .map_err(|_| "Storage PgBouncer catalog is unavailable".to_owned())?
         {
             return Err("Storage PgBouncer configuration is unavailable".to_owned());
+        }
+    }
+    for runtime_principal in runtime_principals {
+        if !user_is_configured(endpoint, credential, runtime_principal)
+            .await
+            .map_err(|_| "Storage PgBouncer user catalog is unavailable".to_owned())?
+        {
+            return Err("Storage PgBouncer authentication configuration is unavailable".to_owned());
+        }
+    }
+    resume_databases(&mut admin, endpoint, credential, entries).await
+}
+
+async fn resume_databases(
+    admin: &mut TokioPostgresPgBouncerAdminPortV1,
+    endpoint: &makosh_storage_pgbouncer::PgBouncerAdminEndpointV1,
+    credential: &makosh_storage_pgbouncer::PgBouncerAdminCredentialV1,
+    entries: &[PgBouncerRuntimeConfigV1],
+) -> Result<(), String> {
+    for entry in entries {
+        if !database_is_configured(endpoint, credential, entry.alias())
+            .await
+            .map_err(|_| "Storage PgBouncer catalog is unavailable".to_owned())?
+        {
+            return Err("Storage PgBouncer configuration is unavailable".to_owned());
+        }
+        let command = PoolLifecycleCommandV1::Resume
+            .render(entry.alias())
+            .map_err(|_| "Storage PgBouncer pool restart is unavailable".to_owned())?;
+        match admin.execute_pool_command(&command).await {
+            PoolLifecycleOutcomeV1::Unavailable => {
+                return Err("Storage PgBouncer admin runtime is unavailable".to_owned());
+            }
+            _ => {}
         }
     }
     Ok(())

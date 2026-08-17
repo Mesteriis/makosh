@@ -5,6 +5,7 @@ import {
 	type ZulipOperationalReplayResponseV1,
 } from '../../../gen/makosh/zulip/operational/realtime/v1/client_pb'
 import { getZulipOperationalRealtimeConnectClient } from './zulipOperationalRealtimeClient'
+import { getClientAccountLaneRegistry } from '../../../platform/gateway/clientAccountLane'
 
 const DEFAULT_REPLAY_LIMIT = 100
 const MAX_REPLAY_LIMIT = 200
@@ -33,13 +34,15 @@ export async function replayZulipOperationalEvents(input: {
 	if (!Number.isInteger(limit) || limit < 1 || limit > MAX_REPLAY_LIMIT) {
 		throw new RangeError('Zulip replay limit must be between 1 and 200')
 	}
-	const response = await getZulipOperationalRealtimeConnectClient().replay(
-		create(ZulipOperationalReplayRequestV1Schema, {
-			accountId,
-			afterSequence,
-			limit,
-		}),
-	)
+	const response = await getClientAccountLaneRegistry()
+		.get({ provider: 'zulip', accountId })
+		.run('realtime', async () => getZulipOperationalRealtimeConnectClient().replay(
+			create(ZulipOperationalReplayRequestV1Schema, {
+				accountId,
+				afterSequence,
+				limit,
+			}),
+		))
 	if (response.accountId !== accountId) {
 		throw new Error('Zulip replay account response is invalid')
 	}

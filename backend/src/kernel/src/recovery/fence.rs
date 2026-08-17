@@ -8,6 +8,8 @@ use sha2::{Digest, Sha256};
 
 const FILE_NAME: &str = ".makosh-recovery-fence-v1";
 const MAGIC: &[u8; 8] = b"MAKOSHF1";
+const LEGACY_FILE_NAME: &str = ".hermes-recovery-fence-v1";
+const LEGACY_MAGIC: &[u8; 8] = b"HERMESF1";
 const RECORD_BYTES: usize = 81;
 const STATE_COMMITTED: u8 = 1;
 const STATE_RESERVED: u8 = 2;
@@ -93,6 +95,26 @@ pub fn verify_or_finalize(
         }
         _ => Err("recovery fence state is invalid".to_owned()),
     }
+}
+
+pub fn verify_or_migrate_legacy(
+    data_dir: &Path,
+    store_path: &Path,
+    store: &ControlStore,
+) -> Result<(), String> {
+    if path(data_dir).exists() {
+        return verify_or_finalize(data_dir, store_path, store);
+    }
+
+    let legacy_path = data_dir.join(LEGACY_FILE_NAME);
+    validate_file(&legacy_path)?;
+    let mut bytes = Vec::with_capacity(RECORD_BYTES);
+    File::open(&legacy_path)
+        .and_then(|mut file| file.read_to_end(&mut bytes))
+        .map_err(|error| error.to_string())?;
+    let record = decode_with_magic(&bytes, LEGACY_MAGIC)?;
+    verify_committed_source(&record, store)?;
+    write_record(data_dir, &record)
 }
 
 pub fn verify_committed_source(
@@ -229,7 +251,14 @@ fn encode(record: &RecoveryFenceRecord) -> [u8; RECORD_BYTES] {
 }
 
 fn decode(bytes: &[u8]) -> Result<RecoveryFenceRecord, String> {
-    if bytes.len() != RECORD_BYTES || &bytes[..8] != MAGIC {
+    decode_with_magic(bytes, MAGIC)
+}
+
+fn decode_with_magic(
+    bytes: &[u8],
+    expected_magic: &[u8; 8],
+) -> Result<RecoveryFenceRecord, String> {
+    if bytes.len() != RECORD_BYTES || &bytes[..8] != expected_magic {
         return Err("recovery fence encoding is invalid".to_owned());
     }
     let instance_bytes: [u8; 16] = bytes[9..25]

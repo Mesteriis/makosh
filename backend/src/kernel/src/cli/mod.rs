@@ -77,6 +77,10 @@ pub(crate) struct BrowserGatewayCli {
     /// in argv or environment.
     #[arg(long)]
     browser_gateway_development_proxy_proof_file: Option<PathBuf>,
+    /// Starts the authenticated development platform for catalog admission,
+    /// while deliberately withholding Scheduler and its topology reconciler.
+    #[arg(long)]
+    browser_gateway_development_admission_mode: bool,
     /// Exposes the explicitly configured Gateway as a paired-remote HTTPS
     /// listener with HTTP/2 and HTTP/3. Without this flag the listener stays
     /// loopback-only.
@@ -98,6 +102,7 @@ impl BrowserGatewayCli {
             browser_gateway_certificate_der,
             browser_gateway_private_key_der,
             browser_gateway_development_proxy_proof_file,
+            browser_gateway_development_admission_mode,
             browser_gateway_paired_remote,
             dangerous_lan_development,
         } = self;
@@ -123,13 +128,23 @@ impl BrowserGatewayCli {
                     "loopback development proxy requires listener, origin and RP ID".to_owned(),
                 );
             };
-            return BrowserGatewayConfigurationV1::new_loopback_development_proxy(
+            let configuration = BrowserGatewayConfigurationV1::new_loopback_development_proxy(
                 address,
                 origin,
                 rp_id,
                 load_development_proxy_proof(&proof_file)?,
-            )
-            .map(Some);
+            )?;
+            return if browser_gateway_development_admission_mode {
+                configuration.for_development_admission().map(Some)
+            } else {
+                Ok(Some(configuration))
+            };
+        }
+
+        if browser_gateway_development_admission_mode {
+            return Err(
+                "development admission mode requires loopback development proxy".to_owned(),
+            );
         }
 
         match (

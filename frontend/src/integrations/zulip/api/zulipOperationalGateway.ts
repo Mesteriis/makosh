@@ -4,6 +4,7 @@ import type {
 } from '../../../gen/makosh/zulip/v1/client_pb'
 import { getZulipCommandConnectClient } from './zulipCommandClient'
 import { getZulipQueryConnectClient } from './zulipQueryClient'
+import { getClientAccountLaneRegistry } from '../../../platform/gateway/clientAccountLane'
 
 export async function sendZulipStreamMessage(input: {
 	accountId: string
@@ -12,18 +13,20 @@ export async function sendZulipStreamMessage(input: {
 	content: string
 	operationId: string
 }): Promise<ZulipCommandReceiptV1> {
-	return getZulipCommandConnectClient().executeCommand({
+	const accountId = requireIdentifier('account ID', input.accountId)
+	return getClientAccountLaneRegistry().get({ provider: 'zulip', accountId })
+		.run('interactive', async () => getZulipCommandConnectClient().executeCommand({
 		command: {
 			case: 'sendStream',
 			value: {
-				accountId: requireIdentifier('account ID', input.accountId),
+				accountId,
 				stream: requireIdentifier('stream', input.stream),
 				topic: requireIdentifier('topic', input.topic),
 				content: requireContent(input.content),
 				operationId: requireIdentifier('operation ID', input.operationId),
 			},
 		},
-	})
+	}))
 }
 
 export async function sendZulipDirectMessage(input: {
@@ -36,17 +39,19 @@ export async function sendZulipDirectMessage(input: {
 	if (recipients.length === 0) {
 		throw new RangeError('Zulip recipient is required')
 	}
-	return getZulipCommandConnectClient().executeCommand({
+	const accountId = requireIdentifier('account ID', input.accountId)
+	return getClientAccountLaneRegistry().get({ provider: 'zulip', accountId })
+		.run('interactive', async () => getZulipCommandConnectClient().executeCommand({
 		command: {
 			case: 'sendDirect',
 			value: {
-				accountId: requireIdentifier('account ID', input.accountId),
+				accountId,
 				recipient: recipients,
 				content: requireContent(input.content),
 				operationId: requireIdentifier('operation ID', input.operationId),
 			},
 		},
-	})
+	}))
 }
 
 export async function getZulipOperationStatus(

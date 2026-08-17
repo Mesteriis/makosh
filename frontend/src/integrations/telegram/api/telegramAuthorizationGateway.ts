@@ -5,11 +5,14 @@ export type TelegramAuthorizationStatus = {
 }
 
 import { getTelegramAuthorizationConnectClient } from './telegramAuthorizationClient'
+import { withTelegramConfigurationRuntimeV1 } from '../setup/telegramConfigurationRuntimeRetry'
 
 export async function getTelegramAuthorizationStatus(): Promise<TelegramAuthorizationStatus> {
-	const response = await getTelegramAuthorizationConnectClient().authorize({
-		request: { case: 'authorizationStatus', value: {} },
-	})
+	const response = await withTelegramConfigurationRuntimeV1(() =>
+		getTelegramAuthorizationConnectClient().authorize({
+			request: { case: 'authorizationStatus', value: {} },
+		}),
+	)
 	if (response.response.case !== 'authorizationStatus') {
 		throw new Error('Telegram authorization status is unavailable')
 	}

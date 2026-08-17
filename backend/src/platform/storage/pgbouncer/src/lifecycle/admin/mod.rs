@@ -10,7 +10,7 @@ mod readiness;
 mod reload;
 
 pub use adapter::{PgBouncerAdminPortV1, PgBouncerPoolFenceAdapterV1};
-pub use catalog::database_is_configured;
+pub use catalog::{database_is_configured, user_is_configured};
 #[allow(unused_imports)]
 pub use connection::TokioPostgresPgBouncerAdminPortV1;
 #[allow(unused_imports)]

@@ -53,6 +53,7 @@ pub fn serve(
         &managed_runtime_supervisor,
         &store,
         data_dir,
+        runtime_dir,
         client_realtime.clone(),
     )?;
     start_development_foundation(
@@ -62,13 +63,21 @@ pub fn serve(
         runtime_dir,
         browser_gateway.as_ref(),
     )?;
+    let scheduler_lifecycle_enabled = browser_gateway
+        .as_ref()
+        .is_none_or(BrowserGatewayConfigurationV1::runs_scheduler_lifecycle);
     // Capture the exact Scheduler launch topology before registration and
     // external-runtime workers can mutate module fences. This is the only
     // race-free in-memory baseline for lifecycle reconciliation.
-    let scheduler_topology_fingerprint = scheduler_lifecycle::capture_active_topology_fingerprint(
-        &store,
-        &managed_runtime_supervisor,
-    )?;
+    let scheduler_topology_fingerprint = scheduler_lifecycle_enabled
+        .then(|| {
+            scheduler_lifecycle::capture_active_topology_fingerprint(
+                &store,
+                &managed_runtime_supervisor,
+            )
+        })
+        .transpose()?
+        .flatten();
     let browser_pairing = browser_pairing(
         &store,
         &managed_runtime_supervisor,
@@ -84,6 +93,7 @@ pub fn serve(
         client_realtime,
         browser_gateway,
         browser_pairing,
+        scheduler_lifecycle_enabled,
         scheduler_topology_fingerprint,
     });
     let failure = supervise_workers(&receiver, &shutdown_requested);
@@ -95,6 +105,7 @@ fn configure_runtime(
     managed_runtime_supervisor: &ManagedRuntimeSupervisor,
     store: &Arc<SqliteControlStore>,
     data_dir: &Path,
+    runtime_dir: &Path,
     client_realtime: InMemoryBrowserRealtimeSource,
 ) -> Result<(), String> {
     let vault_route_handler: Arc<KernelManagedVaultRouteHandler> =
@@ -123,6 +134,7 @@ fn configure_runtime(
             Arc::clone(store),
             managed_runtime_supervisor.relay_port(),
             data_dir.to_path_buf(),
+            runtime_dir.to_path_buf(),
         ),
     ))?;
     managed_runtime_supervisor.configure_blob_custody_release_handler(Arc::new(
@@ -166,8 +178,15 @@ fn start_development_foundation(
     {
         return Ok(());
     }
-    crate::platform::development::start_local_foundation(supervisor, store, data_dir, runtime_dir)
-        .map_err(|error| match supervisor.shutdown() {
+    crate::platform::development::start_local_foundation(
+        supervisor,
+        store,
+        data_dir,
+        runtime_dir,
+        browser_gateway
+            .is_some_and(BrowserGatewayConfigurationV1::starts_development_scheduler),
+    )
+    .map_err(|error| match supervisor.shutdown() {
             Ok(()) => error,
             Err(cleanup_error) => format!(
                 "{error}; managed runtime cleanup after developer bootstrap failure also failed: {cleanup_error}"
@@ -199,6 +218,7 @@ struct ControlPlaneWorkerInputV1 {
     client_realtime: InMemoryBrowserRealtimeSource,
     browser_gateway: Option<BrowserGatewayConfigurationV1>,
     browser_pairing: Option<Arc<BrowserPairingAdmissionV1>>,
+    scheduler_lifecycle_enabled: bool,
     scheduler_topology_fingerprint: Option<[u8; 32]>,
 }
 
@@ -218,6 +238,7 @@ fn start_workers(
         client_realtime,
         browser_gateway,
         browser_pairing,
+        scheduler_lifecycle_enabled,
         scheduler_topology_fingerprint,
     } = input;
     let (completed, receiver) = mpsc::channel::<WorkerCompletionV1>();
@@ -246,14 +267,16 @@ fn start_workers(
         runtime_dir.clone(),
         managed_runtime_supervisor.clone(),
     ));
-    workers.push(start_scheduler_worker(
-        completed.clone(),
-        &shutdown_requested,
-        Arc::clone(&store),
-        runtime_dir,
-        managed_runtime_supervisor.clone(),
-        scheduler_topology_fingerprint,
-    ));
+    if scheduler_lifecycle_enabled {
+        workers.push(start_scheduler_worker(
+            completed.clone(),
+            &shutdown_requested,
+            Arc::clone(&store),
+            runtime_dir,
+            managed_runtime_supervisor.clone(),
+            scheduler_topology_fingerprint,
+        ));
+    }
     if browser_gateway.is_some() {
         workers.push(start_system_status_realtime_worker(
             completed.clone(),

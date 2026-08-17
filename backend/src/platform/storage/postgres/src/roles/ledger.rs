@@ -1,6 +1,6 @@
 //! Durable current-role binding with identity and fence checks.
 
-use sqlx::{query, query_as};
+use sqlx::{AssertSqlSafe, query, query_as, query_scalar};
 
 use crate::{PostgresAdapterErrorV1, PostgresAdminConnectorV1};
 
@@ -15,6 +15,25 @@ pub async fn ensure_role_ledger_binding(
         Some(current) => reconcile_existing_binding(connector, &current, &requested).await,
         None => insert_new_binding(connector, &requested).await,
     }
+}
+
+pub async fn repair_legacy_storage_ledger_binding(
+    connector: &PostgresAdminConnectorV1,
+    spec: &StorageRoleSpecV1,
+) -> Result<bool, PostgresAdapterErrorV1> {
+    let requested = RoleLedgerBindingV1::from_spec(spec)?;
+    let current = match read_owner_binding(connector, spec).await? {
+        Some(current) => current,
+        None => return Ok(false),
+    };
+    if !current.supports_legacy_repair(&requested) {
+        return Ok(false);
+    }
+    if let Some(runtime_principal) = current.retired_runtime_principal(&requested) {
+        retire_runtime_principal(connector, runtime_principal).await?;
+    }
+    update_binding(connector, &requested).await?;
+    Ok(true)
 }
 
 async fn read_owner_binding(
@@ -46,7 +65,26 @@ async fn reconcile_existing_binding(
     if current.matches(requested) {
         return Ok(());
     }
+    if let Some(runtime_principal) = current.retired_runtime_principal(requested) {
+        retire_runtime_principal(connector, runtime_principal).await?;
+    }
     update_binding(connector, requested).await
+}
+
+async fn retire_runtime_principal(
+    connector: &PostgresAdminConnectorV1,
+    runtime_principal: &str,
+) -> Result<(), PostgresAdapterErrorV1> {
+    let statement: String = query_scalar("SELECT format('ALTER ROLE %I NOLOGIN', $1)")
+        .bind(runtime_principal)
+        .fetch_one(connector.pool())
+        .await
+        .map_err(|_| PostgresAdapterErrorV1::RoleBinding)?;
+    query(AssertSqlSafe(statement))
+        .execute(connector.pool())
+        .await
+        .map_err(|_| PostgresAdapterErrorV1::RoleBinding)?;
+    Ok(())
 }
 
 async fn insert_new_binding(
@@ -162,16 +200,35 @@ impl RoleLedgerBindingV1 {
     }
 
     fn is_strict_successor(&self, requested: &Self) -> bool {
-        self.owner_id == requested.owner_id
+        let same_owner_binding = self.owner_id == requested.owner_id
             && self.ddl_owner == requested.ddl_owner
-            && self.registration_id == requested.registration_id
             && self.runtime_principal != requested.runtime_principal
-            && self.runtime_instance_id != requested.runtime_instance_id
-            && requested.storage_generation >= self.storage_generation
+            && self.runtime_instance_id != requested.runtime_instance_id;
+        if !same_owner_binding {
+            return false;
+        }
+        if self.registration_id != requested.registration_id {
+            return requested.storage_generation >= self.storage_generation
+                && requested.grant_epoch >= self.grant_epoch
+                && requested.storage_bundle_revision >= self.storage_bundle_revision;
+        }
+        requested.storage_generation >= self.storage_generation
             && requested.runtime_generation > self.runtime_generation
             && requested.grant_epoch >= self.grant_epoch
             && requested.role_epoch > self.role_epoch
             && requested.credential_lease_revision > self.credential_lease_revision
+            && requested.storage_bundle_revision >= self.storage_bundle_revision
+    }
+
+    fn supports_legacy_repair(&self, requested: &Self) -> bool {
+        self.owner_id == requested.owner_id
+            && self.ddl_owner == requested.ddl_owner
+            && self.runtime_instance_id != requested.runtime_instance_id
+            && requested.storage_generation >= self.storage_generation
+            && requested.runtime_generation <= self.runtime_generation
+            && requested.grant_epoch <= self.grant_epoch
+            && requested.role_epoch <= self.role_epoch
+            && requested.credential_lease_revision <= self.credential_lease_revision
             && requested.storage_bundle_revision >= self.storage_bundle_revision
     }
 }
@@ -255,8 +312,24 @@ impl StoredRoleLedgerBindingV1 {
         }
     }
 
+    fn supports_legacy_repair(&self, requested: &RoleLedgerBindingV1) -> bool {
+        match self {
+            Self::Legacy { .. } => false,
+            Self::Current(current) => current.supports_legacy_repair(requested),
+        }
+    }
+
     fn matches(&self, requested: &RoleLedgerBindingV1) -> bool {
         matches!(self, Self::Current(current) if current == requested)
+    }
+
+    fn retired_runtime_principal<'a>(&'a self, requested: &RoleLedgerBindingV1) -> Option<&'a str> {
+        match self {
+            Self::Current(current) if current.registration_id != requested.registration_id => {
+                Some(current.runtime_principal.as_str())
+            }
+            _ => None,
+        }
     }
 }
 
@@ -266,7 +339,7 @@ fn database_fence(value: u64) -> Result<i64, PostgresAdapterErrorV1> {
 
 #[cfg(test)]
 mod tests {
-    use super::RoleLedgerBindingV1;
+    use super::{RoleLedgerBindingV1, StoredRoleLedgerBindingV1};
 
     fn binding(
         runtime_principal: &str,
@@ -306,5 +379,65 @@ mod tests {
 
         assert!(!current.permits(&stale_role));
         assert!(!current.permits(&stale_lease));
+    }
+
+    #[test]
+    fn owner_grant_epoch_authorizes_a_registration_successor() {
+        let current = binding("runtime_scheduler_1", "scheduler-1", 1, 1, 1);
+        let mut successor = binding("runtime_scheduler_4", "scheduler-4", 4, 4, 4);
+        successor.registration_id = "scheduler-successor".to_owned();
+        successor.grant_epoch = 2;
+
+        assert!(current.permits(&successor));
+    }
+
+    #[test]
+    fn registration_successor_can_restart_registration_scoped_fences() {
+        let current = binding("runtime_scheduler_1", "scheduler-1", 1, 1, 1);
+        let mut successor = binding("runtime_scheduler_2", "scheduler-2", 1, 1, 1);
+        successor.registration_id = "scheduler-successor".to_owned();
+
+        assert!(current.permits(&successor));
+        assert_eq!(
+            StoredRoleLedgerBindingV1::Current(current).retired_runtime_principal(&successor),
+            Some("runtime_scheduler_1"),
+        );
+        successor.grant_epoch = 0;
+        assert!(!binding("runtime_scheduler_1", "scheduler-1", 1, 1, 1).permits(&successor));
+    }
+
+    #[test]
+    fn supports_legacy_repair_for_lower_fences_with_same_registration() {
+        let current = binding("runtime_scheduler_744", "scheduler-1", 744, 744, 744);
+        let mut stale = binding("runtime_scheduler_5", "scheduler-5", 5, 5, 5);
+        stale.storage_bundle_revision = 10;
+
+        assert!(!current.is_strict_successor(&stale));
+        assert!(StoredRoleLedgerBindingV1::Current(current).supports_legacy_repair(&stale));
+    }
+
+    #[test]
+    fn supports_legacy_repair_for_registration_mismatch() {
+        let current = binding(
+            "runtime_communications_258",
+            "communications-1",
+            258,
+            258,
+            258,
+        );
+        let mut stale = binding("runtime_communications_9", "communications-2", 9, 9, 9);
+        stale.registration_id = "new-registration".to_owned();
+
+        assert!(StoredRoleLedgerBindingV1::Current(current).supports_legacy_repair(&stale));
+    }
+
+    #[test]
+    fn does_not_support_legacy_repair_for_monoascending_fences() {
+        let current = binding("runtime_scheduler_5", "scheduler-5", 5, 5, 5);
+        let mut successor = binding("runtime_scheduler_6", "scheduler-6", 6, 6, 6);
+        successor.storage_bundle_revision = 10;
+
+        assert!(current.permits(&successor));
+        assert!(!StoredRoleLedgerBindingV1::Current(current).supports_legacy_repair(&successor));
     }
 }

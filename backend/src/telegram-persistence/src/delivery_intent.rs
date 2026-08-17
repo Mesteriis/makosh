@@ -216,6 +216,7 @@ mod tests {
     #[test]
     fn locator_reproduces_the_exact_communications_scope_cursors() {
         let message = TelegramMessageProjection {
+            sender_source_identity: None,
             message_id: "local-message-1".to_owned(),
             account_id: "account-1".to_owned(),
             provider_chat_id: "chat-1".to_owned(),

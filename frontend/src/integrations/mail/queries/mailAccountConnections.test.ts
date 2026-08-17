@@ -11,6 +11,7 @@ import {
 	MailProviderPathReadinessV1,
 } from '../../../gen/makosh/mail/account/v1/client_pb'
 import {
+	mailConnectionCredentialRequired,
 	mailAccountConnectionFingerprint,
 	mailAccountConnections,
 } from './mailAccountConnections'
@@ -59,6 +60,23 @@ describe('Mail provider account connection discovery', () => {
 		expect(mailAccountConnectionFingerprint(connections)).toBe(
 			'mail-registration:configuration-only|mail-registration:primary|mail-registration:secondary',
 		)
+	})
+
+	it('distinguishes a configured account that still needs provider credentials', () => {
+		const connections = mailAccountConnections([
+			create(ClientModuleBootstrapV1Schema, {
+				registrationId: 'mail-registration',
+				moduleId: 'makosh-mail-runtime',
+				sectionsEnabled: true,
+				capabilityIds: ['mail.account.catalog.query.v1'],
+			}),
+		], [account(
+			'gmail-configuration-only',
+			MailAccountReadinessV1.MAIL_ACCOUNT_READINESS_CONFIGURATION_ONLY,
+		)])
+
+		expect(mailConnectionCredentialRequired(connections, 'gmail-configuration-only')).toBe(true)
+		expect(mailConnectionCredentialRequired(connections, 'missing')).toBe(false)
 	})
 
 	it('fails closed without the provider catalog capability', () => {

@@ -77,6 +77,7 @@ pub struct PendingCommunicationsBodyCustodyTransferV1 {
 pub enum CommunicationsConsumeOutcomeV1 {
     Applied,
     Duplicate,
+    Rejected,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

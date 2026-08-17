@@ -12,7 +12,9 @@ use makosh_events_jetstream::{
     JetStreamClient, RuntimeJetStreamConnection, RuntimeNatsIdentity, RuntimePublishPermitV1,
     RuntimeSubscribePermitV1, request_managed_runtime_event_access_v2,
 };
-use makosh_runtime_protocol::managed_control::ManagedControlChannelV2;
+use makosh_runtime_protocol::managed_control::{
+    ManagedControlChannelV2, ManagedControlRequestDispatcherV2, ManagedControlTransportErrorV2,
+};
 use makosh_runtime_protocol::v1::{
     ManagedIntegrationHostBridgeConfigurationV1, ManagedRuntimeClientDeliveryResponseV1,
     ManagedRuntimeControlResponseV1, ManagedRuntimeReadyRequestV1,
@@ -78,6 +80,8 @@ pub struct WhatsAppAdmittedRuntime {
     account_id: String,
     host_bridge_socket_path: String,
     host_bridge_route_binding: [u8; 32],
+    operational_realtime_revision: u64,
+    pending_operational_realtime_revision: Option<u64>,
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -243,6 +247,8 @@ pub async fn open_admitted_runtime(
         account_id: settings.account_id.clone(),
         host_bridge_socket_path,
         host_bridge_route_binding,
+        operational_realtime_revision: 0,
+        pending_operational_realtime_revision: None,
     })
 }
 
@@ -444,7 +450,7 @@ impl WhatsAppAdmittedRuntime {
     }
 
     pub fn serve_host_bridge_once(
-        &self,
+        &mut self,
         listener: &UnixListener,
         handle: &tokio::runtime::Handle,
     ) -> Result<(), WhatsAppBootstrapError> {
@@ -458,25 +464,26 @@ impl WhatsAppAdmittedRuntime {
     /// Serves one short-lived host connection when one is already pending.
     /// The process root owns scheduling and continues relaying the durable
     /// Communications outbox when no host request is waiting.
-    pub fn try_serve_host_bridge_once(
+    pub fn try_accept_host_bridge_session(
         &self,
         listener: &UnixListener,
-        handle: &tokio::runtime::Handle,
-    ) -> Result<bool, WhatsAppBootstrapError> {
+    ) -> Result<
+        Option<crate::host_bridge_transport::WhatsAppHostBridgeSession>,
+        WhatsAppBootstrapError,
+    > {
         let (stream, _) = match listener.accept() {
             Ok(value) => value,
-            Err(error) if error.kind() == ErrorKind::WouldBlock => return Ok(false),
+            Err(error) if error.kind() == ErrorKind::WouldBlock => return Ok(None),
             Err(_) => return Err(WhatsAppBootstrapError::HostBridge),
         };
         // A provider-owned host connection is untrusted. A malformed frame,
         // handshake or payload terminates only that connection; it must not
         // poison the admitted runtime or its durable relay loop.
-        let _ = crate::host_bridge_transport::serve_connection(stream, self, handle);
-        Ok(true)
+        Ok(crate::host_bridge_transport::WhatsAppHostBridgeSession::start(stream, self).ok())
     }
 
     pub async fn accept_host_observation(
-        &self,
+        &mut self,
         envelope: &WhatsAppHostBridgeEnvelopeV1,
         recorded_at_unix_seconds: i64,
         recorded_at_nanos: i32,
@@ -491,7 +498,50 @@ impl WhatsAppAdmittedRuntime {
             recorded_at_unix_seconds,
             recorded_at_nanos,
         )
-        .await
+        .await?;
+        self.operational_realtime_revision = self.operational_realtime_revision.saturating_add(1);
+        self.pending_operational_realtime_revision = Some(self.operational_realtime_revision);
+        let occurred_at_unix_millis = u64::try_from(recorded_at_unix_seconds)
+            .ok()
+            .and_then(|seconds| seconds.checked_mul(1_000))
+            .and_then(|millis| {
+                u64::try_from(recorded_at_nanos)
+                    .ok()
+                    .map(|nanos| millis + nanos / 1_000_000)
+            })
+            .unwrap_or(0);
+        let _ = self.publish_pending_operational_realtime(occurred_at_unix_millis);
+        Ok(())
+    }
+
+    pub fn publish_pending_operational_realtime(
+        &mut self,
+        occurred_at_unix_millis: u64,
+    ) -> Result<bool, WhatsAppBootstrapError> {
+        let Some(revision) = self.pending_operational_realtime_revision else {
+            return Ok(false);
+        };
+        let mut dispatcher = WhatsAppBusyControlDispatcher;
+        match crate::client_realtime::publish_operational_projection_changed_v1(
+            &mut self.control_channel,
+            &mut dispatcher,
+            &self.logical_owner_id,
+            self.identity.runtime_generation,
+            &self.account_id,
+            revision,
+            occurred_at_unix_millis,
+        ) {
+            Ok(()) => {
+                if self.pending_operational_realtime_revision == Some(revision) {
+                    self.pending_operational_realtime_revision = None;
+                }
+                Ok(true)
+            }
+            Err(crate::client_realtime::WhatsAppClientRealtimeErrorV1::Unavailable) => Ok(false),
+            Err(crate::client_realtime::WhatsAppClientRealtimeErrorV1::InvalidEvent) => {
+                Err(WhatsAppBootstrapError::Admission)
+            }
+        }
     }
 
     pub fn accepts_host_bridge_handshake(&self, handshake: &WhatsAppHostBridgeHandshakeV1) -> bool {
@@ -531,6 +581,46 @@ impl WhatsAppAdmittedRuntime {
             published_at_unix_seconds,
         )
         .await
+    }
+}
+
+struct WhatsAppBusyControlDispatcher;
+
+impl ManagedControlRequestDispatcherV2<UnixStream> for WhatsAppBusyControlDispatcher {
+    fn dispatch_request(
+        &mut self,
+        channel: &mut ManagedControlChannelV2<UnixStream>,
+        correlation_id: [u8; MANAGED_CONTROL_CORRELATION_ID_BYTES],
+        request: makosh_runtime_protocol::v1::ManagedRuntimeControlRequestV1,
+    ) -> Result<(), ManagedControlTransportErrorV2> {
+        let response = match request.operation {
+            Some(Operation::ClientDelivery(delivery)) => match delivery.request {
+                Some(request) if validate_module_client_request_v1(&request).is_ok() => {
+                    ManagedRuntimeControlResponseV1 {
+                        result: Some(ControlResult::ClientDelivery(
+                            ManagedRuntimeClientDeliveryResponseV1 {
+                                response: Some(ModuleClientResponseV1 {
+                                    protocol_major: 1,
+                                    request_id: request.request_id,
+                                    response_payload: Vec::new(),
+                                    error_code: "RUNTIME_BUSY".to_owned(),
+                                }),
+                            },
+                        )),
+                        error_code: String::new(),
+                    }
+                }
+                _ => ManagedRuntimeControlResponseV1 {
+                    result: None,
+                    error_code: "managed_runtime_control_invalid_client_delivery".to_owned(),
+                },
+            },
+            _ => ManagedRuntimeControlResponseV1 {
+                result: None,
+                error_code: "managed_runtime_control_unexpected_request".to_owned(),
+            },
+        };
+        channel.write_response(correlation_id, response)
     }
 }
 

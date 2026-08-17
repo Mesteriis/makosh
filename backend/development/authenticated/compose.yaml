@@ -41,7 +41,7 @@ services:
     networks:
       - platform
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U makosh_storage_admin -d makosh_storage_authenticated"]
+      test: ["CMD-SHELL", "pg_isready -U makosh_postgres_admin -d makosh_storage_authenticated"]
       interval: 5s
       timeout: 3s
       retries: 20

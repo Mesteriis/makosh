@@ -9,9 +9,13 @@ pub const WHATSAPP_OPERATIONAL_REALTIME_DESCRIPTOR_SET_V1: &[u8] = include_bytes
     "/makosh.whatsapp.operational.realtime.v1.bin"
 ));
 pub const WHATSAPP_CLIENT_CONTRACT_MAJOR: u32 = 1;
-pub const WHATSAPP_CLIENT_CONTRACT_REVISION: u32 = 1;
+pub const WHATSAPP_CLIENT_CONTRACT_REVISION: u32 = 2;
 pub const WHATSAPP_MODULE_ID: &str = "makosh-whatsapp-runtime";
 pub const WHATSAPP_OWNER_ID: &str = "whatsapp";
+pub const WHATSAPP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1: &str =
+    "whatsapp.operational.realtime.shared.v1";
+pub const WHATSAPP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1: &str =
+    "whatsapp.operational.projection_changed.v1";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum WhatsAppClientContractV1 {

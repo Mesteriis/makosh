@@ -12,14 +12,16 @@ use crate::runtime::managed::execution::{
     ManagedChildExecutionResult,
 };
 use std::net::Shutdown;
+use std::os::fd::AsRawFd;
 use std::process::{Child, ExitStatus};
 use std::sync::atomic::AtomicBool;
-use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender};
+use std::sync::mpsc::{Receiver, SyncSender, TryRecvError};
 use std::time::{Duration, Instant};
 
 use makosh_runtime_protocol::managed_control::{
     ManagedControlChannelV2, ManagedControlTransportMajorV1,
 };
+use makosh_runtime_protocol::managed_runtime_poll::ManagedRuntimePollBackoffV1;
 use makosh_runtime_protocol::v1::{
     ManagedRuntimeControlAckV1, ManagedRuntimeControlRequestV1, ManagedRuntimeControlResponseV1,
     managed_runtime_control_response_v1::Result as ControlResult,
@@ -38,6 +40,7 @@ pub fn run(
         arguments,
         expectation,
         policy,
+        || false,
         |child, _| {
             bounded_managed_child_execution::wait(child, policy.max_runtime())
                 .map(ManagedChildAttemptOutcomeV1::Exited)
@@ -54,6 +57,7 @@ pub struct ManagedChildRunInput<'a> {
     pub shutdown_requested: &'a AtomicBool,
     pub stop_requested: &'a AtomicBool,
     pub relay_requests: &'a Receiver<managed_runtime_control::ManagedRuntimeRelayRequest>,
+    pub relay_wake: &'a std::os::unix::net::UnixStream,
     pub control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers<'a>,
     pub ready_sender: &'a SyncSender<Result<(), String>>,
     pub ready_state: &'a AtomicBool,
@@ -68,6 +72,7 @@ pub fn run_until_shutdown(
             input.arguments,
             input.expectation,
             input.policy,
+            || stop_is_requested(&input),
             |child, channel| wait_until_shutdown_with_relay(child, channel, &input),
         ),
         ManagedControlTransportMajorV1::CorrelatedV2 => run_with_wait_v2(
@@ -75,16 +80,18 @@ pub fn run_until_shutdown(
             input.arguments,
             input.expectation,
             input.policy,
+            || stop_is_requested(&input),
             |child, channel| wait_until_shutdown_with_correlated_relay(child, channel, &input),
         ),
     }
 }
 
-fn run_with_wait<F>(
+fn run_with_wait<F, S>(
     staged_executable: &StagedNativeArtifact,
     arguments: &[String],
     expectation: &ManagedRuntimeExpectation,
     policy: &ManagedChildExecutionPolicy,
+    stop_requested: S,
     mut wait: F,
 ) -> Result<ManagedChildExecutionResult, String>
 where
@@ -92,6 +99,7 @@ where
         &mut Child,
         &mut std::os::unix::net::UnixStream,
     ) -> Result<ManagedChildAttemptOutcomeV1, String>,
+    S: Fn() -> bool,
 {
     for attempt in 1..=policy.max_attempts() {
         let attempt_span = tracing::info_span!(
@@ -109,6 +117,9 @@ where
                 Ok(channel) => channel,
                 Err(error) => {
                     let _ = bounded_managed_child_execution::terminate(&mut child);
+                    if stop_requested_after_fault(&stop_requested) {
+                        return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                    }
                     if attempt == policy.max_attempts() {
                         return Err(error);
                     }
@@ -120,7 +131,17 @@ where
                     continue;
                 }
             };
-        match wait(&mut child, &mut control_channel)? {
+        let outcome = match wait(&mut child, &mut control_channel) {
+            Ok(outcome) => outcome,
+            Err(error) => {
+                if stop_requested_after_fault(&stop_requested) {
+                    let _ = bounded_managed_child_execution::terminate(&mut child);
+                    return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                }
+                return Err(error);
+            }
+        };
+        match outcome {
             ManagedChildAttemptOutcomeV1::RequestedStop(status) => {
                 return Ok(ManagedChildExecutionResult::succeeded(
                     attempt,
@@ -128,6 +149,10 @@ where
                 ));
             }
             ManagedChildAttemptOutcomeV1::ControlFault(error) => {
+                if stop_requested_after_fault(&stop_requested) {
+                    let _ = bounded_managed_child_execution::terminate(&mut child);
+                    return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                }
                 if attempt == policy.max_attempts() {
                     return Err(error);
                 }
@@ -143,6 +168,11 @@ where
                     status.code().unwrap_or(0),
                 ));
             }
+            ManagedChildAttemptOutcomeV1::Exited(_)
+                if stop_requested_after_fault(&stop_requested) =>
+            {
+                return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+            }
             ManagedChildAttemptOutcomeV1::Exited(status) => tracing::warn!(
                 event = "managed_runtime.attempt.retrying",
                 error.class = "child_exit",
@@ -153,11 +183,12 @@ where
     Err("managed child exhausted its bounded restart attempts".to_owned())
 }
 
-fn run_with_wait_v2<F>(
+fn run_with_wait_v2<F, S>(
     staged_executable: &StagedNativeArtifact,
     arguments: &[String],
     expectation: &ManagedRuntimeExpectation,
     policy: &ManagedChildExecutionPolicy,
+    stop_requested: S,
     mut wait: F,
 ) -> Result<ManagedChildExecutionResult, String>
 where
@@ -165,6 +196,7 @@ where
         &mut Child,
         &mut ManagedControlChannelV2<std::os::unix::net::UnixStream>,
     ) -> Result<ManagedChildAttemptOutcomeV1, String>,
+    S: Fn() -> bool,
 {
     for attempt in 1..=policy.max_attempts() {
         let attempt_span = tracing::info_span!(
@@ -182,6 +214,9 @@ where
                 Ok(channel) => channel,
                 Err(error) => {
                     let _ = bounded_managed_child_execution::terminate(&mut child);
+                    if stop_requested_after_fault(&stop_requested) {
+                        return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                    }
                     if attempt == policy.max_attempts() {
                         return Err(error);
                     }
@@ -193,7 +228,17 @@ where
                     continue;
                 }
             };
-        match wait(&mut child, &mut control_channel)? {
+        let outcome = match wait(&mut child, &mut control_channel) {
+            Ok(outcome) => outcome,
+            Err(error) => {
+                if stop_requested_after_fault(&stop_requested) {
+                    let _ = bounded_managed_child_execution::terminate(&mut child);
+                    return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                }
+                return Err(error);
+            }
+        };
+        match outcome {
             ManagedChildAttemptOutcomeV1::RequestedStop(status) => {
                 return Ok(ManagedChildExecutionResult::succeeded(
                     attempt,
@@ -201,6 +246,10 @@ where
                 ));
             }
             ManagedChildAttemptOutcomeV1::ControlFault(error) => {
+                if stop_requested_after_fault(&stop_requested) {
+                    let _ = bounded_managed_child_execution::terminate(&mut child);
+                    return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+                }
                 if attempt == policy.max_attempts() {
                     return Err(error);
                 }
@@ -216,6 +265,11 @@ where
                     status.code().unwrap_or(0),
                 ));
             }
+            ManagedChildAttemptOutcomeV1::Exited(_)
+                if stop_requested_after_fault(&stop_requested) =>
+            {
+                return Ok(ManagedChildExecutionResult::succeeded(attempt, 0));
+            }
             ManagedChildAttemptOutcomeV1::Exited(status) => tracing::warn!(
                 event = "managed_runtime.attempt.retrying",
                 error.class = "child_exit",
@@ -226,11 +280,33 @@ where
     Err("managed child exhausted its bounded restart attempts".to_owned())
 }
 
+fn stop_is_requested(input: &ManagedChildRunInput<'_>) -> bool {
+    input
+        .shutdown_requested
+        .load(std::sync::atomic::Ordering::Acquire)
+        || input
+            .stop_requested
+            .load(std::sync::atomic::Ordering::Acquire)
+}
+
+fn stop_requested_after_fault(stop_requested: &impl Fn() -> bool) -> bool {
+    if stop_requested() {
+        return true;
+    }
+    // SIGINT is delivered to the Kernel and its children as a process group.
+    // Give the Kernel signal handler one normal control-plane tick to publish
+    // shutdown before classifying the child's simultaneous channel close as a
+    // crash and starting a replacement.
+    std::thread::sleep(Duration::from_millis(25));
+    stop_requested()
+}
+
 fn wait_until_shutdown_with_relay(
     child: &mut Child,
     channel: &mut std::os::unix::net::UnixStream,
     input: &ManagedChildRunInput<'_>,
 ) -> Result<ManagedChildAttemptOutcomeV1, String> {
+    let mut idle_backoff = supervisor_idle_backoff();
     loop {
         if input
             .shutdown_requested
@@ -269,19 +345,29 @@ fn wait_until_shutdown_with_relay(
                 .ready_state
                 .store(true, std::sync::atomic::Ordering::Release);
             let _ = input.ready_sender.try_send(Ok(()));
+            idle_backoff.observe(true);
             continue;
         }
         match process_typed_requests(channel, input.expectation, input.control_handlers) {
-            Ok(true) => continue,
+            Ok(true) => {
+                idle_backoff.observe(true);
+                continue;
+            }
             Ok(false) => {}
             Err(error) => {
                 return unexpected_control_fault(child, error);
             }
         }
-        match input.relay_requests.recv_timeout(Duration::from_millis(25)) {
-            Ok(request) => request.dispatch(channel, input.expectation, input.control_handlers),
-            Err(RecvTimeoutError::Timeout) => {}
-            Err(RecvTimeoutError::Disconnected) => {
+        let idle_wait = idle_backoff.observe(false);
+        match input.relay_requests.try_recv() {
+            Ok(request) => {
+                idle_backoff.observe(true);
+                request.dispatch(channel, input.expectation, input.control_handlers);
+            }
+            Err(TryRecvError::Empty) => {
+                wait_for_supervisor_activity(channel, input.relay_wake, idle_wait)?;
+            }
+            Err(TryRecvError::Disconnected) => {
                 bounded_managed_child_execution::terminate(child)?;
                 return Err("managed runtime relay was disconnected".to_owned());
             }
@@ -298,6 +384,7 @@ fn wait_until_shutdown_with_correlated_relay(
         .inner_mut()
         .set_nonblocking(true)
         .map_err(|error| error.to_string())?;
+    let mut idle_backoff = supervisor_idle_backoff();
     loop {
         if input
             .shutdown_requested
@@ -325,6 +412,7 @@ fn wait_until_shutdown_with_correlated_relay(
         match channel.try_receive_request() {
             Ok(Some((correlation_id, request))) => {
                 dispatch_v2_typed_request(channel, correlation_id, request, input)?;
+                idle_backoff.observe(true);
                 continue;
             }
             Ok(None) => {}
@@ -335,14 +423,89 @@ fn wait_until_shutdown_with_correlated_relay(
                 );
             }
         }
-        match input.relay_requests.recv_timeout(Duration::from_millis(25)) {
-            Ok(request) => dispatch_correlated_relay(channel, request, input),
-            Err(RecvTimeoutError::Timeout) => {}
-            Err(RecvTimeoutError::Disconnected) => {
+        let idle_wait = idle_backoff.observe(false);
+        match input.relay_requests.try_recv() {
+            Ok(request) => {
+                idle_backoff.observe(true);
+                dispatch_correlated_relay(channel, request, input);
+            }
+            Err(TryRecvError::Empty) => {
+                wait_for_supervisor_activity(channel.inner_mut(), input.relay_wake, idle_wait)?;
+            }
+            Err(TryRecvError::Disconnected) => {
                 bounded_managed_child_execution::terminate(child)?;
                 return Err("managed runtime relay was disconnected".to_owned());
             }
         }
+    }
+}
+
+fn supervisor_idle_backoff() -> ManagedRuntimePollBackoffV1 {
+    ManagedRuntimePollBackoffV1::new(Duration::from_millis(25), Duration::from_secs(1))
+        .expect("managed supervisor idle bounds are valid")
+}
+
+fn wait_for_supervisor_activity(
+    channel: &std::os::unix::net::UnixStream,
+    relay_wake: &std::os::unix::net::UnixStream,
+    timeout: Duration,
+) -> Result<(), String> {
+    let timeout_millis = i32::try_from(timeout.as_millis()).unwrap_or(i32::MAX);
+    let mut descriptors = [
+        libc::pollfd {
+            fd: channel.as_raw_fd(),
+            events: libc::POLLIN | libc::POLLHUP | libc::POLLERR,
+            revents: 0,
+        },
+        libc::pollfd {
+            fd: relay_wake.as_raw_fd(),
+            events: libc::POLLIN | libc::POLLHUP | libc::POLLERR,
+            revents: 0,
+        },
+    ];
+    // SAFETY: `descriptors` contains two initialized pollfd values for live
+    // streams borrowed for the duration of this call. `poll` does not retain
+    // either pointer or fd.
+    let result = unsafe { libc::poll(descriptors.as_mut_ptr(), 2, timeout_millis) };
+    if result >= 0 {
+        if descriptors[1].revents != 0 {
+            drain_relay_wake(relay_wake)?;
+        }
+        Ok(())
+    } else {
+        let error = std::io::Error::last_os_error();
+        if error.kind() == std::io::ErrorKind::Interrupted {
+            Ok(())
+        } else {
+            Err(error.to_string())
+        }
+    }
+}
+
+fn drain_relay_wake(relay_wake: &std::os::unix::net::UnixStream) -> Result<(), String> {
+    let mut bytes = [0_u8; 64];
+    loop {
+        // SAFETY: the buffer and live Unix stream fd remain valid for the call;
+        // MSG_DONTWAIT guarantees draining cannot stall the supervisor.
+        let result = unsafe {
+            libc::recv(
+                relay_wake.as_raw_fd(),
+                bytes.as_mut_ptr().cast(),
+                bytes.len(),
+                libc::MSG_DONTWAIT,
+            )
+        };
+        if result > 0 {
+            continue;
+        }
+        if result == 0 {
+            return Ok(());
+        }
+        let error = std::io::Error::last_os_error();
+        return match error.kind() {
+            std::io::ErrorKind::WouldBlock | std::io::ErrorKind::Interrupted => Ok(()),
+            _ => Err(error.to_string()),
+        };
     }
 }
 
@@ -613,7 +776,7 @@ enum ManagedChildAttemptOutcomeV1 {
 
 #[cfg(test)]
 mod tests {
-    use std::io::Read;
+    use std::io::{Read, Write};
     use std::os::unix::fs::PermissionsExt;
     use std::sync::{atomic::AtomicBool, mpsc};
 
@@ -625,6 +788,40 @@ mod tests {
     use sha2::{Digest, Sha256};
 
     use super::*;
+
+    #[test]
+    fn supervisor_idle_wait_is_bounded_and_resets_after_progress() {
+        let mut backoff = supervisor_idle_backoff();
+
+        assert_eq!(backoff.observe(false), Duration::from_millis(25));
+        assert_eq!(backoff.observe(false), Duration::from_millis(50));
+        assert_eq!(backoff.observe(false), Duration::from_millis(100));
+        assert_eq!(backoff.observe(false), Duration::from_millis(200));
+        assert_eq!(backoff.observe(false), Duration::from_millis(400));
+        assert_eq!(backoff.observe(false), Duration::from_millis(800));
+        assert_eq!(backoff.observe(false), Duration::from_secs(1));
+        assert_eq!(backoff.observe(false), Duration::from_secs(1));
+        assert_eq!(backoff.observe(true), Duration::ZERO);
+        assert_eq!(backoff.observe(false), Duration::from_millis(25));
+    }
+
+    #[test]
+    fn control_socket_activity_wakes_idle_supervisor_without_waiting_for_timeout() {
+        let (reader, mut writer) = std::os::unix::net::UnixStream::pair().expect("socket pair");
+        let (relay_reader, _relay_writer) =
+            std::os::unix::net::UnixStream::pair().expect("relay socket pair");
+        let wake = std::thread::spawn(move || {
+            std::thread::sleep(Duration::from_millis(20));
+            writer.write_all(&[1]).expect("wake byte");
+        });
+        let started = Instant::now();
+
+        wait_for_supervisor_activity(&reader, &relay_reader, Duration::from_secs(1))
+            .expect("poll activity");
+
+        assert!(started.elapsed() < Duration::from_millis(500));
+        wake.join().expect("wake thread");
+    }
 
     #[test]
     fn requested_stop_kills_unresponsive_child_once_without_replacement() {
@@ -671,6 +868,8 @@ mod tests {
         let shutdown = AtomicBool::new(false);
         let stop = AtomicBool::new(true);
         let (_relay_sender, relay_receiver) = mpsc::sync_channel(1);
+        let (relay_wake, _relay_signal) =
+            std::os::unix::net::UnixStream::pair().expect("relay wake pair");
         let (ready_sender, _ready_receiver) = mpsc::sync_channel(1);
         let ready_state = AtomicBool::new(false);
         let started = Instant::now();
@@ -683,6 +882,7 @@ mod tests {
             shutdown_requested: &shutdown,
             stop_requested: &stop,
             relay_requests: &relay_receiver,
+            relay_wake: &relay_wake,
             control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers::default(),
             ready_sender: &ready_sender,
             ready_state: &ready_state,
@@ -694,6 +894,79 @@ mod tests {
             std::fs::read(&launches).expect("launch counter"),
             b"x",
             "killed child must not be replaced"
+        );
+        std::fs::remove_dir_all(root).expect("remove fixture");
+    }
+
+    #[test]
+    fn requested_stop_accepts_an_already_closed_correlated_channel_without_replacement() {
+        let root = std::env::temp_dir().join(format!(
+            "makosh-managed-correlated-stop-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .expect("clock")
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&root).expect("fixture root");
+        let launches = root.join("launches");
+        let (descriptor_bytes, framed_describe) = correlated_describe_fixture();
+        let source = root.join("child.sh");
+        std::fs::write(
+            &source,
+            format!(
+                "#!/bin/sh\nprintf x >> \"$1\"\nprintf '{}' >&0\nexec 0>&-\nwhile :; do sleep 1; done\n",
+                shell_octal(&framed_describe)
+            ),
+        )
+        .expect("child fixture");
+        std::fs::set_permissions(&source, std::fs::Permissions::from_mode(0o500))
+            .expect("fixture executable");
+        let digest: [u8; 32] = Sha256::digest(std::fs::read(&source).expect("child bytes")).into();
+        let staged = crate::distribution::staged_artifact::stage(
+            &source,
+            &root.join("staged"),
+            "managed-correlated-stop-child",
+            &digest,
+        )
+        .expect("staged fixture");
+        let expectation = ManagedRuntimeExpectation::new(
+            "registration",
+            "runtime",
+            "persons",
+            1,
+            1,
+            Sha256::digest(&descriptor_bytes).into(),
+            None,
+        );
+        let policy = ManagedChildExecutionPolicy::new(3, Duration::from_secs(5)).expect("policy");
+        let shutdown = AtomicBool::new(false);
+        let stop = AtomicBool::new(true);
+        let (_relay_sender, relay_receiver) = mpsc::sync_channel(1);
+        let (relay_wake, _relay_signal) =
+            std::os::unix::net::UnixStream::pair().expect("relay wake pair");
+        let (ready_sender, _ready_receiver) = mpsc::sync_channel(1);
+        let ready_state = AtomicBool::new(false);
+        let result = run_until_shutdown(ManagedChildRunInput {
+            staged_executable: &staged,
+            arguments: &[launches.display().to_string()],
+            expectation: &expectation,
+            policy: &policy,
+            control_transport: ManagedControlTransportMajorV1::CorrelatedV2,
+            shutdown_requested: &shutdown,
+            stop_requested: &stop,
+            relay_requests: &relay_receiver,
+            relay_wake: &relay_wake,
+            control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers::default(),
+            ready_sender: &ready_sender,
+            ready_state: &ready_state,
+        })
+        .expect("requested stop is terminal despite a concurrent peer close");
+        assert_eq!(result.attempts(), 1);
+        assert_eq!(
+            std::fs::read(&launches).expect("launch counter"),
+            b"x",
+            "requested stop must not launch a replacement"
         );
         std::fs::remove_dir_all(root).expect("remove fixture");
     }
@@ -762,6 +1035,8 @@ mod tests {
         let shutdown = AtomicBool::new(false);
         let stop = AtomicBool::new(false);
         let (_relay_sender, relay_receiver) = mpsc::sync_channel(1);
+        let (relay_wake, _relay_signal) =
+            std::os::unix::net::UnixStream::pair().expect("relay wake pair");
         let (ready_sender, _ready_receiver) = mpsc::sync_channel(1);
         let ready_state = AtomicBool::new(false);
         let result = run_until_shutdown(ManagedChildRunInput {
@@ -773,6 +1048,7 @@ mod tests {
             shutdown_requested: &shutdown,
             stop_requested: &stop,
             relay_requests: &relay_receiver,
+            relay_wake: &relay_wake,
             control_handlers: managed_runtime_control::ManagedRuntimeControlHandlers::default(),
             ready_sender: &ready_sender,
             ready_state: &ready_state,

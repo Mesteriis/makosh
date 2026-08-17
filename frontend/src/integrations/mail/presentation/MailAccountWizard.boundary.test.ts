@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 describe('Mail account wizard composition', () => {
 	it('keeps provider setup account-scoped and credential custody outside Settings', () => {
 		const wizard = read('./MailAccountSetupPanel.vue')
+		const gmailOAuth = read('./GmailOAuthSetupView.vue')
 		const management = read('./MailAccountManagementPanel.vue')
 		const setup = read('../setup/mailAccountSetupWorkflow.ts')
 		const setupController = read('../setup/useMailAccountSetup.ts')
@@ -15,10 +16,16 @@ describe('Mail account wizard composition', () => {
 		expect(wizard).toContain('iCloud Mail')
 		expect(wizard).toContain('Custom IMAP')
 		expect(wizard).toContain('setup.authorizeGmail')
-		expect(wizard).toContain('OAuth redirect URI')
-		expect(wizard).toContain(':value="setup.gmailRedirectUri.value" readonly')
-		expect(wizard).not.toMatch(/Returned state|Authorization code/)
-		expect(setupController).toContain('runGmailOAuthBrowserFlowV1')
+		expect(wizard).toContain('GmailOAuthSetupView')
+		expect(gmailOAuth).toContain('OAuth redirect URI')
+		expect(wizard).toContain("provider !== 'gmail'")
+		expect(gmailOAuth).toContain('mailbox identity are selected during OAuth authorization')
+		expect(gmailOAuth).toContain(':value="redirectUri" readonly')
+		expect(gmailOAuth).toContain('Continue with Google OAuth')
+		expect(`${wizard}\n${gmailOAuth}`).not.toMatch(/Returned state|Authorization code/)
+		expect(setupController).toContain('redirectGmailOAuthInSameTabV1')
+		expect(setupController).toContain('provisionDevelopmentGmailOAuthClientSecretV1')
+		expect(management).not.toContain('provisionDevelopmentGmailOAuthClientSecretV1')
 		expect(setupController).toContain('current.started.authorizationUrl')
 		expect(management).toContain('management.accounts.value')
 		expect(management).toContain('management.selectAccount')
@@ -26,7 +33,7 @@ describe('Mail account wizard composition', () => {
 		expect(setup).toContain('configurationInstanceId')
 		expect(catalog).toContain('MailAccountCatalogService')
 		expect(catalog).toContain('{ major: 1 }')
-		for (const source of [wizard, management, setup, setupController, catalog]) {
+		for (const source of [wizard, gmailOAuth, management, setup, setupController, catalog]) {
 			expect(source).not.toMatch(/domains\/communications/)
 			expect(source).not.toMatch(/password.*settingId|settingId.*password/i)
 		}
@@ -51,7 +58,7 @@ describe('Mail account wizard composition', () => {
 			expect(surface).not.toMatch(/Returned state|Authorization code|One-time authorization code/)
 		}
 		for (const controller of controllers) {
-			expect(controller).toContain('runGmailOAuthBrowserFlowV1')
+			expect(controller).toContain('redirectGmailOAuthInSameTabV1')
 		}
 		expect(entrypoint).toContain("import('./app/bootstrap')")
 		expect(entrypoint).not.toContain("from './app/App.vue'")

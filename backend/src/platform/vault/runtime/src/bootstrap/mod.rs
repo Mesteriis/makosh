@@ -26,7 +26,7 @@ fn store_platform_credentials(
     seeds: PlatformCredentialSeeds,
 ) -> Result<(), String> {
     store
-        .store_secrets_atomically(seeds.scoped_credentials()?)
+        .reconcile_bootstrap_secrets_atomically(seeds.scoped_credentials()?)
         .map_err(|_| "Vault platform credential import failed".to_owned())?;
     Ok(())
 }

@@ -47,7 +47,7 @@ pub(crate) fn resolve(
         || configuration.runtime_artifacts[0].artifact_id != TELEGRAM_TDJSON_ARTIFACT_ID
         || configuration.runtime_artifacts[1].artifact_id != TELEGRAM_TGCALLS_ARTIFACT_ID
     {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("artifact_contract"));
     }
     let tdjson_artifact_path = resolve_native_artifact(
         &configuration.runtime_artifacts[0],
@@ -65,7 +65,7 @@ pub(crate) fn resolve(
             root.state_generation != 0
                 && root.state_layout_revision == TELEGRAM_STATE_LAYOUT_REVISION_V1
         })
-        .ok_or_else(invalid_bindings)?;
+        .ok_or_else(|| invalid_bindings("state_contract"))?;
     let database_directory = prepare_database_directory(Path::new(&state_root.root_path))?;
     Ok(TelegramRuntimeBindingsV1 {
         tdjson_artifact_path,
@@ -85,56 +85,61 @@ fn resolve_native_artifact(
         || artifact.size_bytes > maximum_size_bytes
         || artifact.sha256.len() != 32
     {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("artifact_metadata"));
     }
     let artifact_path = PathBuf::from(&artifact.staged_path);
     let bytes = read(
         &artifact_path,
         SecureReadPolicy::owner_private(artifact.size_bytes),
     )
-    .map_err(|_| invalid_bindings())?;
+    .map_err(|_| invalid_bindings("artifact_read"))?;
     if bytes.len() as u64 != artifact.size_bytes
         || Sha256::digest(&bytes).as_slice() != artifact.sha256.as_slice()
     {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("artifact_digest"));
     }
     Ok(artifact_path)
 }
 
 fn prepare_database_directory(root: &Path) -> Result<PathBuf, String> {
     if !root.is_absolute() {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("state_root_path"));
     }
     validate_private_directory(root)?;
-    let canonical_root = fs::canonicalize(root).map_err(|_| invalid_bindings())?;
+    let canonical_root =
+        fs::canonicalize(root).map_err(|_| invalid_bindings("state_root_canonical"))?;
     let database_directory = canonical_root.join(TDLIB_STATE_DIRECTORY_V1);
     match DirBuilder::new().mode(0o700).create(&database_directory) {
         Ok(()) => {}
         Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {}
-        Err(_) => return Err(invalid_bindings()),
+        Err(_) => return Err(invalid_bindings("state_database_create")),
     }
     validate_private_directory(&database_directory)?;
-    let canonical_database =
-        fs::canonicalize(&database_directory).map_err(|_| invalid_bindings())?;
+    let canonical_database = fs::canonicalize(&database_directory)
+        .map_err(|_| invalid_bindings("state_database_canonical"))?;
     if !canonical_database.starts_with(&canonical_root) || canonical_database == canonical_root {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("state_database_boundary"));
     }
     Ok(canonical_database)
 }
 
 fn validate_private_directory(path: &Path) -> Result<(), String> {
-    let metadata = fs::symlink_metadata(path).map_err(|_| invalid_bindings())?;
+    let metadata =
+        fs::symlink_metadata(path).map_err(|_| invalid_bindings("state_directory_metadata"))?;
     if metadata.file_type().is_symlink()
         || !metadata.is_dir()
         || metadata.uid() != unsafe { libc::geteuid() }
         || metadata.mode() & 0o077 != 0
     {
-        return Err(invalid_bindings());
+        return Err(invalid_bindings("state_directory_permissions"));
     }
     Ok(())
 }
 
-fn invalid_bindings() -> String {
+fn invalid_bindings(stage: &'static str) -> String {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        eprintln!("developer_telegram_runtime_binding_error stage={stage}");
+    }
     "Telegram runtime platform bindings are invalid".to_owned()
 }
 

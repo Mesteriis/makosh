@@ -2,7 +2,7 @@
 
 use std::{fmt, time::Duration};
 
-use serde_json::Value;
+use serde_json::{Value, json};
 
 use crate::{
     TdJsonClient, TdlibAuthorizationParameters, TdlibAuthorizationUpdate, TdlibError,
@@ -29,23 +29,45 @@ impl fmt::Debug for TdlibAuthorizationEvent {
     }
 }
 
-pub struct TdlibAuthorizationDriver {
-    client: TdJsonClient,
+pub trait AuthorizationClient {
+    fn send_json(&self, request: &Value) -> Result<(), TdlibError>;
+    fn receive_json(&self, timeout_seconds: f64) -> Result<Option<Value>, TdlibError>;
+}
+
+impl AuthorizationClient for TdJsonClient {
+    fn send_json(&self, request: &Value) -> Result<(), TdlibError> {
+        TdJsonClient::send_json(self, request)
+    }
+
+    fn receive_json(&self, timeout_seconds: f64) -> Result<Option<Value>, TdlibError> {
+        TdJsonClient::receive_json(self, timeout_seconds)
+    }
+}
+
+pub struct TdlibAuthorizationDriver<C = TdJsonClient> {
+    client: C,
     parameters: TdlibAuthorizationParameters,
     parameters_sent: bool,
     encryption_key_checked: bool,
     qr_requested: bool,
 }
 
-impl TdlibAuthorizationDriver {
-    pub fn new(client: TdJsonClient, parameters: TdlibAuthorizationParameters) -> Self {
-        Self {
+impl<C> TdlibAuthorizationDriver<C>
+where
+    C: AuthorizationClient,
+{
+    pub fn new(client: C, parameters: TdlibAuthorizationParameters) -> Result<Self, TdlibError> {
+        client.send_json(&json!({
+            "@type": "getAuthorizationState",
+            "@extra": "makosh-initial-authorization-state"
+        }))?;
+        Ok(Self {
             client,
             parameters,
             parameters_sent: false,
             encryption_key_checked: false,
             qr_requested: false,
-        }
+        })
     }
 
     pub fn initialize(&mut self) -> Result<(), TdlibError> {
@@ -63,6 +85,9 @@ impl TdlibAuthorizationDriver {
         let Some(payload) = self.client.receive_json(timeout_seconds)? else {
             return Ok(None);
         };
+        if !is_authorization_payload(&payload) {
+            return Ok(None);
+        }
         self.handle_payload(payload).map(Some)
     }
 
@@ -113,14 +138,105 @@ impl TdlibAuthorizationDriver {
         self.client.send_json(&close_session_request())
     }
 
-    pub fn into_client(self) -> TdJsonClient {
+    pub fn into_client(self) -> C {
         self.client
     }
+}
 
+impl TdlibAuthorizationDriver<TdJsonClient> {
     pub fn into_transport(
         self,
         account_id: impl Into<String>,
     ) -> Result<crate::TdJsonTransport, TdlibError> {
         crate::TdJsonTransport::new(self.client, account_id)
+    }
+}
+
+fn is_authorization_payload(payload: &Value) -> bool {
+    matches!(
+        payload.get("@type").and_then(Value::as_str),
+        Some("updateAuthorizationState" | "error")
+    ) || payload
+        .get("@type")
+        .and_then(Value::as_str)
+        .is_some_and(|kind| kind.starts_with("authorizationState"))
+}
+
+#[cfg(test)]
+mod tests {
+    use std::{cell::RefCell, collections::VecDeque, path::PathBuf};
+
+    use serde_json::Value;
+    use serde_json::json;
+    use zeroize::Zeroizing;
+
+    use super::{AuthorizationClient, TdlibAuthorizationDriver, is_authorization_payload};
+    use crate::{TdlibAuthorizationParameters, TdlibError};
+
+    #[derive(Default)]
+    struct RecordingAuthorizationClient {
+        sent: RefCell<Vec<Value>>,
+        received: RefCell<VecDeque<Value>>,
+    }
+
+    impl AuthorizationClient for RecordingAuthorizationClient {
+        fn send_json(&self, request: &Value) -> Result<(), TdlibError> {
+            self.sent.borrow_mut().push(request.clone());
+            Ok(())
+        }
+
+        fn receive_json(&self, _timeout_seconds: f64) -> Result<Option<Value>, TdlibError> {
+            Ok(self.received.borrow_mut().pop_front())
+        }
+    }
+
+    #[test]
+    fn starts_by_requesting_the_current_authorization_state() {
+        let client = RecordingAuthorizationClient::default();
+        let driver = TdlibAuthorizationDriver::new(
+            client,
+            TdlibAuthorizationParameters {
+                api_id: 1,
+                api_hash: Zeroizing::new("hash".to_owned()),
+                database_directory: PathBuf::from("database"),
+                session_encryption_key: None,
+            },
+        )
+        .expect("authorization driver");
+
+        assert_eq!(
+            driver.client.sent.into_inner(),
+            vec![json!({
+                "@type": "getAuthorizationState",
+                "@extra": "makosh-initial-authorization-state"
+            })]
+        );
+    }
+
+    #[test]
+    fn ignores_tdlib_acknowledgements_without_overwriting_authorization_state() {
+        assert!(!is_authorization_payload(&json!({
+            "@type": "ok",
+            "@extra": "makosh-request-qr-code-authentication"
+        })));
+        assert!(!is_authorization_payload(&json!({
+            "@type": "updateOption",
+            "name": "version"
+        })));
+
+        assert!(is_authorization_payload(&json!({
+            "@type": "updateAuthorizationState",
+            "authorization_state": {
+                "@type": "authorizationStateWaitOtherDeviceConfirmation",
+                "link": "tg://redacted"
+            }
+        })));
+        assert!(is_authorization_payload(&json!({
+            "@type": "authorizationStateWaitPassword"
+        })));
+        assert!(is_authorization_payload(&json!({
+            "@type": "error",
+            "code": 400
+        })));
     }
 }

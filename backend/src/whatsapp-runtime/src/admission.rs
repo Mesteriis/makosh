@@ -15,7 +15,9 @@ use makosh_runtime_protocol::v1::{
 pub use makosh_whatsapp_api::client_contract::{WHATSAPP_MODULE_ID, WHATSAPP_OWNER_ID};
 use makosh_whatsapp_api::{
     client_contract::{
-        WHATSAPP_CLIENT_CONTRACT_MAJOR, WHATSAPP_CLIENT_CONTRACT_REVISION, WhatsAppClientContractV1,
+        WHATSAPP_CLIENT_CONTRACT_MAJOR, WHATSAPP_CLIENT_CONTRACT_REVISION,
+        WHATSAPP_DESCRIPTOR_SET_V1, WHATSAPP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1,
+        WHATSAPP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1, WhatsAppClientContractV1,
     },
     host_bridge::HOST_BRIDGE_CONTRACT_NAME,
 };
@@ -49,6 +51,7 @@ pub fn whatsapp_admission_capabilities_v1() -> Vec<CapabilityDescriptorV1> {
         whatsapp_events_capability_v1(),
         whatsapp_host_bridge_capability_v1(),
         whatsapp_client_capability_v1(WhatsAppClientContractV1::OperationalQuery),
+        whatsapp_operational_shared_realtime_capability_v1(),
         whatsapp_client_capability_v1(WhatsAppClientContractV1::OperationalRealtime),
         whatsapp_client_capability_v1(WhatsAppClientContractV1::Query),
         whatsapp_storage_capability_v1(),
@@ -80,6 +83,27 @@ fn whatsapp_client_capability_v1(contract: WhatsAppClientContractV1) -> Capabili
             client_rpc_route: Some(ClientRpcRouteV1 {
                 path: contract.connect_path().to_owned(),
             }),
+            client_blob_route: None,
+        }],
+        ..Default::default()
+    }
+}
+
+fn whatsapp_operational_shared_realtime_capability_v1() -> CapabilityDescriptorV1 {
+    CapabilityDescriptorV1 {
+        capability_id: WHATSAPP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1.to_owned(),
+        capability_revision: 1,
+        criticality: CapabilityCriticalityV1::Optional as i32,
+        provides: vec![ProvidedSurfaceV1 {
+            kind: ProvidedSurfaceKindV1::ClientRealtime as i32,
+            contract: Some(ContractReferenceV1 {
+                owner: WHATSAPP_OWNER_ID.to_owned(),
+                name: WHATSAPP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1.to_owned(),
+                major: WHATSAPP_CLIENT_CONTRACT_MAJOR,
+                revision: WHATSAPP_CLIENT_CONTRACT_REVISION,
+                schema_sha256: Sha256::digest(WHATSAPP_DESCRIPTOR_SET_V1).to_vec(),
+            }),
+            client_rpc_route: None,
             client_blob_route: None,
         }],
         ..Default::default()
@@ -218,6 +242,7 @@ mod tests {
                 WHATSAPP_EVENTS_CAPABILITY_ID,
                 HOST_BRIDGE_CONTRACT_NAME,
                 WhatsAppClientContractV1::OperationalQuery.capability_id(),
+                WHATSAPP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1,
                 WhatsAppClientContractV1::OperationalRealtime.capability_id(),
                 WhatsAppClientContractV1::Query.capability_id(),
                 WHATSAPP_STORAGE_CAPABILITY_ID,
@@ -248,6 +273,20 @@ mod tests {
                 contract.connect_path()
             );
         }
+
+        let shared_realtime = descriptor
+            .capabilities
+            .iter()
+            .find(|capability| {
+                capability.capability_id == WHATSAPP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1
+            })
+            .expect("WhatsApp shared realtime capability");
+        assert_eq!(shared_realtime.provides.len(), 1);
+        assert_eq!(
+            shared_realtime.provides[0].kind,
+            ProvidedSurfaceKindV1::ClientRealtime as i32
+        );
+        assert!(shared_realtime.provides[0].client_rpc_route.is_none());
 
         let host = descriptor
             .capabilities

@@ -6,6 +6,7 @@ import {
 } from '../../../gen/makosh/mail/account/v1/client_pb'
 import type { MailAccountLifecycleReceiptV1 } from '../../../gen/makosh/mail/account_lifecycle/v1/client_pb'
 import type { ApplyOwnerManagedIntegrationSettingsReceiptV1 } from '../../../gen/makosh/gateway/v1/owner_module_settings_pb'
+import { ManagedIntegrationSetupV1 } from '../../../platform/settings'
 import { OwnerModuleSettingsClientV1 } from '../../../platform/settings/ownerModuleSettingsClient'
 import {
 	OwnerVaultActionV1,
@@ -21,6 +22,9 @@ import {
 	retryMailAccountLifecycle,
 } from '../api/mailAccountLifecycleClient'
 import { getMailAccountStatus, listMailAccounts } from '../api/mailAccountQueryClient'
+import { mailGmailPreauthorizationSettings } from '../setup/mailAccountSetupWorkflow'
+
+const MAIL_STORAGE_CAPABILITY_ID = 'mail.storage.v1'
 
 export type MailPasswordPurposeV1 = 'imap' | 'smtp'
 
@@ -52,6 +56,7 @@ type MailAccountManagementPortsV1 = {
 		credentialRevision: bigint
 	}): Promise<MailCredentialBindingReceiptV1>
 	activation: Pick<OwnerModuleSettingsClientV1, 'applyManagedIntegration'>
+	configuration: Pick<ManagedIntegrationSetupV1, 'apply'>
 }
 
 export type MailPasswordRotationReceiptV1 = {
@@ -151,6 +156,28 @@ export class MailAccountManagementWorkflowV1 {
 			status: await this.ports.status(input.status.connectionId),
 		}
 	}
+
+	async normalizeGmailOAuthRedirect(input: {
+		registrationId: string
+		configurationInstanceId: string
+		expectedDesiredRevision: bigint
+		connectionId: string
+		clientId: string
+		redirectUri: string
+	}): Promise<void> {
+		await this.ports.configuration.apply({
+			registrationId: required(input.registrationId),
+			storageCapabilityId: MAIL_STORAGE_CAPABILITY_ID,
+			configurationInstanceId: required(input.configurationInstanceId),
+			expectedDesiredRevision: input.expectedDesiredRevision,
+			requestHostBridge: false,
+			values: mailGmailPreauthorizationSettings({
+				connectionId: required(input.connectionId),
+				clientId: required(input.clientId),
+				redirectUri: required(input.redirectUri),
+			}),
+		})
+	}
 }
 
 function defaultPorts(): MailAccountManagementPortsV1 {
@@ -164,6 +191,7 @@ function defaultPorts(): MailAccountManagementPortsV1 {
 		vault: new OwnerVaultProvisioningClientV1(),
 		bind: bindMailCredential,
 		activation: new OwnerModuleSettingsClientV1(),
+		configuration: new ManagedIntegrationSetupV1(),
 	}
 }
 

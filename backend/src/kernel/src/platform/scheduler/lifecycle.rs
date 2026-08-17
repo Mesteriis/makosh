@@ -17,12 +17,14 @@ use super::launch;
 use crate::platform::storage::successor;
 use crate::runtime::lifecycle::supervisor::ManagedRuntimeSupervisor;
 
-const IDLE_POLL_INTERVAL: Duration = Duration::from_millis(250);
+const CHANGE_POLL_INTERVAL: Duration = Duration::from_millis(250);
+const STABLE_POLL_INTERVAL: Duration = Duration::from_secs(1);
 const TOPOLOGY_STABLE_OBSERVATIONS: u8 = 8;
 
 enum ReconcileOutcome {
     Idle,
-    Active,
+    Stable,
+    ObservingTopology,
     Started,
     Refreshed,
 }
@@ -48,14 +50,10 @@ pub(crate) fn serve(
             if scheduler_is_active(&store, &supervisor)? {
                 blocked = false;
             }
-            wait_for_poll(&shutdown_requested);
+            wait_for_poll(&shutdown_requested, STABLE_POLL_INTERVAL);
             continue;
         }
-        let registration_id = active_scheduler_binding(&store)
-            .ok()
-            .flatten()
-            .map(|binding| binding.registration_id().to_owned());
-        match reconcile_once(
+        let poll_interval = match reconcile_once(
             &store,
             kernel,
             runtime_dir,
@@ -66,25 +64,34 @@ pub(crate) fn serve(
         ) {
             Ok(ReconcileOutcome::Refreshed) => {
                 tracing::debug!(event = "scheduler.topology.refreshed");
+                CHANGE_POLL_INTERVAL
             }
-            Ok(ReconcileOutcome::Idle | ReconcileOutcome::Active | ReconcileOutcome::Started) => {}
+            Ok(ReconcileOutcome::ObservingTopology | ReconcileOutcome::Started) => {
+                CHANGE_POLL_INTERVAL
+            }
+            Ok(ReconcileOutcome::Idle | ReconcileOutcome::Stable) => STABLE_POLL_INTERVAL,
             Err(error) => {
-                if let Some(registration_id) = registration_id {
+                if let Some(registration_id) = active_scheduler_binding(&store)
+                    .ok()
+                    .flatten()
+                    .map(|binding| binding.registration_id().to_owned())
+                {
                     let _ = supervisor.record_failure(&registration_id, error);
                 }
                 // A failed reconcile may already have revoked the predecessor and
                 // reserved a successor. Retrying would fence that successor again
                 // and erase the failure evidence, so require owner intervention.
                 blocked = true;
+                STABLE_POLL_INTERVAL
             }
-        }
-        wait_for_poll(&shutdown_requested);
+        };
+        wait_for_poll(&shutdown_requested, poll_interval);
     }
     Ok(())
 }
 
-fn wait_for_poll(shutdown_requested: &AtomicBool) {
-    let deadline = std::time::Instant::now() + IDLE_POLL_INTERVAL;
+fn wait_for_poll(shutdown_requested: &AtomicBool, interval: Duration) {
+    let deadline = std::time::Instant::now() + interval;
     while !shutdown_requested.load(Ordering::Acquire) && std::time::Instant::now() < deadline {
         std::thread::sleep(Duration::from_millis(25));
     }
@@ -112,19 +119,19 @@ fn reconcile_once(
             .is_some_and(|current| current == &expected_topology_fingerprint)
         {
             clear_pending_topology(pending_topology_fingerprint, pending_topology_observations);
-            return Ok(ReconcileOutcome::Active);
+            return Ok(ReconcileOutcome::Stable);
         }
         if active_topology_fingerprint.is_none() {
             *active_topology_fingerprint = Some(expected_topology_fingerprint);
             clear_pending_topology(pending_topology_fingerprint, pending_topology_observations);
-            return Ok(ReconcileOutcome::Active);
+            return Ok(ReconcileOutcome::Stable);
         }
         if !observe_stable_topology(
             expected_topology_fingerprint,
             pending_topology_fingerprint,
             pending_topology_observations,
         ) {
-            return Ok(ReconcileOutcome::Active);
+            return Ok(ReconcileOutcome::ObservingTopology);
         }
         let issue = successor::issue_after(&binding)?;
         let (reservation, successor) = successor::reserve(

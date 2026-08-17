@@ -13,11 +13,19 @@ pub(crate) fn with_blocking_control_channel<T>(
     channel: &mut ManagedControlChannelV2<UnixStream>,
     request: impl FnOnce(&mut ManagedControlChannelV2<UnixStream>) -> T,
 ) -> Result<T, ()> {
+    with_blocking_control_channel_timeout(channel, CONTROL_TIMEOUT, request)
+}
+
+pub(crate) fn with_blocking_control_channel_timeout<T>(
+    channel: &mut ManagedControlChannelV2<UnixStream>,
+    timeout: Duration,
+    request: impl FnOnce(&mut ManagedControlChannelV2<UnixStream>) -> T,
+) -> Result<T, ()> {
     channel
         .inner_mut()
         .set_nonblocking(false)
-        .and_then(|_| channel.inner_mut().set_read_timeout(Some(CONTROL_TIMEOUT)))
-        .and_then(|_| channel.inner_mut().set_write_timeout(Some(CONTROL_TIMEOUT)))
+        .and_then(|_| channel.inner_mut().set_read_timeout(Some(timeout)))
+        .and_then(|_| channel.inner_mut().set_write_timeout(Some(timeout)))
         .map_err(|_| ())?;
     let result = request(channel);
     let read_timeout_cleared = channel.inner_mut().set_read_timeout(None).is_ok();

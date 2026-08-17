@@ -150,7 +150,7 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   assert.match(wire, /encode_sync_health_query/);
   assert.match(wire, /decode_sync_health_response/);
   assert.match(wire, /encode_sync_health_response\(&response\)\? != bytes/);
-  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 14/);
+  assert.match(contract, /MAIL_CLIENT_CONTRACT_REVISION: u32 = 15/);
   assert.match(contract, /mail\.sync\.health\.query\.v1/);
   assert.match(
     contract,
@@ -184,6 +184,26 @@ test('Mail sync health is exact, restart-safe and cut over through its generated
   assert.match(
     runtimeRoot,
     /ActiveGmailSyncProviderOperationV1[\s\S]*mpsc::Receiver<GmailSyncProviderPageDeliveryV1>/,
+  );
+  assert.match(
+    runtimeRoot,
+    /gmail_oauth_provider_operations\s*=\s*BTreeMap::<[\s\S]*CompletedGmailOAuthProviderOperationV1/,
+  );
+  assert.match(
+    runtimeRoot,
+    /imap_sync_provider_operations\s*=\s*BTreeMap::<String, ActiveImapSyncProviderOperationV1>/,
+  );
+  assert.match(
+    runtimeRoot,
+    /gmail_sync_provider_operations\s*=\s*BTreeMap::<String, ActiveGmailSyncProviderOperationV1>/,
+  );
+  assert.doesNotMatch(
+    runtimeRoot,
+    /let mut (?:gmail_oauth|imap_sync|gmail_sync)_provider_operation\s*:\s*Option/,
+  );
+  assert.match(
+    runtimeRoot,
+    /MAX_SYNC_PAGES_PER_ACCOUNT_PER_TICK:\s*usize\s*=\s*1/,
   );
   assert.match(
     runtimeRoot,

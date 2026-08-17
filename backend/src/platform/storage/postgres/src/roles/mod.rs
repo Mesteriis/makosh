@@ -11,7 +11,7 @@ pub use audit::{
     StorageDataPrivilegeAuditV1, StorageRoleAuditV1, read_storage_data_privilege_audit,
     read_storage_role_audit,
 };
-pub use ledger::ensure_role_ledger_binding;
+pub use ledger::{ensure_role_ledger_binding, repair_legacy_storage_ledger_binding};
 pub use privileges::reconcile_owner_data_privileges;
 pub use reconciliation::{
     ensure_storage_roles, read_runtime_role_scram_verifier, set_runtime_role_password,

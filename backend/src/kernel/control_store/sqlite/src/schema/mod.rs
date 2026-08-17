@@ -50,8 +50,9 @@ mod v45_to_v46;
 mod v46_to_v47;
 mod v47_to_v48;
 mod v48_to_v49;
+mod v49_to_v50;
 
-pub const SCHEMA_VERSION: i64 = 49;
+pub const SCHEMA_VERSION: i64 = 50;
 
 pub fn migrate_schema(connection: &Connection) -> Result<(), StoreError> {
     loop {
@@ -164,6 +165,10 @@ fn version_feature_exists(connection: &Connection, version: i64) -> Result<bool,
             connection,
             "makosh_kernel_module_client_blob_route_request",
             "max_response_bytes BETWEEN 1 AND 33554432",
+        )? || table_definition_contains(
+            connection,
+            "makosh_kernel_module_client_blob_route_request",
+            "max_response_bytes BETWEEN 1 AND 4294967296",
         )?),
         44 => Ok(
             table_exists(connection, "makosh_kernel_settings_configuration_target")?
@@ -187,10 +192,19 @@ fn version_feature_exists(connection: &Connection, version: i64) -> Result<bool,
             "makosh_kernel_module_blob_quota_request",
             "allowed_operations BETWEEN 0 AND 15",
         ),
-        49 => table_definition_contains(
+        49 => Ok(table_definition_contains(
             connection,
             "makosh_kernel_module_client_blob_route_request",
             "max_response_bytes BETWEEN 1 AND 33554432",
+        )? || table_definition_contains(
+            connection,
+            "makosh_kernel_module_client_blob_route_request",
+            "max_response_bytes BETWEEN 1 AND 4294967296",
+        )?),
+        50 => table_definition_contains(
+            connection,
+            "makosh_kernel_module_client_blob_route_request",
+            "max_response_bytes BETWEEN 1 AND 4294967296",
         ),
         _ => Ok(false),
     }
@@ -383,6 +397,7 @@ fn apply_step(version: i64, transaction: &Transaction<'_>) -> Result<(), StoreEr
         46 => v46_to_v47::apply(transaction),
         47 => v47_to_v48::apply(transaction),
         48 => v48_to_v49::apply(transaction),
+        49 => v49_to_v50::apply(transaction),
         unsupported => Err(StoreError::UnsupportedSchema(unsupported)),
     }
 }

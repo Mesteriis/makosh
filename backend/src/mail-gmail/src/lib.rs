@@ -15,6 +15,7 @@ use makosh_mail_api::{
     GmailOAuthEndpointV1, valid_ca_certificate_pem, valid_gmail_oauth_configuration,
 };
 use serde::Deserialize;
+use zeroize::Zeroizing;
 
 const MAX_RESPONSE_BYTES: usize = 16 * 1024 * 1024;
 const MAX_MESSAGE_IDS: usize = 500;
@@ -65,12 +66,14 @@ pub struct GmailAuthorizationCodeExchangeV1 {
     pub configuration: GmailOAuthConfigurationV1,
     pub authorization_code: String,
     pub code_verifier: String,
+    pub client_secret: Zeroizing<String>,
 }
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct GmailRefreshTokenRequestV1 {
     pub configuration: GmailOAuthConfigurationV1,
     pub refresh_token: String,
+    pub client_secret: Zeroizing<String>,
 }
 
 #[derive(Clone, Eq, PartialEq, Deserialize)]
@@ -89,6 +92,7 @@ impl fmt::Debug for GmailAuthorizationCodeExchangeV1 {
             .field("configuration", &self.configuration)
             .field("authorization_code", &"[redacted]")
             .field("code_verifier", &"[redacted]")
+            .field("client_secret", &"[redacted]")
             .finish()
     }
 }
@@ -99,6 +103,7 @@ impl fmt::Debug for GmailRefreshTokenRequestV1 {
             .debug_struct("GmailRefreshTokenRequestV1")
             .field("configuration", &self.configuration)
             .field("refresh_token", &"[redacted]")
+            .field("client_secret", &"[redacted]")
             .finish()
     }
 }
@@ -129,6 +134,7 @@ pub async fn exchange_authorization_code(
         ("grant_type", "authorization_code".to_owned()),
         ("code", request.authorization_code.clone()),
         ("client_id", request.configuration.client_id.clone()),
+        ("client_secret", request.client_secret.to_string()),
         ("redirect_uri", request.configuration.redirect_uri.clone()),
         ("code_verifier", request.code_verifier.clone()),
     ];
@@ -147,6 +153,7 @@ pub async fn refresh_access_token(
         ("grant_type", "refresh_token".to_owned()),
         ("refresh_token", request.refresh_token.clone()),
         ("client_id", request.configuration.client_id.clone()),
+        ("client_secret", request.client_secret.to_string()),
     ];
     request_oauth_token(&request.configuration.token_endpoint, &form).await
 }
@@ -790,10 +797,21 @@ struct GmailListResponse {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum GmailOAuthProviderErrorV1 {
+    InvalidGrant,
+    InvalidClient,
+    RedirectUriMismatch,
+    InvalidRequest,
+    AccessDenied,
+    Other,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum GmailAdapterErrorV1 {
     InvalidRequest,
     Transport,
     ProviderStatus(u16),
+    OAuthProviderError(GmailOAuthProviderErrorV1),
     InvalidResponse,
 }
 
@@ -819,7 +837,8 @@ fn parse_json_response<T: for<'de> Deserialize<'de>>(
     if !(200..300).contains(&status) {
         return Err(GmailAdapterErrorV1::ProviderStatus(status));
     }
-    serde_json::from_slice(&response[split + 4..]).map_err(|_| GmailAdapterErrorV1::InvalidResponse)
+    let body = parse_http_response_body(response, split, MAX_RESPONSE_BYTES)?;
+    serde_json::from_slice(&body).map_err(|_| GmailAdapterErrorV1::InvalidResponse)
 }
 
 fn parse_response_status(response: &[u8]) -> Result<u16, GmailAdapterErrorV1> {
@@ -837,6 +856,74 @@ fn parse_response_status(response: &[u8]) -> Result<u16, GmailAdapterErrorV1> {
         .nth(1)
         .and_then(|value| value.parse::<u16>().ok())
         .ok_or(GmailAdapterErrorV1::InvalidResponse)
+}
+
+fn parse_http_response_body(
+    response: &[u8],
+    header_end: usize,
+    maximum_body_bytes: usize,
+) -> Result<Vec<u8>, GmailAdapterErrorV1> {
+    let headers = std::str::from_utf8(&response[..header_end])
+        .map_err(|_| GmailAdapterErrorV1::InvalidResponse)?;
+    let transfer_encoding = headers.lines().skip(1).find_map(|line| {
+        let (name, value) = line.split_once(':')?;
+        name.trim()
+            .eq_ignore_ascii_case("transfer-encoding")
+            .then_some(value.trim())
+    });
+    let encoded_body = &response[header_end + 4..];
+    match transfer_encoding {
+        None => {
+            if encoded_body.len() > maximum_body_bytes {
+                return Err(GmailAdapterErrorV1::InvalidResponse);
+            }
+            Ok(encoded_body.to_vec())
+        }
+        Some(value) if value.eq_ignore_ascii_case("chunked") => {
+            decode_chunked_body(encoded_body, maximum_body_bytes)
+        }
+        Some(_) => Err(GmailAdapterErrorV1::InvalidResponse),
+    }
+}
+
+fn decode_chunked_body(
+    encoded: &[u8],
+    maximum_body_bytes: usize,
+) -> Result<Vec<u8>, GmailAdapterErrorV1> {
+    let mut cursor = 0_usize;
+    let mut decoded = Vec::new();
+    loop {
+        let line_end = encoded[cursor..]
+            .windows(2)
+            .position(|value| value == b"\r\n")
+            .map(|offset| cursor + offset)
+            .ok_or(GmailAdapterErrorV1::InvalidResponse)?;
+        let size_field = std::str::from_utf8(&encoded[cursor..line_end])
+            .map_err(|_| GmailAdapterErrorV1::InvalidResponse)?;
+        let size =
+            usize::from_str_radix(size_field.split(';').next().unwrap_or_default().trim(), 16)
+                .map_err(|_| GmailAdapterErrorV1::InvalidResponse)?;
+        cursor = line_end + 2;
+        if size == 0 {
+            return Ok(decoded);
+        }
+        let chunk_end = cursor
+            .checked_add(size)
+            .filter(|end| *end <= encoded.len())
+            .ok_or(GmailAdapterErrorV1::InvalidResponse)?;
+        if decoded
+            .len()
+            .checked_add(size)
+            .is_none_or(|length| length > maximum_body_bytes)
+        {
+            return Err(GmailAdapterErrorV1::InvalidResponse);
+        }
+        decoded.extend_from_slice(&encoded[cursor..chunk_end]);
+        if encoded.get(chunk_end..chunk_end + 2) != Some(b"\r\n") {
+            return Err(GmailAdapterErrorV1::InvalidResponse);
+        }
+        cursor = chunk_end + 2;
+    }
 }
 
 async fn request_oauth_token(
@@ -914,7 +1001,7 @@ async fn request_oauth_token_inner(
     if response.len() > MAX_OAUTH_RESPONSE_BYTES {
         return Err(GmailAdapterErrorV1::InvalidResponse);
     }
-    let token: GmailOAuthTokenResponseV1 = parse_json_response(&response)?;
+    let token = parse_oauth_token_response(&response)?;
     if !valid_bearer_token(&token.access_token)
         || token
             .refresh_token
@@ -929,6 +1016,41 @@ async fn request_oauth_token_inner(
         return Err(GmailAdapterErrorV1::InvalidResponse);
     }
     Ok(token)
+}
+
+fn parse_oauth_token_response(
+    response: &[u8],
+) -> Result<GmailOAuthTokenResponseV1, GmailAdapterErrorV1> {
+    if response.len() > MAX_OAUTH_RESPONSE_BYTES {
+        return Err(GmailAdapterErrorV1::InvalidResponse);
+    }
+    let split = response
+        .windows(4)
+        .position(|value| value == b"\r\n\r\n")
+        .ok_or(GmailAdapterErrorV1::InvalidResponse)?;
+    let status = parse_response_status(response)?;
+    let body = parse_http_response_body(response, split, MAX_OAUTH_RESPONSE_BYTES)?;
+    if (200..300).contains(&status) {
+        return serde_json::from_slice(&body).map_err(|_| GmailAdapterErrorV1::InvalidResponse);
+    }
+    #[derive(Deserialize)]
+    struct OAuthErrorResponse<'a> {
+        #[serde(borrow)]
+        error: &'a str,
+    }
+    let provider_error = serde_json::from_slice::<OAuthErrorResponse<'_>>(&body)
+        .ok()
+        .map(|value| match value.error {
+            "invalid_grant" => GmailOAuthProviderErrorV1::InvalidGrant,
+            "invalid_client" => GmailOAuthProviderErrorV1::InvalidClient,
+            "redirect_uri_mismatch" => GmailOAuthProviderErrorV1::RedirectUriMismatch,
+            "invalid_request" => GmailOAuthProviderErrorV1::InvalidRequest,
+            "access_denied" => GmailOAuthProviderErrorV1::AccessDenied,
+            _ => GmailOAuthProviderErrorV1::Other,
+        });
+    provider_error
+        .map(GmailAdapterErrorV1::OAuthProviderError)
+        .map_or(Err(GmailAdapterErrorV1::ProviderStatus(status)), Err)
 }
 
 fn valid_host(host: &str) -> bool {
@@ -995,6 +1117,34 @@ fn percent_encode(value: &str) -> Result<String, GmailAdapterErrorV1> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn oauth_error_response_is_reduced_to_a_payload_safe_provider_code() {
+        let response = b"HTTP/1.1 400 Bad Request\r\nContent-Type: application/json\r\n\r\n{\"error\":\"invalid_client\",\"error_description\":\"private provider detail\"}";
+
+        assert_eq!(
+            parse_oauth_token_response(response),
+            Err(GmailAdapterErrorV1::OAuthProviderError(
+                GmailOAuthProviderErrorV1::InvalidClient,
+            )),
+        );
+        assert!(
+            !format!("{:?}", parse_oauth_token_response(response))
+                .contains("private provider detail")
+        );
+    }
+
+    #[test]
+    fn oauth_error_response_decodes_chunked_transport_before_classification() {
+        let response = b"HTTP/1.1 400 Bad Request\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n19\r\n{\"error\":\"invalid_grant\"}\r\n0\r\n\r\n";
+
+        assert_eq!(
+            parse_oauth_token_response(response),
+            Err(GmailAdapterErrorV1::OAuthProviderError(
+                GmailOAuthProviderErrorV1::InvalidGrant,
+            )),
+        );
+    }
 
     fn oauth_configuration() -> GmailOAuthConfigurationV1 {
         GmailOAuthConfigurationV1 {
@@ -1094,10 +1244,12 @@ mod tests {
             configuration: oauth_configuration(),
             authorization_code: "authorization-code-secret".to_owned(),
             code_verifier: "pkce-verifier-secret".to_owned(),
+            client_secret: Zeroizing::new("oauth-client-secret".to_owned()),
         };
         let refresh = GmailRefreshTokenRequestV1 {
             configuration: oauth_configuration(),
             refresh_token: "refresh-token-secret".to_owned(),
+            client_secret: Zeroizing::new("oauth-client-secret".to_owned()),
         };
         let response = GmailOAuthTokenResponseV1 {
             access_token: "access-token-secret".to_owned(),
@@ -1110,6 +1262,7 @@ mod tests {
         for secret in [
             "authorization-code-secret",
             "pkce-verifier-secret",
+            "oauth-client-secret",
             "refresh-token-secret",
             "access-token-secret",
             "rotated-refresh-secret",

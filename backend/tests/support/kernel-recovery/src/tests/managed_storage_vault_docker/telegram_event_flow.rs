@@ -191,6 +191,7 @@ async fn persist_provider_observation(durable: &TelegramDurablePersistence) {
             provider_topic_id: None,
             sender_id: "telegram-sender-1".to_owned(),
             sender_display_name: None,
+            sender_source_identity: None,
             is_outgoing: false,
             text: None,
             media: None,

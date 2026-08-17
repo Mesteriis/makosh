@@ -61,6 +61,50 @@ describe('Gmail OAuth browser flow', () => {
 		expect(environment.open).not.toHaveBeenCalled()
 	})
 
+	it('falls back to a regular tab when the embedded browser rejects popup windows', async () => {
+		const channel = new FakeChannel()
+		const tab = { close: vi.fn() }
+		const environment = browserEnvironment(channel, tab)
+		environment.open
+			.mockReturnValueOnce(null)
+			.mockReturnValueOnce(tab)
+
+		const resultPromise = runGmailOAuthBrowserFlowV1(
+			googleAuthorizationUrl('provider-state'),
+			environment,
+		)
+
+		expect(environment.open).toHaveBeenNthCalledWith(
+			2,
+			expect.stringContaining('https://accounts.google.com/o/oauth2/v2/auth'),
+			'_blank',
+			'',
+		)
+		channel.receive({
+			kind: 'makosh.gmail.oauth.callback.v1',
+			state: 'provider-state',
+			authorizationCode: 'one-use-code',
+		})
+		await expect(resultPromise).resolves.toEqual({
+			returnedState: 'provider-state',
+			authorizationCode: 'one-use-code',
+		})
+	})
+
+	it('normalizes browser window-open exceptions as a blocked popup', async () => {
+		const channel = new FakeChannel()
+		const environment = browserEnvironment(channel, { close: vi.fn() })
+		environment.open.mockImplementation(() => {
+			throw new DOMException('blocked', 'NotAllowedError')
+		})
+
+		await expect(runGmailOAuthBrowserFlowV1(
+			googleAuthorizationUrl('provider-state'),
+			environment,
+		)).rejects.toThrow('gmail_oauth_popup_blocked')
+		expect(environment.open).toHaveBeenCalledTimes(2)
+	})
+
 	it('removes provider code from browser history before publishing the callback', () => {
 		const channel = new FakeChannel()
 		const order: string[] = []

@@ -9,9 +9,13 @@ pub const ZULIP_OPERATIONAL_REALTIME_DESCRIPTOR_SET_V1: &[u8] = include_bytes!(c
     "/makosh.zulip.operational.realtime.v1.bin"
 ));
 pub const ZULIP_CLIENT_CONTRACT_MAJOR: u32 = 1;
-pub const ZULIP_CLIENT_CONTRACT_REVISION: u32 = 1;
+pub const ZULIP_CLIENT_CONTRACT_REVISION: u32 = 2;
 pub const ZULIP_MODULE_ID: &str = "makosh-zulip-runtime";
 pub const ZULIP_OWNER_ID: &str = "zulip";
+pub const ZULIP_OPERATIONAL_SHARED_REALTIME_CAPABILITY_ID_V1: &str =
+    "zulip.operational.realtime.shared.v1";
+pub const ZULIP_OPERATIONAL_PROJECTION_CHANGED_CONTRACT_NAME_V1: &str =
+    "zulip.operational.projection_changed.v1";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ZulipClientContractV1 {

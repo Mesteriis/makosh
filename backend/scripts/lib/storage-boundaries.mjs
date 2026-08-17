@@ -120,7 +120,7 @@ function isExactKnowledgeLifecycleMigration(entry, construct) {
     && entry.surface === 'persistence'
     && new Set(['drop', 'destructive_alter']).has(construct)
     && createHash('sha256').update(entry.content, 'utf8').digest('hex')
-      === '67d64e39f8150e9c889b6ac3544ea889f91010ab1b7d58005be7375cb09e4d6e';
+      === '125de65fc49e465e1f95e5191203f2fb9d32fc1ceda2546ff93cf4a3964bf6a0';
 }
 
 export function validateStorageEntries(policy, entries) {

@@ -81,7 +81,7 @@ fn read_scheduler_job_requests(
     registration_id: &str,
     capability_id: &str,
 ) -> Result<Vec<ModuleSchedulerJobRequestV1>, StoreError> {
-    let mut statement = connection.prepare(
+    let mut statement = connection.prepare_cached(
         "SELECT job_owner, job_name, job_major, job_revision, contract_schema_sha256
          FROM makosh_kernel_module_scheduler_job_request
          WHERE registration_id = ?1 AND capability_id = ?2

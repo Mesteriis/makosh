@@ -8,6 +8,7 @@ pub mod attachment_anchor_mapping;
 pub mod attachment_safety_projection;
 pub mod attachment_security_outbox;
 pub mod client_port;
+mod client_realtime;
 pub mod communications_outbox;
 pub mod delivery_intent_consumer;
 pub mod delivery_intent_execution;

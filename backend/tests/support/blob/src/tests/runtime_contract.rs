@@ -12,7 +12,7 @@ use makosh_runtime_protocol::{
 fn blob_managed_runtime_contract_excludes_content_and_requires_current_vault_fence() {
     let configuration = BlobRuntimeConfigurationV1 {
         data_dir: "/private/makosh/blob".to_owned(),
-        maximum_blob_bytes: 64 * 1024 * 1024,
+        maximum_blob_bytes: 4 * 1024 * 1024 * 1024,
         vault_instance_id: "instance_blob".to_owned(),
         vault_runtime_generation: 9,
         vault_hpke_public_key_x25519: vec![3; 32],
@@ -26,7 +26,7 @@ fn blob_managed_runtime_contract_excludes_content_and_requires_current_vault_fen
         state: BlobRuntimeStateV1::Ready as i32,
         runtime_generation: 4,
         vault_runtime_generation: 9,
-        maximum_blob_bytes: 64 * 1024 * 1024,
+        maximum_blob_bytes: 4 * 1024 * 1024 * 1024,
         blocker_code: String::new(),
     };
     assert!(
@@ -42,7 +42,7 @@ fn blob_managed_runtime_contract_excludes_content_and_requires_current_vault_fen
 fn blob_runtime_rejects_unbounded_configuration_or_status() {
     let configuration = BlobRuntimeConfigurationV1 {
         data_dir: "relative".to_owned(),
-        maximum_blob_bytes: 64 * 1024 * 1024 + 1,
+        maximum_blob_bytes: 4 * 1024 * 1024 * 1024 + 1,
         vault_instance_id: String::new(),
         vault_runtime_generation: 0,
         vault_hpke_public_key_x25519: vec![3; 31],

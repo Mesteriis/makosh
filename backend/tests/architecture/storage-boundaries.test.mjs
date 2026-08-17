@@ -42,6 +42,77 @@ test('Storage quarantines policy-invalid owner bundles before bootstrap grants',
   );
 });
 
+test('Storage startup logging remains bounded and never serializes migration payloads', async () => {
+  const runtime = await readFile(
+    new URL('../../src/platform/storage/runtime/src/control/runtime.rs', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(runtime, /event = "storage\.configuration\.loaded"/);
+  assert.match(runtime, /bindings\.desired_count = configuration\.desired_bindings\.len\(\)/);
+  assert.match(runtime, /bundles\.desired_count = configuration\.desired_bundles\.len\(\)/);
+  assert.doesNotMatch(runtime, /payload\.configuration = \?configuration/);
+});
+
+test('PgBouncer transaction-mode runtime clients disable persistent statement caching', async () => {
+  const runtimeConnections = [
+    '../../src/platform/scheduler/persistence/src/store/connection.rs',
+    '../../src/mail-persistence/src/durable.rs',
+    '../../src/mail-persons-sync-persistence/src/repository.rs',
+    '../../src/telegram-persistence/src/durable.rs',
+    '../../src/whatsapp-persistence/src/durable.rs',
+    '../../src/zulip-persistence/src/lib.rs',
+  ];
+
+  for (const path of runtimeConnections) {
+    const source = await readFile(new URL(path, import.meta.url), 'utf8');
+    assert.match(
+      source,
+      /PgConnectOptions::new\(\)[\s\S]*?\.statement_cache_capacity\(0\)[\s\S]*?\.database\(/,
+      path,
+    );
+  }
+});
+
+test('development PgBouncer tracks prepared statements while transaction pooling', async () => {
+  const configuration = await readFile(
+    new URL('../../development/authenticated/pgbouncer.ini', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(configuration, /^pool_mode = transaction$/m);
+  assert.match(configuration, /^max_prepared_statements = [1-9][0-9]*$/m);
+});
+
+test('incremental Storage binding apply resolves only the new runtime credential', async () => {
+  const [apply, bindings] = await Promise.all([
+    readFile(
+      new URL('../../src/platform/storage/runtime/src/control/apply.rs', import.meta.url),
+      'utf8',
+    ),
+    readFile(
+      new URL('../../src/platform/storage/runtime/src/admin/bindings.rs', import.meta.url),
+      'utf8',
+    ),
+  ]);
+
+  assert.match(
+    apply,
+    /resolve_runtime_credential\(channel, configuration, binding\.clone\(\)\)/,
+  );
+  assert.doesNotMatch(apply, /resolve_runtime_credentials\(channel, configuration\)/);
+  assert.match(
+    apply,
+    /reconcile_authorized_roles\([\s\S]*std::slice::from_ref\(&runtime_credential\)/,
+  );
+  assert.match(
+    apply,
+    /apply_authorized_bindings\([\s\S]*&configuration\.desired_bindings/,
+  );
+  assert.match(bindings, /runtime_bindings: &\[StorageBindingV1\]/);
+  assert.doesNotMatch(bindings, /RuntimeRoleCredentialV1/);
+});
+
 test('allows schema-qualified owner-local SQL and additive migrations', () => {
   const violations = validateStorageEntries(policy(), [
     storageEntry(`

@@ -12,7 +12,7 @@ pub use lifecycle::{
     PgBouncerAdminPortV1, PgBouncerPoolFenceAdapterV1, PoolLifecycleCommandV1,
     PoolLifecycleErrorV1, PoolLifecycleOutcomeV1, PoolRevokePlanV1,
     TokioPostgresPgBouncerAdminPortV1, database_is_configured, reload_configuration,
-    verify_admin_connection,
+    user_is_configured, verify_admin_connection,
 };
 
 pub const MINIMUM_VERSION: &str = "1.25.2";

@@ -85,6 +85,15 @@ test('Kernel stages granted workflow and engine resources without owner semantic
   assert.match(nativeLaunch, /cleanup_staged_runtime_artifacts/);
   assert.match(nativeLaunch, /remove_dir_all\(artifact_directory\)/);
   assert.match(managedLaunch, /fn prepare_runtime_with_artifacts/);
+  assert.match(managedLaunch, /fn managed_launch_directory/);
+  assert.match(
+    managedLaunch,
+    /reservation\.runtime_generation\(\),\s*reservation\.runtime_instance_id\(\)/,
+  );
+  assert.doesNotMatch(
+    managedLaunch,
+    /join\(format!\("launch-\{\}", reservation\.runtime_generation\(\)\)\)/,
+  );
   assert.match(managedLaunch, /configuration\.runtime_artifacts = prepared\.runtime_artifact_bindings/);
   assert.match(ownerControl, /effective_granted_capability_ids/);
   assert.match(stagedArtifact, /StagedArtifactAccessV1::ReadOnly => 0o400/);

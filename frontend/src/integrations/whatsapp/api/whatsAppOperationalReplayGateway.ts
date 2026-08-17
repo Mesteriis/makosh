@@ -5,6 +5,7 @@ import {
 	type WhatsAppOperationalReplayResponseV1,
 } from '../../../gen/makosh/whatsapp/operational/realtime/v1/client_pb'
 import { getWhatsAppOperationalRealtimeConnectClient } from './whatsAppOperationalRealtimeClient'
+import { getClientAccountLaneRegistry } from '../../../platform/gateway/clientAccountLane'
 
 const DEFAULT_REPLAY_LIMIT = 100
 const MAX_REPLAY_LIMIT = 500
@@ -33,13 +34,15 @@ export async function replayWhatsAppOperationalEvents(input: {
 	if (!Number.isInteger(limit) || limit < 1 || limit > MAX_REPLAY_LIMIT) {
 		throw new RangeError('WhatsApp replay limit must be between 1 and 500')
 	}
-	const response = await getWhatsAppOperationalRealtimeConnectClient().replay(
-		create(WhatsAppOperationalReplayRequestV1Schema, {
-			accountId,
-			afterSequence,
-			limit,
-		}),
-	)
+	const response = await getClientAccountLaneRegistry()
+		.get({ provider: 'whatsapp', accountId })
+		.run('realtime', async () => getWhatsAppOperationalRealtimeConnectClient().replay(
+			create(WhatsAppOperationalReplayRequestV1Schema, {
+				accountId,
+				afterSequence,
+				limit,
+			}),
+		))
 	if (response.accountId !== accountId) {
 		throw new Error('WhatsApp replay account response is invalid')
 	}

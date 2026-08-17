@@ -206,6 +206,81 @@ fn event_catalog_rejects_incompatible_contract_revisions_before_broker_reconcili
     std::fs::remove_dir_all(root).expect("remove fixture directory");
 }
 
+#[test]
+fn event_catalog_accepts_only_the_exact_wire_compatible_scheduler_package_rename() {
+    const LEGACY_SCHEMA: [u8; 32] = [
+        0x3f, 0x9b, 0xb7, 0xb2, 0xde, 0xa5, 0xe0, 0xa7, 0x8d, 0x4c, 0x9f, 0xd6, 0x8c, 0xf5, 0x86,
+        0x7d, 0x36, 0x6b, 0x2b, 0x70, 0xf2, 0x1f, 0x81, 0xaf, 0xe6, 0x9d, 0x31, 0xb8, 0x64, 0x76,
+        0x74, 0x15,
+    ];
+    const CURRENT_SCHEMA: [u8; 32] = [
+        0xc5, 0x60, 0x05, 0x21, 0x88, 0x8d, 0x9f, 0x76, 0x89, 0xb3, 0xc6, 0x5e, 0x61, 0xab, 0x72,
+        0x6c, 0x9d, 0xdf, 0x16, 0x5f, 0xd6, 0xea, 0xb3, 0x3f, 0xe8, 0x8c, 0x5c, 0xa7, 0x20, 0x95,
+        0x37, 0x10,
+    ];
+    let root = unique_target_root("makosh-scheduler-package-rename");
+    std::fs::create_dir_all(&root).expect("create fixture directory");
+    let store = SqliteControlStore::create(&root.join("control.sqlite"), "instance-1", 1)
+        .expect("create Control Store");
+    for (registration_id, module_id, capability_id, schema_sha256) in [
+        (
+            "scheduler_legacy",
+            "scheduler-legacy-consumer",
+            "events.scheduler.legacy",
+            LEGACY_SCHEMA,
+        ),
+        (
+            "scheduler_current",
+            "scheduler-current-publisher",
+            "events.scheduler.current",
+            CURRENT_SCHEMA,
+        ),
+    ] {
+        let registration = ModuleRegistration::new(
+            registration_id,
+            module_id,
+            "scheduler",
+            schema_sha256,
+            ModuleRegistrationState::Pending,
+            1,
+        );
+        let route = ModuleEventRouteRequestV1::new(
+            makosh_kernel_control_store::ModuleEventRouteRequestInputV1 {
+                registration_id: registration_id.to_owned(),
+                capability_id: capability_id.to_owned(),
+                envelope_kind: ModuleEventEnvelopeKindV1::Ack,
+                contract_owner: "scheduler".to_owned(),
+                contract_name: "job_receipt".to_owned(),
+                contract_major: 1,
+                contract_revision: 1,
+                contract_schema_sha256: schema_sha256,
+                direction: ModuleEventRouteDirectionV1::Publish,
+                max_in_flight: 16,
+                delivery_policy: None,
+            },
+        );
+        store
+            .create_pending_registration_with_requests(
+                &registration,
+                &[capability_id.to_owned()],
+                &[],
+                &[route],
+                &[],
+            )
+            .expect("persist Scheduler package route");
+        store
+            .approve_module_registration(registration_id, &[capability_id.to_owned()])
+            .expect("approve Scheduler package route");
+    }
+
+    let contracts = catalog::resolve_contracts(&store).expect("resolve compatible rename");
+    assert_eq!(contracts.len(), 1);
+    assert_eq!(contracts[0].schema_sha256(), &CURRENT_SCHEMA);
+    assert_eq!(contracts[0].publishers().len(), 2);
+
+    std::fs::remove_dir_all(root).expect("remove fixture directory");
+}
+
 fn registration() -> ModuleRegistration {
     ModuleRegistration::new(
         "registration_notes",

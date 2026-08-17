@@ -1,4 +1,5 @@
 import type { TelegramMessageInspection } from '../api/telegramMessageInspectorGateway'
+import { resolveTelegramSenderName } from './telegramOperationalPageModel'
 
 export type TelegramMessageInspectorRow = {
 	id: string
@@ -23,6 +24,7 @@ export type TelegramMessageInspectorModel = {
 
 export function buildTelegramMessageInspectionView(
 	inspection: TelegramMessageInspection | null,
+	personaNames: ReadonlyMap<string, string> = new Map(),
 ): Pick<
 	TelegramMessageInspectorModel,
 	'commands' | 'forwardChain' | 'mutations' | 'overview' | 'reactions' | 'replyChain' | 'tombstones' | 'versions'
@@ -61,8 +63,8 @@ export function buildTelegramMessageInspectionView(
 			].join(' · '),
 		})),
 		mutations: inspection.mutations.map((mutation, index) => mutationRow(mutation.mutation, index)),
-		replyChain: inspection.replyChain.map((message) => messageRow(message.messageId, message)),
-		forwardChain: inspection.forwardChain.map((message) => messageRow(message.messageId, message)),
+		replyChain: inspection.replyChain.map((message) => messageRow(message.messageId, message, personaNames)),
+		forwardChain: inspection.forwardChain.map((message) => messageRow(message.messageId, message, personaNames)),
 		reactions: inspection.reactionSummary.map((reaction) => ({
 			id: reaction.emoji,
 			title: `${reaction.emoji} · ${reaction.count}`,
@@ -109,10 +111,27 @@ function mutationRow(
 function messageRow(
 	id: string,
 	message: TelegramMessageInspection['replyChain'][number],
+	personaNames: ReadonlyMap<string, string>,
 ): TelegramMessageInspectorRow {
+	const mediaCaption = message.media ? normalizeMediaCaption(message.media.caption) : ''
+	const mediaFilename = message.media ? normalizeMediaCaption(message.media.filename) || mediaCaption : ''
 	return {
 		id,
-		title: message.senderDisplayName || message.senderId || 'Unknown sender',
-		detail: message.text || message.media?.caption || `[${message.media?.kind || 'message'}]`,
+		title: resolveTelegramSenderName(message, personaNames),
+		detail: message.media
+			? mediaCaption || mediaFilename || readableMediaKind(message.media.kind)
+			: message.text?.trim() || 'Message',
 	}
+}
+
+function readableMediaKind(kind?: string): string {
+	const normalized = kind?.trim().replaceAll('_', ' ') || ''
+	return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : 'Attachment'
+}
+
+function normalizeMediaCaption(value: string | undefined): string {
+	const normalized = value?.trim() || ''
+	if (!normalized) return ''
+	if (normalized.startsWith('[') && normalized.endsWith(']')) return ''
+	return normalized
 }

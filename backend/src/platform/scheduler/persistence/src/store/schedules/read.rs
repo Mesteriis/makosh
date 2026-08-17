@@ -24,10 +24,67 @@ impl SchedulerPostgresStoreV1 {
         .bind(i64::from(limit))
         .fetch_all(self.pool())
         .await
-        .map_err(|_| SchedulerScheduleStoreErrorV1::Unavailable)?;
+        .map_err(unavailable)?;
         rows.into_iter()
             .map(PersistedScheduleRowV1::from_row)
             .map(|result| result.and_then(PersistedScheduleRowV1::into_due))
             .collect()
+    }
+}
+
+fn unavailable(error: sqlx::Error) -> SchedulerScheduleStoreErrorV1 {
+    if std::env::var_os("MAKOSH_DEVELOPER_VERBOSE").is_some() {
+        if let Some(database) = error.as_database_error() {
+            let sqlstate = database
+                .code()
+                .filter(|value| {
+                    value.len() <= 5 && value.bytes().all(|byte| byte.is_ascii_alphanumeric())
+                })
+                .unwrap_or_else(|| "unknown".into());
+            let message = bounded_diagnostic(database.message());
+            eprintln!(
+                "developer_scheduler_persistence_failure=due_schedules:sqlstate_{sqlstate}:{message}"
+            );
+        } else {
+            let class = match error {
+                sqlx::Error::PoolTimedOut => "pool_timeout",
+                sqlx::Error::PoolClosed => "pool_closed",
+                sqlx::Error::WorkerCrashed => "worker_crashed",
+                sqlx::Error::Io(_) => "io",
+                sqlx::Error::Tls(_) => "tls",
+                sqlx::Error::Protocol(_) => "protocol",
+                _ => "driver",
+            };
+            eprintln!("developer_scheduler_persistence_failure=due_schedules:{class}");
+        }
+    }
+    SchedulerScheduleStoreErrorV1::Unavailable
+}
+
+fn bounded_diagnostic(value: &str) -> String {
+    value
+        .chars()
+        .take(160)
+        .map(|character| {
+            if character.is_ascii_alphanumeric()
+                || matches!(character, ' ' | '_' | '-' | '.' | ':' | '"')
+            {
+                character
+            } else {
+                '_'
+            }
+        })
+        .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::bounded_diagnostic;
+
+    #[test]
+    fn database_diagnostics_are_bounded_and_single_line() {
+        let diagnostic = bounded_diagnostic(&format!("line\n{}", "x".repeat(256)));
+        assert!(diagnostic.len() <= 160);
+        assert!(!diagnostic.contains('\n'));
     }
 }

@@ -46,6 +46,7 @@ pub(crate) fn start_local_foundation(
     store: &SqliteControlStore,
     data_dir: &Path,
     runtime_dir: &Path,
+    start_scheduler: bool,
 ) -> Result<(), String> {
     let vault_binding = ensure_vault_binding(store)?;
     vault::ensure_initialized_vault(
@@ -56,7 +57,9 @@ pub(crate) fn start_local_foundation(
     )?;
     ensure_blob_binding(store)?;
     ensure_telemetry_binding(store)?;
-    restore_scheduler_developer_grants(supervisor, store)?;
+    if start_scheduler {
+        restore_scheduler_developer_grants(supervisor, store)?;
+    }
     ensure_storage_binding(store)?;
     ensure_storage_topology(store)?;
     ensure_events_binding(store)?;
@@ -83,7 +86,9 @@ pub(crate) fn start_local_foundation(
         events_launch::start(supervisor, store, runtime_dir)
             .map_err(|error| format!("developer Event Hub startup failed: {error}"))?;
     }
-    ensure_scheduler(supervisor, store, runtime_dir)?;
+    if start_scheduler {
+        ensure_scheduler(supervisor, store, runtime_dir)?;
+    }
     Ok(())
 }
 
@@ -350,25 +355,29 @@ fn ensure_scheduler_registration(
         );
         let storage =
             ModuleStorageRequestV1::new(REGISTRATION_ID, STORAGE_CAPABILITY, "scheduler", 4, 5_000);
-        return store
-            .upgrade_approved_registration_with_all_descriptor_requests(
+        let requests = ModuleDescriptorRegistrationRequestsV1 {
+            storage: std::slice::from_ref(&storage),
+            events: &routes,
+            blobs: &[],
+            scheduler: &[],
+            vault_purposes: &[],
+            client_rpc_routes: &[],
+            client_blob_routes: &[],
+            client_realtime_routes: &[],
+            query_rpc_routes: &[],
+            request_rpc_routes: &[],
+            contract_dependencies: &[],
+        };
+        return if current.descriptor_sha256() == &descriptor_sha256 {
+            store.reconcile_approved_registration_event_routes(&upgraded, &routes)
+        } else {
+            store.upgrade_approved_registration_with_all_descriptor_requests(
                 &upgraded,
                 &capabilities,
-                ModuleDescriptorRegistrationRequestsV1 {
-                    storage: std::slice::from_ref(&storage),
-                    events: &routes,
-                    blobs: &[],
-                    scheduler: &[],
-                    vault_purposes: &[],
-                    client_rpc_routes: &[],
-                    client_blob_routes: &[],
-                    client_realtime_routes: &[],
-                    query_rpc_routes: &[],
-                    request_rpc_routes: &[],
-                    contract_dependencies: &[],
-                },
+                requests,
             )
-            .map_err(|_| "developer Scheduler registration cannot be upgraded".to_owned());
+        }
+        .map_err(|_| "developer Scheduler registration cannot be upgraded".to_owned());
     }
     (current.state() != ModuleRegistrationState::Approved)
         .then(|| store.approve_module_registration(REGISTRATION_ID, &capabilities))

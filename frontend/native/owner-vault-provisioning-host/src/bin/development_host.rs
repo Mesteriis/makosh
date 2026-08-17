@@ -34,6 +34,8 @@ const OPEN_RECEIPT_PATH: &str = "/__makosh/owner-vault-host/v1/open-receipt";
 const CANCEL_PATH: &str = "/__makosh/owner-vault-host/v1/cancel";
 const TELEGRAM_CREDENTIALS_PATH: &str = "/__makosh/owner-vault-host/v1/telegram-credentials";
 const TELEGRAM_SEAL_API_HASH_PATH: &str = "/__makosh/owner-vault-host/v1/seal-telegram-api-hash";
+const GMAIL_SEAL_OAUTH_CLIENT_SECRET_PATH: &str =
+    "/__makosh/owner-vault-host/v1/seal-gmail-oauth-client-secret";
 const RECOVERY_START_PATH: &str = "/__makosh/legacy-provider-recovery/v1/start";
 const RECOVERY_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/source";
 const RECOVERY_SEAL_SOURCE_PATH: &str = "/__makosh/legacy-provider-recovery/v1/seal-source";
@@ -59,6 +61,12 @@ fn main() -> Result<(), String> {
         .as_deref()
         .map(DevelopmentTelegramCredentialsV1::open)
         .transpose()?;
+    let gmail_oauth_client = configuration
+        .telegram_credentials_environment_file
+        .as_deref()
+        .map(DevelopmentGoogleOAuthClientV1::open_from_environment)
+        .transpose()?
+        .flatten();
     let recovery = match (
         configuration.legacy_recovery_bundle_root.as_deref(),
         configuration.legacy_recovery_receipt_file.as_deref(),
@@ -84,6 +92,7 @@ fn main() -> Result<(), String> {
             &host,
             &owner_device_proof,
             telegram_credentials.as_ref(),
+            gmail_oauth_client.as_ref(),
             recovery.as_deref(),
             &proof,
         );
@@ -206,60 +215,61 @@ struct DevelopmentTelegramCredentialsV1 {
     api_hash: Zeroizing<Vec<u8>>,
 }
 
+struct DevelopmentGoogleOAuthClientV1 {
+    client_secret: Zeroizing<Vec<u8>>,
+}
+
+impl DevelopmentGoogleOAuthClientV1 {
+    fn open_from_environment(path: &Path) -> Result<Option<Self>, String> {
+        let bytes = read_private_development_file(path, "development credentials")?;
+        let assignments = development_environment_assignments(&bytes)?;
+        let config_path = match (
+            assignments.get("HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH"),
+            assignments.get("MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH"),
+        ) {
+            (Some(path), None) | (None, Some(path)) => PathBuf::from(path),
+            (None, None) => return Ok(None),
+            _ => return Err("development Google OAuth configuration is invalid".to_owned()),
+        };
+        if !config_path.is_absolute() {
+            return Err("development Google OAuth configuration is invalid".to_owned());
+        }
+        let configuration = read_private_development_file(
+            &config_path,
+            "development Google OAuth configuration",
+        )?;
+        #[derive(Deserialize)]
+        struct InstalledClient<'a> {
+            #[serde(borrow)]
+            installed: InstalledFields<'a>,
+        }
+        #[derive(Deserialize)]
+        struct InstalledFields<'a> {
+            #[serde(borrow)]
+            client_secret: &'a str,
+        }
+        let parsed: InstalledClient<'_> = serde_json::from_slice(&configuration)
+            .map_err(|_| "development Google OAuth configuration is invalid".to_owned())?;
+        if parsed.installed.client_secret.is_empty()
+            || parsed.installed.client_secret.len() > 4096
+            || parsed.installed.client_secret.chars().any(char::is_control)
+        {
+            return Err("development Google OAuth configuration is invalid".to_owned());
+        }
+        Ok(Some(Self {
+            client_secret: Zeroizing::new(parsed.installed.client_secret.as_bytes().to_vec()),
+        }))
+    }
+}
+
 impl DevelopmentTelegramCredentialsV1 {
     fn open(path: &Path) -> Result<Self, String> {
-        let metadata = fs::symlink_metadata(path)
-            .map_err(|_| "development Telegram credentials file is unavailable".to_owned())?;
-        if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
-            return Err("development Telegram credentials file is invalid".to_owned());
-        }
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::PermissionsExt;
-            if metadata.permissions().mode() & 0o077 != 0 {
-                return Err(
-                    "development Telegram credentials file permissions are invalid".to_owned(),
-                );
-            }
-        }
-        if metadata.len() > 128 * 1024 {
-            return Err("development Telegram credentials file is invalid".to_owned());
-        }
-        let bytes = Zeroizing::new(
-            fs::read(path)
-                .map_err(|_| "development Telegram credentials file is unreadable".to_owned())?,
-        );
+        let bytes = read_private_development_file(path, "development Telegram credentials")?;
         Self::parse(&bytes)
     }
 
     fn parse(bytes: &[u8]) -> Result<Self, String> {
-        let input = std::str::from_utf8(bytes)
-            .map_err(|_| "development Telegram credentials file is invalid".to_owned())?;
-        let allowed = [
-            "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
-            "HERMES_TELEGRAM_API_HASH",
-            "HERMES_TELEGRAM_API_ID",
-            "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
-            "MAKOSH_TELEGRAM_API_HASH",
-            "MAKOSH_TELEGRAM_API_ID",
-        ];
-        let mut assignments = BTreeMap::<&str, &str>::new();
-        for raw_line in input.lines() {
-            let line = raw_line.trim();
-            if line.is_empty() || line.starts_with('#') {
-                continue;
-            }
-            let assignment = line.strip_prefix("export ").unwrap_or(line);
-            let (name, value) = assignment
-                .split_once('=')
-                .ok_or_else(|| "development Telegram credentials file is invalid".to_owned())?;
-            let name = name.trim();
-            if !allowed.contains(&name) || assignments.contains_key(name) {
-                return Err("development Telegram credentials file is invalid".to_owned());
-            }
-            let value = literal_environment_value(value.trim())?;
-            assignments.insert(name, value);
-        }
+        let assignments = development_environment_assignments(bytes)?;
         let hermes = exact_telegram_pair(
             &assignments,
             "HERMES_TELEGRAM_API_ID",
@@ -288,6 +298,56 @@ impl DevelopmentTelegramCredentialsV1 {
             api_hash: Zeroizing::new(api_hash.as_bytes().to_vec()),
         })
     }
+}
+
+fn read_private_development_file(path: &Path, label: &str) -> Result<Zeroizing<Vec<u8>>, String> {
+    let metadata = fs::symlink_metadata(path).map_err(|_| format!("{label} file is unavailable"))?;
+    if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
+        return Err(format!("{label} file is invalid"));
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        if metadata.permissions().mode() & 0o077 != 0 {
+            return Err(format!("{label} file permissions are invalid"));
+        }
+    }
+    if metadata.len() > 128 * 1024 {
+        return Err(format!("{label} file is invalid"));
+    }
+    Ok(Zeroizing::new(
+        fs::read(path).map_err(|_| format!("{label} file is unreadable"))?,
+    ))
+}
+
+fn development_environment_assignments(bytes: &[u8]) -> Result<BTreeMap<&str, &str>, String> {
+    let input = std::str::from_utf8(bytes)
+        .map_err(|_| "development credentials file is invalid".to_owned())?;
+    let allowed = [
+        "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+        "HERMES_TELEGRAM_API_HASH",
+        "HERMES_TELEGRAM_API_ID",
+        "MAKOSH_GOOGLE_OAUTH_CLIENT_CONFIG_PATH",
+        "MAKOSH_TELEGRAM_API_HASH",
+        "MAKOSH_TELEGRAM_API_ID",
+    ];
+    let mut assignments = BTreeMap::new();
+    for raw_line in input.lines() {
+        let line = raw_line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let assignment = line.strip_prefix("export ").unwrap_or(line);
+        let (name, value) = assignment
+            .split_once('=')
+            .ok_or_else(|| "development credentials file is invalid".to_owned())?;
+        let name = name.trim();
+        if !allowed.contains(&name) || assignments.contains_key(name) {
+            return Err("development credentials file is invalid".to_owned());
+        }
+        assignments.insert(name, literal_environment_value(value.trim())?);
+    }
+    Ok(assignments)
 }
 
 fn exact_telegram_pair<'a>(
@@ -349,6 +409,7 @@ fn serve_request(
     host: &OwnerVaultProvisioningHostV1,
     owner_device_proof: &OwnerDeviceProofHostV1,
     telegram_credentials: Option<&DevelopmentTelegramCredentialsV1>,
+    gmail_oauth_client: Option<&DevelopmentGoogleOAuthClientV1>,
     recovery: Option<&LegacyProviderRecoverySessionsV1>,
     proof: &str,
 ) {
@@ -358,6 +419,7 @@ fn serve_request(
         host,
         owner_device_proof,
         telegram_credentials,
+        gmail_oauth_client,
         recovery,
         proof,
     )
@@ -374,6 +436,7 @@ fn dispatch(
     host: &OwnerVaultProvisioningHostV1,
     owner_device_proof: &OwnerDeviceProofHostV1,
     telegram_credentials: Option<&DevelopmentTelegramCredentialsV1>,
+    gmail_oauth_client: Option<&DevelopmentGoogleOAuthClientV1>,
     recovery: Option<&LegacyProviderRecoverySessionsV1>,
     proof: &str,
 ) -> Result<Response<std::io::Cursor<Vec<u8>>>, DevelopmentHostErrorV1> {
@@ -448,7 +511,7 @@ fn dispatch(
             )
         }
         TELEGRAM_SEAL_API_HASH_PATH => {
-            let request: SealDevelopmentTelegramApiHashRequestV1 = json_request(request)?;
+            let request: SealDevelopmentCustodiedSecretRequestV1 = json_request(request)?;
             let credentials = telegram_credentials.ok_or(DevelopmentHostErrorV1::Unavailable)?;
             if request.secret_purpose != "telegram_api_hash"
                 || !matches!(
@@ -470,6 +533,41 @@ fn dispatch(
                     request.action,
                     request.secret_class,
                     Zeroizing::new(credentials.api_hash.as_slice().to_vec()),
+                )
+                .map_err(|_| DevelopmentHostErrorV1::Rejected)?;
+            json_response(
+                StatusCode(200),
+                &SealedProvisioningCommandResponseV1 {
+                    operation_digest_sha256: sealed.operation_digest_sha256.to_vec(),
+                    hpke_encapped_key: sealed.hpke_encapped_key,
+                    ciphertext: sealed.ciphertext,
+                    hpke_authentication_tag: sealed.hpke_authentication_tag,
+                },
+            )
+        }
+        GMAIL_SEAL_OAUTH_CLIENT_SECRET_PATH => {
+            let request: SealDevelopmentCustodiedSecretRequestV1 = json_request(request)?;
+            let client = gmail_oauth_client.ok_or(DevelopmentHostErrorV1::Unavailable)?;
+            if request.secret_purpose != "mail_gmail_oauth_client_secret"
+                || !matches!(
+                    owner_vault_action_from_wire_code_v1(request.action),
+                    Ok(VaultActionV1::Create | VaultActionV1::ReplaceCas)
+                )
+                || !matches!(
+                    owner_vault_secret_class_from_wire_code_v1(request.secret_class),
+                    Ok(SecretClassV1::ProviderCredential)
+                )
+            {
+                return Err(DevelopmentHostErrorV1::InvalidRequest);
+            }
+            let sealed = host
+                .seal_custodied(
+                    &request.host_session_id,
+                    request.authorized.try_into()?,
+                    exact_array(request.operation_id)?,
+                    request.action,
+                    request.secret_class,
+                    Zeroizing::new(client.client_secret.as_slice().to_vec()),
                 )
                 .map_err(|_| DevelopmentHostErrorV1::Rejected)?;
             json_response(
@@ -897,7 +995,7 @@ struct DevelopmentTelegramCredentialsResponseV1 {
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct SealDevelopmentTelegramApiHashRequestV1 {
+struct SealDevelopmentCustodiedSecretRequestV1 {
     secret_purpose: String,
     host_session_id: String,
     operation_id: Vec<u8>,
@@ -1201,6 +1299,50 @@ fn optional_unsigned(value: Option<&str>) -> Result<Option<u64>, DevelopmentHost
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn gmail_oauth_client_secret_is_loaded_from_a_private_installed_client_file() {
+        use std::os::unix::fs::PermissionsExt;
+        use std::time::{SystemTime, UNIX_EPOCH};
+
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("time")
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!(
+            "makosh-gmail-oauth-client-{}-{nonce}",
+            std::process::id()
+        ));
+        fs::create_dir(&root).expect("temporary directory");
+        let configuration = root.join("installed-client.json");
+        let environment = root.join("credentials.env");
+        fs::write(
+            &configuration,
+            br#"{"installed":{"client_id":"client.apps.googleusercontent.com","client_secret":"test-client-secret","redirect_uris":["http://127.0.0.1"]}}"#,
+        )
+        .expect("configuration");
+        fs::write(
+            &environment,
+            format!(
+                "HERMES_GOOGLE_OAUTH_CLIENT_CONFIG_PATH={}\n\
+                 HERMES_TELEGRAM_API_ID=12345\n\
+                 HERMES_TELEGRAM_API_HASH=0123456789abcdef0123456789abcdef\n",
+                configuration.display()
+            ),
+        )
+        .expect("environment");
+        fs::set_permissions(&configuration, fs::Permissions::from_mode(0o600))
+            .expect("private configuration");
+        fs::set_permissions(&environment, fs::Permissions::from_mode(0o600))
+            .expect("private environment");
+
+        let client = DevelopmentGoogleOAuthClientV1::open_from_environment(&environment)
+            .expect("installed client")
+            .expect("configured client");
+        assert_eq!(client.client_secret.as_slice(), b"test-client-secret");
+
+        fs::remove_dir_all(root).expect("temporary cleanup");
+    }
 
     #[test]
     fn configuration_rejects_non_loopback_and_relative_proof_paths() {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
 import type { ProviderAccountNavigationSnapshot } from '../../../shared/ui/shell/providerAccountNavigation'
 import TelegramOperationalPage from '../presentation/TelegramOperationalPage.vue'
 import TelegramCommandWorkbench from '../presentation/TelegramCommandWorkbench.vue'
@@ -15,19 +15,28 @@ import { useTelegramMessageInspector } from '../queries/useTelegramMessageInspec
 import { useTelegramOperationRetry } from '../queries/useTelegramOperationRetry'
 import { useTelegramTopicCommands } from '../queries/useTelegramTopicCommands'
 import { telegramAccountNavigation } from '../presentation/telegramAccountNavigation'
+import { canStartTelegramOperationalLane } from '../presentation/telegramAccountAccessModel'
+import type { TelegramDiscoveryResultRow } from '../presentation/telegramDiscoveryModel'
+import { EMPTY_PROVIDER_SOURCE_NAMES } from '../../../shared/identity/providerSourceIdentity'
 
 const props = defineProps<{
 	canAuthorize: boolean
 	canManageLifecycle: boolean
 	canQuery: boolean
+	canReplay: boolean
 	canReconfigure: boolean
 	canSend: boolean
 	navigationAccountId?: string
+	senderPersonaNames?: ReadonlyMap<string, string>
 }>()
 const emit = defineEmits<{
 	accountNavigationChange: [snapshot: ProviderAccountNavigationSnapshot]
 }>()
-const surface = useTelegramOperationalPage(() => props.canSend)
+const surface = useTelegramOperationalPage(
+	() => props.canSend,
+	() => props.canReplay,
+	() => props.senderPersonaNames ?? EMPTY_PROVIDER_SOURCE_NAMES,
+)
 const accountAccess = useTelegramAccountAccess({
 	canAuthorize: () => props.canAuthorize,
 	canManageLifecycle: () => props.canManageLifecycle,
@@ -37,6 +46,7 @@ const discovery = useTelegramDiscovery({
 	accountId: () => accountAccess.selectedAccountId.value,
 	canQuery: () => props.canQuery,
 	selectedChatId: () => surface.model.value.selectedChatId,
+	senderPersonaNames: () => props.senderPersonaNames ?? EMPTY_PROVIDER_SOURCE_NAMES,
 })
 const commandTarget = {
 	accountId: () => accountAccess.selectedAccountId.value,
@@ -56,26 +66,64 @@ const messageInspector = useTelegramMessageInspector({
 	messageId: () => surface.model.value.selectedMessageId,
 	providerChatId: () => surface.model.value.selectedChatId,
 	providerMessageId: () => surface.model.value.selectedProviderMessageId,
+	senderPersonaNames: () => props.senderPersonaNames ?? EMPTY_PROVIDER_SOURCE_NAMES,
 })
 const operationRetry = useTelegramOperationRetry(() => props.canManageLifecycle)
+let operationalLaneStateKey = ''
+let operationalLaneGeneration = 0
+
+async function reconcileOperationalLane(): Promise<void> {
+	const accountModel = accountAccess.model.value
+	// Account access and its watcher update before refreshAccounts resumes.
+	// Bind the operational surface first so that the watcher cannot start the
+	// selected lane with the composable's initial empty account ID.
+	surface.updateAccountId(accountModel.selectedAccountId)
+	const nextLaneKey = canStartTelegramOperationalLane(accountModel)
+		? accountModel.selectedAccountId
+		: ''
+	const nextLaneStateKey = nextLaneKey
+		? `active:${nextLaneKey}`
+		: `blocked:${accountModel.selectedAccountId}:${accountModel.authorizationState}`
+	if (nextLaneStateKey === operationalLaneStateKey) return
+	const generation = ++operationalLaneGeneration
+	operationalLaneStateKey = nextLaneStateKey
+	if (!nextLaneKey) {
+		surface.stopRealtime()
+		if (accountModel.selectedAccountId) {
+			await surface.loadCachedProjection()
+			if (generation !== operationalLaneGeneration) return
+			surface.suspendForAuthorization(accountModel.authorizationState)
+		}
+		return
+	}
+	await surface.loadChats()
+	if (generation !== operationalLaneGeneration) return
+	await surface.startRealtime()
+}
 
 async function refreshAccounts(): Promise<void> {
 	await accountAccess.refresh()
 	const accountId = accountAccess.selectedAccountId.value
 	updateAccountId(accountId)
-	if (accountId && accountAccess.model.value.authorizationState === 'ready') {
-		await surface.loadChats()
-	}
+	await reconcileOperationalLane()
 }
 
 async function selectAccount(accountId: string): Promise<void> {
+	surface.stopRealtime()
 	accountAccess.selectAccount(accountId)
 	updateAccountId(accountId)
-	await surface.loadChats()
+	await reconcileOperationalLane()
 }
 
 async function selectChat(providerChatId: string): Promise<void> {
 	await surface.selectChat(providerChatId)
+}
+
+async function selectSearchResult(result: TelegramDiscoveryResultRow): Promise<void> {
+	await surface.selectChat(result.providerChatId)
+	if (result.kind === 'message') {
+		surface.selectMessage(result.id, result.providerMessageId)
+	}
 }
 
 function updateAccountId(accountId: string): void {
@@ -85,7 +133,10 @@ function updateAccountId(accountId: string): void {
 
 watch(
 	accountAccess.model,
-	(model) => emit('accountNavigationChange', telegramAccountNavigation(model)),
+	(model) => {
+		emit('accountNavigationChange', telegramAccountNavigation(model))
+		void reconcileOperationalLane()
+	},
 	{ immediate: true },
 )
 
@@ -99,6 +150,10 @@ watch(
 
 onMounted(() => {
 	void refreshAccounts()
+})
+
+onBeforeUnmount(() => {
+	surface.stopRealtime()
 })
 </script>
 
@@ -116,7 +171,12 @@ onMounted(() => {
 		@select-account="selectAccount"
 		@submit-authorization-password="accountAccess.submitPassword"
 		@load="surface.loadChats"
+		@load-more-chats="surface.loadMoreChats"
+		@load-older-messages="surface.loadOlderMessages"
+		@begin-reply="surface.beginReply"
+		@cancel-reply="surface.cancelReply"
 		@search="discovery.search"
+		@select-search-result="selectSearchResult"
 		@select-chat="selectChat"
 		@select-message="surface.selectMessage"
 		@send="surface.send"

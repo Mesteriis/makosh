@@ -25,6 +25,14 @@ message AuthorizationStatusResponse {
   optional string password_hint = 3;
 }
 
+// Client-safe notification that the account-local operational projection
+// advanced. Message bodies, chat/message identifiers and provider cursors stay
+// behind the bounded query/blob contracts.
+message TelegramOperationalProjectionChangedV1 {
+  string account_id = 1;
+  uint64 latest_sequence = 2;
+}
+
 message AuthorizationPasswordAcceptedResponse {}
 
 message TelegramLifecycleRequestV1 {
@@ -296,20 +304,21 @@ message TelegramProviderQueryResponseV1 {
     RealtimeResponse realtime = 27;
   }
 }
-message TelegramChatProjection { string account_id = 1; string provider_chat_id = 2; string kind = 3; string title = 4; optional string username = 5; }
+message TelegramChatProjection { string account_id = 1; string provider_chat_id = 2; string kind = 3; string title = 4; optional string username = 5; optional string avatar_provider_file_id = 6; optional string avatar_provider_unique_id = 7; }
 message ChatListResponse { repeated TelegramChatProjection chat = 1; }
 message ChatResponse { optional TelegramChatProjection chat = 1; }
 message TelegramChatAvatarProjection { string account_id = 1; string provider_chat_id = 2; optional string provider_file_id = 3; optional string provider_unique_id = 4; }
 message ChatAvatarResponse { optional TelegramChatAvatarProjection avatar = 1; }
-message TelegramMessageMediaProjection { string kind = 1; optional string provider_file_id = 2; optional string caption = 3; optional string filename = 4; optional string content_type = 5; }
+message TelegramMessageMediaProjection { string kind = 1; optional string provider_file_id = 2; optional string caption = 3; optional string filename = 4; optional string content_type = 5; optional string preview_provider_file_id = 6; optional string preview_content_type = 7; optional bytes preview_inline_data = 8; bool preview_metadata_loaded = 9; }
+message TelegramPersonSourceIdentityProjection { bytes integration_public_id = 1; bytes account_public_id = 2; bytes provider_source_contact_public_id = 3; }
 message TelegramReplyReferenceProjection { string provider_chat_id = 1; string provider_message_id = 2; }
 message TelegramForwardOriginProjection { optional string provider_chat_id = 1; optional string provider_message_id = 2; optional string provider_sender_id = 3; optional string sender_name = 4; optional int64 observed_at_unix_seconds = 5; }
 message TelegramMessageReferencesProjection { optional TelegramReplyReferenceProjection reply_to = 1; optional TelegramForwardOriginProjection forward_origin = 2; }
-message TelegramMessageObservationProjection { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; optional string provider_topic_id = 4; string sender_id = 5; optional string sender_display_name = 6; optional string text = 7; optional TelegramMessageMediaProjection media = 8; TelegramMessageReferencesProjection references = 9; int64 observed_at_unix_seconds = 10; bool is_outgoing = 11; }
+message TelegramMessageObservationProjection { string account_id = 1; string provider_chat_id = 2; string provider_message_id = 3; optional string provider_topic_id = 4; string sender_id = 5; optional string sender_display_name = 6; optional string text = 7; optional TelegramMessageMediaProjection media = 8; TelegramMessageReferencesProjection references = 9; int64 observed_at_unix_seconds = 10; bool is_outgoing = 11; optional TelegramPersonSourceIdentityProjection sender_source_identity = 12; }
 message MessageObservationListResponse { repeated TelegramMessageObservationProjection item = 1; }
 message TelegramHistoryPageProjection { repeated TelegramMessageObservationProjection item = 1; optional int64 next_from_message_id = 2; bool has_more = 3; }
 message HistoryPageResponse { TelegramHistoryPageProjection page = 1; }
-message TelegramMessageProjection { string message_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; optional string provider_topic_id = 5; string sender_id = 6; optional string sender_display_name = 7; optional string text = 8; optional TelegramMessageMediaProjection media = 9; TelegramMessageReferencesProjection references = 10; int64 observed_at_unix_seconds = 11; string delivery_state = 12; }
+message TelegramMessageProjection { string message_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; optional string provider_topic_id = 5; string sender_id = 6; optional string sender_display_name = 7; optional string text = 8; optional TelegramMessageMediaProjection media = 9; TelegramMessageReferencesProjection references = 10; int64 observed_at_unix_seconds = 11; string delivery_state = 12; optional TelegramPersonSourceIdentityProjection sender_source_identity = 13; }
 message MessageProjectionListResponse { repeated TelegramMessageProjection item = 1; }
 message TelegramMessageVersionProjection { string version_id = 1; string message_id = 2; string account_id = 3; string provider_chat_id = 4; string provider_message_id = 5; uint32 version_number = 6; optional string body_text = 7; int64 observed_at_unix_seconds = 8; string source = 9; }
 message MessageVersionListResponse { repeated TelegramMessageVersionProjection item = 1; }
@@ -324,7 +333,7 @@ message MessageMutationListResponse { repeated TelegramMessageMutationProjection
 message MessageReferencesResponse { optional TelegramMessageReferencesProjection references = 1; }
 message TelegramAttachmentProjection { string attachment_id = 1; string account_id = 2; string provider_chat_id = 3; string provider_message_id = 4; string provider_file_id = 5; string state = 6; optional uint64 size_bytes = 7; optional string filename = 8; optional string content_type = 9; optional string blob_ref = 10; }
 message AttachmentResponse { optional TelegramAttachmentProjection attachment = 1; }
-message TelegramFileSnapshotProjection { string account_id = 1; string provider_file_id = 2; optional string provider_unique_id = 3; optional string media_kind = 4; optional uint64 size_bytes = 5; optional uint64 expected_size_bytes = 6; optional uint64 downloaded_size_bytes = 7; bool is_downloading = 8; bool is_downloaded = 9; }
+message TelegramFileSnapshotProjection { string account_id = 1; string provider_file_id = 2; optional string provider_unique_id = 3; optional string media_kind = 4; optional uint64 size_bytes = 5; optional uint64 expected_size_bytes = 6; optional uint64 downloaded_size_bytes = 7; bool is_downloading = 8; bool is_downloaded = 9; optional bytes blob_reference_id = 10; optional bytes blob_plaintext_sha256 = 11; optional uint32 blob_backup_class = 12; }
 message FileResponse { optional TelegramFileSnapshotProjection file = 1; }
 message TelegramParticipantProjection { string account_id = 1; string provider_chat_id = 2; string provider_member_id = 3; optional string display_name = 4; optional string username = 5; string role = 6; string status = 7; bool is_admin = 8; bool is_owner = 9; repeated string permission = 10; }
 message ParticipantPageResponse { string account_id = 1; string provider_chat_id = 2; string filter = 3; repeated TelegramParticipantProjection item = 4; optional uint32 next_offset = 5; }

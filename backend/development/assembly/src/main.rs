@@ -16,6 +16,8 @@ use sha2::{Digest, Sha256};
 const STATE_FILE: &str = "development-assembly-state-v1";
 const ENSEMBLE_RESERVATION_FILE: &str = "development-ensemble-reservation-v2";
 const DEVICE_KEY_FILE: &str = "device-es256.key";
+const DEVELOPMENT_DISTRIBUTION_ID: &str = "makosh-local-development";
+const LEGACY_HERMES_DEVELOPMENT_DISTRIBUTION_ID: &str = "hermes-local-development";
 const COMMUNICATIONS_RUNTIME_ARTIFACT: &str = "communications.runtime.v1";
 const COMMUNICATIONS_STORAGE_ARTIFACT: &str = "communications.storage.v1";
 const COMMUNICATIONS_STORAGE_CAPABILITY: &str = "communications.storage.v1";
@@ -104,6 +106,8 @@ const MAIL_STORAGE_CAPABILITY: &str = "mail.storage.v1";
 const PERSONS_RUNTIME_ARTIFACT: &str = "persons.runtime.v1";
 const PERSONS_STORAGE_ARTIFACT: &str = "persons.storage.v1";
 const PERSONS_STORAGE_CAPABILITY: &str = "persons.storage.v1";
+const LEGACY_CONTACTS_RUNTIME_ARTIFACT: &str = "contacts.runtime.v1";
+const LEGACY_CONTACTS_STORAGE_CAPABILITY: &str = "contacts.storage.v1";
 const IDENTITY_RESOLUTION_RUNTIME_ARTIFACT: &str = "identity_resolution.runtime.v1";
 const IDENTITY_RESOLUTION_STORAGE_ARTIFACT: &str = "identity_resolution.storage.v1";
 const IDENTITY_RESOLUTION_STORAGE_CAPABILITY: &str = "identity_resolution.storage.v1";
@@ -137,6 +141,8 @@ const OMNIROUTE_STORAGE_CAPABILITY: &str = "omniroute.ai.storage.v1";
 const MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT: &str = "mail_persons_sync.runtime.v1";
 const MAIL_PERSONS_SYNC_STORAGE_ARTIFACT: &str = "mail_persons_sync.storage.v1";
 const MAIL_PERSONS_SYNC_STORAGE_CAPABILITY: &str = "mail_persons_sync.storage.v1";
+const LEGACY_MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT: &str = "mail_contacts_sync.runtime.v1";
+const LEGACY_MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY: &str = "mail_contacts_sync.storage.v1";
 const REVIEW_PERSON_MATCH_CANDIDATE_RUNTIME_ARTIFACT: &str =
     "review.person-match-candidate.runtime.v1";
 const REVIEW_PERSON_MATCH_CANDIDATE_STORAGE_ARTIFACT: &str =
@@ -164,7 +170,7 @@ const ZULIP_STORAGE_CAPABILITY: &str = "zulip.storage.v1";
 struct Cli {
     #[arg(long)]
     data_dir: PathBuf,
-    #[arg(long, default_value = "makosh-local-development")]
+    #[arg(long, default_value = DEVELOPMENT_DISTRIBUTION_ID)]
     distribution_id: String,
     #[arg(long, default_value_t = 1)]
     distribution_generation: u64,
@@ -800,6 +806,60 @@ const PRE_CONTACTS_SYNC_MODULE_PLAN_RUNTIME_ARTIFACTS_V3: [&str; 14] = [
     WHATSAPP_RUNTIME_ARTIFACT,
     ZULIP_RUNTIME_ARTIFACT,
 ];
+const LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3: [(&str, &str); 16] = [
+    (
+        COMMUNICATIONS_RUNTIME_ARTIFACT,
+        COMMUNICATIONS_STORAGE_CAPABILITY,
+    ),
+    (
+        COMMUNICATIONS_EXPORT_RUNTIME_ARTIFACT,
+        COMMUNICATIONS_EXPORT_STORAGE_CAPABILITY,
+    ),
+    (
+        COMMUNICATION_DELIVERY_INTENT_RUNTIME_ARTIFACT,
+        COMMUNICATION_DELIVERY_INTENT_STORAGE_CAPABILITY,
+    ),
+    (
+        COMMUNICATION_BULK_ACTION_RUNTIME_ARTIFACT,
+        COMMUNICATION_BULK_ACTION_STORAGE_CAPABILITY,
+    ),
+    (
+        COMMUNICATION_DELAYED_DELIVERY_RUNTIME_ARTIFACT,
+        COMMUNICATION_DELAYED_DELIVERY_STORAGE_CAPABILITY,
+    ),
+    (
+        ATTACHMENT_SECURITY_RUNTIME_ARTIFACT,
+        ATTACHMENT_SECURITY_STORAGE_CAPABILITY,
+    ),
+    (
+        ATTACHMENT_TEXT_EXTRACTION_RUNTIME_ARTIFACT,
+        ATTACHMENT_TEXT_EXTRACTION_STORAGE_CAPABILITY,
+    ),
+    (
+        ATTACHMENT_PREVIEW_RUNTIME_ARTIFACT,
+        ATTACHMENT_PREVIEW_STORAGE_CAPABILITY,
+    ),
+    (
+        ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_RUNTIME_ARTIFACT,
+        ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_STORAGE_CAPABILITY,
+    ),
+    (
+        ATTACHMENT_TRANSLATION_RUNTIME_ARTIFACT,
+        ATTACHMENT_TRANSLATION_STORAGE_CAPABILITY,
+    ),
+    (MAIL_RUNTIME_ARTIFACT, MAIL_STORAGE_CAPABILITY),
+    (TELEGRAM_RUNTIME_ARTIFACT, TELEGRAM_STORAGE_CAPABILITY),
+    (WHATSAPP_RUNTIME_ARTIFACT, WHATSAPP_STORAGE_CAPABILITY),
+    (ZULIP_RUNTIME_ARTIFACT, ZULIP_STORAGE_CAPABILITY),
+    (
+        LEGACY_CONTACTS_RUNTIME_ARTIFACT,
+        LEGACY_CONTACTS_STORAGE_CAPABILITY,
+    ),
+    (
+        LEGACY_MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT,
+        LEGACY_MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY,
+    ),
+];
 
 fn main() {
     if let Err(error) = run(Cli::parse()) {
@@ -926,6 +986,12 @@ fn development_assembly_status(
         return Ok("missing");
     };
     if state.distribution_id != distribution_id {
+        if distribution_id == DEVELOPMENT_DISTRIBUTION_ID
+            && is_legacy_hermes_pre_persons_state(state)
+            && distribution_generation > state.distribution_generation
+        {
+            return Ok("stale");
+        }
         return Err("development assembly distribution identity changed".to_owned());
     }
     match distribution_generation.cmp(&state.distribution_generation) {
@@ -965,6 +1031,7 @@ fn start_ensemble(
                     &module.registration_id,
                     &module.storage_capability_id,
                 )?;
+                stagger_next_runtime_start();
             }
             ModuleRuntimeKindV1::Engine => {
                 client.start_reserved_engine_runtime(
@@ -972,6 +1039,7 @@ fn start_ensemble(
                     &module.registration_id,
                     &module.storage_capability_id,
                 )?;
+                stagger_next_runtime_start();
             }
             ModuleRuntimeKindV1::Workflow => {
                 let started = client.start_reserved_workflow_runtime(
@@ -983,6 +1051,7 @@ fn start_ensemble(
                     "{}_runtime={}",
                     plan.runtime_artifact_id, started.launch_state
                 );
+                stagger_next_runtime_start();
                 continue;
             }
             ModuleRuntimeKindV1::Integration => {
@@ -997,12 +1066,20 @@ fn start_ensemble(
                     "{}_runtime={}",
                     plan.runtime_artifact_id, started.launch_state
                 );
+                stagger_next_runtime_start();
                 continue;
             }
         }
         println!("{}_runtime=accepted", plan.runtime_artifact_id);
     }
     Ok(())
+}
+
+fn stagger_next_runtime_start() {
+    // The local full-stack plan starts dozens of isolated processes. Give the
+    // just-launched process one bounded bootstrap window before the next one
+    // competes for Kernel control, Vault, Event Hub and Storage leases.
+    std::thread::sleep(std::time::Duration::from_secs(1));
 }
 
 fn requires_real_provider_evidence(runtime_artifact_id: &str) -> bool {
@@ -1168,7 +1245,10 @@ fn reconcile_plan(
         let reservation_release =
             validate_reservation_release(&reservation, distribution_id, distribution_generation)?;
         if existing_state.is_some_and(|state| {
-            state.distribution_id != reservation.distribution_id
+            let exact_legacy_cutover = reservation.distribution_id == DEVELOPMENT_DISTRIBUTION_ID
+                && is_legacy_hermes_pre_persons_state(state)
+                && reservation.distribution_generation > state.distribution_generation;
+            (!exact_legacy_cutover && state.distribution_id != reservation.distribution_id)
                 || state.distribution_generation > reservation.distribution_generation
         }) {
             return Err("development ensemble reservation is stale".to_owned());
@@ -1207,6 +1287,20 @@ fn reconcile_plan(
                 outcome: ReconciliationOutcomeV1::Current,
             });
         }
+        if is_legacy_hermes_pre_persons_state(state) {
+            let successor = legacy_hermes_pre_persons_successor(state)?;
+            return Ok(ReconciliationResultV1 {
+                state: refresh_plan(
+                    client,
+                    owner_session_id,
+                    distribution_id,
+                    distribution_generation,
+                    &successor,
+                    reservation_path,
+                )?,
+                outcome: ReconciliationOutcomeV1::Updated,
+            });
+        }
         return Ok(ReconciliationResultV1 {
             state: refresh_plan(
                 client,
@@ -1220,6 +1314,25 @@ fn reconcile_plan(
         });
     }
 
+    Ok(ReconciliationResultV1 {
+        state: admit_current_plan(
+            client,
+            owner_session_id,
+            distribution_id,
+            distribution_generation,
+            reservation_path,
+        )?,
+        outcome: ReconciliationOutcomeV1::Admitted,
+    })
+}
+
+fn admit_current_plan(
+    client: &OwnerControlClientV1,
+    owner_session_id: &str,
+    distribution_id: &str,
+    distribution_generation: u64,
+    reservation_path: &Path,
+) -> Result<DevelopmentAssemblyStateV1, String> {
     let mut modules = Vec::with_capacity(MODULE_PLAN.len());
     for module in MODULE_PLAN {
         modules.push(reserve_new_module(
@@ -1236,10 +1349,7 @@ fn reconcile_plan(
         modules,
     };
     write_reservation(reservation_path, &reservation)?;
-    Ok(ReconciliationResultV1 {
-        state: finish_ensemble_bindings(client, owner_session_id, reservation)?,
-        outcome: ReconciliationOutcomeV1::Admitted,
-    })
+    finish_ensemble_bindings(client, owner_session_id, reservation)
 }
 
 fn reserve_new_module(
@@ -1255,7 +1365,11 @@ fn reserve_new_module(
             module.runtime_artifact_id,
             distribution_id,
             distribution_generation,
-            operation_id(module.runtime_artifact_id),
+            operation_id(
+                distribution_id,
+                distribution_generation,
+                module.runtime_artifact_id,
+            ),
         )
         .map_err(|error| admission_error(module.runtime_artifact_id, "propose", error))?;
     let status = client
@@ -1358,6 +1472,66 @@ fn refresh_plan(
             .map_err(|error| {
                 admission_error(plan.runtime_artifact_id, "inspect_storage_binding", error)
             })?;
+        let upgrade = client
+            .upgrade_bundled_managed_registration(
+                owner_session_id,
+                &previous.registration_id,
+                plan.runtime_artifact_id,
+                distribution_id,
+                distribution_generation,
+            )
+            .map_err(|error| {
+                admission_error(plan.runtime_artifact_id, "upgrade_registration", error)
+            })?;
+        let launch = client
+            .bind_bundled_managed_release(
+                owner_session_id,
+                &previous.registration_id,
+                plan.runtime_artifact_id,
+            )
+            .map_err(|error| admission_error(plan.runtime_artifact_id, "bind_release", error))?;
+        let storage = client
+            .admit_bundled_storage_artifact(
+                owner_session_id,
+                plan.storage_artifact_id,
+                distribution_id,
+                distribution_generation,
+            )
+            .map_err(|error| admission_error(plan.runtime_artifact_id, "admit_storage", error))?;
+        let storage_bundle_digest: [u8; 32] = storage
+            .storage_bundle_digest
+            .as_slice()
+            .try_into()
+            .map_err(|_| {
+            admission_error(
+                plan.runtime_artifact_id,
+                "admit_storage",
+                "Storage bundle digest is invalid".to_owned(),
+            )
+        })?;
+        if reusable_module_binding(
+            launch.replayed,
+            &live_storage.binding_state,
+            live_storage.grant_epoch,
+            upgrade.grant_epoch,
+            live_storage.storage_bundle_revision,
+            storage.storage_bundle_revision,
+            &live_storage.storage_bundle_digest,
+            &storage_bundle_digest,
+        ) {
+            modules.push(ModuleReservationV1 {
+                runtime_artifact_id: plan.runtime_artifact_id.to_owned(),
+                registration_id: previous.registration_id.clone(),
+                storage_capability_id: plan.storage_capability_id.to_owned(),
+                runtime_instance_id: live_storage.runtime_instance_id,
+                runtime_generation: live_storage.runtime_generation,
+                role_epoch: live_storage.role_epoch,
+                credential_lease_revision: live_storage.credential_lease_revision,
+                storage_bundle_revision: storage.storage_bundle_revision,
+                storage_bundle_digest,
+            });
+            continue;
+        }
         let (role_epoch, credential_lease_revision) = refresh_storage_successor_fences(
             previous,
             live_storage.binding_revision,
@@ -1389,51 +1563,19 @@ fn refresh_plan(
                 ));
             }
         }
-        client
-            .upgrade_bundled_managed_registration(
-                owner_session_id,
-                &previous.registration_id,
-                plan.runtime_artifact_id,
-                distribution_id,
-                distribution_generation,
-            )
-            .map_err(|error| {
-                admission_error(plan.runtime_artifact_id, "upgrade_registration", error)
-            })?;
-        client
-            .bind_bundled_managed_release(
-                owner_session_id,
-                &previous.registration_id,
-                plan.runtime_artifact_id,
-            )
-            .map_err(|error| admission_error(plan.runtime_artifact_id, "bind_release", error))?;
-        let storage = client
-            .admit_bundled_storage_artifact(
-                owner_session_id,
-                plan.storage_artifact_id,
-                distribution_id,
-                distribution_generation,
-            )
-            .map_err(|error| admission_error(plan.runtime_artifact_id, "admit_storage", error))?;
         let reservation = client
             .reserve_bundled_managed_runtime(owner_session_id, &previous.registration_id)
             .map_err(|error| admission_error(plan.runtime_artifact_id, "reserve_runtime", error))?;
         modules.push(ModuleReservationV1 {
-            runtime_artifact_id: previous.runtime_artifact_id.clone(),
+            runtime_artifact_id: plan.runtime_artifact_id.to_owned(),
             registration_id: previous.registration_id.clone(),
-            storage_capability_id: previous.storage_capability_id.clone(),
+            storage_capability_id: plan.storage_capability_id.to_owned(),
             runtime_instance_id: reservation.runtime_instance_id,
             runtime_generation: reservation.runtime_generation,
             role_epoch,
             credential_lease_revision,
             storage_bundle_revision: storage.storage_bundle_revision,
-            storage_bundle_digest: storage.storage_bundle_digest.try_into().map_err(|_| {
-                admission_error(
-                    plan.runtime_artifact_id,
-                    "admit_storage",
-                    "Storage bundle digest is invalid".to_owned(),
-                )
-            })?,
+            storage_bundle_digest,
         });
     }
     let reservation = EnsembleReservationV2 {
@@ -1443,6 +1585,24 @@ fn refresh_plan(
     };
     write_reservation(reservation_path, &reservation)?;
     finish_ensemble_bindings(client, owner_session_id, reservation)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn reusable_module_binding(
+    launch_replayed: bool,
+    binding_state: &str,
+    live_grant_epoch: u64,
+    admitted_grant_epoch: u64,
+    live_storage_bundle_revision: u64,
+    admitted_storage_bundle_revision: u64,
+    live_storage_bundle_digest: &[u8],
+    admitted_storage_bundle_digest: &[u8; 32],
+) -> bool {
+    launch_replayed
+        && binding_state == "active"
+        && live_grant_epoch == admitted_grant_epoch
+        && live_storage_bundle_revision == admitted_storage_bundle_revision
+        && live_storage_bundle_digest == admitted_storage_bundle_digest
 }
 
 fn complete_storage_binding_revocation(
@@ -1495,6 +1655,9 @@ fn validate_state_plan(state: &DevelopmentAssemblyStateV1) -> Result<(), String>
 
 fn validate_refreshable_state_plan(state: &DevelopmentAssemblyStateV1) -> Result<(), String> {
     if validate_state_plan(state).is_ok()
+        || state_matches_legacy_hermes_pre_persons_plan(state)
+        || state_matches_legacy_pre_person_successor_plan(state)
+        || state_matches_pre_person_match_review_plan(state)
         || state_matches_pre_zoom_telemost_omniroute_plan(state)
         || state_matches_pre_memory_consistency_risk_plan(state)
         || state_matches_pre_search_timeline_graph_plan(state)
@@ -1579,6 +1742,29 @@ fn state_matches_pre_zoom_telemost_omniroute_plan(state: &DevelopmentAssemblySta
     state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
 }
 
+fn state_matches_pre_person_match_review_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    let runtime_artifact_ids = MODULE_PLAN[..16]
+        .iter()
+        .map(|plan| plan.runtime_artifact_id)
+        .collect::<Vec<_>>();
+    state_matches_runtime_artifact_plan(state, &runtime_artifact_ids)
+}
+
+fn state_matches_legacy_pre_person_successor_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    state.modules.len() == 16
+        && MODULE_PLAN[..14]
+            .iter()
+            .zip(&state.modules[..14])
+            .all(|(plan, module)| {
+                module.runtime_artifact_id == plan.runtime_artifact_id
+                    && module.storage_capability_id == plan.storage_capability_id
+            })
+        && state.modules[14].runtime_artifact_id == PERSONS_RUNTIME_ARTIFACT
+        && state.modules[14].storage_capability_id == LEGACY_CONTACTS_STORAGE_CAPABILITY
+        && state.modules[15].runtime_artifact_id == MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT
+        && state.modules[15].storage_capability_id == LEGACY_MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY
+}
+
 fn state_matches_pre_memory_consistency_risk_plan(state: &DevelopmentAssemblyStateV1) -> bool {
     let runtime_artifact_ids = MODULE_PLAN[..35]
         .iter()
@@ -1628,8 +1814,56 @@ fn state_matches_runtime_artifact_plan(
             })
 }
 
+fn state_matches_legacy_hermes_pre_persons_plan(state: &DevelopmentAssemblyStateV1) -> bool {
+    state.modules.len() == LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3.len()
+        && LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3
+            .iter()
+            .zip(&state.modules)
+            .all(|((runtime_artifact_id, storage_capability_id), module)| {
+                module.runtime_artifact_id == *runtime_artifact_id
+                    && module.storage_capability_id == *storage_capability_id
+            })
+}
+
+fn is_legacy_hermes_pre_persons_state(state: &DevelopmentAssemblyStateV1) -> bool {
+    state.distribution_id == LEGACY_HERMES_DEVELOPMENT_DISTRIBUTION_ID
+        && state_matches_legacy_hermes_pre_persons_plan(state)
+}
+
+fn legacy_hermes_pre_persons_successor(
+    state: &DevelopmentAssemblyStateV1,
+) -> Result<DevelopmentAssemblyStateV1, String> {
+    if !is_legacy_hermes_pre_persons_state(state) {
+        return Err("development assembly legacy successor is invalid".to_owned());
+    }
+    let mut successor = state.clone();
+    successor.distribution_id = DEVELOPMENT_DISTRIBUTION_ID.to_owned();
+    successor.modules[14].runtime_artifact_id = PERSONS_RUNTIME_ARTIFACT.to_owned();
+    successor.modules[15].runtime_artifact_id = MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT.to_owned();
+    validate_refreshable_state_plan(&successor)?;
+    Ok(successor)
+}
+
 fn admission_error(artifact_id: &str, phase: &str, error: String) -> String {
     format!("module={artifact_id} phase={phase}: {error}")
+}
+
+fn retry_transient_owner_control<T>(
+    mut operation: impl FnMut() -> Result<T, String>,
+) -> Result<T, String> {
+    const MAX_ATTEMPTS: u32 = 3;
+    for attempt in 1..=MAX_ATTEMPTS {
+        match operation() {
+            Err(error)
+                if attempt < MAX_ATTEMPTS
+                    && error.contains("Resource temporarily unavailable (os error 35)") =>
+            {
+                std::thread::sleep(std::time::Duration::from_millis(u64::from(attempt) * 100));
+            }
+            result => return result,
+        }
+    }
+    unreachable!("bounded owner-control retry always returns")
 }
 
 fn finish_ensemble_bindings(
@@ -1647,8 +1881,8 @@ fn finish_ensemble_bindings(
         {
             return Err("development ensemble reservation does not match the plan".to_owned());
         }
-        let issued = client
-            .issue_managed_storage_binding(
+        let issued = retry_transient_owner_control(|| {
+            client.issue_managed_storage_binding(
                 owner_session_id,
                 &module.registration_id,
                 &module.storage_capability_id,
@@ -1659,9 +1893,10 @@ fn finish_ensemble_bindings(
                 module.storage_bundle_revision,
                 module.storage_bundle_digest.to_vec(),
             )
-            .map_err(|error| {
-                admission_error(plan.runtime_artifact_id, "issue_storage_binding", error)
-            })?;
+        })
+        .map_err(|error| {
+            admission_error(plan.runtime_artifact_id, "issue_storage_binding", error)
+        })?;
         modules.push(ModuleAssemblyStateV1 {
             runtime_artifact_id: module.runtime_artifact_id,
             registration_id: module.registration_id,
@@ -1691,10 +1926,25 @@ fn exact_requested_capability<'a>(
     }
 }
 
-fn operation_id(artifact_id: &str) -> [u8; 16] {
+fn operation_id(
+    distribution_id: &str,
+    distribution_generation: u64,
+    artifact_id: &str,
+) -> [u8; 16] {
     let mut digest = Sha256::new();
-    digest.update(b"makosh.local-development-assembly.proposal.v2");
-    digest.update([0]);
+    digest.update(b"makosh.local-development-assembly.proposal.v3");
+    digest.update(
+        u64::try_from(distribution_id.len())
+            .unwrap_or(u64::MAX)
+            .to_be_bytes(),
+    );
+    digest.update(distribution_id.as_bytes());
+    digest.update(distribution_generation.to_be_bytes());
+    digest.update(
+        u64::try_from(artifact_id.len())
+            .unwrap_or(u64::MAX)
+            .to_be_bytes(),
+    );
     digest.update(artifact_id.as_bytes());
     digest.finalize()[..16]
         .try_into()
@@ -2041,6 +2291,7 @@ fn read_state(path: &Path) -> Result<DevelopmentAssemblyStateV1, String> {
         PRE_ATTACHMENT_PREVIEW_EVIDENCE_REPLAY_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_ATTACHMENT_TRANSLATION_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_CONTACTS_SYNC_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
+        LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3.len(),
         PRE_AI_OLLAMA_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_SPEECH_TO_TEXT_WHISPER_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
         PRE_CALENDAR_MODULE_PLAN_RUNTIME_ARTIFACTS_V3.len(),
@@ -2060,10 +2311,13 @@ fn read_state(path: &Path) -> Result<DevelopmentAssemblyStateV1, String> {
             let field = |name: &str| format!("module.{index}.{name}");
             let runtime_artifact_id = required_field(&fields, &field("runtime_artifact_id"))?;
             let storage_capability_id = required_field(&fields, &field("storage_capability_id"))?;
-            if !MODULE_PLAN.iter().any(|plan| {
+            let is_current_module = MODULE_PLAN.iter().any(|plan| {
                 runtime_artifact_id == plan.runtime_artifact_id
                     && storage_capability_id == plan.storage_capability_id
-            }) {
+            });
+            let is_exact_legacy_module = LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3
+                .contains(&(runtime_artifact_id, storage_capability_id));
+            if !is_current_module && !is_exact_legacy_module {
                 return Err("development assembly state is invalid".to_owned());
             }
             Ok(ModuleAssemblyStateV1 {
@@ -2168,6 +2422,7 @@ impl OwnerControlProofSignerV1 for FileOwnerSigner {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::cell::Cell;
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static TEST_FILE_COUNTER: AtomicU64 = AtomicU64::new(1);
@@ -2182,7 +2437,7 @@ mod tests {
 
     fn fixture_state(distribution_generation: u64) -> DevelopmentAssemblyStateV1 {
         DevelopmentAssemblyStateV1 {
-            distribution_id: "makosh-local-development".to_owned(),
+            distribution_id: DEVELOPMENT_DISTRIBUTION_ID.to_owned(),
             distribution_generation,
             modules: MODULE_PLAN
                 .iter()
@@ -2197,6 +2452,23 @@ mod tests {
                 })
                 .collect(),
         }
+    }
+
+    fn fixture_legacy_hermes_pre_persons_state(
+        distribution_generation: u64,
+    ) -> DevelopmentAssemblyStateV1 {
+        let mut state = fixture_state(distribution_generation);
+        state.distribution_id = LEGACY_HERMES_DEVELOPMENT_DISTRIBUTION_ID.to_owned();
+        state
+            .modules
+            .truncate(LEGACY_HERMES_PRE_PERSONS_MODULE_PLAN_V3.len());
+        state.modules[14].runtime_artifact_id = LEGACY_CONTACTS_RUNTIME_ARTIFACT.to_owned();
+        state.modules[14].storage_capability_id = LEGACY_CONTACTS_STORAGE_CAPABILITY.to_owned();
+        state.modules[15].runtime_artifact_id =
+            LEGACY_MAIL_CONTACTS_SYNC_RUNTIME_ARTIFACT.to_owned();
+        state.modules[15].storage_capability_id =
+            LEGACY_MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY.to_owned();
+        state
     }
 
     fn fixture_reservation(distribution_generation: u64) -> EnsembleReservationV2 {
@@ -2663,14 +2935,50 @@ mod tests {
     }
 
     #[test]
-    fn proposal_operation_ids_are_stable_and_artifact_scoped() {
+    fn proposal_operation_ids_are_stable_and_release_scoped() {
         assert_eq!(
-            operation_id(COMMUNICATIONS_RUNTIME_ARTIFACT),
-            operation_id(COMMUNICATIONS_RUNTIME_ARTIFACT),
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
         );
         assert_ne!(
-            operation_id(COMMUNICATIONS_RUNTIME_ARTIFACT),
-            operation_id(MAIL_RUNTIME_ARTIFACT),
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
+            operation_id(DEVELOPMENT_DISTRIBUTION_ID, 371, MAIL_RUNTIME_ARTIFACT),
+        );
+        assert_ne!(
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                372,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
+        );
+        assert_ne!(
+            operation_id(
+                DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT
+            ),
+            operation_id(
+                LEGACY_HERMES_DEVELOPMENT_DISTRIBUTION_ID,
+                371,
+                COMMUNICATIONS_RUNTIME_ARTIFACT,
+            ),
         );
     }
 
@@ -2691,6 +2999,60 @@ mod tests {
             development_assembly_status(None, "makosh-local-development", 1),
             Ok("missing"),
         );
+    }
+
+    #[test]
+    fn exact_legacy_hermes_pre_persons_state_is_a_refreshable_makosh_predecessor() {
+        let path = temporary_state_path("legacy-hermes-pre-persons-v3");
+        let legacy = fixture_legacy_hermes_pre_persons_state(277);
+        write_test_state(&path, &encode_state_v3(&legacy));
+
+        let state = read_state(&path).expect("exact legacy state must remain readable");
+        assert_eq!(state, legacy);
+        assert!(validate_refreshable_state_plan(&state).is_ok());
+        assert!(validate_state_plan(&state).is_err());
+        let successor = legacy_hermes_pre_persons_successor(&state)
+            .expect("exact legacy state must have one canonical successor");
+        assert_eq!(successor.distribution_id, DEVELOPMENT_DISTRIBUTION_ID);
+        assert_eq!(successor.distribution_generation, 277);
+        assert_eq!(successor.modules.len(), 16);
+        assert_eq!(
+            successor.modules[14].runtime_artifact_id,
+            PERSONS_RUNTIME_ARTIFACT
+        );
+        assert_eq!(
+            successor.modules[14].storage_capability_id,
+            LEGACY_CONTACTS_STORAGE_CAPABILITY,
+        );
+        assert_eq!(
+            successor.modules[15].runtime_artifact_id,
+            MAIL_PERSONS_SYNC_RUNTIME_ARTIFACT,
+        );
+        assert_eq!(
+            successor.modules[15].storage_capability_id,
+            LEGACY_MAIL_CONTACTS_SYNC_STORAGE_CAPABILITY,
+        );
+        assert!(validate_refreshable_state_plan(&successor).is_ok());
+        assert_eq!(
+            development_assembly_status(Some(&state), DEVELOPMENT_DISTRIBUTION_ID, 278),
+            Ok("stale"),
+        );
+        assert!(
+            development_assembly_status(Some(&state), DEVELOPMENT_DISTRIBUTION_ID, 277).is_err()
+        );
+        assert!(development_assembly_status(Some(&state), "other-distribution", 278).is_err());
+        std::fs::remove_file(path).unwrap();
+    }
+
+    #[test]
+    fn arbitrary_legacy_module_mix_is_not_refreshable() {
+        let path = temporary_state_path("legacy-hermes-mixed-v3");
+        let mut legacy = fixture_legacy_hermes_pre_persons_state(277);
+        legacy.modules.swap(14, 15);
+        write_test_state(&path, &encode_state_v3(&legacy));
+
+        assert!(read_state(&path).is_err());
+        std::fs::remove_file(path).unwrap();
     }
 
     #[test]
@@ -3135,6 +3497,56 @@ mod tests {
         assert_eq!(successor_fences(2, 3), Ok((3, 4)));
         assert!(successor_fences(u64::MAX, 1).is_err());
         assert!(successor_fences(1, u64::MAX).is_err());
+    }
+
+    #[test]
+    fn transient_owner_control_would_block_is_bounded_and_retried() {
+        let attempts = Cell::new(0_u32);
+        let result = retry_transient_owner_control(|| {
+            attempts.set(attempts.get() + 1);
+            (attempts.get() == 3)
+                .then_some("issued")
+                .ok_or_else(|| "Resource temporarily unavailable (os error 35)".to_owned())
+        });
+        assert_eq!(result, Ok("issued"));
+        assert_eq!(attempts.get(), 3);
+    }
+
+    #[test]
+    fn non_transient_owner_control_failure_is_not_retried() {
+        let attempts = Cell::new(0_u32);
+        let result = retry_transient_owner_control(|| {
+            attempts.set(attempts.get() + 1);
+            Err::<(), _>("owner control operation was denied".to_owned())
+        });
+        assert_eq!(result, Err("owner control operation was denied".to_owned()));
+        assert_eq!(attempts.get(), 1);
+    }
+
+    #[test]
+    fn byte_equivalent_active_module_reuses_its_runtime_and_storage_fences() {
+        let digest = [7_u8; 32];
+        assert!(reusable_module_binding(
+            true, "active", 4, 4, 3, 3, &digest, &digest,
+        ));
+    }
+
+    #[test]
+    fn changed_or_revoking_module_requires_a_successor_binding() {
+        let digest = [7_u8; 32];
+        let changed = [8_u8; 32];
+        assert!(!reusable_module_binding(
+            false, "active", 4, 4, 3, 3, &digest, &digest,
+        ));
+        assert!(!reusable_module_binding(
+            true, "revoking", 4, 4, 3, 3, &digest, &digest,
+        ));
+        assert!(!reusable_module_binding(
+            true, "active", 4, 5, 3, 3, &digest, &digest,
+        ));
+        assert!(!reusable_module_binding(
+            true, "active", 4, 4, 3, 3, &changed, &digest,
+        ));
     }
 
     #[test]

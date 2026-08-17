@@ -7,7 +7,8 @@ use makosh_blob_protocol::{
 use makosh_blob_runtime::lease::BlobKeyLeaseV1;
 use makosh_blob_runtime::metadata::{BlobMetadataError, BlobMetadataLedger};
 use makosh_blob_runtime::storage::{
-    BlobContentLifecycleStore, BlobContentWriteRequestV1, BlobLifecycleError, EncryptedBlobStore,
+    BlobContentLifecycleStore, BlobContentWriteChunkRequestV1, BlobContentWriteRequestV1,
+    BlobLifecycleError, EncryptedBlobStore,
 };
 use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
@@ -277,6 +278,123 @@ fn receipt_bound_write_accepts_exact_retry_and_rejects_existing_content_mismatch
         store.write_receipt_bound(request(b"other content"), &different),
         Err(BlobLifecycleError::Integrity)
     ));
+}
+
+#[test]
+fn failed_final_chunk_releases_staging_and_quota_for_an_exact_retry() {
+    const CHUNK_BYTES: usize = 1024 * 1024;
+    let directory = private_directory();
+    let declared_size = CHUNK_BYTES + 3;
+    let store = BlobContentLifecycleStore::open(
+        directory.path(),
+        u64::try_from(declared_size).expect("declared size"),
+    )
+    .expect("lifecycle store");
+    let reference = reference(10, u64::try_from(declared_size).expect("declared size"));
+    let access = access();
+    let custody = custody();
+    let quota = quota(u64::try_from(declared_size).expect("quota"));
+    let lease = lease(&reference, access.clone());
+    let mut plaintext = vec![b'a'; CHUNK_BYTES];
+    plaintext.extend_from_slice(b"bbb");
+    let correct: [u8; 32] = Sha256::digest(&plaintext).into();
+    let wrong: [u8; 32] = Sha256::digest(b"wrong").into();
+    let write = |offset, bytes: &[u8], complete, expected| {
+        store.write_receipt_bound_chunk(BlobContentWriteChunkRequestV1 {
+            reference: &reference,
+            access: &access,
+            custody: &custody,
+            quota: &quota,
+            lease: &lease,
+            offset,
+            plaintext: bytes,
+            complete,
+            expected_plaintext_sha256: expected,
+            now_unix_ms: 2,
+        })
+    };
+
+    assert!(
+        !write(0, &plaintext[..CHUNK_BYTES], false, &wrong).expect("first wrong-receipt chunk")
+    );
+    assert!(
+        write(
+            u64::try_from(CHUNK_BYTES).expect("offset"),
+            &plaintext[CHUNK_BYTES..],
+            true,
+            &wrong,
+        )
+        .is_err()
+    );
+    assert!(!write(0, &plaintext[..CHUNK_BYTES], false, &correct).expect("first retry chunk"));
+    assert!(
+        write(
+            u64::try_from(CHUNK_BYTES).expect("offset"),
+            &plaintext[CHUNK_BYTES..],
+            true,
+            &correct,
+        )
+        .expect("final retry chunk")
+    );
+}
+
+#[test]
+fn explicit_chunk_abort_releases_staging_and_quota_idempotently() {
+    const CHUNK_BYTES: usize = 1024 * 1024;
+    let directory = private_directory();
+    let declared_size = CHUNK_BYTES + 3;
+    let store = BlobContentLifecycleStore::open(
+        directory.path(),
+        u64::try_from(declared_size).expect("declared size"),
+    )
+    .expect("lifecycle store");
+    let reference = reference(11, u64::try_from(declared_size).expect("declared size"));
+    let access = access();
+    let custody = custody();
+    let quota = quota(u64::try_from(declared_size).expect("quota"));
+    let lease = lease(&reference, access.clone());
+    let mut plaintext = vec![b'a'; CHUNK_BYTES];
+    plaintext.extend_from_slice(b"bbb");
+    let expected: [u8; 32] = Sha256::digest(&plaintext).into();
+
+    assert!(
+        !store
+            .write_receipt_bound_chunk(BlobContentWriteChunkRequestV1 {
+                reference: &reference,
+                access: &access,
+                custody: &custody,
+                quota: &quota,
+                lease: &lease,
+                offset: 0,
+                plaintext: &plaintext[..CHUNK_BYTES],
+                complete: false,
+                expected_plaintext_sha256: &expected,
+                now_unix_ms: 2,
+            })
+            .expect("first staged chunk")
+    );
+    store
+        .abort_receipt_bound_write(&reference, &access, &custody, &quota)
+        .expect("abort staged write");
+    store
+        .abort_receipt_bound_write(&reference, &access, &custody, &quota)
+        .expect("idempotent abort without staging");
+    assert!(
+        !store
+            .write_receipt_bound_chunk(BlobContentWriteChunkRequestV1 {
+                reference: &reference,
+                access: &access,
+                custody: &custody,
+                quota: &quota,
+                lease: &lease,
+                offset: 0,
+                plaintext: &plaintext[..CHUNK_BYTES],
+                complete: false,
+                expected_plaintext_sha256: &expected,
+                now_unix_ms: 2,
+            })
+            .expect("retry first chunk")
+    );
 }
 
 #[test]

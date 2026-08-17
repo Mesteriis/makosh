@@ -104,7 +104,7 @@ test('Telegram account identity is user-only and QR authority stays with TDLib',
 
   assert.doesNotMatch(clientProto, /\bstring provider_kind\s*=/);
   assert.match(clientProto, /reserved 2;\s*reserved "provider_kind";/);
-  assert.match(clientContract, /TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 6/);
+  assert.match(clientContract, /TELEGRAM_CLIENT_CONTRACT_REVISION: u32 = 9/);
 
   assert.doesNotMatch(frontendGateway, /providerKind/);
   assert.match(frontendGateway, /qrAuthorized: false/);

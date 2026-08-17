@@ -21,9 +21,18 @@ import {
 	type MailOperationalReadStatus,
 } from '../presentation/mailOperationalReadModel'
 import type { MailAccountConnection } from './mailAccountConnections'
+import {
+	openMailOperationalRealtime,
+	type MailOperationalRealtimeBinding,
+} from '../api/mailOperationalRealtime'
+import {
+	getClientAccountLaneRegistry,
+	type ClientAccountLane,
+} from '../../../platform/gateway/clientAccountLane'
 
 export function useMailOperationalRead(input: {
 	canQuery: () => boolean
+	canRealtime?: () => boolean
 	connections: () => readonly MailAccountConnection[]
 }) {
 	const status = ref<MailOperationalReadStatus>('blocked')
@@ -40,6 +49,11 @@ export function useMailOperationalRead(input: {
 	const threadCursor = ref('')
 	const messageCursor = ref('')
 	let generation = 0
+	let realtimeGeneration = 0
+	let realtimeBinding: MailOperationalRealtimeBinding | undefined
+	let realtimeLane: ClientAccountLane | undefined
+	let realtimeConnectionId = ''
+	const projectionCache = new Map<string, MailProjectionSnapshot>()
 
 	const connections = computed(input.connections)
 	const model = computed<MailOperationalReadModel>(() => ({
@@ -72,13 +86,14 @@ export function useMailOperationalRead(input: {
 			selectedConnectionId.value = available[0]!.connectionId
 		}
 		await refresh()
+		startRealtime()
 	}
 
 	async function refresh(): Promise<void> {
 		if (!readyForQuery()) return
 		const token = ++generation
 		begin('Loading Mail folders…')
-		resetProjection()
+		if (!restoreProjection(selectedConnectionId.value)) resetProjection()
 		try {
 			const page = await listMailOperationalFolders({
 				connectionId: selectedConnectionId.value,
@@ -99,8 +114,114 @@ export function useMailOperationalRead(input: {
 
 	async function selectConnection(connectionId: string): Promise<void> {
 		if (!connections.value.some((connection) => connection.connectionId === connectionId)) return
+		saveProjection()
+		stopRealtime()
 		selectedConnectionId.value = connectionId
 		await refresh()
+		startRealtime()
+	}
+
+	function startRealtime(): void {
+		stopRealtime()
+		if (!input.canRealtime?.() || !selectedConnectionId.value) return
+		const connectionId = selectedConnectionId.value
+		const token = realtimeGeneration
+		realtimeConnectionId = connectionId
+		realtimeLane = getClientAccountLaneRegistry().get({ provider: 'mail', accountId: connectionId })
+		realtimeBinding = openMailOperationalRealtime(connectionId, {
+			onProjectionChanged: revision => {
+				realtimeLane?.invalidate(revision, async (_revision, signal) => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(connectionId, token)
+				})
+		},
+			onUnavailable: () => {
+				if (token !== realtimeGeneration) return
+				realtimeLane?.recover(async (signal) => {
+					if (signal.aborted || token !== realtimeGeneration) return
+					await refreshCurrentProjection(connectionId, token)
+				})
+			},
+		})
+	}
+
+	function stopRealtime(): void {
+		realtimeGeneration += 1
+		realtimeBinding?.close()
+		realtimeBinding = undefined
+		if (realtimeConnectionId) {
+			getClientAccountLaneRegistry().close({ provider: 'mail', accountId: realtimeConnectionId })
+		}
+		realtimeLane = undefined
+		realtimeConnectionId = ''
+	}
+
+	async function refreshCurrentProjection(
+		connectionId: string,
+		realtimeToken: number,
+	): Promise<void> {
+		const token = ++generation
+		const preferredFolderId = selectedFolderId.value
+		const preferredThreadId = selectedThreadId.value
+		const preferredMessageId = selectedMessageId.value
+		try {
+			const folderPage = await listMailOperationalFolders({ connectionId })
+			if (!currentRealtimeRefresh(token, connectionId, realtimeToken)) return
+			const folder = folderPage.item.find(value => value.folderId === preferredFolderId)
+				?? preferredFolder(folderPage.item)
+			if (!folder) {
+				folders.value = []
+				threads.value = []
+				messages.value = []
+				detail.value = undefined
+				completeEmpty('No operational Mail folders are available for this connection.')
+				return
+			}
+			const threadPage = await listMailOperationalThreads({
+				connectionId,
+				folderId: folder.folderId,
+			})
+			if (!currentRealtimeRefresh(token, connectionId, realtimeToken)) return
+			const threadId = threadPage.item.some(value => value.providerThreadId === preferredThreadId)
+				? preferredThreadId
+				: ''
+			const messagePage = await listMailOperationalMessages({
+				connectionId,
+				folderId: folder.folderId,
+				providerThreadId: threadId || undefined,
+			})
+			if (!currentRealtimeRefresh(token, connectionId, realtimeToken)) return
+			const message = messagePage.item.find(value => value.messageId === preferredMessageId)
+				?? messagePage.item[0]
+			const nextDetail = message
+				? await getMailOperationalMessage({ connectionId, messageId: message.messageId })
+				: undefined
+			if (!currentRealtimeRefresh(token, connectionId, realtimeToken)) return
+			folders.value = folderPage.item
+			folderCursor.value = folderPage.nextCursor ?? ''
+			selectedFolderId.value = folder.folderId
+			threads.value = threadPage.item
+			threadCursor.value = threadPage.nextCursor ?? ''
+			selectedThreadId.value = threadId
+			messages.value = messagePage.item
+			messageCursor.value = messagePage.nextCursor ?? ''
+			selectedMessageId.value = message?.messageId ?? ''
+			detail.value = nextDetail?.summary
+			if (message) completeReady()
+			else completeEmpty('No operational Mail messages are available in this selection.')
+		} catch (error) {
+			if (currentRealtimeRefresh(token, connectionId, realtimeToken)) {
+				statusMessage.value = error instanceof Error
+					? error.message
+					: 'Mail realtime refresh is unavailable.'
+			}
+		}
+	}
+
+	function currentRealtimeRefresh(token: number, connectionId: string, realtimeToken: number): boolean {
+		return current(token)
+			&& connectionId === selectedConnectionId.value
+			&& realtimeToken === realtimeGeneration
 	}
 
 	async function selectFolder(folderId: string): Promise<void> {
@@ -289,7 +410,9 @@ export function useMailOperationalRead(input: {
 	}
 
 	function clear(message: string): void {
+		stopRealtime()
 		generation += 1
+		projectionCache.clear()
 		resetProjection()
 		selectedConnectionId.value = ''
 		status.value = 'blocked'
@@ -309,6 +432,38 @@ export function useMailOperationalRead(input: {
 		messageCursor.value = ''
 	}
 
+	function saveProjection(): void {
+		if (!selectedConnectionId.value) return
+		projectionCache.set(selectedConnectionId.value, {
+			selectedFolderId: selectedFolderId.value,
+			selectedThreadId: selectedThreadId.value,
+			selectedMessageId: selectedMessageId.value,
+			folders: folders.value,
+			threads: threads.value,
+			messages: messages.value,
+			detail: detail.value,
+			folderCursor: folderCursor.value,
+			threadCursor: threadCursor.value,
+			messageCursor: messageCursor.value,
+		})
+	}
+
+	function restoreProjection(connectionId: string): boolean {
+		const snapshot = projectionCache.get(connectionId)
+		if (!snapshot) return false
+		selectedFolderId.value = snapshot.selectedFolderId
+		selectedThreadId.value = snapshot.selectedThreadId
+		selectedMessageId.value = snapshot.selectedMessageId
+		folders.value = snapshot.folders
+		threads.value = snapshot.threads
+		messages.value = snapshot.messages
+		detail.value = snapshot.detail
+		folderCursor.value = snapshot.folderCursor
+		threadCursor.value = snapshot.threadCursor
+		messageCursor.value = snapshot.messageCursor
+		return true
+	}
+
 	function fail(error: unknown, token: number, fallback: string): void {
 		if (!current(token)) return
 		status.value = 'error'
@@ -326,11 +481,25 @@ export function useMailOperationalRead(input: {
 		loadMoreThreads,
 		reconcile,
 		refresh,
+		stopRealtime,
 		selectConnection,
 		selectFolder,
 		selectMessage,
 		selectThread,
 	}
+}
+
+type MailProjectionSnapshot = {
+	selectedFolderId: string
+	selectedThreadId: string
+	selectedMessageId: string
+	folders: readonly MailFolderV1[]
+	threads: readonly MailThreadV1[]
+	messages: readonly MailMessageSummaryV1[]
+	detail: MailMessageSummaryV1 | undefined
+	folderCursor: string
+	threadCursor: string
+	messageCursor: string
 }
 
 function preferredFolder(folders: readonly MailFolderV1[]): MailFolderV1 | undefined {

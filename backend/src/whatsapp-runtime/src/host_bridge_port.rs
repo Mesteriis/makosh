@@ -45,7 +45,7 @@ fn decode_host_request(
 }
 
 pub async fn handle_host_request(
-    runtime: &WhatsAppAdmittedRuntime,
+    runtime: &mut WhatsAppAdmittedRuntime,
     bytes: &[u8],
     recorded_at_unix_seconds: i64,
     recorded_at_nanos: i32,

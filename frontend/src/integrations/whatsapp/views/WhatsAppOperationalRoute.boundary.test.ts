@@ -55,6 +55,7 @@ describe('WhatsApp operational active route boundary', () => {
 		expect(appLayout).toContain("'whatsapp.command.v1'")
 		expect(appLayout).toContain("'whatsapp.operational.query.v1'")
 		expect(appLayout).toContain("'whatsapp.operational.realtime.v1'")
+		expect(appLayout).toContain("'whatsapp.operational.realtime.shared.v1'")
 		expect(compiledAdapters).toContain("'whatsapp-integration'")
 	})
 })

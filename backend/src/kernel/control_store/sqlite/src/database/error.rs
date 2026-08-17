@@ -8,6 +8,7 @@ pub enum StoreError {
     UnsupportedSchema(i64),
     MigrationInvariant { expected: i64, actual: i64 },
     MigrationSchemaAssertion { version: i64 },
+    LegacyNamespaceConflict,
     InvalidGeneration,
     RecoveryFenceOverflow,
     InstallationIdentityMismatch,

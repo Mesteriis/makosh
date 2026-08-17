@@ -15,6 +15,10 @@ import {
 	type ZulipOperationalQueryV1,
 } from '../../../gen/makosh/zulip/operational/v1/client_pb'
 import { getZulipOperationalReadConnectClient } from './zulipOperationalReadClient'
+import {
+	getClientAccountLaneRegistry,
+	type ClientAccountWorkClass,
+} from '../../../platform/gateway/clientAccountLane'
 
 const DEFAULT_PAGE_LIMIT = 50
 const MAX_PAGE_LIMIT = 200
@@ -31,7 +35,7 @@ export type ZulipOperationalPageInput = {
 export async function listZulipOperationalMessages(
 	input: ZulipOperationalPageInput & { providerConversationId?: string },
 ): Promise<ZulipMessagePageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listMessages',
 		value: create(ListMessagesQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -55,7 +59,7 @@ export async function searchZulipOperationalMessages(
 		searchQuery: string
 	},
 ): Promise<ZulipMessagePageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'searchMessages',
 		value: create(SearchMessagesQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -77,7 +81,7 @@ export async function searchZulipOperationalMessages(
 export async function listZulipOperationalConversations(
 	input: ZulipOperationalPageInput,
 ): Promise<ZulipConversationPageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listConversations',
 		value: create(ListConversationsQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -97,7 +101,7 @@ export async function listZulipOperationalEvents(
 		providerConversationId?: string
 	},
 ): Promise<ZulipEventPageV1> {
-	const response = await query({
+	const response = await query(input.accountId, {
 		case: 'listEvents',
 		value: create(ListEventsQuerySchema, {
 			accountId: identifier('account ID', input.accountId),
@@ -119,7 +123,7 @@ export async function listZulipOperationalEvents(
 export async function getZulipOperationalAccountStatus(
 	accountId: string,
 ): Promise<ZulipAccountStatusV1> {
-	const response = await query({
+	const response = await query(accountId, {
 		case: 'getAccountStatus',
 		value: create(GetAccountStatusQuerySchema, {
 			accountId: identifier('account ID', accountId),
@@ -131,10 +135,16 @@ export async function getZulipOperationalAccountStatus(
 	return response.response.value
 }
 
-function query(queryInput: ZulipOperationalQueryV1['query']) {
-	return getZulipOperationalReadConnectClient().query(
-		create(ZulipOperationalQueryV1Schema, { query: queryInput }),
-	)
+function query(
+	accountId: string,
+	queryInput: ZulipOperationalQueryV1['query'],
+	workClass: ClientAccountWorkClass = 'interactive',
+) {
+	return getClientAccountLaneRegistry()
+		.get({ provider: 'zulip', accountId: identifier('account ID', accountId) })
+		.run(workClass, async () => getZulipOperationalReadConnectClient().query(
+			create(ZulipOperationalQueryV1Schema, { query: queryInput }),
+		))
 }
 
 function identifier(label: string, value: string): string {

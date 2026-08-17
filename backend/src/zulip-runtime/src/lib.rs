@@ -6,6 +6,7 @@
 pub mod admission;
 pub mod blob;
 pub mod client_port;
+mod client_realtime;
 mod communications_outbox;
 pub mod delivery_intent_consumer;
 pub mod delivery_intent_execution;
@@ -40,6 +41,7 @@ use makosh_zulip_http::{
 use makosh_zulip_persistence::{
     ZulipCommandOperationStateV1, ZulipDeliveryRouteLocatorV1, ZulipDurablePersistence,
     ZulipDurablePersistenceError, ZulipOperationalIngestV1, ZulipQueueCursorV1,
+    ZulipQueuedCommandV1,
 };
 use sha2::{Digest, Sha256};
 use std::sync::Mutex;
@@ -78,6 +80,18 @@ pub enum ZulipRuntimeErrorV1 {
     Persistence(ZulipDurablePersistenceError),
     Credential,
     OperationAlreadyKnown,
+    CommandFenced,
+}
+
+pub struct ZulipClaimedCommandV1 {
+    queued: ZulipQueuedCommandV1,
+    command: ZulipCommandV1,
+}
+
+impl ZulipClaimedCommandV1 {
+    pub fn command(&self) -> &ZulipCommandV1 {
+        &self.command
+    }
 }
 
 /// Records a command before any worker may contact the provider.
@@ -136,19 +150,36 @@ pub async fn execute_next_command_with_blob(
     blob_write_materializer: Option<
         &Mutex<Option<blob::ZulipBlobWriteMaterializer<makosh_blob_client::BlobDataClient>>>,
     >,
-    mut authorize_blob: impl FnMut(
-        &ZulipCommandV1,
-        BlobDataOperationV1,
-    ) -> Result<(), ZulipRuntimeErrorV1>,
+    authorize_blob: impl FnMut(&ZulipCommandV1, BlobDataOperationV1) -> Result<(), ZulipRuntimeErrorV1>,
     dispatched_at_unix_seconds: i64,
     completed_at_unix_seconds: i64,
 ) -> Result<bool, ZulipRuntimeErrorV1> {
+    let Some(claimed) = claim_next_command(durable, dispatched_at_unix_seconds).await? else {
+        return Ok(false);
+    };
+    execute_claimed_command_with_blob(
+        durable,
+        config,
+        claimed,
+        blob_materializer,
+        blob_write_materializer,
+        authorize_blob,
+        || true,
+        completed_at_unix_seconds,
+    )
+    .await
+}
+
+pub async fn claim_next_command(
+    durable: &ZulipDurablePersistence,
+    dispatched_at_unix_seconds: i64,
+) -> Result<Option<ZulipClaimedCommandV1>, ZulipRuntimeErrorV1> {
     let Some(queued) = durable
         .claim_next_command(dispatched_at_unix_seconds)
         .await
         .map_err(ZulipRuntimeErrorV1::Persistence)?
     else {
-        return Ok(false);
+        return Ok(None);
     };
     let command =
         makosh_zulip_api::client_wire::decode_command_request(&queued.exact_command_bytes)
@@ -164,6 +195,30 @@ pub async fn execute_next_command_with_blob(
             ZulipDurablePersistenceError::InvalidRow,
         ));
     }
+    Ok(Some(ZulipClaimedCommandV1 { queued, command }))
+}
+
+pub async fn execute_claimed_command_with_blob(
+    durable: &ZulipDurablePersistence,
+    config: &ZulipHttpConfigV1,
+    claimed: ZulipClaimedCommandV1,
+    blob_materializer: Option<
+        &Mutex<Option<blob::ZulipBlobMaterializer<makosh_blob_client::BlobDataClient>>>,
+    >,
+    blob_write_materializer: Option<
+        &Mutex<Option<blob::ZulipBlobWriteMaterializer<makosh_blob_client::BlobDataClient>>>,
+    >,
+    mut authorize_blob: impl FnMut(
+        &ZulipCommandV1,
+        BlobDataOperationV1,
+    ) -> Result<(), ZulipRuntimeErrorV1>,
+    fence_is_current: impl Fn() -> bool,
+    completed_at_unix_seconds: i64,
+) -> Result<bool, ZulipRuntimeErrorV1> {
+    if !fence_is_current() {
+        return Err(ZulipRuntimeErrorV1::CommandFenced);
+    }
+    let ZulipClaimedCommandV1 { queued, command } = claimed;
     let (execution, provider_upload_started, completed_blob_ref) = match &command {
         ZulipCommandV1::SendStreamWithUpload {
             stream,
@@ -227,6 +282,9 @@ pub async fn execute_next_command_with_blob(
         }
         _ => (execute_http_command(config, &command).await, false, None),
     };
+    if !fence_is_current() {
+        return Err(ZulipRuntimeErrorV1::CommandFenced);
+    }
     match execution {
         Ok(response) => {
             durable
@@ -358,13 +416,39 @@ where
     let events = poll_event_queue(config, queue)
         .await
         .map_err(ZulipRuntimeErrorV1::Http)?;
+    accept_polled_events(
+        durable,
+        identity,
+        &config.account.account_id,
+        queue,
+        events,
+        recorded_at_unix_seconds,
+        recorded_at_nanos,
+        body_admitter,
+    )
+    .await
+}
+
+pub async fn accept_polled_events<F>(
+    durable: &ZulipDurablePersistence,
+    identity: &ZulipRuntimeIdentityV1,
+    account_id: &str,
+    queue: &mut ZulipEventQueueV1,
+    events: Vec<ZulipPolledEventV1>,
+    recorded_at_unix_seconds: i64,
+    recorded_at_nanos: i32,
+    body_admitter: &mut F,
+) -> Result<usize, ZulipRuntimeErrorV1>
+where
+    F: FnMut(&[u8]) -> Result<BodyBlobReceiptV1, BodyAdmissionFailureV1>,
+{
     let mut accepted = 0;
     for event in events {
         if accept_polled_event(
             durable,
             identity,
             ZulipPolledEventContextV1 {
-                account_id: &config.account.account_id,
+                account_id,
                 queue_id: &queue.queue_id,
                 event: &event,
                 recorded_at_unix_seconds,

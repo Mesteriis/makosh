@@ -152,6 +152,7 @@ CREATE INDEX IF NOT EXISTS mail_communications_outbox_causal_pending_idx
     WHERE published_at_unix_seconds IS NULL;
 "#;
 
+#[derive(Clone)]
 pub struct MailDurablePersistence {
     pub(crate) pool: PgPool,
 }
@@ -183,6 +184,7 @@ pub enum MailDurablePersistenceError {
 pub enum MailAttachmentAnchorMappingOutcomeV1 {
     Applied,
     AlreadyApplied,
+    IgnoredForeignSource,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -287,6 +289,7 @@ impl MailDurablePersistence {
         let port =
             u16::try_from(pgbouncer_port).map_err(|_| MailDurablePersistenceError::InvalidRow)?;
         let options = PgConnectOptions::new()
+            .statement_cache_capacity(0)
             .host(pgbouncer_host)
             .port(port)
             .username(binding.access().runtime_principal())

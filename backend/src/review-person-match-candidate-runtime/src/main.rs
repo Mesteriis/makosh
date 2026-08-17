@@ -18,6 +18,7 @@ use makosh_review_person_match_candidate_runtime::{
     review_person_match_candidate_settings_schema_bytes_v1,
 };
 use makosh_runtime_protocol::{
+    managed_runtime_poll::ManagedRuntimePollBackoffV1,
     v1::ManagedDomainRuntimeConfigurationV1,
     validation::{
         descriptor::decode_settings_schema_v1,
@@ -103,6 +104,11 @@ where
         ))
         .map_err(runtime_error)?;
     let mut failures = 0_u8;
+    let mut poll_backoff = ManagedRuntimePollBackoffV1::new(
+        std::time::Duration::from_millis(25),
+        std::time::Duration::from_millis(100),
+    )
+    .map_err(|_| "Review Person Match Candidate polling bounds are invalid".to_owned())?;
     loop {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -111,7 +117,17 @@ where
             .try_into()
             .map_err(|_| "Review Person Match Candidate clock is invalid".to_owned())?;
         match executor.block_on(runtime.service_once(now)) {
-            Ok(_) => failures = 0,
+            Ok(progressed) => {
+                failures = 0;
+                let delay = poll_backoff.observe(progressed);
+                if !delay.is_zero()
+                    && !executor
+                        .block_on(runtime.wait_retry_delay(delay))
+                        .map_err(runtime_error)?
+                {
+                    return Ok(());
+                }
+            }
             Err(ReviewPersonMatchCandidateManagedRuntimeErrorV1::ControlClosed) => return Ok(()),
             Err(ReviewPersonMatchCandidateManagedRuntimeErrorV1::EventUnavailable)
             | Err(ReviewPersonMatchCandidateManagedRuntimeErrorV1::Persistence(
